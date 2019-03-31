@@ -1,4 +1,4 @@
-package api.data;
+package data.external;
 
 public interface ExternalData {
     /*
@@ -11,9 +11,15 @@ public interface ExternalData {
      * From the game center, a particular game's display may be edited to the user's preference. For example, a game's
      * display image may change from some default background to a likely scene in that particular game. This method will
      * need to change any other files that accompany the actual game to ensure consistency between the game center, engine,
-     * and authoring
+     * and center
      */
     void saveGameDisplay(String gameName);
+    /*
+     * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
+     * with their basic outlines, that it will absolutely need for a game. This folder is where center will store information
+     * from the user's design inputs so that it can be loaded across any platforms that would need access to data
+     */
+    void createFolder(String folderName);
     /*
      * This method will load a game from the beginning, as a user may wish to restart a game entirely as opposed to continuing
      * wherever they left off. The files loaded will include all of the game's necessary xml and resources file. In particular, these
@@ -34,10 +40,4 @@ public interface ExternalData {
      * resume playing the game
      */
     void saveGame(String gameName);
-    /*
-     * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
-     * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information
-     * from the user's design inputs so that it can be loaded across any platforms that would need access to data
-     */
-    void createFolder(String folderName);
 }
