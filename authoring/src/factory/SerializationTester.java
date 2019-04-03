@@ -9,7 +9,12 @@ import engine.external.VisibilityComponent;
 
 
 public class SerializationTester {
-    private XStream mySerializer = new XStream(new DomDriver());
+    private XStream mySerializer;
+
+    public SerializationTester(){
+        mySerializer = new XStream(new DomDriver());
+    }
+
     public void saveAndMakeMario(){
         Entity myMario = new Entity();
         myMario.addComponent(new HealthComponent<>(10.0));
