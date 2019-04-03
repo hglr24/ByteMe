@@ -1,5 +1,7 @@
 package data.internal;
 
+import data.external.DataManager;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +28,9 @@ public class DataSandbox {
                 System.out.println("Couldn't close file");
             }
         }
+
+        DataManager dm = new DataManager();
+        dm.createFolder("testGameFolder");
 
     }
 }

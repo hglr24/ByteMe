@@ -1,5 +1,10 @@
 package data.external;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 public class DataManager implements ExternalData{
 
 
@@ -31,6 +36,11 @@ public class DataManager implements ExternalData{
 
     @Override
     public void createFolder(String folderName) {
-
+        try {
+            Files.createDirectories(Paths.get("created_games" + File.separator + folderName));
+        } catch (IOException e) {
+            System.out.println("Could not create directory");
+            e.printStackTrace();
+        }
     }
 }
