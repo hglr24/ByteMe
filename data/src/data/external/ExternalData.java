@@ -1,5 +1,7 @@
 package data.external;
 
+import java.util.List;
+
 public interface ExternalData {
     /*
      * From the game center, a particular set of games will be loaded in to be displayed - the game center does not
@@ -39,5 +41,41 @@ public interface ExternalData {
      * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information
      * from the user's design inputs so that it can be loaded across any platforms that would need access to data
      */
-    void createFolder(String folderName);
+    void createGameFolder(String folderName);
+
+    /**
+     * Saves a an object to xml at the path specified by path
+     * @param path to the file to be saved
+     * @param objectToBeSaved the object that should be saved to xml
+     */
+    void saveObjectToXML(String path, Object objectToBeSaved);
+
+    /**
+     * Load a deserialized version of the object represented by the xml file specified by path
+     * @param path path to the xml file of the serialized object you wish to deserialize
+     * @return deserialized version of the object that should be cast
+     */
+    Object loadObjectFromXML(String path);
+
+    /**
+     * Save a Game of name gameName to the path created_games/gameName/game_data.xml
+     * @param gameName name of the game -> folder to be created
+     * @param gameObject the object containing all game information except for assets
+     */
+    void saveGameData(String gameName, Object gameObject);
+
+    /**
+     * Saves the assets associated with a game (files at the specified paths) to that game folder
+     * @param gameName the name of the game (corresponding to the folder name)
+     * @param assets the paths to the images, sounds, etc. you want to save as part of the game
+     */
+    void saveAssets(String gameName, List<String> assets);
+
+    /**
+     * Deserializes the xml file stored at created_games/gameName/game_data.xml into an object
+     * @param gameName the game whose data is to be loaded
+     * @return the deserialized game data that should then be cast to a game object
+     */
+    Object loadGameData(String gameName);
+
 }
