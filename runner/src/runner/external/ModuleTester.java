@@ -7,7 +7,7 @@ public class ModuleTester {
     public static void main(String[] args) {
         System.out.println("Actually in this class");
         DataManager dm = new DataManager();
-        Entity marioReloaded = (Entity)dm.loadGameData("RyanGame");
+        Entity marioReloaded = (Entity)dm.loadGameData("DataTestingGame");
         marioReloaded.printMyComponents();
     }
 }

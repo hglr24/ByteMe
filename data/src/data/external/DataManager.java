@@ -88,7 +88,7 @@ public class DataManager implements ExternalData{
         StringBuilder rawXML = new StringBuilder();
         try {
             fileReader = new FileReader(path);
-            bufferedReader = new BufferedReader(fileReader);
+            bufferedReader = new BufferedReader(new FileReader(path));
             String currentLine;
             while ((currentLine = bufferedReader.readLine()) != null) {
                 rawXML.append(currentLine);

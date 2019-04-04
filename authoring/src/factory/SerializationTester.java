@@ -28,14 +28,14 @@ public class SerializationTester {
 
     public void saveAndMakeNewGameWithObject() {
         DataManager dm = new DataManager();
-        dm.createGameFolder("TestGameName");
+        dm.createGameFolder("DataTestingGame");
         Entity myMario = new Entity();
         myMario.addComponent(new HealthComponent<>(20.0));
         myMario.addComponent(new VisibilityComponent<>(false));
-        dm.createGameFolder("RyanGame");
-        dm.saveGameData("RyanGame", myMario);
+        dm.createGameFolder("SecondDataTester");
+        dm.saveGameData("DataTestingGame", myMario);
 //        dm.saveObjectToXML("TestGameName", myMario);
-        Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
+        Entity mySecondMario = (Entity)dm.loadGameData("DataTestingGame");
         mySecondMario.printMyComponents();
     }
 
@@ -49,7 +49,7 @@ public class SerializationTester {
         ryan.addComponent(health);
 //        game.addEntity(mario);
 //        game.addEntity(ryan);
-        dm.createGameFolder("LucasGame");
-        dm.saveGameData("LucasGame", game);
+        dm.createGameFolder("ObjectReferenceTester");
+        dm.saveGameData("ObjectReferenceTester", game);
     }
 }
