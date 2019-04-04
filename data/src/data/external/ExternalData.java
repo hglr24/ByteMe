@@ -35,7 +35,7 @@ public interface ExternalData {
      * score, time, hero lives, hero position, etc. so that the user may continue wherever they left off if they choose to
      * resume playing the game
      */
-    void saveGame(String gameName);
+//    void saveGame(String gameName);
     /*
      * This method will create a folder when a user starts building a new game, and populate it with the xml files, along
      * with their basic outlines, that it will absolutely need for a game. This folder is where authoring will store information

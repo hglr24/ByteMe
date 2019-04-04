@@ -31,7 +31,7 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadGame(String gameName) {
-        return null;
+        return loadGameData(gameName);
     }
 
     @Override
@@ -39,10 +39,10 @@ public class DataManager implements ExternalData{
         return null;
     }
 
-    @Override
-    public void saveGame(String gameName) {
-
-    }
+//    @Override
+//    public void saveGame(String gameName) {
+//
+//    }
 
     @Override
     public void createGameFolder(String folderName) {
