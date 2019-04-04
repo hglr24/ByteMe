@@ -5,5 +5,7 @@ public class SerializationRunner {
         SerializationTester myTester = new SerializationTester();
         myTester.saveAndMakeMario();
         System.out.println("Is this printed");
+        myTester.saveAndMakeNewGameWithObject();
+        myTester.testObjectReferences();
     }
 }
