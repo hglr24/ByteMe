@@ -47,8 +47,8 @@ public class SerializationTester {
         Entity ryan = new Entity();
         mario.addComponent(health);
         ryan.addComponent(health);
-        game.addEntity(mario);
-        game.addEntity(ryan);
+//        game.addEntity(mario);
+//        game.addEntity(ryan);
         dm.createGameFolder("LucasGame");
         dm.saveGameData("LucasGame", game);
     }
