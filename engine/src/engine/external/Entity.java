@@ -18,4 +18,13 @@ public class Entity {
         myComponents.remove(component.getClass());
     }
 
+    /*
+     * Added this in to test to see whether I was correctly reloading the components in of an entity - can certainly
+     * delete later on
+     * @author Anna
+     */
+    public void printMyComponents(){
+        for (Component<?> c: myComponents.values())
+            System.out.println(c.getValue());
+    }
 }

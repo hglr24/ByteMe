@@ -1,0 +1,65 @@
+.root {
+    -fx-background-color: gray;
+}
+
+.pane {
+    -fx-background-color: lightgray;
+}
+
+.scroll-pane {
+
+}
+
+.label {
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-text-alignment: center;
+}
+
+.prop-label {
+    -fx-font-size: 14;
+    -fx-font-weight: normal;
+}
+
+.combo-box {
+
+}
+
+.titled-pane {
+    -fx-collapsible: false;
+    -fx-animated: false;
+}
+
+.list-view {
+    -fx-pref-width: 300;
+    -fx-pref-height: 200;
+}
+
+.list-cell {
+    -fx-background-color: #545454;
+    -fx-text-fill: #c6c6c6;
+}
+
+.accordion {
+
+}
+
+.button {
+    -fx-font-size: 12;
+    -fx-min-width: 70;
+    -fx-min-height: 30;
+}
+
+
+.scroll-bar {
+
+}
+
+.menu {
+
+}
+
+.menu-bar {
+
+}
