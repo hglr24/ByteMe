@@ -62,7 +62,8 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadObjectFromXML(String path) {
-        return null;
+        String rawXML = readFromXML(path);
+        return mySerializer.fromXML(rawXML);
     }
 
     @Override
@@ -78,8 +79,7 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadGameData(String gameName) {
-        String rawXML = readFromXML(transformGameNameToPath(gameName));
-        return mySerializer.fromXML(rawXML);
+        return loadObjectFromXML(transformGameNameToPath(gameName));
     }
 
     private String readFromXML(String path) {
