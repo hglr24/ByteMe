@@ -8,6 +8,7 @@ module authoring {
     requires javafx.media;
     requires xstream;
 
+
     exports authoring.external;
     exports ui.panes;
 }
