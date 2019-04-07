@@ -8,6 +8,8 @@ import javafx.scene.control.Alert;
  */
 public class ErrorBox extends Alert {
 
+    public static final String DEFAULT_STYLE = "default.css";
+
     /**
      * Creates an ErrorBox with given type and message
      * @param type Type of error (displayed in box header)
@@ -18,6 +20,7 @@ public class ErrorBox extends Alert {
         this.setTitle("Error");
         this.setHeaderText(type);
         this.setContentText(message);
+        this.getDialogPane().getStylesheets().add(DEFAULT_STYLE);
     }
 
     /**

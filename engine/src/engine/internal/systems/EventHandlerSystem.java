@@ -1,8 +1,7 @@
 package engine.internal.systems;
 
-import engine.external.Event;
+import engine.external.IEvent;
 import engine.external.component.Component;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import java.util.List;
  * Checks all Events every cycle
  */
 public class EventHandlerSystem extends System {
-    List<Event> events;
+    List<IEvent> events;
 
     //TODO: feed Constructor a list of Events, not Components
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents) {
@@ -20,8 +19,11 @@ public class EventHandlerSystem extends System {
 
     @Override
     protected void run() {
-        for (Event e : events) {
-            e.execute();
+
+        //TODO: implement this
+
+        for (IEvent e : events) {
+            //e.execute;
         }
     }
 }

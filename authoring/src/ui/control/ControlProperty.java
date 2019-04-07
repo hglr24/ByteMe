@@ -1,11 +1,12 @@
 package ui.control;
 
-import ui.TestEntity;
+import ui.Propertable;
 import ui.UIException;
+import ui.manager.LabelManager;
 
 public interface ControlProperty {
 
-    void populateValue(String newValue);
+    void populateValue(String type, String newValue, LabelManager labels);
 
-    void setAction(TestEntity entity, String action) throws UIException;
+    void setAction(Propertable propertable, String label, String action) throws UIException;
 }
