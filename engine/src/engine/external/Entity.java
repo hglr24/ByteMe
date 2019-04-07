@@ -2,10 +2,7 @@ package engine.external;
 
 import engine.external.component.Component;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Entity {
     private Map<Class<? extends Component>, Component<?>> myComponents;
@@ -14,12 +11,24 @@ public class Entity {
         myComponents = new HashMap<>();
     }
 
-    public void addComponent(Component<?> component) {
-        myComponents.put(component.getClass(), component);
+    public void addComponent(Collection<Component<?>> components) {
+        for (Component<?> component: components) {
+            myComponents.put(component.getClass(), component);
+        }
     }
 
-    public void removeComponent(Component<?> component){
-        myComponents.remove(component.getClass());
+    public void addComponent(Component<?> component) {
+        addComponent(Arrays.asList(component));
+    }
+
+    public void removeComponent(Collection<Component<?>> components){
+        for (Component<?> component: components) {
+            myComponents.remove(component.getClass());
+        }
+    }
+
+    public void removeComponent(Component<?> component) {
+        removeComponent(Arrays.asList(component));
     }
 
     public boolean hasComponents(Collection<Class<? extends Component>> components) {

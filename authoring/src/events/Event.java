@@ -5,6 +5,7 @@ import actions.Action;
 import engine.external.Entity;
 import engine.external.IEvent;
 import engine.external.component.NameComponent;
+import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,11 +22,13 @@ public abstract class Event implements IEvent {
     //private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
     private List<Consumer<Entity>> actions;
     private List<Condition> conditions;
+    private List<KeyCode> inputs;
     private String myType;
 
     //this is the name that the event is attached to
     public Event(String name) { myType = name; }
 
+    //need to make this method take in keycode inputs as well
     @Override
     public void execute(List<Entity> entities) {
         List<Entity> filtered_entities = filter(entities);
