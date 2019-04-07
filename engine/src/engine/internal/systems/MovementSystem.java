@@ -1,11 +1,8 @@
 package engine.internal.systems;
 
 import engine.external.Entity;
-import engine.external.component.Component;
-import engine.external.component.PositionComponent;
-import engine.external.component.VelocityComponent;
+import engine.external.component.*;
 import engine.internal.Engine;
-import javafx.geometry.Point3D;
 
 import java.util.Collection;
 
@@ -18,18 +15,19 @@ public class MovementSystem extends System {
     @Override
     protected void run() {
         for (Entity e: getEntities()) {
-            //XPositionComponent XPositionComponent = (XPositionComponent) e.getComponent(X_POSITION_COMPONENT_CLASS);
-            //YPositionComponent YPositionComponent = (YPositionComponent) e.getComponent(Y_POSITION_COMPONENT_CLASS);
-            //ZPositionComponent ZPositionComponent = (ZPositionComponent) e.getComponent(Z_POSITION_COMPONENT_CLASS);
-            VelocityComponent velocityComponent = (VelocityComponent) e.getComponent(VELOCITY_COMPONENT_CLASS);
+            XPositionComponent XPositionComponent = (XPositionComponent) e.getComponent(X_POSITION_COMPONENT_CLASS);
+            YPositionComponent YPositionComponent = (YPositionComponent) e.getComponent(Y_POSITION_COMPONENT_CLASS);
+            ZPositionComponent ZPositionComponent = (ZPositionComponent) e.getComponent(Z_POSITION_COMPONENT_CLASS);
+            XVelocityComponent XVelocityComponent = (XVelocityComponent) e.getComponent(X_VELOCITY_COMPONENT_CLASS);
+            YVelocityComponent YVelocityComponent = (YVelocityComponent) e.getComponent(Y_VELOCITY_COMPONENT_CLASS);
 
-            double x = XPositionComponent.getValue() + velocityComponent.getValue().getX();
-            double y = YPositionComponent.getValue() + velocityComponent.getValue().getY();
+            double x = XPositionComponent.getValue() + XVelocityComponent.getValue();
+            double y = YPositionComponent.getValue() + YVelocityComponent.getValue();
             double z = ZPositionComponent.getValue();
 
-            XpositionComponent.setValue(x);
-            YpositionComponent.setValue(y);
-            ZpositionComponent.setValue(z);
+            XPositionComponent.setValue(x);
+            YPositionComponent.setValue(y);
+            ZPositionComponent.setValue(z);
         }
     }
 }

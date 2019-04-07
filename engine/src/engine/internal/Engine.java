@@ -13,12 +13,12 @@ import java.util.Collections;
 
 public class Engine {
     //TODO: Read from external source file instead of hardcoding final variables for system initialization
-    private final Collection<Class<? extends Component>> MOVEMENT_SYSTEM_COMPONENTS = Arrays.asList(VelocityComponent.class, PositionComponent.class);
+    private final Collection<Class<? extends Component>> MOVEMENT_SYSTEM_COMPONENTS = Arrays.asList(XVelocityComponent.class,YVelocityComponent.class, XPositionComponent.class, YPositionComponent.class, ZPositionComponent.class);
     private final Collection<Class<? extends Component>> CONTACT_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
     private final Collection<Class<? extends Component>> COLLISION_SYSTEM_COMPONENTS = Arrays.asList(CollisionComponent.class, ImageViewComponent.class);
     private final Collection<Class<? extends Component>> HEALTH_SYSTEM_COMPONENTS = Arrays.asList(HealthComponent.class);
     private final Collection<Class<? extends Component>> CLEANUP_SYSTEM_COMPONENTS = Arrays.asList(DestroyComponent.class);
-    private final Collection<Class<? extends Component>> IMAGEVIEW_SYSTEM_COMPONENTS = Arrays.asList(SpriteComponent.class, PositionComponent.class);
+    private final Collection<Class<? extends Component>> IMAGEVIEW_SYSTEM_COMPONENTS = Arrays.asList(SpriteComponent.class, XPositionComponent.class, YPositionComponent.class, ZPositionComponent.class);
     private final Collection<Class<? extends Component>> EVENTHANDLER_SYSTEM_COMPONENTS = new ArrayList<>();
 
     protected Collection<Entity> myEntities;

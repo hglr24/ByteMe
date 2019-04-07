@@ -27,10 +27,12 @@ public class ImageViewSystem extends System {
 
     private ImageView generateImageView(Entity entity){
         Image image = new Image((String)entity.getComponent(SPRITE_COMPONENT_CLASS).getValue());
-        Point3D position = (Point3D) entity.getComponent(POSITION_COMPONENT_CLASS).getValue();
+        Double XPosition = (Double)entity.getComponent(X_POSITION_COMPONENT_CLASS).getValue();
+        Double YPosition = (Double)entity.getComponent(Y_POSITION_COMPONENT_CLASS).getValue();
+
         ImageView imageView = new ImageView(image);
-        imageView.setX(position.getX());
-        imageView.setY(position.getY());
+        imageView.setX(XPosition);
+        imageView.setY(YPosition);
         return imageView;
     }
 
