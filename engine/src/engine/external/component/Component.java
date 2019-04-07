@@ -6,6 +6,7 @@ public abstract class Component<T> {
     public Component(T value){
         myValue = value;
     }
+
     public void setValue(T value){
         myValue = value;
     }

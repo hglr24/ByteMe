@@ -10,6 +10,7 @@ module authoring {
     requires java.desktop;
 
 
+
     exports authoring.external;
     exports ui.panes;
 }

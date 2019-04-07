@@ -1,11 +1,13 @@
 package events;
 
 
+import actions.Action;
 import engine.external.Entity;
 import engine.external.IEvent;
 import engine.external.component.NameComponent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -16,14 +18,13 @@ import java.util.function.Consumer;
  * @author Feroze Mohideen
  */
 public abstract class Event implements IEvent {
+    //private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
     private List<Consumer<Entity>> actions;
     private List<Condition> conditions;
     private String myType;
 
     //this is the name that the event is attached to
-    public Event(String name) {
-        myType = name;
-    }
+    public Event(String name) { myType = name; }
 
     @Override
     public void execute(List<Entity> entities) {
@@ -59,4 +60,21 @@ public abstract class Event implements IEvent {
         //TODO: implement
         actions.forEach(action -> action.accept(entity));
     }
+
+    public void setActions(List<Consumer<Entity>> actionsToAdd){
+        actions.addAll(actionsToAdd);
+    }
+
+    protected void setConditions(List<Condition> conditionsToAdd){
+        conditions.addAll(conditionsToAdd);
+    }
+
+//    /**
+//     * Get the list of available Events to display to the user in the authoring environment
+//     * @return an unmodifiable List of the subclasses of Event
+//     */
+//    public List<Class<? extends Event>> getEventsList(){
+//        return Collections.unmodifiableList(eventsList);
+//    }
+
 }

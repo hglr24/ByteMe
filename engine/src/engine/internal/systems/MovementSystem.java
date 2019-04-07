@@ -4,16 +4,15 @@ import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.PositionComponent;
 import engine.external.component.VelocityComponent;
+import engine.internal.Engine;
 import javafx.geometry.Point3D;
 
 import java.util.Collection;
 
 public class MovementSystem extends System {
-    private final Class<? extends Component> POSITION_COMPONENT_CLASS = PositionComponent.class;
-    private final Class<? extends Component> VELOCITY_COMPONENT_CLASS = VelocityComponent.class;
 
-    public MovementSystem(Collection<Class<? extends Component>> requiredComponents) {
-        super(requiredComponents);
+    public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+        super(requiredComponents, engine);
     }
 
     @Override
