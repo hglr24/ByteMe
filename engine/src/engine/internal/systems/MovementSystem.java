@@ -18,14 +18,18 @@ public class MovementSystem extends System {
     @Override
     protected void run() {
         for (Entity e: getEntities()) {
-            PositionComponent positionComponent = (PositionComponent) e.getComponent(POSITION_COMPONENT_CLASS);
+            //XPositionComponent XPositionComponent = (XPositionComponent) e.getComponent(X_POSITION_COMPONENT_CLASS);
+            //YPositionComponent YPositionComponent = (YPositionComponent) e.getComponent(Y_POSITION_COMPONENT_CLASS);
+            //ZPositionComponent ZPositionComponent = (ZPositionComponent) e.getComponent(Z_POSITION_COMPONENT_CLASS);
             VelocityComponent velocityComponent = (VelocityComponent) e.getComponent(VELOCITY_COMPONENT_CLASS);
 
-            double x = positionComponent.getValue().getX() + velocityComponent.getValue().getX();
-            double y = positionComponent.getValue().getY() + velocityComponent.getValue().getY();
-            double z = positionComponent.getValue().getZ();
+            double x = XPositionComponent.getValue() + velocityComponent.getValue().getX();
+            double y = YPositionComponent.getValue() + velocityComponent.getValue().getY();
+            double z = ZPositionComponent.getValue();
 
-            positionComponent.setValue(new Point3D(x, y, z));
+            XpositionComponent.setValue(x);
+            YpositionComponent.setValue(y);
+            ZpositionComponent.setValue(z);
         }
     }
 }
