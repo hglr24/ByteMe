@@ -19,8 +19,6 @@ public class SerializationTester {
 
     public void saveAndMakeMario(){
         Entity myMario = new Entity();
-        myMario.addComponent(new HealthComponent<>(10.0));
-        myMario.addComponent(new VisibilityComponent<>(true));
         String mySavedEnemy = mySerializer.toXML(myMario);
         Entity mySecondMario = (Entity)mySerializer.fromXML(mySavedEnemy);
         mySecondMario.printMyComponents();
@@ -30,11 +28,8 @@ public class SerializationTester {
         DataManager dm = new DataManager();
         dm.createGameFolder("TestGameName");
         Entity myMario = new Entity();
-        myMario.addComponent(new HealthComponent<>(20.0));
-        myMario.addComponent(new VisibilityComponent<>(false));
         dm.createGameFolder("RyanGame");
         dm.saveGameData("RyanGame", myMario);
-//        dm.saveObjectToXML("TestGameName", myMario);
         Entity mySecondMario = (Entity)dm.loadGameData("RyanGame");
         mySecondMario.printMyComponents();
     }
@@ -45,10 +40,6 @@ public class SerializationTester {
         Entity mario = new Entity();
         HealthComponent health = new HealthComponent(20.0D);
         Entity ryan = new Entity();
-        mario.addComponent(health);
-        ryan.addComponent(health);
-//        game.addEntity(mario);
-//        game.addEntity(ryan);
         dm.createGameFolder("LucasGame");
         dm.saveGameData("LucasGame", game);
     }

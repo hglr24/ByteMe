@@ -12,7 +12,7 @@ import java.util.List;
 public class EventHandlerSystem extends System {
     List<IEvent> events;
 
-    //TODO: feed Constructor a list of Events, not Components
+    //TODO: feed Constructor a list of Events, not Compone  nts
     public EventHandlerSystem(Collection<Class<? extends Component>> requiredComponents) {
         super(requiredComponents);
     }
