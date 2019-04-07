@@ -6,9 +6,9 @@ import javafx.geometry.Point3D;
 
 import java.util.function.Consumer;
 
-public class setVelocityAction extends Action {
+public class VelocityAction extends Action {
 
-    public setVelocityAction(){ super();}
+    public VelocityAction(){ super();}
 
     public Consumer<Entity> makeVelocityAction(double xVelocity,double yVelocity) {
         return (Consumer<Entity>) (entity) -> {

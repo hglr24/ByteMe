@@ -5,9 +5,9 @@ import engine.external.component.ValueComponent;
 
 import java.util.function.Consumer;
 
-public class setValueAction extends Action {
+public class ValueAction extends Action {
 
-    public setValueAction(){ super();}
+    public ValueAction(){ super();}
 
     public Consumer<Entity> makeValueAction(double newValue) {
         return makeValueAction(newValue, ValueComponent.class);

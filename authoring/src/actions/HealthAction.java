@@ -5,9 +5,9 @@ import engine.external.component.HealthComponent;
 
 import java.util.function.Consumer;
 
-public class setHealthComponentAction extends Action {
+public class HealthAction extends Action {
 
-    public setHealthComponentAction(){ super();}
+    public HealthAction(){ super();}
 
     /**
      *
