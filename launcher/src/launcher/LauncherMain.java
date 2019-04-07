@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class LauncherMain extends Application {
     private static final double STAGE_SIZE = 400;
     private static final Color BACKGROUND_COLOR = Color.LIGHTPINK;
     public static void main(String[] args){

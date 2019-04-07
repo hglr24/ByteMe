@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataManager implements ExternalData{
@@ -108,6 +109,17 @@ public class DataManager implements ExternalData{
             }
         }
         return rawXML.toString();
+    }
+
+    public void printGameNames(){
+        File file = new File(CREATED_GAMES_DIRECTORY);
+        String[] directories = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        System.out.println(Arrays.toString(directories));
     }
 
     private String transformGameNameToPath(String gameName) {

@@ -9,5 +9,6 @@ public class ModuleTester {
         DataManager dm = new DataManager();
         Entity marioReloaded = (Entity)dm.loadGameData("RyanGame");
         marioReloaded.printMyComponents();
+        dm.printGameNames();
     }
 }
