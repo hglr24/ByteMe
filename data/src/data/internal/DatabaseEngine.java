@@ -154,8 +154,14 @@ public class DatabaseEngine {
         return  null;
     }
 
-    public void updateGameEntry(String gameName, String rawXML){
+    public void updateGameEntryData(String gameName, String rawXML){
+        executeStatement("UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_DATA_COLUMN + " = '" + rawXML +
+                "' WHERE " + GAME_NAME_COLUMN + " = '" + gameName + "';");
+    }
 
+    public void updateGameEntryInfo(String gameName, String rawXML){
+        executeStatement("UPDATE " + GAME_INFORMATION_TABLE_NAME + " SET " + GAME_INFO_COLUMN + " = '" + rawXML +
+                "' WHERE " + GAME_NAME_COLUMN + " = '" + gameName + "';");
     }
 
     public void addAssets(String gameName, List<String> assetPaths){
@@ -170,7 +176,10 @@ public class DatabaseEngine {
     }
 
     public String loadGameInformation(String gameName){
-        return "";
+        String query =
+                "SELECT * FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " = '" + gameName +
+                        "';";
+        return executeQuery(query, GAME_INFORMATION_TABLE_NAME);
     }
 
     private void printResults(ResultSet results) throws SQLException {

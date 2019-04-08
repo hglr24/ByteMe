@@ -15,6 +15,7 @@ public class DataManager implements ExternalData{
     private static final String CREATED_GAMES_DIRECTORY = "created_games";
     public static final String XML_EXTENSION = ".xml";
     public static final String GAME_DATA = "game_data";
+    private static final String GAME_INFO = "game_info";
 
     private XStream mySerializer;
     private DatabaseEngine myDatabaseEngine;
@@ -49,6 +50,14 @@ public class DataManager implements ExternalData{
 
     }
 
+    public void createGameFolder(String folderName, String gameName){
+        if (!myDatabaseEngine.open()){
+            System.out.println("Couldn't connect to database");
+        }
+        myDatabaseEngine.createEntryForNewGame(gameName);
+        createGameFolder(folderName);
+    }
+
     @Override
     public void createGameFolder(String folderName) {
         try {
@@ -73,15 +82,26 @@ public class DataManager implements ExternalData{
 
     @Override
     public void saveGameData(String gameName, Object gameObject) {
-        String path = transformGameNameToPath(gameName);
+        String path = transformGameNameToPath(gameName, GAME_DATA);
         saveObjectToXML(path, gameObject);
         String myRawXML = mySerializer.toXML(gameObject);
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
         }
-        myDatabaseEngine.updateGameEntry(gameName, myRawXML);
+        myDatabaseEngine.updateGameEntryData(gameName, myRawXML);
         myDatabaseEngine.close();
 
+    }
+
+    public void saveGameInfo(String gameName, Object gameInfoObject){
+        String path = transformGameNameToPath(gameName, GAME_INFO);
+        saveObjectToXML(path, gameInfoObject);
+        String myRawXML = mySerializer.toXML(gameInfoObject);
+        if (! myDatabaseEngine.open()){
+            System.out.println("Couldn't load to database because couldn't connect");
+        }
+        myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+        myDatabaseEngine.close();
     }
 
     @Override
@@ -135,8 +155,8 @@ public class DataManager implements ExternalData{
         System.out.println(Arrays.toString(directories));
     }
 
-    private String transformGameNameToPath(String gameName) {
-        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + GAME_DATA + XML_EXTENSION;
+    private String transformGameNameToPath(String gameName, String filename) {
+        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + filename + XML_EXTENSION;
     }
 
     private void writeToXML(String path, String rawXML){

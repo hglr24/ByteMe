@@ -40,6 +40,7 @@ public class DataSandbox {
         }
         System.out.println("Game data: " + de.loadGameData("Ryan Game"));
         de.printGameTable();
+        de.updateGameEntryData("Ryan Game", "changed");
         de.close();
 
     }
