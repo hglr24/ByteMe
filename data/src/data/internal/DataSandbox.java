@@ -31,6 +31,9 @@ public class DataSandbox {
 
         DataManager dm = new DataManager();
         dm.createGameFolder("testGameFolder");
+        DatabaseEngine de = new DatabaseEngine();
+        de.createEntryForNewGame("Ryan Game");
+        de.printGameTable();
 
     }
 }
