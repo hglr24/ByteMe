@@ -1,9 +1,8 @@
 package data.internal;
 
 import java.sql.*;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.Map;
 
 public class DatabaseEngine {
 
@@ -31,7 +30,7 @@ public class DatabaseEngine {
     private static final String ASSETS_COLUMN = "Assets";
     private static final String FIRST_PUBLISHED_COLUMN = "FirstPublished";
     private static final String MOST_RECENT_PUBLISHED_COLUMN = "MostRecentPublish";
-    public static final List<String> GAME_INFORMATION_COLUMN_NAME = List.of(
+    public static final List<String> GAME_INFORMATION_COLUMN_NAMES = List.of(
             GAME_NAME_COLUMN,
             GAME_DATA_COLUMN,
             GAME_INFO_COLUMN,
@@ -78,8 +77,33 @@ public class DatabaseEngine {
             CHECKPOINT_COLUMN
     );
 
-    public DatabaseEngine(){
+    public static final Map<String, List<String>> DATABASE_SCHEMA = Map.of(
+            GAME_INFORMATION_TABLE_NAME, GAME_INFORMATION_COLUMN_NAMES,
+            GAME_STATISTICS_TABLE_NAME, GAME_STATISTICS_COLUMN_NAMES,
+            USERS_TABLE_NAME, USERS_COLUMN_NAMES,
+            CHECKPOINTS_TABLE_NAME, CHECKPOINTS_COLUMN_NAMES
+    );
 
+    private Connection myConnection;
+
+    public boolean open() {
+        try {
+            myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
+            return true;
+        } catch (SQLException exception){
+            System.out.println("Couldn't connect to database");
+            return false;
+        }
+    }
+
+    public void close() {
+        try {
+            if (myConnection != null){
+                myConnection.close();
+            }
+        } catch (SQLException exception){
+            System.out.println("Couldn't close the connection");
+        }
     }
 
     public void createEntryForNewGame(String gameName){
@@ -90,41 +114,44 @@ public class DatabaseEngine {
     }
 
     public void printGameTable(){
-        printTable("GameInformation");
-    }
-
-    private void printTable(String tableToPrint) {
-        ResultSet results = executeStatement("SELECT * FROM " + tableToPrint);
-//        try {
-//            processResults(results);
-//        } catch (SQLException exception){
-//            exception.printStackTrace();
-//        }
-    }
-
-    private ResultSet executeStatement(String sqlQuery) {
-        ResultSet results = null;
         try {
-
-            //Establish connection to the database, will create database if not exists at the path
-            Connection conn = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
-
-            // Everything with JDBC is done with statements, use the connection to create a statement
-            Statement statement = conn.createStatement();
-            statement.execute(sqlQuery);
-
-            results = statement.getResultSet();
-            if (results != null) {
-                processResults(results);
-            }
-
-            statement.close();
-            conn.close();
-
-        } catch (SQLException exception){
-            System.out.println("Failed: " + exception.getMessage());
+            printTable(GAME_INFORMATION_TABLE_NAME);
+        } catch (SQLException e) {
+            System.out.println("Failed to print table: " + e.getMessage());
         }
-        return results;
+    }
+
+    private void printTable(String tableToPrint) throws SQLException{
+        executeQuery("SELECT * FROM " + tableToPrint, new TablePrinter(tableToPrint));
+    }
+
+    private void executeStatement (String sqlStatement){
+        try (Statement statement = myConnection.createStatement()){
+            statement.execute(sqlStatement);
+        } catch (SQLException exception){
+            System.out.println("Statement failed: " + exception.getMessage());
+        }
+    }
+
+    private void executeQuery(String sqlQuery, ResultsProcessor resultsProcessor) {
+        try (Statement statement = myConnection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery)){
+            resultsProcessor.processResults(resultSet);
+        } catch (SQLException exception){
+            System.out.println("Query failed: " + exception.getMessage());
+        }
+    }
+
+    private String executeQuery(String sqlQuery, String columnName){
+        try (Statement statement = myConnection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sqlQuery)){
+            if (resultSet != null && resultSet.next()){
+                return resultSet.getString(columnName);
+            }
+        } catch (SQLException exception){
+            System.out.println("Query failed: " + exception.getMessage());
+        }
+        return  null;
     }
 
     public void updateGameEntry(String gameName, String rawXML){
@@ -136,14 +163,17 @@ public class DatabaseEngine {
     }
 
     public String loadGameData(String gameName){
-        return "";
+        String query =
+                "SELECT * FROM " + GAME_INFORMATION_TABLE_NAME + " WHERE " + GAME_NAME_COLUMN + " = '" + gameName +
+                        "';";
+        return executeQuery(query, GAME_DATA_COLUMN);
     }
 
     public String loadGameInformation(String gameName){
         return "";
     }
 
-    private void processResults(ResultSet results) throws SQLException {
+    private void printResults(ResultSet results) throws SQLException {
         // iterate of the results, starts at beginning so results.next() takes you to first record
         while (results.next()){
             System.out.println(results.getString(1));

@@ -32,8 +32,14 @@ public class DataSandbox {
         DataManager dm = new DataManager();
         dm.createGameFolder("testGameFolder");
         DatabaseEngine de = new DatabaseEngine();
-        de.createEntryForNewGame("Ryan Game");
+//        de.createEntryForNewGame("Ryan Game");
+//        de.printGameTable();
+        if (! de.open()){
+            System.out.println("Couldn't open datasource");
+            return;
+        }
         de.printGameTable();
+        de.close();
 
     }
 }
