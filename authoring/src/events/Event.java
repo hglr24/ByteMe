@@ -20,7 +20,6 @@ import java.util.List;
  * @author Feroze Mohideen
  */
 public class Event implements IEventEngine, IEventAuthoring {
-    //private List<Class<? extends Event>> eventsList= new ArrayList<>(); //list of all events
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
     private List<KeyCode> inputs = new ArrayList<>();
@@ -88,6 +87,9 @@ public class Event implements IEventEngine, IEventAuthoring {
         actions.removeAll(actionsToRemove);
     }
 
-
+    public Collection<String> getAllEvents(){
+        //TODO: implement
+        return new ArrayList<>();
+    };
 
 }

@@ -3,6 +3,7 @@ package events;
 import actions.Action;
 import conditions.Condition;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +43,8 @@ public interface IEventAuthoring {
     void addConditions(List<Condition> conditionsToAdd);
 
     void addConditions(Condition condition);
+
+    Collection<String> getAllEvents();
 
 
 
