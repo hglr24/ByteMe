@@ -2,6 +2,7 @@ package data.external;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import data.internal.DatabaseEngine;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -14,10 +15,13 @@ public class DataManager implements ExternalData{
     private static final String CREATED_GAMES_DIRECTORY = "created_games";
     public static final String XML_EXTENSION = ".xml";
     public static final String GAME_DATA = "game_data";
+
     private XStream mySerializer;
+    private DatabaseEngine myDatabaseEngine;
 
     public DataManager(){
         mySerializer = new XStream(new DomDriver());
+        myDatabaseEngine = new DatabaseEngine();
     }
 
     @Override
@@ -71,6 +75,13 @@ public class DataManager implements ExternalData{
     public void saveGameData(String gameName, Object gameObject) {
         String path = transformGameNameToPath(gameName);
         saveObjectToXML(path, gameObject);
+        String myRawXML = mySerializer.toXML(gameObject);
+        if (! myDatabaseEngine.open()){
+            System.out.println("Couldn't load to database because couldn't connect");
+        }
+        myDatabaseEngine.updateGameEntry(gameName, myRawXML);
+        myDatabaseEngine.close();
+
     }
 
     @Override
@@ -80,7 +91,9 @@ public class DataManager implements ExternalData{
 
     @Override
     public Object loadGameData(String gameName) {
-        return loadObjectFromXML(transformGameNameToPath(gameName));
+
+//        return loadObjectFromXML(transformGameNameToPath(gameName));
+        return mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
     }
 
     private String readFromXML(String path) {

@@ -38,6 +38,7 @@ public class DataSandbox {
             System.out.println("Couldn't open datasource");
             return;
         }
+        System.out.println("Game data: " + de.loadGameData("Ryan Game"));
         de.printGameTable();
         de.close();
 
