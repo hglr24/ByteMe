@@ -1,6 +1,8 @@
 package engine.external.component;
 
-public abstract class Component<T> {
+import java.io.Serializable;
+
+public abstract class Component<T> implements Serializable {
     private T myValue;
 
     public Component(T value){

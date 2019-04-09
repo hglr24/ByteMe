@@ -25,8 +25,13 @@ public class Event implements IEventEngine, IEventAuthoring {
     private List<KeyCode> inputs = new ArrayList<>();
     private String myType;
 
-    //this is the name that the event is attached to
-    public Event(String name) { myType = name;
+    /**
+     * An Event is created using the name of the type of entity that this event will apply to
+     * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
+     * @param name
+     */
+    public Event(String name) {
+        myType = name;
     }
 
     //need to make this method take in keycode inputs as well

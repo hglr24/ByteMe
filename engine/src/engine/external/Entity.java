@@ -2,9 +2,10 @@ package engine.external;
 
 import engine.external.component.Component;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Entity {
+public class Entity implements Serializable {
 
     private Map<Class<? extends Component>, Component<?>> myComponents;
 
