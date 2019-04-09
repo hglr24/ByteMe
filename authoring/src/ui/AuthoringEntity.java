@@ -7,8 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
-import javafx.geometry.Point3D;
-import javafx.scene.image.ImageView;
 import ui.manager.ObjectManager;
 
 import java.util.Arrays;
@@ -49,18 +47,35 @@ public class AuthoringEntity implements Propertable {
         this();
         myBackingEntity = basis;
         myObjectManager = manager;
-        myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
-        myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
-        myPropertyMap.put(EntityField.X, ("" + ((Point3D) (basis.getComponent(XPositionComponent.class).getValue())).getX()));
-        myPropertyMap.put(EntityField.Y, ("" + ((Point3D) (basis.getComponent(YPositionComponent.class).getValue())).getY()));
-        myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO update these for new components
-        myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
+        if (basis.hasComponents(NameComponent.class)) // TODO try to fix this
+            myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
+        if (basis.hasComponents(SpriteComponent.class))
+            myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
+        if (basis.hasComponents(XPositionComponent.class))
+            myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
+        if (basis.hasComponents(YPositionComponent.class))
+            myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
+        if (basis.hasComponents(WidthComponent.class))
+            myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
+        if (basis.hasComponents(HeightComponent.class))
+            myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
         addPropertyListeners();
         myObjectManager.addEntity(this);
     }
 
-    public AuthoringEntity(AuthoringEntity copyBasis) {
-        // TODO implement this for creating new instance from created types
+    public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
+        this();
+        myObjectManager = copyBasis.myObjectManager;
+        myPropertyMap.put(EntityField.LABEL, copyBasis.myPropertyMap.get(EntityField.LABEL));
+        myPropertyMap.put(EntityField.IMAGE, copyBasis.myPropertyMap.get(EntityField.IMAGE));
+        myPropertyMap.put(EntityField.GROUP, copyBasis.myPropertyMap.get(EntityField.GROUP));
+        myPropertyMap.put(EntityField.X, copyBasis.myPropertyMap.get(EntityField.X));
+        myPropertyMap.put(EntityField.Y, copyBasis.myPropertyMap.get(EntityField.Y));
+        myPropertyMap.put(EntityField.XSCALE, copyBasis.myPropertyMap.get(EntityField.XSCALE));
+        myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
+        myBackingEntity = backingEntity;
+        addPropertyListeners();
+        myObjectManager.addEntity(this);
     }
 
     private void addPropertyListeners() {
@@ -75,7 +90,7 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
     }
 
-    public Map<Enum, String> getPropertyMap() {
+    public ObservableMap<Enum, String> getPropertyMap() {
         return myPropertyMap;
     }
 

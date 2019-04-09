@@ -1,5 +1,10 @@
 package events;
 
+import conditions.CollisionCondition;
+import conditions.LeftDownCollisionCondition;
+import engine.external.component.CollidedComponent;
+import engine.external.component.XPositionComponent;
+
 public class LeftCollisionEvent extends Event {
 
     private String myCollisionWithEntity;
@@ -8,27 +13,15 @@ public class LeftCollisionEvent extends Event {
         super(name);
         myCollisionWithEntity = collideWithEntity;
 
-        //Example: adding actions and conditions:
-        makeActions();
-        makeConditions();
+        makeLeftCollisionCondition();
     }
-
-    private void makeActions(){
-        /*
-        //Here is an Example: Add an action that stops the movement of the entity
-        setVelocityAction velocityAction = new setVelocityAction();
-        setActions(List.of(velocityAction.makeVelocityAction(0,0)));
-         */
+    /**
+     * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
+     * Adds a condition to the Event that verifies the collision is on the left of entity
+     */
+    private void makeLeftCollisionCondition(){
+        CollisionCondition containsCollidedComponentCondition = new LeftDownCollisionCondition(CollidedComponent.class, myCollisionWithEntity, XPositionComponent.class);
+        addConditions(containsCollidedComponentCondition);
     }
-
-    private void makeConditions(){
-        //TODO: set a condition that checks entity's x position is less than entityCollidedWith's position
-        /*
-        //X position of entity collided with
-        Double XPosition =((XPositionComponent) myCollisionWithEntity.getComponent(XPositionComponent.class)).getValue();
-        LessThanCondition condition = new LessThanCondition(XPositionComponent.class, XPosition);
-        */
-    }
-
 
 }

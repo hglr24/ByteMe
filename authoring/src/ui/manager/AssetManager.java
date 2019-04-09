@@ -205,9 +205,11 @@ public class AssetManager extends Stage {
         try {
             BufferedImage image = ImageIO.read(selectedFile);
             File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
+            File otherSaveToFile = new File("Images/" + selectedFile.getName());
             String[] split = selectedFile.getPath().split("\\.");
             String extension = split[split.length-1];
             ImageIO.write(image, extension, saveToFile);
+            ImageIO.write(image, extension, otherSaveToFile);
             drawImageScrollPane();
         } catch (IOException e) {
             //TODO: Test that this works

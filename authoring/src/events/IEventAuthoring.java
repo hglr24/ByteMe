@@ -3,6 +3,7 @@ package events;
 import actions.Action;
 import conditions.Condition;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,6 +29,12 @@ public interface IEventAuthoring {
     void addActions(Action action);
 
     /**
+     * Removes a set of actions associated with this event
+     * @param actionsToRemove
+     */
+    void removeActions(List<Action> actionsToRemove);
+
+    /**
      * This method allows you to set the CONDITIONS associated with an event to
      * a new list of conditions.
      * @param newSetOfConditions new list of conditions to set
@@ -42,6 +49,17 @@ public interface IEventAuthoring {
     void addConditions(List<Condition> conditionsToAdd);
 
     void addConditions(Condition condition);
+
+    /**
+     * Returns the set of all available events
+     * @return set of all available events
+     */
+    Collection<String> getAllEvents();
+    /**
+     * Removes a set of conditions from the list of conditions associated with this event.
+     * @param conditionsToRemove
+     */
+    void removeConditions(List<Condition> conditionsToRemove);
 
 
 

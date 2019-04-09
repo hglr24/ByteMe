@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 /**
  * @author Harry Ross
  */
-class PropertiesPane extends TitledPane {
+public class PropertiesPane extends TitledPane {
 
     private Propertable myProp;
     private String myPropFile;
@@ -28,7 +28,7 @@ class PropertiesPane extends TitledPane {
 
     private static final String PROP_TYPE_EXT = " Properties";
 
-    PropertiesPane(String propOf, Propertable prop, String propResource, LabelManager labelManager) throws UIException {
+    public PropertiesPane(String propOf, Propertable prop, String propResource, LabelManager labelManager) throws UIException {
         myProp = prop;
         myPropFile = propResource;
         myLabelManager = labelManager;

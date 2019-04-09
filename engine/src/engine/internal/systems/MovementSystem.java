@@ -2,11 +2,11 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import engine.internal.Engine;
+import engine.external.Engine;
 
 import java.util.Collection;
 
-public class MovementSystem extends System {
+public class MovementSystem extends VoogaSystem {
 
     public MovementSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);

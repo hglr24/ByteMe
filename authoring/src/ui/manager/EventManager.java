@@ -1,10 +1,11 @@
 package ui.manager;
 
+import events.EventType;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -12,6 +13,7 @@ import ui.EntityField;
 import ui.Propertable;
 import ui.AuthoringEntity;
 import ui.Utility;
+import ui.panes.EventPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,13 +28,16 @@ import java.util.Map;
 public class EventManager extends Stage {
 
     private AuthoringEntity myEntity;
+    private Scene myDefaultScene;
 
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
-        this.setScene(createPane());
+        myDefaultScene = createPane();
+        this.setScene(myDefaultScene);
         this.setResizable(false);
         createContent();
     }
+
 
     private Node createContent() {
         GridPane eventsGrid = new GridPane();
@@ -49,17 +54,29 @@ public class EventManager extends Stage {
         description.put("label", new ArrayList<>(Collections.singletonList("Manage " + myEntity.getPropertyMap().get(EntityField.LABEL) + " Events")));
         description.put("sub-label", new ArrayList<>(Collections.singletonList("Add or Remove Events for " + myEntity.getPropertyMap().get(EntityField.LABEL))));
 
-        Button addButton = Utility.makeButton(this, "addEvent", "Add");
+        ComboBox<String> myAddEventBox = new ComboBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
+        myAddEventBox.setValue("Add Event...");
+        myAddEventBox.getStylesheets().add("default.css");
+        addEvent(myAddEventBox);
+        //Button addButton = Utility.makeButton(this, "addEvent", "Add");
         Button removeButton = Utility.makeButton(this, "removeEvent", "Remove");
         Button closeButton = Utility.makeButton(this, "closeWindow", "Close");
 
-        return Utility.createDialogPane(Utility.createLabelsGroup(description), createContent(), Arrays.asList(addButton, removeButton, closeButton));
+        //Scene myScene = Utility.createDialogPane(Utility.createLabelsGroup(description), createContent(), Arrays.asList(removeButton, closeButton));
+        return Utility.createGeneralPane(Utility.createLabelsGroup(description), createContent(),
+                Arrays.asList(myAddEventBox,removeButton,closeButton));
     }
 
-    private void addEvent() {
-        // Open Add dialog for user to enter info, stores result in ObservableList (myEntity.getEvents())
-        // Pretty sure I'm gonna replace the gridpane with a listview to make this stuff easier
+    private void addEvent(ComboBox<String> myEvents) {
+        myEvents.getSelectionModel().selectedItemProperty().addListener(
+                (ObservableValue<? extends String> observable, String oldValue, String newValue) ->
+                        openEventOptions(myEvents.getValue()) );
     }
+
+    private void openEventOptions(String eventName){
+        new EventPane(eventName);
+    }
+
 
     private void removeEvent() {
         // Remove selected Event from ObservableList (myEntity.getEvents())

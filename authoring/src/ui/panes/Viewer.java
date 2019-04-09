@@ -12,6 +12,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Line;
 import ui.AuthoringEntity;
+import ui.EntityField;
 import ui.Utility;
 
 import java.util.ResourceBundle;
@@ -22,7 +23,7 @@ public class Viewer extends ScrollPane {
     private static final int CELL_SIZE = 50;
     private int myRoomWidth;
     private int myRoomHeight;
-    private DataFormat myDataFormat;
+    private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
 
 
@@ -30,12 +31,11 @@ public class Viewer extends ScrollPane {
      *
      * @param roomWidth
      * @param roomHeight
-     * @param dataFormat This needs to be the same dataformat passed into the UserCreatedTypesPane
-     *                   this allows for entities to be passed between these two panes
+     * @param userCreatedTypesPane
      */
-    public Viewer(int roomWidth, int roomHeight, DataFormat dataFormat){
+    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane){
         myStackPane = new StackPane();
-        myDataFormat = dataFormat;
+        myUserCreatedPane = userCreatedTypesPane;
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
         myStackPane.setOnDragOver(new EventHandler<DragEvent>() {
@@ -50,11 +50,10 @@ public class Viewer extends ScrollPane {
                 Dragboard db = dragEvent.getDragboard();
                 boolean success = false;
                 System.out.println(db.getContentTypes());
-                if (db.hasContent(dataFormat)) {
-                    AuthoringEntity entity = (AuthoringEntity) db.getContent(myDataFormat);
-                    addImage(Utility.createImageWithEntity(entity));
-                    success = true;
-                }
+                AuthoringEntity authoringEntity = userCreatedTypesPane.getDraggedAuthoringEntity();
+                authoringEntity.getPropertyMap().put(EntityField.X, "" + dragEvent.getX());
+                authoringEntity.getPropertyMap().put(EntityField.Y, "" + dragEvent.getY());
+                addImage(Utility.createImageWithEntity(authoringEntity));
                 dragEvent.setDropCompleted(success);
             }
         });
@@ -115,7 +114,7 @@ public class Viewer extends ScrollPane {
             Line tempLine = new Line(x1, y, x2, y);
             pane.getChildren().add(tempLine);
             System.out.println("Y Coordinate: " + y);
-            //System.out.println("Drew line");
+            //VoogaSystem.out.println("Drew line");
         }
     }
 

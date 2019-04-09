@@ -1,0 +1,7 @@
+.hbox {
+    -fx-pref-width: 700;
+    -fx-pref-height: 500;
+    -fx-max-width: 700;
+    -fx-max-height: 500;
+    -fx-padding: 40;
+}

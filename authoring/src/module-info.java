@@ -12,4 +12,5 @@ module authoring {
     exports authoring.external;
     exports ui;
     exports ui.panes;
+    exports ui.main;
 }

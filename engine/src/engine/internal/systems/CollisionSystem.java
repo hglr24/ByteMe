@@ -3,21 +3,16 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.CollidedComponent;
 import engine.external.component.Component;
-import engine.internal.Engine;
+import engine.external.Engine;
 import javafx.scene.image.ImageView;
-import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class CollisionSystem extends System {
-
+public class CollisionSystem extends VoogaSystem {
 
     public CollisionSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
-
     }
 
     @Override

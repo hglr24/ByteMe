@@ -149,7 +149,7 @@ public class GameRunner {
 
 //            PositionComponent positionComponent = (PositionComponent) entity.getComponent(PositionComponent.class);
 //            Point3D position = (Point3D) positionComponent.getValue();
-//            System.out.println(position.getX());
+//            VoogaSystem.out.println(position.getX());
         }
     }
 

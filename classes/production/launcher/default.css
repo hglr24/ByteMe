@@ -1,0 +1,197 @@
+.root {
+    -fx-background-color: #303030;
+}
+
+.scroll-pane {
+    -fx-background: transparent;
+}
+
+.label {
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
+.prop-cell {
+    -fx-background-color: transparent;
+}
+
+.prop-grid {
+    -fx-vgap: 8;
+    -fx-padding: 10;
+    -fx-grid-lines-visible: false;
+}
+
+.prop-label {
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+    -fx-padding: 5;
+}
+
+.combo-box, .combo-box-popup .list-cell  {
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
+}
+
+.combo-box:hover, .combo-box .list-cell:hover, .combo-box:focused, .button:hover,
+.combo-box-popup .list-cell:hover, .text-field:focused, .text-field:hover{
+    -fx-background-color: #555555;
+}
+
+.combo-box-popup {
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: white;
+}
+
+
+.titled-pane {
+    -fx-collapsible: false;
+    -fx-animated: false;
+    -fx-pref-width: 700;
+    -fx-pref-height: 500;
+    -fx-max-width: 700;
+    -fx-max-height: 500;
+    -fx-backgound: #505050;
+    -fx-text-fill: white;
+}
+
+.titled-pane *.content {
+    -fx-background: #404040;
+    -fx-border-color: #303030;
+}
+
+.titled-pane .title {
+    -fx-background-color: #505050;
+    -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0 );
+}
+
+.asset-manager {
+    -fx-pref-width: 500;
+    -fx-pref-height: 700;
+    -fx-max-width: 500;
+    -fx-max-height: 700;
+}
+
+.asset-manager-labels  {
+    -fx-font-family: Verdana;
+    -fx-font-weight: normal;
+    -fx-font-size: 10;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
+.text-field {
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-font-size: 12;
+    -fx-min-width: 70;
+    -fx-min-height: 20;
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
+}
+
+.scroll-bar {
+    -fx-background-color: #303030;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #484848;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #505050;
+}
+
+.dialog-pane {
+    -fx-border-color: #303030;
+    -fx-background-color: #404040;
+}
+
+.dialog-pane .content {
+    -fx-padding: 10;
+    -fx-background-color: #404040;
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #404040;
+}
+
+.group-manager {
+    -fx-background-color: #404040;
+    -fx-padding: 20;
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+
+.sub-label {
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+}
+.welcome-label {
+    -fx-font-size: 70;
+    -fx-font-weight: heavy;
+    -fx-text-fill: pink;
+}
+
+.group-manager .top-pane {
+    -fx-text-fill: white;
+}
+
+.group-manager .center-pane {
+    -fx-padding: 10, 0, 0, 0;
+}
+
+.group-manager .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-pref-height: 500;
+    -fx-fit-to-width: true;
+    -fx-border-color: #202020;
+}
+
+.group-manager .list-view {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.group-manager .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.group-manager .list-cell:odd{
+    -fx-background-color: #303030;
+}
+
+.group-manager .list-cell:selected {
+    -fx-background-color: #005797;
+}
+
+.hbox {
+     -fx-alignment: center;
+     -fx-padding: 40;
+ }
+.vbox {
+    -fx-alignment: center;
+    -fx-padding: 40;
+}
+
+.buttons-bar {
+    -fx-alignment: center;
+    -fx-padding: 15;
+    -fx-spacing: 20;
+}
+
+.center-pane {
+    -fx-padding: 10;
+    -fx-alignment: center;
+}

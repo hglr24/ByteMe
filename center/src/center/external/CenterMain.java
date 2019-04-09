@@ -1,6 +1,6 @@
 package center.external;
 
-import ui_components.CenterView;
+import frontend.CenterView;
 
 public class CenterMain {
 
