@@ -1,5 +1,6 @@
 package data.external;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface ExternalData {
@@ -55,7 +56,7 @@ public interface ExternalData {
      * @param path path to the xml file of the serialized object you wish to deserialize
      * @return deserialized version of the object that should be cast
      */
-    Object loadObjectFromXML(String path);
+    Object loadObjectFromXML(String path) throws FileNotFoundException;
 
     /**
      * Save a Game of name gameName to the path created_games/gameName/game_data.xml
@@ -76,6 +77,6 @@ public interface ExternalData {
      * @param gameName the game whose data is to be loaded
      * @return the deserialized game data that should then be cast to a game object
      */
-    Object loadGameData(String gameName);
+    Object loadGameData(String gameName) throws FileNotFoundException;
 
 }
