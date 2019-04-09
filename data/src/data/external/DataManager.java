@@ -86,7 +86,7 @@ public class DataManager implements ExternalData{
         return loadObjectFromXML(transformGameNameToPath(gameName, GAME_INFO));
     }
 
-    public List<Object> loadGameAllGameInfoObject(){
+    public List<Object> loadAllGameInfoObjects(){
         List<String> gameNames = getGameNames();
         List<Object> gameInfoObjects = new ArrayList<>();
         for (String game : gameNames){
