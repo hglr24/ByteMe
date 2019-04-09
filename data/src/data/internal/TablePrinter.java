@@ -1,5 +1,7 @@
 package data.internal;
 
+import data.external.DatabaseEngine;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

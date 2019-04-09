@@ -1,4 +1,7 @@
-package data.internal;
+package data.external;
+
+import data.internal.ResultsProcessor;
+import data.internal.TablePrinter;
 
 import java.sql.*;
 import java.util.List;
@@ -91,7 +94,8 @@ public class DatabaseEngine {
             myConnection = DriverManager.getConnection(DATABASE_URL, USERNAME, PASSWORD);
             return true;
         } catch (SQLException exception){
-            System.out.println("Couldn't connect to database");
+            System.out.println("Couldn't connect to database" + exception.getMessage());
+            exception.printStackTrace();
             return false;
         }
     }
