@@ -6,6 +6,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,6 +85,15 @@ public class DataManager implements ExternalData{
         return loadObjectFromXML(transformGameNameToPath(gameName, GAME_INFO));
     }
 
+    public List<Object> loadGameAllGameInfoObject(){
+        List<String> gameNames = getGameNames();
+        List<Object> gameInfoObjects = new ArrayList<>();
+        for (String game : gameNames){
+            gameInfoObjects.add(loadGameInfo(game));
+        }
+        return gameInfoObjects;
+    }
+
     public void saveGameInfo(String gameName, Object gameInfoObject){
         String path = transformGameNameToPath(gameName, GAME_INFO);
         saveObjectToXML(path, gameInfoObject);
@@ -128,7 +138,7 @@ public class DataManager implements ExternalData{
         return rawXML.toString();
     }
 
-    public void printGameNames(){
+    public List<String> getGameNames(){
         File file = new File(CREATED_GAMES_DIRECTORY);
         String[] directories = file.list(new FilenameFilter() {
             @Override
@@ -137,6 +147,10 @@ public class DataManager implements ExternalData{
             }
         });
         System.out.println(Arrays.toString(directories));
+        if (directories != null) {
+            return Arrays.asList(directories);
+        }
+        return new ArrayList<>();
     }
 
     private String transformGameNameToPath(String gameName, String filename) {
