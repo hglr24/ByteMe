@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCode;
 import runner.Testing.actions.NumericAction;
 import runner.Testing.actions.XPositionAction;
 import runner.Testing.actions.YPositionAction;
+import runner.Testing.conditions.Condition;
+import runner.Testing.conditions.GreaterThanCondition;
 import runner.Testing.events.Event;
 import runner.external.Game;
 import javafx.stage.Stage;
@@ -34,6 +36,7 @@ public class DummyGameObjectMaker {
         Event event = new Event("one");
         event.addInputs(KeyCode.SPACE);
         event.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, 1.0));
+        //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
         level1.addEvent(event);
     }
 
@@ -68,6 +71,9 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));
+
+        dummy1.addComponent(new XVelocityComponent(2.0));
+        dummy1.addComponent(new YVelocityComponent(0.0));
 
 
         level.addEntity(dummy1);
