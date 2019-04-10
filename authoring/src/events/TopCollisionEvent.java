@@ -1,8 +1,7 @@
 package events;
 
 import conditions.CollisionCondition;
-import conditions.RightUpCollisionCondition;
-import engine.external.component.BottomCollidedComponent;
+import engine.external.component.TopCollidedComponent;
 import engine.external.component.YPositionComponent;
 
 public class TopCollisionEvent extends Event {
@@ -20,7 +19,7 @@ public class TopCollisionEvent extends Event {
      * Adds a condition to the Event that verifies the collision is on top of entity
      */
     private void makeTopCollisionCondition(){
-        CollisionCondition containsCollidedComponentCondition = new RightUpCollisionCondition(BottomCollidedComponent.class, myCollisionWithEntity, YPositionComponent.class);
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
 }

@@ -10,4 +10,8 @@ public class MainTester extends Application {
         MainGUI testGUI = new MainGUI();
         testGUI.launch();
     }
+
+    public static void main(String[] args){
+        launch(args);
+    }
 }

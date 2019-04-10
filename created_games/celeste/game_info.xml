@@ -2,4 +2,5 @@
     <myTitle>Celeste</myTitle>
     <myDescription>Celeste is a platforming video game by Canadian video game developers Matt Thorson and Noel Berry, with art of the Brazilian Studio MiniBoss. </myDescription>
     <myImageLocation>center/data/game_information/images/celeste.jpg</myImageLocation>
+    <myFolderName>celeste</myFolderName>
 </runner.external.GameCenterData>

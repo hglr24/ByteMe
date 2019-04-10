@@ -35,6 +35,7 @@ public class TestEngine {
             YPositionComponent yPositionComponent = (YPositionComponent) e.getComponent(YPositionComponent.class);
             Double yPosition = yPositionComponent.getValue();
 
+            System.out.println(sprite);
             ImageView image = new ImageView(sprite);
 
             image.setFitWidth(width);

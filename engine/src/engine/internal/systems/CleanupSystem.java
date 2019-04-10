@@ -31,7 +31,7 @@ public class CleanupSystem extends VoogaSystem {
     @Override
     protected void run() {
         for(Entity entity:this.getEntities()){
-            if((Boolean)entity.getComponent(DESTROY_COMPONENT_CLASS).getValue()){
+            if(getBooleanComponentValue(DESTROY_COMPONENT_CLASS,entity)){
                 myEngine.removeEntity(entity);
             }
         }

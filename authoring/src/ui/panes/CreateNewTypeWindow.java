@@ -7,6 +7,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -20,9 +21,8 @@ import ui.DefaultTypesFactory;
 import ui.Utility;
 import ui.manager.AssetManager;
 
-import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -34,14 +34,13 @@ public class CreateNewTypeWindow extends Stage {
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
-    private HBox myButtonPane;
+    private Node myButtonNode;
     private Pane mySelectedImagePane;
     private DefaultTypesFactory myDefaultTypesFactory;
     private String mySelectedImageName;
     private Entity myUserCreatedEntity;
 
-    private static final Insets INSETS = new Insets(10,10,10,10);
-    private static final int STAGE_HEIGHT = 300;
+    private static final int STAGE_HEIGHT = 325;
     private static final int STAGE_WIDTH = 400;
     private static final int GRIDPANE_GAP = 10;
     private static final int INPUT_WIDTH = 100;
@@ -72,7 +71,7 @@ public class CreateNewTypeWindow extends Stage {
         myBasedOnComboBox = new ComboBox();
         myTypeOfComboBox = new ComboBox();
         myTextField = new TextField();
-        myButtonPane = new HBox();
+        myButtonNode = new HBox();
         mySelectedImagePane = new Pane();
         myDefaultTypesFactory = new DefaultTypesFactory();
         mySelectedImageName = "";
@@ -119,13 +118,12 @@ public class CreateNewTypeWindow extends Stage {
 
     private void createButtonPane() {
         String[] buttons = myWindowResources.getString("Buttons").split(",");
+        List<Button> buttonList = new ArrayList<>();
         for(String s : buttons){
             String[] info = s.split(" ");
-            myButtonPane.getChildren().add(Utility.makeButton(this, info[1], info[0]));
+            buttonList.add(Utility.makeButton(this, info[1], info[0]));
         }
-        myButtonPane.setPadding(INSETS);
-        myButtonPane.setAlignment(Pos.CENTER);
-        myButtonPane.setSpacing(GRIDPANE_GAP);
+        myButtonNode = Utility.createButtonBar(buttonList);
     }
 
     private void handleCloseButton(){
@@ -188,7 +186,8 @@ public class CreateNewTypeWindow extends Stage {
         TitledPane titledPane = new TitledPane();
         titledPane.setText(myWindowResources.getString("Title"));
         VBox contents = new VBox();
-        contents.getChildren().addAll(myGridPane, myButtonPane);
+        contents.getChildren().addAll(myGridPane, myButtonNode);
+        contents.setSpacing(10.0);
         titledPane.setContent(contents);
         titledPane.setCollapsible(false);
         Scene scene = new Scene(titledPane);

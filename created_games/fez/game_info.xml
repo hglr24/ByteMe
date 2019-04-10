@@ -2,4 +2,5 @@
     <myTitle>Fez</myTitle>
     <myDescription>Fez is an indie puzzle-platform video game developed by Polytron Corporation and published by Trapdoor. The player-character Gomez receives a fez that reveals his two-dimensional world to be one of four sides of a three-dimensional world. </myDescription>
     <myImageLocation>center/data/game_information/images/fez.jpg</myImageLocation>
+    <myFolderName>fez</myFolderName>
 </runner.external.GameCenterData>

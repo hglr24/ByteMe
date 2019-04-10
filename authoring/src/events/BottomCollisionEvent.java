@@ -1,7 +1,6 @@
 package events;
 
 import conditions.CollisionCondition;
-import conditions.LeftDownCollisionCondition;
 import engine.external.component.BottomCollidedComponent;
 import engine.external.component.YPositionComponent;
 
@@ -19,7 +18,7 @@ public class BottomCollisionEvent extends Event{
      * Adds a condition to the Event that verifies the collision is below entity
      */
     private void makeBottomCollisionCondition(){
-        CollisionCondition containsCollidedComponentCondition = new LeftDownCollisionCondition(BottomCollidedComponent.class, myCollisionWithEntity, YPositionComponent.class);
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(BottomCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
 }

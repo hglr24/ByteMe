@@ -31,8 +31,7 @@ public class HealthSystem extends VoogaSystem {
     @Override
     protected void run() {
         for(Entity e:this.getEntities()){
-
-            if((Double)(e.getComponent(HEALTH_COMPONENT_CLASS).getValue())<0){
+            if(getDoubleComponentValue(HEALTH_COMPONENT_CLASS,e)<0){
                 if(e.hasComponents(DESTROY_COMPONENT_CLASS)){
                     ((DestroyComponent)e.getComponent(DESTROY_COMPONENT_CLASS)).setValue(true);
                 }else{

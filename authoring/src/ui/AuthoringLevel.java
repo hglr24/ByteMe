@@ -17,7 +17,7 @@ public class AuthoringLevel implements Propertable {
     private ObjectManager myObjectManager;
 
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(LevelField.values());
-    private static final Integer DEFAULT_ROOM_SIZE = 500;
+    private static final Integer DEFAULT_ROOM_SIZE = 1200;
 
     public AuthoringLevel(String label, ObjectManager manager) {
         myObjectManager = manager;

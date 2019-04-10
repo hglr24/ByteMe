@@ -2,9 +2,11 @@ package events;
 
 import actions.Action;
 import conditions.Condition;
+import javafx.scene.input.KeyCode;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * This is the API that Authoring can refer to when constructing Events
@@ -51,18 +53,35 @@ public interface IEventAuthoring {
     void addConditions(Condition condition);
 
     /**
-     * Returns the set of all available events
-     * @return set of all available events
-     */
-    Collection<String> getAllEvents();
-    /**
      * Removes a set of conditions from the list of conditions associated with this event.
      * @param conditionsToRemove
      */
     void removeConditions(List<Condition> conditionsToRemove);
 
+    /**
+     * Returns the set of all available events
+     * @return set of all available events
+     */
+    Collection<String> getAllEvents();
 
 
+
+    void setInputs(Set<KeyCode> inputs);
+
+    /**
+     * Allows you to add a list of INPUTS to the current list of inputs
+     * associated with this event. The next method allows you to add a single input.
+     * @param
+     */
+    void addInputs(Set<KeyCode> inputsToAdd);
+
+    void addInputs(KeyCode inputToAdd);
+
+    /**
+     * Removes a set of required inputs from the list  associated with this event.
+     * @param inputsToRemove
+     */
+    void removeInputs(Set<KeyCode> inputsToRemove);
 
 
 }

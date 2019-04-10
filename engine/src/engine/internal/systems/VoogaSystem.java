@@ -3,6 +3,7 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.*;
 import engine.external.Engine;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import java.util.ArrayList;
@@ -20,7 +21,11 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
     protected final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
     protected final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
-    protected final Class<? extends Component> COLLIDED_COMPONENT_CLASS = BottomCollidedComponent.class;
+    protected final Class<? extends Component> BOTTOM_COLLIDED_COMPONENT_CLASS = BottomCollidedComponent.class;
+    protected final Class<? extends Component> TOP_COLLIDED_COMPONENT_CLASS = TopCollidedComponent.class;
+    protected final Class<? extends Component> RIGHT_COLLIDED_COMPONENT_CLASS = RightCollidedComponent.class;
+    protected final Class<? extends Component> LEFT_COLLIDED_COMPONENT_CLASS = LeftCollidedComponent.class;
+    protected final Class<? extends Component> ANY_COLLIDED_COMPONENT_CLASS = AnyCollidedComponent.class;
     protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
     protected final Class<? extends Component> DIRECTION_COMPONENT_CLASS = DirectionComponent.class;
@@ -106,4 +111,20 @@ public abstract class VoogaSystem {
         return myInputs;
     }
 
+
+    protected Double getDoubleComponentValue(Class<? extends Component> componentClazz,Entity entity){
+        return (Double)entity.getComponent(componentClazz).getValue();
+    }
+
+    protected Boolean getBooleanComponentValue(Class<? extends Component> componentClazz,Entity entity){
+        return (Boolean)entity.getComponent(componentClazz).getValue();
+    }
+
+    protected String getStringComponentValue(Class<? extends Component> componentClazz,Entity entity){
+        return (String)entity.getComponent(componentClazz).getValue();
+    }
+
+    protected ImageView getImageViewComponentValue(Class<? extends Component> componentClazz, Entity entity){
+        return (ImageView) entity.getComponent(componentClazz).getValue();
+    }
 }

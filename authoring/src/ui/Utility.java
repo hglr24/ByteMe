@@ -7,6 +7,7 @@ import engine.external.component.WidthComponent;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -224,4 +225,31 @@ public class Utility {
         db.setContent(content);
         db.setDragView(imageWithEntity.getImage(), 0, 0);
     }
+
+    /**
+     * This searches for the change name in the given resource bundle and attempts to call that as a method
+     * from the object passed in
+     * Used by ImageWithEntity and Viewer
+     * @param resourceBundle
+     * @param change change from a map
+     * @param o Object that contains the method
+     */
+    public static void makeAndCallMethod(ResourceBundle resourceBundle, MapChangeListener.Change<? extends Enum,? extends String> change, Object o){
+        String methodName = resourceBundle.getString(change.getKey().toString());
+        System.out.println(methodName);
+        try {
+            Method method = o.getClass().getDeclaredMethod(methodName, String.class);
+            System.out.println("Value Added: " + change.getValueAdded());
+            method.setAccessible(true);
+            method.invoke(o, change.getValueAdded());
+        } catch (Exception e) {
+            //TODO: get rid of the stack trace once confirmed working
+            e.printStackTrace();
+            String header = resourceBundle.getString("MethodReflectionError");
+            String content = resourceBundle.getString("MethodReflectionErrorContent");
+            ErrorBox errorBox = new ErrorBox(header, content);
+            errorBox.display();
+        }
+    }
+
 }

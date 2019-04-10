@@ -7,11 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import ui.AuthoringEntity;
 import ui.EntityField;
-import ui.ErrorBox;
 import ui.Utility;
 
 import java.io.FileInputStream;
-import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 public class ImageWithEntity extends ImageView {
@@ -30,20 +28,7 @@ public class ImageWithEntity extends ImageView {
 
     private void handleChange(MapChangeListener.Change<? extends Enum,? extends String> change) {
         if(change.wasAdded() && myResources.containsKey(change.getKey().toString())){
-            System.out.println("Change was added");
-            String methodName = myResources.getString(change.getKey().toString());
-            try {
-                Method method = this.getClass().getDeclaredMethod(methodName, String.class);
-                System.out.println("Value Added: " + change.getValueAdded());
-                method.invoke(this, change.getValueAdded());
-            } catch (Exception e) {
-                //TODO: get rid of the stack trace once confirmed working
-                e.printStackTrace();
-                String header = myResources.getString("ErrorHeader");
-                String content = myResources.getString("ErrorContent");
-                ErrorBox errorBox = new ErrorBox(header, content);
-                errorBox.display();
-            }
+            Utility.makeAndCallMethod(myResources, change, this);
         }
     }
 

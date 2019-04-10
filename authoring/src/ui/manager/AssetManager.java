@@ -12,10 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ui.EntityField;
-import ui.ErrorBox;
-import ui.Propertable;
-import ui.Utility;
+import ui.*;
 import ui.panes.AssetImageSubPane;
 
 import javax.imageio.ImageIO;
@@ -228,8 +225,11 @@ public class AssetManager extends Stage {
 
     private void handleClose(){
         if(!mySelectedImageName.equals("")){
-            if(myProp != null){
+            if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
                 myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
+            }
+            else if(myProp != null && myProp.getPropertyMap().containsKey(LevelField.BACKGROUND)){
+                myProp.getPropertyMap().put(LevelField.BACKGROUND, mySelectedImageName);
             }
             this.close();
         }

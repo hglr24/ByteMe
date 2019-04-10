@@ -1,9 +1,7 @@
 package events;
 
 import conditions.CollisionCondition;
-import conditions.LeftDownCollisionCondition;
-import engine.external.component.BottomCollidedComponent;
-import engine.external.component.XPositionComponent;
+import engine.external.component.LeftCollidedComponent;
 
 public class LeftCollisionEvent extends Event {
 
@@ -20,7 +18,7 @@ public class LeftCollisionEvent extends Event {
      * Adds a condition to the Event that verifies the collision is on the left of entity
      */
     private void makeLeftCollisionCondition(){
-        CollisionCondition containsCollidedComponentCondition = new LeftDownCollisionCondition(BottomCollidedComponent.class, myCollisionWithEntity, XPositionComponent.class);
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(LeftCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
 

@@ -51,12 +51,16 @@ public class PropertiesPane extends TitledPane {
         });
     }
 
-    private ScrollPane createPropertiesGrid() throws UIException {
+    private Node createPropertiesGrid() throws UIException {
         Platform.runLater(this::requestFocus);
         GridPane gridlist = new GridPane();
         gridlist.getStyleClass().add("prop-grid");
         ScrollPane scrollpane = new ScrollPane(gridlist);
-        extractNewProperties(gridlist);
+        if (myProp.getValue() != null)
+            extractNewProperties(gridlist);
+        else {
+            return new Label("Create an Object Type to Start");
+        }
         return scrollpane;
     }
 

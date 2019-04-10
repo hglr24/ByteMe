@@ -1,52 +1,100 @@
 package ui.panes;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.MapChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Line;
-import ui.AuthoringEntity;
-import ui.EntityField;
-import ui.Propertable;
-import ui.Utility;
+import ui.*;
 
+import java.io.FileInputStream;
 import java.util.ResourceBundle;
 
 
 public class Viewer extends ScrollPane {
     private StackPane myStackPane;
     private static final int CELL_SIZE = 50;
-    private int myRoomWidth;
-    private int myRoomHeight;
     private boolean isDragOnView;
+    private ObjectProperty<Propertable> myAuthoringLevel;
     private AuthoringEntity myDraggedAuthoringEntity;
     private ObjectProperty<Propertable>  mySelectedEntity;
     private UserCreatedTypesPane myUserCreatedPane;
     private ResourceBundle myGeneralResources;
+    private Pane myLinesPane;
+    private String myBackgroundFileName;
+    private static final ResourceBundle myResources = ResourceBundle.getBundle("viewer");
 
 
     /**
      *
-     * @param roomWidth
-     * @param roomHeight
+     * @param authoringLevel
      * @param userCreatedTypesPane
+     * @param objectProperty
      */
-    public Viewer(int roomWidth, int roomHeight, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
+    public Viewer(ObjectProperty<Propertable> authoringLevel, UserCreatedTypesPane userCreatedTypesPane, ObjectProperty objectProperty){
         myStackPane = new StackPane();
+        myLinesPane = new Pane();
+        myBackgroundFileName = null;
+        myStackPane.getChildren().add(myLinesPane);
         myUserCreatedPane = userCreatedTypesPane;
         mySelectedEntity = objectProperty;
+        myAuthoringLevel = authoringLevel;
+        myAuthoringLevel.getValue().getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change ->
+                handleChange(change));
         myStackPane.setAlignment(Pos.TOP_LEFT);
         myGeneralResources = ResourceBundle.getBundle("authoring_general");
         setupAcceptDragEvents();
         setupDragDropped();
-        setRoomSize(roomWidth, roomHeight);
-        addGridLines();
+        setRoomSize();
+        updateGridLines();
         this.setContent(myStackPane);
+        this.getStyleClass().add("viewer-scroll-pane");
+    }
+
+
+    private void handleChange(MapChangeListener.Change<? extends Enum,? extends String> change) {
+        if(change.wasAdded() && myResources.containsKey(change.getKey().toString())){
+            Utility.makeAndCallMethod(myResources, change, this);
+        }
+        if(change.getKey().equals(LevelField.BACKGROUND)){
+            System.out.println("Background change triggered");
+        }
+    }
+
+    private void updateWidth(String width){
+        Double widthDouble = Double.parseDouble(width);
+        updateGridLines();
+        updateBackground(myBackgroundFileName);
+        myStackPane.setMinWidth(widthDouble);
+        myStackPane.setMaxWidth(widthDouble);
+    }
+
+    private void updateHeight(String height){
+        Double heightDouble = Double.parseDouble(height);
+        updateGridLines();
+        updateBackground(myBackgroundFileName);
+        myStackPane.setMinHeight(heightDouble);
+        myStackPane.setMaxHeight(heightDouble);
+    }
+
+    private void updateBackground(String filename){
+        if(filename != null){
+            System.out.println("Trying to update background");
+            String filepath = myGeneralResources.getString("images_filepath") + filename;
+            FileInputStream fileInputStream = Utility.makeFileInputStream(filepath);
+            Double roomHeight = this.getPrefHeight();
+            Double roomWidth = this.getPrefWidth();
+            Image image = new Image(fileInputStream, roomWidth, roomHeight, false, false);
+            BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
+            myStackPane.setBackground(new Background(backgroundImage));
+            myBackgroundFileName = filename;
+        }
     }
 
     private void setupAcceptDragEvents() {
@@ -116,44 +164,43 @@ public class Viewer extends ScrollPane {
         myStackPane.getChildren().add(imageView);
     }
 
-    /**
-     * Sets the size of the room (the size of the entire level)
-     * @param width Desired width of the level
-     * @param height Desired height of the level
-     */
-    public void setRoomSize(int width, int height){
+    private void setRoomSize(){
+        Double height = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.HEIGHT));
+        Double width = Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.WIDTH));
+        this.setPrefHeight(height);
+        this.setPrefWidth(width);
         myStackPane.setMinWidth(width);
         myStackPane.setMinHeight(height);
-        myRoomWidth = width;
-        myRoomHeight = height;
     }
 
-    private void addGridLines(){
-        Pane linesPane = new Pane();
-        linesPane.setPrefHeight(myRoomHeight);
-        linesPane.setPrefWidth(myRoomWidth);
-        addHorizontalLines(linesPane);
-        addVerticalLines(linesPane);
-        myStackPane.getChildren().add(linesPane);
+    private void updateGridLines(){
+        myStackPane.getChildren().remove(myLinesPane);
+        myLinesPane.getChildren().clear();
+        int height = (int) Math.round(Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.HEIGHT)));
+        int width = (int) Math.round(Double.parseDouble(myAuthoringLevel.getValue().getPropertyMap().get(LevelField.WIDTH)));
+        myLinesPane.setPrefWidth(width);
+        myLinesPane.setPrefHeight(height);
+        addHorizontalLines(height, width);
+        addVerticalLines(height, width);
+        myStackPane.getChildren().add(myLinesPane);
     }
 
-    private void addHorizontalLines(Pane pane) {
+    private void addHorizontalLines(int height, int width) {
         int x1 = 0;
-        int x2 = myRoomWidth;
-        for(int k = 0; k < myRoomHeight/CELL_SIZE; k++){
+        for(int k = 0; k < height/CELL_SIZE; k++){
             int y = k * CELL_SIZE;
-            Line tempLine = new Line(x1, y, x2, y);
-            pane.getChildren().add(tempLine);
+            Line tempLine = new Line(x1, y, width, y);
+            myLinesPane.getChildren().add(tempLine);
         }
     }
 
-    private void addVerticalLines(Pane pane){
+    private void addVerticalLines(int height, int width){
         int y1 = 0;
-        int y2 = myRoomHeight;
-        for(int k = 0; k < myRoomWidth/CELL_SIZE; k++){
+        int y2 = height;
+        for(int k = 0; k < width/CELL_SIZE; k++){
             int x = k * CELL_SIZE;
             Line tempLine = new Line(x, y1, x, y2);
-            pane.getChildren().add(tempLine);
+            myLinesPane.getChildren().add(tempLine);
         }
     }
 

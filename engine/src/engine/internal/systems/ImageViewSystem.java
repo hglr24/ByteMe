@@ -36,18 +36,13 @@ public class ImageViewSystem extends VoogaSystem {
     }
 
     private ImageView generateImageView(Entity entity){
-        Image image = new Image((String)entity.getComponent(SPRITE_COMPONENT_CLASS).getValue());
-        Double XPosition = (Double)entity.getComponent(X_POSITION_COMPONENT_CLASS).getValue();
-        Double YPosition = (Double)entity.getComponent(Y_POSITION_COMPONENT_CLASS).getValue();
-        Double width = (Double)entity.getComponent(WIDTH_COMPONENT_CLASS).getValue();
-        Double height = (Double)entity.getComponent(HEIGHT_COMPONENT_CLASS).getValue();
-
-        ImageView imageView = new ImageView(image);
-        imageView.setX(XPosition);
-        imageView.setY(YPosition);
-        imageView.setFitWidth(width);
-        imageView.setFitHeight(height);
+        ImageView imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS,entity)));
+        imageView.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,entity));
+        imageView.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,entity));
+        imageView.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS,entity));
+        imageView.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS,entity));
         return imageView;
     }
+
 
 }
