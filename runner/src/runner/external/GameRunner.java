@@ -36,7 +36,7 @@ public class GameRunner {
     private Stage myStage;
     private Group myGroup;
     private Scene myScene;
-    private TestEngine myEngine;
+    private Engine myEngine;
     //private Engine myEngine;
     private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 60;
@@ -66,7 +66,7 @@ public class GameRunner {
 
         myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
-        myEngine = new TestEngine(myLevels.get(0));
+        myEngine = new Engine(myLevels.get(0));
         myEntities = myEngine.updateState(myCurrentKeys);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
