@@ -39,7 +39,7 @@ public class GameRunner {
     private Engine myEngine;
     //private Engine myEngine;
     private Timeline myAnimation;
-    private static final int FRAMES_PER_SECOND = 60;
+    private static final int FRAMES_PER_SECOND = 1;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     private static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private Map myEntitiesAndNodes;
@@ -131,7 +131,7 @@ public class GameRunner {
        // updateMap();
         showEntities();
         printKeys();
-        printEntityLocations();
+        //printEntityLocations();
     }
 
     private void printKeys() {
@@ -196,7 +196,7 @@ public class GameRunner {
 //            System.out.println("end");
 //            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            System.out.println(imageViewComponent);
+           // System.out.println(imageViewComponent);
             ImageView image = (ImageView) imageViewComponent.getValue();
 
             myGroup.getChildren().add(image);

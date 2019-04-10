@@ -58,9 +58,9 @@ public class DummyGameObjectMaker {
         dummy3.addComponent(new WidthComponent(80.0));
         dummy3.addComponent(new HeightComponent(20.0));
 
-        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+//        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+//        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+//        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
         dummy1.addComponent(new SpriteComponent("basketball.png"));
         dummy2.addComponent(new SpriteComponent("basketball.png"));
         dummy3.addComponent(new SpriteComponent("basketball.png"));
