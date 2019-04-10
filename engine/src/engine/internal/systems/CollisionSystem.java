@@ -36,9 +36,11 @@ public class CollisionSystem extends VoogaSystem {
     protected void run() {
         this.getEntities().forEach(e1->this.getEntities().forEach(e2->{
             if(seemColliding(e1,e2)&& e1!=e2){
+                System.out.println("colliding");
                 registerCollidedEntity(horizontalCollide(e2,e1),e1,e2);
                 registerCollidedEntity(verticalCollide(e2,e1),e1,e2);
                 registerCollidedEntity(ANY_COLLIDED_COMPONENT_CLASS,e1,e2);
+
             }
         }));
     }
@@ -46,8 +48,9 @@ public class CollisionSystem extends VoogaSystem {
     private void registerCollidedEntity(Class<? extends Component> componentClazz, Entity e1, Entity e2){
         if(!e1.hasComponents(componentClazz)){
             try {
-                e1.addComponent((Component<?>) Class.forName(componentClazz.getSimpleName()).getConstructor(new Class[]{Collection.class}).newInstance(new HashSet<>()));
-            } catch (InstantiationException|IllegalAccessException|InvocationTargetException|NoSuchMethodException|ClassNotFoundException e) {
+                e1.addComponent((Component<?>) Class.forName(this.getClass().getModule(),
+                        Engine.COMPONENTS_PACKAGE_PATH + componentClazz.getSimpleName()).getConstructor(new Class[]{Collection.class}).newInstance(new HashSet<>()));
+            } catch (InstantiationException|IllegalAccessException|InvocationTargetException|NoSuchMethodException e) {
                 System.out.println("Invalid reflection instantiation call in CollisionSystem: "+componentClazz.getSimpleName());
             }
         }
@@ -72,7 +75,7 @@ public class CollisionSystem extends VoogaSystem {
 
 
     private boolean seemColliding(Entity e1, Entity e2){
-        return (getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e1)).intersects((getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e1)).getBoundsInLocal());
+        return (getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e1)).intersects((getImageViewComponentValue(IMAGEVIEW_COMPONENT_CLASS,e2)).getBoundsInLocal());
     }
 
 }

@@ -61,8 +61,8 @@ public class Event implements IEventEngine, IEventAuthoring {
     private boolean conditionsMet(Entity entity) {
         try {
             return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
-        }catch(Exception e){
-            e.printStackTrace(); //TODO find exact exceptions to catch
+        }catch(NullPointerException npe){
+            //npe.printStackTrace(); //TODO find exact exceptions to catch
             return false;
         }
     }
