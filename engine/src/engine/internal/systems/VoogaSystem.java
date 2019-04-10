@@ -72,6 +72,7 @@ public abstract class VoogaSystem {
     public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {
         myEntities = new ArrayList<>();
         myInputs = inputs;
+
         for (Entity e: entities) {
             if (filter(e)) {
                 myEntities.add(e);

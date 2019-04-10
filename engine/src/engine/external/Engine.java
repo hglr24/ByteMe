@@ -17,6 +17,7 @@ public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
     private final ResourceBundle SYSTEM_ORDER_RESOURCES = ResourceBundle.getBundle("SystemUpdateOrder");
     private final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
+    private final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
 
     private HashMap<Integer,VoogaSystem> mySystems;
     protected Collection<Entity> myEntities;
@@ -51,7 +52,7 @@ public class Engine {
      * @return an unmodifiable collection of Entities within the currently running game
      */
     public Collection<Entity> getEntities(){
-        return Collections.unmodifiableCollection(myEntities);
+        return myEntities;
     }
 
     /**
@@ -91,7 +92,7 @@ public class Engine {
         String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
-            componentList.add((Class<? extends Component>)Class.forName(this.getClass().getModule(),component));
+            componentList.add((Class) Class.forName(this.getClass().getModule(),COMPONENTS_PACKAGE_PATH+component));
         }
         return componentList;
     }
