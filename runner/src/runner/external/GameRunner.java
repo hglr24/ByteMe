@@ -55,22 +55,23 @@ public class GameRunner {
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        dm2.serializeObject();
+//        dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
 
-        DataManager dm = new DataManager();
+        //DataManager dm = new DataManager();
 
-        myGame = (Game) dm.loadGameData(game);
+        //myGame = (Game) dm.loadGameData(game);
+        myGame = gameMade;
 
 
 
         myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
+        myStage = new Stage();
         myEngine = new Engine(myLevels.get(0));
         myEntities = myEngine.updateState(myCurrentKeys);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
-        myStage = new Stage();
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
         myScene.setFill(Color.BEIGE);

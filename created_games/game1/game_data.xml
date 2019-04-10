@@ -5,50 +5,10 @@
         <engine.external.Entity>
           <myComponents>
             <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">60.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">30.0</myValue>
-              </engine.external.component.WidthComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">basketball.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
               <java-class>engine.external.component.YPositionComponent</java-class>
               <engine.external.component.YPositionComponent>
-                <myValue class="double">60.0</myValue>
+                <myValue class="double">30.0</myValue>
               </engine.external.component.YPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">30.0</myValue>
-              </engine.external.component.HeightComponent>
-            </entry>
-          </myComponents>
-        </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">30.0</myValue>
-              </engine.external.component.XPositionComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.WidthComponent</java-class>
@@ -63,16 +23,16 @@
               </engine.external.component.SpriteComponent>
             </entry>
             <entry>
+              <java-class>engine.external.component.XPositionComponent</java-class>
+              <engine.external.component.XPositionComponent>
+                <myValue class="double">30.0</myValue>
+              </engine.external.component.XPositionComponent>
+            </entry>
+            <entry>
               <java-class>engine.external.component.ZPositionComponent</java-class>
               <engine.external.component.ZPositionComponent>
                 <myValue class="double">0.0</myValue>
               </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">30.0</myValue>
-              </engine.external.component.YPositionComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.HeightComponent</java-class>
@@ -85,10 +45,50 @@
         <engine.external.Entity>
           <myComponents>
             <entry>
+              <java-class>engine.external.component.YPositionComponent</java-class>
+              <engine.external.component.YPositionComponent>
+                <myValue class="double">60.0</myValue>
+              </engine.external.component.YPositionComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.WidthComponent</java-class>
+              <engine.external.component.WidthComponent>
+                <myValue class="double">30.0</myValue>
+              </engine.external.component.WidthComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.SpriteComponent</java-class>
+              <engine.external.component.SpriteComponent>
+                <myValue class="string">basketball.png</myValue>
+              </engine.external.component.SpriteComponent>
+            </entry>
+            <entry>
               <java-class>engine.external.component.XPositionComponent</java-class>
               <engine.external.component.XPositionComponent>
+                <myValue class="double">60.0</myValue>
+              </engine.external.component.XPositionComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.ZPositionComponent</java-class>
+              <engine.external.component.ZPositionComponent>
+                <myValue class="double">0.0</myValue>
+              </engine.external.component.ZPositionComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.HeightComponent</java-class>
+              <engine.external.component.HeightComponent>
+                <myValue class="double">30.0</myValue>
+              </engine.external.component.HeightComponent>
+            </entry>
+          </myComponents>
+        </engine.external.Entity>
+        <engine.external.Entity>
+          <myComponents>
+            <entry>
+              <java-class>engine.external.component.YPositionComponent</java-class>
+              <engine.external.component.YPositionComponent>
                 <myValue class="double">90.0</myValue>
-              </engine.external.component.XPositionComponent>
+              </engine.external.component.YPositionComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.WidthComponent</java-class>
@@ -103,16 +103,16 @@
               </engine.external.component.SpriteComponent>
             </entry>
             <entry>
+              <java-class>engine.external.component.XPositionComponent</java-class>
+              <engine.external.component.XPositionComponent>
+                <myValue class="double">90.0</myValue>
+              </engine.external.component.XPositionComponent>
+            </entry>
+            <entry>
               <java-class>engine.external.component.ZPositionComponent</java-class>
               <engine.external.component.ZPositionComponent>
                 <myValue class="double">0.0</myValue>
               </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">90.0</myValue>
-              </engine.external.component.YPositionComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.HeightComponent</java-class>

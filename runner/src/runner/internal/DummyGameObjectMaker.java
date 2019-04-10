@@ -4,7 +4,13 @@ import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.*;
+
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import runner.Testing.actions.NumericAction;
+import runner.Testing.actions.XPositionAction;
+import runner.Testing.actions.YPositionAction;
+import runner.Testing.events.Event;
 import runner.external.Game;
 import javafx.stage.Stage;
 
@@ -19,8 +25,16 @@ public class DummyGameObjectMaker {
     private void initializeGame(Game dummyGame) {
         Level level1 = new Level();
         addDummyEntities(level1);
+        addDummyEvents(level1);
         dummyGame.addLevel(level1);
 
+    }
+
+    private void addDummyEvents(Level level1) {
+        Event event = new Event("one");
+        event.addInputs(KeyCode.SPACE);
+        event.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, 1.0));
+        level1.addEvent(event);
     }
 
     private void addDummyEntities(Level level) {
@@ -44,12 +58,16 @@ public class DummyGameObjectMaker {
         dummy3.addComponent(new WidthComponent(80.0));
         dummy3.addComponent(new HeightComponent(20.0));
 
-        //dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        //dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        //dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
+        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
         dummy1.addComponent(new SpriteComponent("basketball.png"));
         dummy2.addComponent(new SpriteComponent("basketball.png"));
         dummy3.addComponent(new SpriteComponent("basketball.png"));
+
+        dummy1.addComponent(new NameComponent("one"));
+        dummy2.addComponent(new NameComponent("two"));
+        dummy3.addComponent(new NameComponent("three"));
 
 
         level.addEntity(dummy1);
