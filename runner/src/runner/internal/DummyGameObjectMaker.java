@@ -30,6 +30,7 @@ public class DummyGameObjectMaker {
         addDummyEvents(level1);
         dummyGame.addLevel(level1);
 
+
     }
 
     private void addDummyEvents(Level level1) {
@@ -77,6 +78,7 @@ public class DummyGameObjectMaker {
 
 
         level.addEntity(dummy1);
+
         level.addEntity(dummy2);
         level.addEntity(dummy3);
     }
@@ -87,6 +89,7 @@ public class DummyGameObjectMaker {
 
     public void serializeObject(){
         DataManager dm = new DataManager();
+        dm.createGameFolder("game1");
         dm.saveGameData("game1", myGame);
     }
 }

@@ -54,14 +54,14 @@ public class GameRunner {
         GameRunner will have parameter String name, not Game game
         code below */
 
-        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-//        dm2.serializeObject();
-        Game gameMade = dm2.getGame(game);
+        //DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
+        //dm2.serializeObject();
+        //Game gameMade = dm2.getGame(game);
 
-        //DataManager dm = new DataManager();
+        DataManager dm = new DataManager();
 
-        //myGame = (Game) dm.loadGameData(game);
-        myGame = gameMade;
+        myGame = (Game) dm.loadGameData(game);
+        //myGame = gameMade;
 
 
 
@@ -113,14 +113,7 @@ public class GameRunner {
 //            //ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
 //            //ImageView image = (ImageView) imageViewComponent.getValue();
 //            ImageView image = new ImageView("basketball.png");
-//
-//            image.setFitWidth(width);
-//            image.setFitHeight(height);
-////            image.setSmooth(false);
-//            image.setLayoutX(xyz.get(0));
-//            image.setLayoutY(xyz.get(1));
-//
-//            map.put(entity, image);
+
 
         }
         return map;
@@ -185,16 +178,6 @@ public class GameRunner {
     private void showEntities(){
         myGroup.getChildren().clear();
         for(Entity entity : myEntities){
-
-//            Node toAdd = (Node) myEntitiesAndNodes.get(entity);
-//            System.out.println("begin");
-//            System.out.println(myGroup);
-//            System.out.println(myGroup.getChildren());
-//            System.out.println(myEntitiesAndNodes);
-//            System.out.println(myEntitiesAndNodes.get(entity));
-//            System.out.println(entity);
-//            System.out.println("end");
-//            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
            // System.out.println(imageViewComponent);
             ImageView image = (ImageView) imageViewComponent.getValue();
