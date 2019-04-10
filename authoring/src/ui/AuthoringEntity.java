@@ -11,7 +11,6 @@ import ui.manager.ObjectManager;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Harry Ross
@@ -40,7 +39,7 @@ public class AuthoringEntity implements Propertable {
         myBackingEntity = new Entity(); // Brand new backing Entity
         myPropertyMap.put(EntityField.LABEL, label);
         addPropertyListeners();
-        myObjectManager.addEntity(this);
+        myObjectManager.addEntityType(this);
     }
 
     public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
@@ -60,7 +59,7 @@ public class AuthoringEntity implements Propertable {
         if (basis.hasComponents(HeightComponent.class))
             myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
         addPropertyListeners();
-        myObjectManager.addEntity(this);
+        myObjectManager.addEntityType(this);
     }
 
     public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
@@ -75,7 +74,7 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
         myBackingEntity = backingEntity;
         addPropertyListeners();
-        myObjectManager.addEntity(this);
+        myObjectManager.addEntityInstance(this);
     }
 
     private void addPropertyListeners() {

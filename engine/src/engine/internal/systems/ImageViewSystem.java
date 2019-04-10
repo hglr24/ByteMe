@@ -40,23 +40,16 @@ public class ImageViewSystem extends VoogaSystem {
     }
 
     private ImageView generateImageView(Entity entity){
-        ImageView imageView = new ImageView();
-        if(!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)){
-            System.out.println(getStringComponentValue(SPRITE_COMPONENT_CLASS,entity));
-            try {
-                FileInputStream stream = new FileInputStream("../Images/"+ getStringComponentValue(SPRITE_COMPONENT_CLASS,entity));
-                imageView = new ImageView(new Image(stream));
-                imageView.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,entity));
-                imageView.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,entity));
-                imageView.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS,entity));
-                imageView.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS,entity));
-            } catch (FileNotFoundException e) {
-                System.out.println("Image file not found");
-            }
-        }else{
+        ImageView imageView;
+        if (!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)) {
+            imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity)));
+        } else {
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }
-
+        imageView.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS, entity));
+        imageView.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS, entity));
+        imageView.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS, entity));
+        imageView.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS, entity));
         return imageView;
     }
 

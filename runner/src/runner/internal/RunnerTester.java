@@ -29,7 +29,7 @@ public class RunnerTester extends Application {
        // dm.createGameFolder("game1");
        // dm.saveGameData("game1", dummyGame);
 
-        GameRunner runner = new GameRunner("game1");
+        GameRunner runner = new GameRunner("test");
     }
 
 //    private void initializeGame(Game dummyGame) {

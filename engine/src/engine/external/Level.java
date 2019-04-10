@@ -1,5 +1,7 @@
 package engine.external;
 
+import javafx.beans.property.StringProperty;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +12,13 @@ import java.util.HashSet;
  * Distinct Levels of the same Game may store different data from each other
  */
 public class Level implements Serializable {
+
+    private String myLabel;
+    private Double myWidth;
+    private Double myHeight;
+    private String myBackground;
+    private String myMusic;
+
     private Collection<Entity> myEntities;
     private Collection<IEventEngine> myEvents;
     private Level myCheckPoint;
@@ -53,6 +62,46 @@ public class Level implements Serializable {
      */
     public Collection<IEventEngine> getEvents() {
         return myEvents;
+    }
+
+    public void setLabel(String label) {
+        myLabel = label;
+    }
+
+    public void setBackground(String imageResource) {
+        myBackground = imageResource;
+    }
+
+    public void setWidth(double width) {
+        myWidth = width;
+    }
+
+    public void setHeight(double height) {
+        myHeight = height;
+    }
+
+    public void setMusic(String musicResource) {
+        myMusic = musicResource;
+    }
+
+    public String getLabel() {
+        return myLabel;
+    }
+
+    public String getBackground() {
+        return myBackground;
+    }
+
+    public String getMusic() {
+        return myMusic;
+    }
+
+    public Double getWidth() {
+        return myWidth;
+    }
+
+    public Double getHeight() {
+        return myHeight;
     }
 
 }

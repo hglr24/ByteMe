@@ -16,7 +16,6 @@ public class GamePane {
     public static final int GAME_PANE_TOP_PADDING = 10;
     public static final int GAME_PANE_PADDING = 100;
     public static final int TITLE_FONT_SIZE = 32;
-    public static final int NUM_GAMES = 6;
     private Pane myDisplay;
     private ResourceBundle myResources;
 
@@ -34,7 +33,7 @@ public class GamePane {
         BorderPane.setAlignment(subtitle, Pos.CENTER);
         subtitle.setFont(new Font(TITLE_FONT_SIZE));
         gamePane.setTop(subtitle);
-        gamePane.setCenter((new GameList(NUM_GAMES)).getDisplay());
+        gamePane.setCenter((new GameList()).getDisplay());
         myDisplay = gamePane;
     }
 

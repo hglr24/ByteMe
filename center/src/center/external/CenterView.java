@@ -1,4 +1,4 @@
-package frontend;
+package center.external;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -16,6 +16,7 @@ public class CenterView extends Application {
     private static final double STAGE_WIDTH = 1250;
     private static final double STAGE_HEIGHT = 750;
     private static final Color BACKGROUND_COLOR = Color.rgb(46, 43, 51);
+    private static final String CSS_LOCATION = "center.css";
 
     public void start (Stage myStage) throws Exception {
         CenterView view = new CenterView();
@@ -41,8 +42,7 @@ public class CenterView extends Application {
         HeaderBar myHeader = new HeaderBar();
         Pane layout = myHeader.getHeaderLayout();
         BorderPane.setAlignment(layout, Pos.TOP_CENTER);
-        root.getStylesheets().add("center.css");
-        layout.getStylesheets().add("center.css");
+        root.getStylesheets().add(CSS_LOCATION);
         root.setTop(layout);
         root.setCenter((new GamePane()).getDisplay());
         myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
