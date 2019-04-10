@@ -79,7 +79,7 @@ public abstract class VoogaSystem {
             }
         }
         run();
-        myInputs.clear();
+        // myInputs.clear();
     }
 
     /**

@@ -38,10 +38,12 @@ public class ImageViewSystem extends VoogaSystem {
 
     private ImageView generateImageView(Entity entity){
         //ImageView imageView = new ImageView();
-        System.out.println(getStringComponentValue(SPRITE_COMPONENT_CLASS,entity));
-
-        Image image = new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS,entity));
-        ImageView imageView = new ImageView(image);
+        ImageView imageView;
+        if(!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)){
+            imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS,entity)));
+        }else{
+            imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
+        }
         imageView.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,entity));
         imageView.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,entity));
         imageView.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS,entity));
