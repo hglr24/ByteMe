@@ -44,7 +44,6 @@ public class EngineSystemTest {
         entityImageViewTop = new Entity();
         entityImageViewTop.addComponent(new SpriteComponent("flappy_bird.png"));
         entityImageViewTop.addComponent(new XPositionComponent(0.0));
-        entityImageViewTop.addComponent(new YPositionComponent(10.0));
         entityImageViewTop.addComponent(new ZPositionComponent(0.0));
         entityImageViewTop.addComponent(new WidthComponent(20.0));
         entityImageViewTop.addComponent(new HeightComponent(20.0));
