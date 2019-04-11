@@ -45,7 +45,6 @@ public class DummyGameObjectMaker {
         //lce.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
         lce.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.0));
         lce.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
-
         Event event3 = new Event("one");
         event3.addInputs(KeyCode.LEFT);
         event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
@@ -93,6 +92,9 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new XVelocityComponent(0.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
+
+        dummy2.addComponent(new XVelocityComponent(0.0));
+        dummy2.addComponent(new YVelocityComponent(0.0));
 
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));

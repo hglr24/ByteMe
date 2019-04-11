@@ -131,7 +131,7 @@ public class GameRunner {
        // updateMap();
         showEntities();
         //printKeys();
-        printEntityLocations();
+        //printEntityLocations();
     }
 
     private void printKeys() {
