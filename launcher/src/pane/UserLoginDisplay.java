@@ -22,7 +22,7 @@ public class UserLoginDisplay extends VBox {
     private static final String LOGIN_LABEL = "login_label";
 
     public UserLoginDisplay(SwitchToUserOptions mySwitch){
-        this.getStylesheets().add("default.css");
+        this.getStylesheets().add("default_launcher.css");
         String[] loginTextFields = myResources.getString(LOGIN_KEY).split(",");
         this.setSpacing(40);
         InformativeField myUserNameField = new InformativeField(loginTextFields[0]);

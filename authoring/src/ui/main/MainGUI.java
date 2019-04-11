@@ -1,5 +1,7 @@
 package ui.main;
 
+import data.external.DataManager;
+import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -14,10 +16,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import runner.external.Game;
-import ui.AuthoringEntity;
+import runner.external.GameCenterData;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
-import ui.LevelField;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
@@ -36,6 +37,7 @@ import java.util.ResourceBundle;
 public class MainGUI {
 
     private Game myGame;
+    private GameCenterData myGameData;
     private Stage myStage;
     private ObjectManager myObjectManager;
     private ObservableStringValue myCurrentStyle;
@@ -50,19 +52,23 @@ public class MainGUI {
 
     public MainGUI() { // Default constructor for creating a new game from scratch
         myGame = new Game();
+        myGameData = new GameCenterData();
+        defaultGameData();
         myStage = new Stage();
-        myObjectManager = new ObjectManager();
-        AuthoringLevel blankLevel = new AuthoringLevel("Level_1", myObjectManager);
-        AuthoringEntity blankEntity = new AuthoringEntity("Object_1", myObjectManager);
-        mySelectedEntity = new SimpleObjectProperty<>(null);
+
+        AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
         myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
+        myObjectManager = new ObjectManager(myCurrentLevel);
+        myObjectManager.addLevel(blankLevel);
+        mySelectedEntity = new SimpleObjectProperty<>(null);
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
     }
 
-    public MainGUI(Game game) {
+    public MainGUI(Game game, GameCenterData gameData) {
         this();
         myGame = game;
+        myGameData = gameData;
     }
 
     public void launch() {
@@ -73,7 +79,7 @@ public class MainGUI {
         myStage.setMinWidth(myStage.getWidth());
     }
 
-    private Scene createMainGUI(){
+    private Scene createMainGUI() { //TODO clean up
         BorderPane mainBorderPane = new BorderPane();
         Scene mainScene = new Scene(mainBorderPane);
         HBox propPaneBox = new HBox();
@@ -109,7 +115,7 @@ public class MainGUI {
     }
 
     private Viewer createViewer(UserCreatedTypesPane userCreatedTypesPane) {
-        Viewer viewer = new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity);
+        Viewer viewer = new Viewer(myCurrentLevel, userCreatedTypesPane, mySelectedEntity, myObjectManager);
         viewer.setMinWidth(400);
         viewer.setMinHeight(300);
         return viewer;
@@ -170,7 +176,14 @@ public class MainGUI {
     }
 
     private void saveGame() {
-        System.out.println("Save"); //TODO
+        GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
+        Game exportableGame = translator.translate();
+        GameCenterData gameData = translator.getNewGameData();
+
+        DataManager dm = new DataManager();
+        dm.createGameFolder(gameData.getFolderName());
+        dm.saveGameData(gameData.getFolderName(), exportableGame);
+        dm.saveGameInfo(gameData.getFolderName(), gameData);
     }
 
     private void openGroupManager() {
@@ -189,6 +202,13 @@ public class MainGUI {
     private void swapStylesheet(String oldVal, String newVal) {
         myStage.getScene().getStylesheets().remove(oldVal);
         myStage.getScene().getStylesheets().add(newVal);
+    }
+
+    private void defaultGameData() {
+        myGameData.setFolderName("test");
+        myGameData.setImageLocation("test");
+        myGameData.setTitle("THE TEST GAME");
+        myGameData.setDescription("A game about testing");
     }
 
 }

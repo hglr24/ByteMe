@@ -1,0 +1,58 @@
+.scroll-pane {
+    -fx-background: transparent;
+}
+
+.label {
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
+.button {
+    -fx-font-size: 12;
+    -fx-min-width: 70;
+    -fx-min-height: 20;
+    -fx-background-color: #606060;
+    -fx-text-fill: white;
+}
+
+.root {
+    -fx-background-color: #27242d;
+}
+
+.rectangle {
+    -fx-arc-width: 25;
+    -fx-arc-height: 25;
+}
+
+.cardtitle {
+    -fx-font-size: 24;
+}
+
+.cardbody {
+    -fx-font-size: 14;
+    -fx-text-alignment: center;
+}
+
+.rectangle1 {
+    -fx-fill: #aa84dc;
+}
+
+.cardtext1 {
+    -fx-fill: black;
+}
+
+.rectangle2 {
+    -fx-fill: #412472;
+}
+
+.cardtext2 {
+    -fx-fill: white;
+}
+
+.buttons {
+    -fx-spacing: 15;
+    -fx-alignment: center;
+}

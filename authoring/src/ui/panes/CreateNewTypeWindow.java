@@ -5,7 +5,6 @@ import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -18,17 +17,17 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.DefaultTypesFactory;
+import ui.EntityField;
+import ui.ErrorBox;
 import ui.Utility;
 import ui.manager.AssetManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 
 public class CreateNewTypeWindow extends Stage {
     private GridPane myGridPane;
+    private static final ResourceBundle SYNTAX_RESOURCES = ResourceBundle.getBundle("property_syntax");
     private ResourceBundle myWindowResources;
     private ResourceBundle myTypeResources;
     private ComboBox myTypeOfComboBox;
@@ -50,6 +49,7 @@ public class CreateNewTypeWindow extends Stage {
     private static final String TYPE_RESOURCES = "default_entity_type";
 
     public CreateNewTypeWindow(String isANewTypeOf, String isBasedOn){
+        mySelectedImageName = null;
         initializeGridPane();
         initializeVariables();
         myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
@@ -66,6 +66,20 @@ public class CreateNewTypeWindow extends Stage {
     public Entity getUserCreatedEntity(){
         return  myUserCreatedEntity;
     }
+
+    /**
+     * Gets the typeOf
+     * Called by UserCreatedTypesPane to determine what category to display
+     * the new type in
+     * @return String of the category
+     */
+    public String[] getCategoryInfo(){
+        String[] result = new String[2];
+        result[0] = myTypeOfComboBox.getValue().toString();
+        result[1] = myBasedOnComboBox.getValue().toString();
+        return result;
+    }
+
 
     private void initializeVariables() {
         myBasedOnComboBox = new ComboBox();
@@ -110,10 +124,12 @@ public class CreateNewTypeWindow extends Stage {
     private void openAssetManager(){
         AssetManager assetManager = new AssetManager();
         assetManager.showAndWait();
-        ImageView imageView = assetManager.getImageView();
-        mySelectedImagePane.getChildren().clear();
-        mySelectedImagePane.getChildren().add(imageView);
-        mySelectedImageName = assetManager.getImageName();
+        if(assetManager.getImageView() != null){
+            ImageView imageView = assetManager.getImageView();
+            mySelectedImagePane.getChildren().clear();
+            mySelectedImagePane.getChildren().add(imageView);
+            mySelectedImageName = assetManager.getImageName();
+        }
     }
 
     private void createButtonPane() {
@@ -131,15 +147,33 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private void handleCreateButton(){
-        String typeLabel = myTextField.getText();
-        String typeOf = (String) myTypeOfComboBox.getValue();
-        String basedOn = (String) myBasedOnComboBox.getValue();
+        if(checkValidInputs()){
+            String typeLabel = myTextField.getText();
+            String typeOf = (String) myTypeOfComboBox.getValue();
+            String basedOn = (String) myBasedOnComboBox.getValue();
 
-        Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
-        entity.addComponent(new NameComponent(typeLabel));
-        entity.addComponent(new SpriteComponent(mySelectedImageName));
-        myUserCreatedEntity = entity;
-        this.close();
+            Entity entity = myDefaultTypesFactory.getDefaultEntity(typeOf, basedOn);
+            entity.addComponent(new NameComponent(typeLabel));
+            entity.addComponent(new SpriteComponent(mySelectedImageName));
+            myUserCreatedEntity = entity;
+            this.close();
+        }
+        else{
+            String[] errorInfo = myWindowResources.getString("InvalidInputs").split(",");
+            ErrorBox errorBox = new ErrorBox(errorInfo[0], errorInfo[1]);
+            errorBox.display();
+        }
+    }
+
+    private boolean checkValidInputs() {
+        Set<Boolean> checkerSet = new HashSet<>();
+        checkerSet.add((!mySelectedImageName.equals("")));
+        System.out.println("Image good: " + (mySelectedImageName != null));
+        checkerSet.add(!myTextField.getText().isEmpty());
+        System.out.println("TextField Not Empty: " + (!myTextField.getText().isEmpty()));
+        checkerSet.add(myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL")));
+        System.out.println("TextField good for label: " + (myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL"))));
+        return !checkerSet.contains(false);
     }
 
 

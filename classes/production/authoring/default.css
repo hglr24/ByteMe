@@ -5,6 +5,11 @@
 
 .scroll-pane {
     -fx-background: transparent;
+    -fx-border-color: #303030;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
 }
 
 .label {
@@ -48,6 +53,10 @@
     -fx-effect: dropshadow( three-pass-box, rgba(0,0,0,0.6), 15, 0, 0, 0  );
 }
 
+.combo-box-popup .list-view {
+    -fx-background-color: #606060;
+}
+
 .combo-box .list-cell {
     -fx-text-fill: white;
 }
@@ -55,10 +64,6 @@
 .titled-pane {
     -fx-collapsible: false;
     -fx-animated: false;
-    -fx-pref-width: 300;
-    -fx-pref-height: 200;
-    -fx-max-height: 200;
-    -fx-max-width: 300;
     -fx-backgound: #505050;
     -fx-text-fill: white;
 }
@@ -99,6 +104,32 @@
 
 .dialog-pane .header-panel {
     -fx-background-color: #404040;
+}
+
+.menu-bar {
+    -fx-background-color: #303030;
+}
+
+.menu-bar .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 12;
+}
+
+.menu {
+    -fx-background-color: #303030;
+}
+
+.menu:hover {
+    -fx-background-color: #505050;
+}
+
+.context-menu {
+    -fx-background-color: #303030;
+    -fx-text-fill: white;
+}
+
+.menu-item:hover, .menu-item:focused {
+    -fx-background-color: #505050;
 }
 
 
@@ -169,4 +200,66 @@
     -fx-alignment: center;
     -fx-padding: 15;
     -fx-spacing: 20;
+}
+
+.prop-pane-box {
+    -fx-spacing: 5;
+}
+
+.entity-pane-box {
+    -fx-spacing: 5;
+    -fx-padding: 0 0 10 5;
+}
+
+.prop-pane {
+    -fx-min-width: 200;
+    -fx-pref-height: 200;
+    -fx-max-height: 200;
+    -fx-alignment: center;
+}
+
+.prop-pane .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 14;
+    -fx-text-fill: #aaaaaa;
+}
+
+.entity-menu {
+
+}
+
+.entity-menu .titled-pane {
+    -fx-pref-width: 200;
+}
+
+.entity-menu .titled-pane .content{
+    -fx-padding: 6 0 0 0;
+}
+
+.entity-menu .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.entity-menu .label {
+    -fx-font-weight: normal;
+    -fx-font-size: 12;
+}
+
+.entity-menu .list-cell:odd{
+    -fx-background-color: #303030;
+}
+
+.entity-menu .list-cell:hover {
+    -fx-background-color: #505050;
+}
+
+.viewer-scroll-pane {
+    -fx-background-color: #606060;
+    -fx-pref-height: 100;
+}
+
+.main-center-pane {
+    -fx-padding: 0 0 10 10;
+    -fx-alignment: center;
 }

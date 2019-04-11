@@ -31,7 +31,7 @@ public class InformativeField extends TextField {
             this.setText("");
         }
     }
-    private String getTextEntered(){
+    public String getTextEntered(){
         return new String(this.getText());
     }
 

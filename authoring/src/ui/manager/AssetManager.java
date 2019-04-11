@@ -67,6 +67,7 @@ public class AssetManager extends Stage {
     public AssetManager(){
         myProp = null;
         mySelectedImageName = "";
+        mySelectedImageView = null;
         initializeVariables();
         initializeStage();
         fillImageExtensionSet();
@@ -198,21 +199,27 @@ public class AssetManager extends Stage {
             chooser.getExtensionFilters().add(extFilter);
         }
         File selectedFile = chooser.showOpenDialog(stage);
-        try {
-            BufferedImage image = ImageIO.read(selectedFile);
-            File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
-            File otherSaveToFile = new File("Images/" + selectedFile.getName());
-            String[] split = selectedFile.getPath().split("\\.");
-            String extension = split[split.length-1];
-            ImageIO.write(image, extension, saveToFile);
-            ImageIO.write(image, extension, otherSaveToFile);
-            drawImageScrollPane();
-        } catch (IOException e) {
-            //TODO: Test that this works
-            String[] text = myResources.getString(IO_ERROR).split(",");
-            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-            errorBox.display();
+        if(selectedFile != null){
+            try {
+                BufferedImage image = ImageIO.read(selectedFile);
+                File saveToFile = new File(ASSET_IMAGE_FOLDER_PATH + File.separator + selectedFile.getName());
+                File otherSaveToFile = new File("Images/" + selectedFile.getName());
+                String[] split = selectedFile.getPath().split("\\.");
+                String extension = split[split.length-1];
+                ImageIO.write(image, extension, saveToFile);
+                ImageIO.write(image, extension, otherSaveToFile);
+                drawImageScrollPane();
+            } catch (IOException e) {
+                //TODO: Test that this works
+                String[] text = myResources.getString(IO_ERROR).split(",");
+                ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+                errorBox.display();
+            }
         }
+        else{
+            mySelectedImageView = null;
+        }
+
     }
 
     private void createAndDisplayAlert(String contentText) {
@@ -224,6 +231,12 @@ public class AssetManager extends Stage {
     }
 
     private void handleClose(){
+        mySelectedImageView = null;
+        this.close();
+    }
+
+    private void handleApply(){
+        //TODO: add method to set Entity's image
         if(!mySelectedImageName.equals("")){
             if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
                 myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedImageName);
@@ -238,10 +251,6 @@ public class AssetManager extends Stage {
             ErrorBox errorBox = new ErrorBox(text[0], text[1]);
             errorBox.display();
         }
-    }
-
-    private void handleApply(){
-        //TODO: add method to set Entity's image
     }
 
     /**

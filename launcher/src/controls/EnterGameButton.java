@@ -22,7 +22,7 @@ public class EnterGameButton extends SceneSwitchButton {
         super(label);
         userNameAccessor = userName;
         passWordAccessor = passWord;
-        this.getStylesheets().add("default.css");
+        this.getStylesheets().add("default_launcher.css");
         this.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {

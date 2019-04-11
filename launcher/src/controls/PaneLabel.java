@@ -13,7 +13,6 @@ public class PaneLabel extends Label {
         ResourceBundle myResources = ResourceBundle.getBundle(WELCOME_RESOURCE);
         this.setText(myResources.getString(key));
         this.getStylesheets().add("default.css");
-        this.getStyleClass().add("welcome-label");
 
     }
 

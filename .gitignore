@@ -6,6 +6,7 @@
 .idea/
 out/
 local.properties
+classes/
 
 # Generic Android ignores #
 ###########################

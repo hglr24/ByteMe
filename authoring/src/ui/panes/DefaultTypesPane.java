@@ -53,8 +53,11 @@ public class DefaultTypesPane extends VBox{
                         CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(s1, s2);
                         createNewTypeWindow.showAndWait();
                         Entity entity = createNewTypeWindow.getUserCreatedEntity();
+                        String[] info = createNewTypeWindow.getCategoryInfo();
+                        String typeOf = info[0];
+                        String basedOn = info[1];
                         if(entity != null){
-                            myUserCreatedTypesPane.addUserDefinedType(s1, entity, s1, s2);
+                            myUserCreatedTypesPane.addUserDefinedType(typeOf, entity, basedOn);
                         }
                     }
                 });

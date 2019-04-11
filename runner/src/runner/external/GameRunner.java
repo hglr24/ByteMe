@@ -22,6 +22,7 @@ import runner.internal.DummyGameObjectMaker;
 import runner.internal.TestEngine;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -36,8 +37,10 @@ public class GameRunner {
     private Stage myStage;
     private Group myGroup;
     private Scene myScene;
+
     private Engine myEngine;
     //private Engine myEngine;
+
     private Timeline myAnimation;
     private static final int FRAMES_PER_SECOND = 30;
     private static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
@@ -67,7 +70,9 @@ public class GameRunner {
 
         myCurrentKeys = new HashSet<KeyCode>();
         myLevels = myGame.getLevels();
+
         myStage = new Stage();
+
         myEngine = new Engine(myLevels.get(0));
         myEntities = myEngine.updateState(myCurrentKeys);
         mySceneWidth = myGame.getWidth();

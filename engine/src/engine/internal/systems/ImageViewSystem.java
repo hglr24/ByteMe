@@ -8,6 +8,9 @@ import engine.external.Engine;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.Collection;
 
@@ -37,6 +40,7 @@ public class ImageViewSystem extends VoogaSystem {
             entity.addComponent(new ImageViewComponent(generateImageView(entity)));
         }
     }
+
 
     private ImageView generateImageView(Entity entity) {
         //ImageView imageView = new ImageView();

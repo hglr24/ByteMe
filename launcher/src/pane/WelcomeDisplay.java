@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 public class WelcomeDisplay extends HBox {
-    private static final String MY_STYLE = "default.css";
+    private static final String MY_STYLE = "default_launcher.css";
     public WelcomeDisplay(String welcomeLabel){
         this.getStylesheets().add(MY_STYLE);
         Label myLabel = new TitleLabel(welcomeLabel);

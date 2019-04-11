@@ -1,6 +1,7 @@
 package ui.panes;
 
 import javafx.application.Application;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -26,11 +27,11 @@ public class PaneTester extends Application {
     public void start(Stage testStage) {
         testStage.setTitle("Pane Test");
         testStage.setResizable(false);
-        ObjectManager manager = new ObjectManager();
+        ObjectManager manager = new ObjectManager(new SimpleObjectProperty<>());
         addTestLabels(manager.getLabelManager());
         AuthoringEntity obj1 = populateTestObjects(manager);
         SimpleObjectProperty<Propertable> testObj = new SimpleObjectProperty<>(obj1);
-        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1", manager));
+        SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1"));
 
         try {
             PropertiesPane testPaneObj = new PropertiesPane(PropertableType.OBJECT, testObj, manager.getLabelManager());
@@ -79,12 +80,12 @@ public class PaneTester extends Application {
         AuthoringEntity d = new AuthoringEntity("object4", manager);
         AuthoringEntity e = new AuthoringEntity("object1", manager);
         AuthoringEntity f = new AuthoringEntity("object1", manager);
-        manager.addEntity(a);
-        manager.addEntity(b);
-        manager.addEntity(c);
-        manager.addEntity(d);
-        manager.addEntity(e);
-        manager.addEntity(f);
+        manager.addEntityType(a);
+        manager.addEntityType(b);
+        manager.addEntityType(c);
+        manager.addEntityType(d);
+        manager.addEntityType(e);
+        manager.addEntityType(f);
         a.getPropertyMap().put(EntityField.GROUP, "Enemies");
         b.getPropertyMap().put(EntityField.GROUP, "Platforms");
         c.getPropertyMap().put(EntityField.GROUP, "Enemies");
