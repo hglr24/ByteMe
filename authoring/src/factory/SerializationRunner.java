@@ -7,6 +7,7 @@ public class SerializationRunner {
 //        System.out.println("Is this printed");
 //        myTester.saveAndMakeNewGameWithObject();
 //        myTester.testObjectReferences();
-        myTester.testGameCenterInfo();
+//        myTester.testGameCenterInfo();
+        myTester.makeYeet();
     }
 }

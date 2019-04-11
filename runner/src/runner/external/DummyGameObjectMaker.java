@@ -1,4 +1,4 @@
-package runner.internal;
+package runner.external;
 
 import data.external.DataManager;
 import engine.external.Entity;

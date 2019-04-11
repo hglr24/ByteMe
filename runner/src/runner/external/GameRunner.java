@@ -18,10 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import runner.internal.DummyGameObjectMaker;
-import runner.internal.TestEngine;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
@@ -58,8 +55,15 @@ public class GameRunner {
 //        dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
 
-        //DataManager dm = new DataManager();
+        DataManager dm = new DataManager();
+        dm.createGameFolder("YeetGame");
+        dm.saveGameData("YeetGame", gameMade);
 
+        GameCenterData gcd = new GameCenterData();
+        gcd.setTitle("Yeet Demo");
+        gcd.setDescription("This game is a demonstration of our end of basic engine functionality");
+        gcd.setFolderName("YeetGame");
+        dm.saveGameInfo("YeetGame",gcd);
         //myGame = (Game) dm.loadGameData(game);
         myGame = gameMade;
 

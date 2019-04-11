@@ -5,6 +5,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.component.HealthComponent;
+import runner.external.DummyGameObjectMaker;
 import runner.external.Game;
 import runner.external.GameCenterData;
 
@@ -50,6 +51,14 @@ public class SerializationTester {
         DataManager dm = new DataManager();
         dm.createGameFolder("testingGameInfo");
         dm.saveGameInfo("testingGameInfo", test);
+    }
+
+    public void makeYeet(){
+        DummyGameObjectMaker dummy = new DummyGameObjectMaker();
+        Game game = dummy.getGame("game1");
+        DataManager dm = new DataManager();
+        dm.createGameFolder("YeetGame");
+        dm.saveGameData("YeetGame", game);
     }
 }
 
