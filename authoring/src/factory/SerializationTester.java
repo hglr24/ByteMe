@@ -51,5 +51,13 @@ public class SerializationTester {
         dm.createGameFolder("testingGameInfo");
         dm.saveGameInfo("testingGameInfo", test);
     }
+
+    public void createYeet(){
+        DummyGameMaker dummy = new DummyGameMaker();
+        Game game = dummy.getGame("game1");
+        DataManager dm = new DataManager();
+        dm.createGameFolder("YeetGame1");
+        dm.saveGameData("YeetGame1", game);
+    }
 }
 
