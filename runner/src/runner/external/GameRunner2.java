@@ -3,11 +3,8 @@ package runner.external;
 import data.external.DataManager;
 import engine.external.Engine;
 import engine.external.Entity;
-
 import engine.external.Level;
-
 import engine.external.component.*;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -19,14 +16,11 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import runner.internal.DummyGameObjectMaker;
-import runner.internal.TestEngine;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class GameRunner {
+public class GameRunner2 {
     /**
      * This will be the primary class that creates a new game engine
      * and displays sprites on a stage
@@ -52,18 +46,18 @@ public class GameRunner {
 
 
 
-    public GameRunner(String game) throws FileNotFoundException{
+    public GameRunner2(String game) throws FileNotFoundException{
        /* Actual way to get game object
         GameRunner will have parameter String name, not Game game
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
 //        dm2.serializeObject();
-        //Game gameMade = dm2.getGame(game);
+        Game gameMade = dm2.getGame(game);
 
-        DataManager dm = new DataManager();
-        myGame = (Game) dm.loadGameData(game);
-        //myGame = gameMade;
+        //DataManager dm = new DataManager();
+        //myGame = (Game) dm.loadGameData(game);
+        myGame = gameMade;
 
 
 
