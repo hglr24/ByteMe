@@ -19,7 +19,7 @@ public class Game {
 
         //Temporary defaults
         myHeight = 200;
-        myWidth = 400;
+        myWidth = 800;
     }
 
     public void addLevel(Level level){

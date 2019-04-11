@@ -2,6 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.DirectionComponent;
 import engine.external.component.ImageViewComponent;
 import engine.external.Engine;
 import javafx.scene.image.Image;
