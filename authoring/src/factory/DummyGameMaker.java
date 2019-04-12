@@ -11,6 +11,7 @@ import engine.external.component.*;
 
 import events.Event;
 import events.RightCollisionEvent;
+import events.RyanEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
@@ -50,7 +51,7 @@ public class DummyGameMaker {
         event3.addInputs(KeyCode.LEFT);
         event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
-//        level1.addEvent(event);
+        level1.addEvent(event);
 //        level1.addEvent(event2);
 //        level1.addEvent(event3);
 //        level1.addEvent(lce);
@@ -84,7 +85,7 @@ public class DummyGameMaker {
 //        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
         dummy1.addComponent(new SpriteComponent("flappy_bird.png"));
-        dummy2.addComponent(new SpriteComponent("goomba.png"));
+        dummy2.addComponent(new SpriteComponent("mushroom.png"));
         dummy3.addComponent(new SpriteComponent("mario_block.png"));
 
         dummy1.addComponent(new NameComponent("one"));

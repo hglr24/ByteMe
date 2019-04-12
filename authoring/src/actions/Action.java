@@ -1,5 +1,6 @@
 package actions;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import engine.external.Entity;
 import engine.external.component.Component;
 
@@ -20,7 +21,8 @@ import java.util.function.Consumer;
  * @author Dima
  */
 public abstract class Action<T> {
-    private final ResourceBundle ACTION_TYPES_RESOURCES = ResourceBundle.getBundle("Actions");
+    @XStreamOmitField
+    private transient ResourceBundle ACTION_TYPES_RESOURCES;
     private Consumer<Entity> myAction;
 
     /**
