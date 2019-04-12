@@ -2,7 +2,6 @@ package events;
 
 
 import actions.Action;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import conditions.Condition;
 import engine.external.Entity;
@@ -18,14 +17,16 @@ import java.util.*;
  * @author Lucas Liu
  * @author Feroze Mohideen
  */
-public class Event implements IEventEngine, IEventAuthoring {
+public class RyanEvent implements IEventEngine, IEventAuthoring {
     @XStreamOmitField
     private transient ResourceBundle EVENT_TYPES_RESOURCES;
+    @XStreamOmitField
     private transient List<Action> actions;
+    @XStreamOmitField
     private transient List<Condition> conditions;
     private String myType;
-    @XStreamImplicit
-    private Set<KeyCode> myInputs;
+    @XStreamOmitField
+    private transient Set<KeyCode> myInputs;
 
 
     /**
@@ -34,7 +35,7 @@ public class Event implements IEventEngine, IEventAuthoring {
      *
      * @param name
      */
-    public Event(String name) {
+    public RyanEvent(String name) {
         myType = name;
         init();
     }
@@ -42,8 +43,8 @@ public class Event implements IEventEngine, IEventAuthoring {
     private void init() {
         EVENT_TYPES_RESOURCES = ResourceBundle.getBundle("Events");
         myInputs = new HashSet<>();
-//        actions = new ArrayList<>();
-//        conditions = new ArrayList<>();
+        actions = new ArrayList<>();
+        conditions = new ArrayList<>();
     }
 
     //need to make this method take in keycode inputs as well
@@ -72,8 +73,8 @@ public class Event implements IEventEngine, IEventAuthoring {
 
     private boolean conditionsMet(Entity entity) {
         try {
-//            return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
-           return true;
+            return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
+//            return true;
         }catch(Exception e){
             e.printStackTrace(); //TODO find exact exceptions to catch
             return false;
@@ -81,11 +82,11 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     private void executeActions(Entity entity) {
-        //actions.forEach(action -> action.getAction().accept(entity));
+        actions.forEach(action -> action.getAction().accept(entity));
     }
 
     public void addActions(List<Action> actionsToAdd) {
-        //actions.addAll(actionsToAdd);
+        actions.addAll(actionsToAdd);
     }
 
     public void addActions(Action action) {
@@ -93,7 +94,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     public void addConditions(List<Condition> conditionsToAdd) {
-        //conditions.addAll(conditionsToAdd);
+        conditions.addAll(conditionsToAdd);
     }
 
     public void addConditions(Condition condition) {
@@ -101,19 +102,19 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     public void setConditions(List<Condition> newSetOfConditions) {
-        //conditions = newSetOfConditions;
+        conditions = newSetOfConditions;
     }
 
     public void removeConditions(List<Condition> conditionsToRemove) {
-        //conditions.removeAll(conditionsToRemove);
+        conditions.removeAll(conditionsToRemove);
     }
 
     public void setActions(List<Action> newSetOfActions) {
-        //actions = newSetOfActions;
+        actions = newSetOfActions;
     }
 
     public void removeActions(List<Action> actionsToRemove) {
-        //actions.removeAll(actionsToRemove);
+        actions.removeAll(actionsToRemove);
     }
 
 

@@ -1,0 +1,9 @@
+package actions;
+
+import engine.external.component.YVelocityComponent;
+
+public class YVelocityAction extends NumericAction {
+    public YVelocityAction(ModifyType type, Double yVelocity) {
+        setAction(type, yVelocity, YVelocityComponent.class);
+    }
+}

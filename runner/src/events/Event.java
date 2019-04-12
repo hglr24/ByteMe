@@ -21,8 +21,10 @@ import java.util.*;
 public class Event implements IEventEngine, IEventAuthoring {
     @XStreamOmitField
     private transient ResourceBundle EVENT_TYPES_RESOURCES;
-    private transient List<Action> actions;
-    private transient List<Condition> conditions;
+    //@XStreamOmitField
+    //private transient List<Action> actions;
+    //@XStreamOmitField
+    //private transient List<Condition> conditions;
     private String myType;
     @XStreamImplicit
     private Set<KeyCode> myInputs;

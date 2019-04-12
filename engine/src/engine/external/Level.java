@@ -1,5 +1,6 @@
 package engine.external;
 
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
@@ -19,7 +20,9 @@ public class Level implements Serializable {
     private String myBackground;
     private String myMusic;
 
+    @XStreamImplicit
     private Collection<Entity> myEntities;
+    @XStreamImplicit
     private Collection<IEventEngine> myEvents;
     private Level myCheckPoint;
 

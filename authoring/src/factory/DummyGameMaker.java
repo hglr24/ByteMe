@@ -37,8 +37,8 @@ public class DummyGameMaker {
 
     private void addDummyEvents(Level level1) {
         Event event = new Event("one");
-//        event.addInputs(KeyCode.RIGHT);
-//        event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
+        event.addInputs(KeyCode.RIGHT);
+        event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
         Event event2 = new Event("one");
         event2.addInputs(KeyCode.S);
         event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
@@ -52,9 +52,9 @@ public class DummyGameMaker {
         event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
         level1.addEvent(event);
-//        level1.addEvent(event2);
-//        level1.addEvent(event3);
-//        level1.addEvent(lce);
+        level1.addEvent(event2);
+        level1.addEvent(event3);
+        level1.addEvent(lce);
     }
 
     private void addDummyEntities(Level level) {
