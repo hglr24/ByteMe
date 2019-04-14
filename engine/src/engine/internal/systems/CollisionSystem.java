@@ -3,6 +3,7 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.Engine;
+import engine.external.component.SpriteComponent;
 import javafx.scene.image.ImageView;
 
 import java.lang.reflect.InvocationTargetException;
@@ -39,7 +40,9 @@ public class CollisionSystem extends VoogaSystem {
             if(seemColliding(e1,e2)&& e1!=e2){
                 registerCollidedEntity(horizontalCollide(e1,e2),e1,e2);
                 registerCollidedEntity(verticalCollide(e1,e2),e1,e2);
-                registerCollidedEntity(ANY_COLLIDED_COMPONENT_CLASS,e1,e2);
+                if(horizontalCollide(e1,e2)!=null||verticalCollide(e1,e2)!=null){
+                    registerCollidedEntity(ANY_COLLIDED_COMPONENT_CLASS,e1,e2);
+                }
             }
         }));
     }
@@ -57,9 +60,10 @@ public class CollisionSystem extends VoogaSystem {
         }
         if(!e1.hasComponents(componentClazz)){
             try {
-                e1.addComponent((Component<?>) Class.forName(componentClazz.getSimpleName()).getConstructor(new Class[]{Collection.class}).newInstance(new HashSet<>()));
+                e1.addComponent((Component<?>) Class.forName(componentClazz.getName()).getConstructor(new Class[]{Collection.class}).newInstance(new HashSet<>()));
             } catch (InstantiationException|IllegalAccessException|InvocationTargetException|NoSuchMethodException|ClassNotFoundException e) {
                 System.out.println("Invalid reflection instantiation call in CollisionSystem: "+componentClazz.getSimpleName());
+                return;
             }
         }
         ((Collection<Entity>)e1.getComponent(componentClazz).getValue()).add(e2);
@@ -123,19 +127,19 @@ public class CollisionSystem extends VoogaSystem {
     }
 
     private boolean isMovingLeft(Entity entity){
-        return getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,entity)<0;
+        return entity.hasComponents(X_VELOCITY_COMPONENT_CLASS)&&(getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,entity)<0);
     }
 
     private boolean isMovingRight(Entity entity){
-        return getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,entity)>0;
+        return entity.hasComponents(X_VELOCITY_COMPONENT_CLASS)&&(getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,entity)>0);
     }
 
     private boolean isMovingUp(Entity entity){
-        return getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,entity)<0;
+        return entity.hasComponents(Y_VELOCITY_COMPONENT_CLASS)&&(getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,entity)<0);
     }
 
     private boolean isMovingDown(Entity entity){
-        return getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,entity)>0;
+        return entity.hasComponents(Y_VELOCITY_COMPONENT_CLASS)&&(getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,entity)>0);
     }
 
 

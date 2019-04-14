@@ -23,14 +23,14 @@ public class Entity implements Serializable {
         addComponent(Arrays.asList(component));
     }
 
-    public void removeComponent(Collection<Component<?>> components){
-        for (Component<?> component: components) {
-            myComponents.remove(component.getClass());
+    public void removeComponent(Collection<Class<? extends Component>> componentClazzes){
+        for (Class<? extends Component> clazz: componentClazzes) {
+            myComponents.remove(clazz);
         }
     }
 
-    public void removeComponent(Component<?> component) {
-        removeComponent(Arrays.asList(component));
+    public void removeComponent(Class<? extends Component> componentClazz) {
+        removeComponent(Arrays.asList(componentClazz));
     }
 
     /*
