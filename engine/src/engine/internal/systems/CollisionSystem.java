@@ -137,6 +137,6 @@ public class CollisionSystem extends VoogaSystem {
     private boolean isMovingDown(Entity entity){
         return getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,entity)>0;
     }
-    
+
 
 }
