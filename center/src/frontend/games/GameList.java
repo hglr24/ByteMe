@@ -1,3 +1,12 @@
+/**
+ * @Author Megan Phibbons
+ * @Date April 2019
+ * @Purpose List all of the games available in a user-friendly attractive way so that they can select a game they are
+ * interested in.
+ * @Dependencies DataManager, javafx, GameCenterData
+ * @Uses: Used in GamePane for displaying games
+ */
+
 package frontend.games;
 
 import data.external.DataManager;
@@ -8,7 +17,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import runner.external.GameCenterData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GameList {
@@ -18,6 +26,9 @@ public class GameList {
     private static final int NUM_CARDS_DISPLAYED = 3;
     private List<GameCenterData> myGames;
 
+    /**
+     * @purpose constructor, reads in the list of original GameData objects and saves it, then sets up the display of cards.
+     */
     public GameList() {
         DataManager manager = new DataManager();
         List<Object> originalList = manager.loadAllGameInfoObjects();
@@ -25,6 +36,10 @@ public class GameList {
         initializeDisplay();
     }
 
+    /**
+     * @purpose give the display of the GameList to the GamePane
+     * @return the current display attached to the GameList.
+     */
     public Pane getDisplay() {
         return myDisplay;
     }

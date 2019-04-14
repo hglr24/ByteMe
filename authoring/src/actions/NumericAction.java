@@ -67,7 +67,7 @@ public abstract class NumericAction<Double> extends Action<Double> {
      * This enum is used in subclass construction to specify what kind of operation should be done to the component
      * value
      */
-    enum ModifyType {
+    public enum ModifyType {
         ABSOLUTE,
         RELATIVE,
         SCALE,

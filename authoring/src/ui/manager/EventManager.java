@@ -9,10 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import ui.EntityField;
-import ui.Propertable;
-import ui.AuthoringEntity;
-import ui.Utility;
+import ui.*;
 import ui.panes.EventPane;
 
 import java.util.ArrayList;
@@ -23,19 +20,31 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Harry Ross
+ * The EventManager handles displaying options for the user to create a new event according to the particular AuthoringEntity
+ * that is currently in focus. These options include adding a new event, removing one previously made, and in the future,
+ * modifying current ones
+ * @see EventPane
+ * @author Harry Ross, Anna Darwish
  */
 public class EventManager extends Stage {
 
     private AuthoringEntity myEntity;
+    private String myEntityName;
     private Scene myDefaultScene;
 
+    private Refresher myRefreshAccess = new Refresher() {
+        @Override
+        public void refresh() {
+            refreshDisplayOfEvents();
+        }
+    };
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
         myDefaultScene = createPane();
         this.setScene(myDefaultScene);
         this.setResizable(false);
         createContent();
+        myEntityName = myEntity.getPropertyMap().get(EntityField.LABEL);
     }
 
 
@@ -43,7 +52,7 @@ public class EventManager extends Stage {
         GridPane eventsGrid = new GridPane();
 
         for (int i = 0; i < myEntity.getEvents().size(); i++) {
-            eventsGrid.add(new HBox(new Label(myEntity.getEvents().get(i).toString())), 0, i);
+            eventsGrid.add(new HBox(new Label(myEntity.getEvents().get(i).getClass().toString())), 0, i);
         }
 
         return new ScrollPane(eventsGrid);
@@ -58,7 +67,6 @@ public class EventManager extends Stage {
         myAddEventBox.setValue("Add Event...");
         myAddEventBox.getStylesheets().add("default.css");
         addEvent(myAddEventBox);
-        //Button addButton = Utility.makeButton(this, "addEvent", "Add");
         Button removeButton = Utility.makeButton(this, "removeEvent", "Remove");
         Button closeButton = Utility.makeButton(this, "closeWindow", "Close");
 
@@ -70,11 +78,21 @@ public class EventManager extends Stage {
     private void addEvent(ComboBox<String> myEvents) {
         myEvents.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends String> observable, String oldValue, String newValue) ->
-                        openEventOptions(myEvents.getValue()) );
+                {
+                    try {
+                        openEventOptions(myEvents.getValue());
+                    } catch (UIException e) {
+                        e.displayUIException();
+                    }
+                });
     }
 
-    private void openEventOptions(String eventName){
-        new EventPane(eventName);
+    private void openEventOptions(String eventName) throws UIException {
+        new EventPane(eventName, myEntityName, myEntity.getEvents(), myRefreshAccess);
+    }
+
+    private void refreshDisplayOfEvents(){
+        this.setScene(createPane());
     }
 
 
@@ -83,7 +101,7 @@ public class EventManager extends Stage {
         // We have to allow for the user to select a gridpane cell to remove, maybe replace entirely with listview to make that easier??
     }
 
-    public void closeWindow() {
+    private void closeWindow() {
         this.close();
     }
 }

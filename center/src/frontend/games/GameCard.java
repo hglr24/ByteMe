@@ -1,3 +1,11 @@
+/**
+ * @Author Megan Phibbons
+ * @Date April 2019
+ * @Purpose Act as a display component for game objects. Contains title, description, image, and buttons in a neater package.
+ * @Dependencies javafx, GameRunner, GameCenterData, Utilities, and java.io
+ * @Uses: Used by GameList for displaying single games at a time.
+ */
+
 package frontend.games;
 
 import javafx.geometry.Insets;
@@ -34,6 +42,11 @@ public class GameCard {
     private GameCenterData myGame;
     private Pane myDisplay;
 
+    /**
+     * @purpose constructor that sets up parameters of the game and initializes the resource bundle used for text.
+     * @param game the GameCenterData object that represents the contents of the GameCard
+     * @param index the index that the game card is in a list. This is used for styling purposes
+     */
     public GameCard(GameCenterData game, int index) {
         myGame = game;
         myIndex = index % 2 + 1;
@@ -41,6 +54,11 @@ public class GameCard {
         initializeDisplay();
     }
 
+    /**
+     * @purpose share the display of the pane. This is used in GameList so that the contents of the GameCard can actually
+     * be displayed.
+     * @return the current display stored in GameCard.
+     */
     public Pane getDisplay() {
         return myDisplay;
     }

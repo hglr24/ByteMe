@@ -24,6 +24,11 @@ public class HiddenField extends PasswordField {
             }
         });
     }
+    /**
+     * Provides access to values of HiddenField, which hides the display of the String value that the user is typing,
+     * in order to validate the user's credentials
+     * @author Anna Darwish
+     */
     public CredentialValidator accessValue(){
         return myField;
     }

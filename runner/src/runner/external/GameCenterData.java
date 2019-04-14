@@ -6,6 +6,16 @@ public class GameCenterData {
     private String myImageLocation;
     private String myDescription;
 
+    public GameCenterData(){
+
+    }
+    public GameCenterData(String folder, String title, String description, String imageLocation){
+        myFolderName = folder;
+        myTitle = title;
+        myDescription = description;
+        myImageLocation = imageLocation;
+    }
+
     public String getFolderName() {
         return myFolderName;
     }
