@@ -19,10 +19,14 @@ public class MovementSystem extends VoogaSystem {
     @Override
     protected void run() {
         for (Entity e: getEntities()) {
-            double x = getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,e) + getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,e);
-            double y = getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,e) + getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,e);
+            double x = calcPosition(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS,e),getDoubleComponentValue(X_VELOCITY_COMPONENT_CLASS,e),getDoubleComponentValue(X_ACCELERATION_COMPONENT_CLASS,e));
+            double y = calcPosition(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS,e),getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,e),getDoubleComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e));
             ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
             ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
         }
+    }
+
+    private double calcPosition(double position, double velocity, double acceleration){
+        return position+velocity+(1/2)*acceleration;
     }
 }
