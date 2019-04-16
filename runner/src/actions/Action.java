@@ -4,6 +4,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import engine.external.Entity;
 import engine.external.component.Component;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
@@ -31,7 +32,7 @@ public abstract class Action<T> {
      * @param componentClass class that specifies the component type
      */
     protected void setAbsoluteAction(T newValue, Class<? extends Component<T>> componentClass) {
-        setAction((entity) -> {
+        setAction((Consumer<Entity> & Serializable) (entity) -> {
             Component component = entity.getComponent(componentClass);
             component.setValue(newValue);
         });
@@ -42,7 +43,7 @@ public abstract class Action<T> {
      * @param action a lambda
      */
     protected void setAction(Consumer<Entity> action) {
-        myAction = action;
+        myAction = (Consumer<Entity> & Serializable) action;
     }
 
     /**
@@ -50,7 +51,7 @@ public abstract class Action<T> {
      * @return lambda
      */
     public Consumer<Entity> getAction() {
-        return myAction;
+        return (Consumer<Entity> & Serializable) myAction;
     }
 
     /**

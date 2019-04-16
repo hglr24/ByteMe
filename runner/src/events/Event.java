@@ -10,7 +10,9 @@ import engine.external.IEventEngine;
 import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
+import java.io.Serializable;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
@@ -21,13 +23,13 @@ import java.util.*;
 public class Event implements IEventEngine, IEventAuthoring {
     @XStreamOmitField
     private transient ResourceBundle EVENT_TYPES_RESOURCES;
-    //@XStreamOmitField
-    //private transient List<Action> actions;
-    //@XStreamOmitField
-    //private transient List<Condition> conditions;
+    @XStreamImplicit
+    private List<Action> actions = new ArrayList<>();
+    @XStreamImplicit
+    private List<Condition> conditions = new ArrayList<>();
     private String myType;
     @XStreamImplicit
-    private Set<KeyCode> myInputs;
+    private Set<KeyCode> myInputs = new HashSet<>();
 
 
     /**
@@ -75,7 +77,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     private boolean conditionsMet(Entity entity) {
         try {
 //            return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
-           return true;
+            return true;
         }catch(Exception e){
             e.printStackTrace(); //TODO find exact exceptions to catch
             return false;
@@ -83,11 +85,11 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     private void executeActions(Entity entity) {
-        //actions.forEach(action -> action.getAction().accept(entity));
+        actions.forEach((Consumer<Action> & Serializable) action -> action.getAction().accept(entity));
     }
 
     public void addActions(List<Action> actionsToAdd) {
-        //actions.addAll(actionsToAdd);
+        actions.addAll(actionsToAdd);
     }
 
     public void addActions(Action action) {
@@ -95,7 +97,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     public void addConditions(List<Condition> conditionsToAdd) {
-        //conditions.addAll(conditionsToAdd);
+        conditions.addAll(conditionsToAdd);
     }
 
     public void addConditions(Condition condition) {
@@ -103,25 +105,24 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     public void setConditions(List<Condition> newSetOfConditions) {
-        //conditions = newSetOfConditions;
+        conditions = newSetOfConditions;
     }
 
     public void removeConditions(List<Condition> conditionsToRemove) {
-        //conditions.removeAll(conditionsToRemove);
+        conditions.removeAll(conditionsToRemove);
     }
 
     public void setActions(List<Action> newSetOfActions) {
-        //actions = newSetOfActions;
+        actions = newSetOfActions;
     }
 
     public void removeActions(List<Action> actionsToRemove) {
-        //actions.removeAll(actionsToRemove);
+        actions.removeAll(actionsToRemove);
     }
 
 
     public Collection<String> getAllEvents() {
-//        return EVENT_TYPES_RESOURCES.keySet();
-        return null;
+        return EVENT_TYPES_RESOURCES.keySet();
     }
 
     @Override

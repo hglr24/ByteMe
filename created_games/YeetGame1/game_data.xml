@@ -305,23 +305,68 @@
       </myEntities>
       <myEvents class="set">
         <events.RightCollisionEvent>
+          <actions>
+            <actions.XVelocityAction>
+              <myAction class="null"/>
+            </actions.XVelocityAction>
+            <actions.HeightAction>
+              <myAction class="null"/>
+            </actions.HeightAction>
+          </actions>
+          <conditions>
+            <conditions.CollisionCondition>
+              <myPredicate class="null"/>
+            </conditions.CollisionCondition>
+          </conditions>
           <myType>one</myType>
           <myInputs/>
           <myCollisionWithEntity>two</myCollisionWithEntity>
         </events.RightCollisionEvent>
         <events.Event>
+          <actions>
+            <actions.XVelocityAction>
+              <myAction resolves-to="serialized-lambda">
+                <capturingClass>actions.Action</capturingClass>
+                <functionalInterfaceClass>java/util/function/Consumer</functionalInterfaceClass>
+                <functionalInterfaceMethodName>accept</functionalInterfaceMethodName>
+                <functionalInterfaceMethodSignature>(Ljava/lang/Object;)V</functionalInterfaceMethodSignature>
+                <implClass>actions/Action</implClass>
+                <implMethodName>lambda$setAbsoluteAction$184c9a37$1</implMethodName>
+                <implMethodSignature>(Ljava/lang/Class;Ljava/lang/Object;Lengine/external/Entity;)V</implMethodSignature>
+                <implMethodKind>6</implMethodKind>
+                <instantiatedMethodType>(Lengine/external/Entity;)V</instantiatedMethodType>
+                <capturedArgs>
+                  <java-class>engine.external.component.XVelocityComponent</java-class>
+                  <double>0.0</double>
+                </capturedArgs>
+              </myAction>
+            </actions.XVelocityAction>
+          </actions>
+          <conditions/>
           <myType>one</myType>
           <myInputs>
             <javafx.scene.input.KeyCode>S</javafx.scene.input.KeyCode>
           </myInputs>
         </events.Event>
         <events.Event>
+          <actions>
+            <actions.XPositionAction>
+              <myAction class="null"/>
+            </actions.XPositionAction>
+          </actions>
+          <conditions/>
           <myType>one</myType>
           <myInputs>
             <javafx.scene.input.KeyCode>LEFT</javafx.scene.input.KeyCode>
           </myInputs>
         </events.Event>
         <events.Event>
+          <actions>
+            <actions.XPositionAction>
+              <myAction class="null"/>
+            </actions.XPositionAction>
+          </actions>
+          <conditions/>
           <myType>one</myType>
           <myInputs>
             <javafx.scene.input.KeyCode>RIGHT</javafx.scene.input.KeyCode>
