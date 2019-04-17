@@ -3,6 +3,10 @@ package data.external;
 import data.internal.ResultsProcessor;
 import data.internal.TablePrinter;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +143,7 @@ public class DatabaseEngine {
 
     private void executeQuery(String sqlQuery, ResultsProcessor resultsProcessor) {
         try (Statement statement = myConnection.createStatement();
-            ResultSet resultSet = statement.executeQuery(sqlQuery)){
+             ResultSet resultSet = statement.executeQuery(sqlQuery)){
             resultsProcessor.processResults(resultSet);
         } catch (SQLException exception){
             System.out.println("Query failed: " + exception.getMessage());
@@ -199,4 +203,16 @@ public class DatabaseEngine {
     }
 
 
+    public void saveImage(String imageName, File imageToSave) {
+        try (PreparedStatement statement = myConnection.prepareStatement("INSERT INTO Images (ImageName, ImageData) " +
+                "VALUES (?, ?)")){
+            statement.setString(1, imageName);
+            statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(imageToSave)));
+            statement.execute();
+        } catch (SQLException exception){
+            System.out.println("Statement failed: " + exception.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not find the file: " + imageToSave.toString());
+        }
+    }
 }
