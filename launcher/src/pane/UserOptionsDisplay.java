@@ -8,29 +8,26 @@ import manager.SwitchToUserOptions;
 public class UserOptionsDisplay extends HBox {
     private static final String CREATE_LAUNCHER = "create";
     private static final String PLAY_LAUNCHER = "play";
+    private static final String CSS_STYLE_NAME = "default_launcher.css";
+    private static final int OFFSET_VALUE = 100;
+    /**
+     * These are the pathways the user may take upon logging in - either navigating to the authoring environment or going
+     * into the game center
+     * @author Anna Darwish
+     */
     public UserOptionsDisplay(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher){
-        this.getStyleClass().add("default_launcher.css");
-        this.setTranslateY(100);
+        this.getStyleClass().add(CSS_STYLE_NAME);
+        this.setTranslateY(OFFSET_VALUE);
         setUpImages(switchDisplay,switchToLauncher);
         this.setAlignment(Pos.CENTER);
-        this.setSpacing(100);
+        this.setSpacing(OFFSET_VALUE);
 
     }
     private void setUpImages(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher){
         LauncherControlDisplay myCreator = new LauncherControlDisplay(CREATE_LAUNCHER);
-        myCreator.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                switchDisplay.switchPage();
-            }
-        });
+        myCreator.setOnMouseClicked(mouseEvent -> switchDisplay.switchPage());
         LauncherControlDisplay myPlayer = new LauncherControlDisplay(PLAY_LAUNCHER);
-        myPlayer.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                switchToLauncher.switchPage();
-            }
-        });
+        myPlayer.setOnMouseClicked(mouseEvent -> switchToLauncher.switchPage());
         this.getChildren().add(0,myCreator);
         this.getChildren().add(1, myPlayer);
     }

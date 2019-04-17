@@ -5,13 +5,13 @@ import controls.PaneLabel;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 
-public class LauncherControlDisplay extends VBox {
-    public LauncherControlDisplay(PaneLabel label, LauncherSymbol symbol){
-        this.getStylesheets().add("default_launcher.css");
-        this.getChildren().add(0,label);
-        this.getChildren().add(1, symbol);
-    }
-    public LauncherControlDisplay(String displayType){
+class LauncherControlDisplay extends VBox {
+    /**
+     * Many of the controls in this launcher environment combine an @LauncherSymbol and @PaneLabel to navigate between
+     * scenes, so this control helps to standardize this display between pages
+     * @author Anna Darwish
+     */
+    LauncherControlDisplay(String displayType){
         this.getStylesheets().add("default_launcher.css");
         this.setSpacing(50);
         this.setAlignment(Pos.CENTER);

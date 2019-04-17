@@ -20,7 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Harry Ross
+ * The EventManager handles displaying options for the user to create a new event according to the particular AuthoringEntity
+ * that is currently in focus. These options include adding a new event, removing one previously made, and in the future,
+ * modifying current ones
+ * @see EventPane
+ * @author Harry Ross, Anna Darwish
  */
 public class EventManager extends Stage {
 
@@ -97,7 +101,7 @@ public class EventManager extends Stage {
         // We have to allow for the user to select a gridpane cell to remove, maybe replace entirely with listview to make that easier??
     }
 
-    public void closeWindow() {
+    private void closeWindow() {
         this.close();
     }
 }

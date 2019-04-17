@@ -18,7 +18,6 @@ public class SceneManager {
     private SplashPage myInitialPage;
     private WelcomeUserPage myWelcomeUserPage;
     private CreateNewGamePage myNewGamePage;
-
     private SwitchToUserOptions switchToWelcomeUserPage = new SwitchToUserOptions() {
         @Override
         public void switchPage() {
@@ -44,7 +43,13 @@ public class SceneManager {
         }
     };
     private Stage myStage;
-
+    /**
+     * The SceneManager class distributes lambdas among the different scenes, depending upon which scene they need
+     * to change to. As a result, different displays do not have to depend on one another and the stage can remain
+     * private to this class. This also helps to reduce code duplication, as two different scenes can use the same
+     * lambda to switch to the same page
+     * @author Anna Darwish
+     */
     public void render(Stage myStage){
         makePages();
         this.myStage = myStage;

@@ -15,6 +15,10 @@ public class LauncherSymbol extends ImageView {
     private static final ResourceBundle myResources = ResourceBundle.getBundle(WELCOME_RESOURCE);
     private Image myDefaultImage;
     private Image myPressedImage;
+    /**
+     * When pressed, these LaunchSymbols switch their image to appear as active
+     * @author Anna Darwish
+     */
     public LauncherSymbol(String action){
        myDefaultImage = new Image(myResources.getString(DEFAULT_KEY + action));
        myPressedImage = new Image(myResources.getString(ACTIVE_KEY + action));

@@ -12,7 +12,10 @@ public class TitleLabel extends Label {
 
     private final String myWelcomeLabel;
     private final FadeTransition myFadeAnimation;
-
+    /**
+     * This is the larger title display users see among the various pages of the launcher environment
+     * @author Anna Darwish
+     */
     public TitleLabel(String resourceKey){
         ResourceBundle myResources = ResourceBundle.getBundle(WELCOME_RESOURCE);
         myWelcomeLabel = myResources.getString(resourceKey);
@@ -24,9 +27,13 @@ public class TitleLabel extends Label {
         this.getStylesheets().add("welcome.css");
 
     }
+    /**
+     * This allows for toggling the display, as it may dependent upon the user who is currently logged in
+     */
     public void addToLabel(String addition){
         this.setText(this.getText() + " " + addition);
     }
+    //@TODO work on developing fade transition of header titles as a nice UI feature
     private void setUpDisplay(){
         this.setText(myWelcomeLabel);
         myFadeAnimation.setNode(this);

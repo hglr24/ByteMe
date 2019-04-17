@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import ui.panes.EventPane;
 
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -16,7 +17,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+/**
+ * This is essentially a Utilities class that EventPane uses in order to display particular options and properties associated
+ * with events and actions. This helps with reflection in creating events, as different events need to provide different
+ * controls to the user to input information necessary to instantiate different events and actions
+ * @see EventPane
+ * @author Anna Darwish
+ */
 public class EventFactory {
     private static final String DEFAULT_RESOURCES_NAME = "basic_event_display";
     private static final ResourceBundle DEFAULT_RESOURCES = ResourceBundle.getBundle(DEFAULT_RESOURCES_NAME);
@@ -51,7 +58,7 @@ public class EventFactory {
         myChoices.setValue(myButtons.get(0));
         return myChoices;
     }
-    public static TextField createDisappearingLabel(String textFieldInformation){
+    private static TextField createDisappearingLabel(String textFieldInformation){
         TextField myTextField = new TextField();
         myTextField.setPromptText(textFieldInformation);
         myTextField.setFocusTraversable(false);

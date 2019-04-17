@@ -9,8 +9,12 @@ import javafx.scene.layout.VBox;
 import manager.SwitchToUserOptions;
 
 import java.util.ResourceBundle;
-
-public class UserLoginDisplay extends VBox {
+/**
+ * This is the login display that a user sees in the lower right pane of the splash page - a user enters their credentials
+ * here
+ * @author Anna Darwish
+ */
+class UserLoginDisplay extends VBox {
     private static final String LOGIN_RESOURCE = "launcher_display";
     private static final ResourceBundle myResources = ResourceBundle.getBundle(LOGIN_RESOURCE);
 
@@ -21,7 +25,7 @@ public class UserLoginDisplay extends VBox {
 
     private static final String LOGIN_LABEL = "login_label";
 
-    public UserLoginDisplay(SwitchToUserOptions mySwitch){
+    UserLoginDisplay(SwitchToUserOptions mySwitch){
         this.getStylesheets().add("default_launcher.css");
         String[] loginTextFields = myResources.getString(LOGIN_KEY).split(",");
         this.setSpacing(40);

@@ -13,7 +13,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -22,13 +21,18 @@ import ui.Utility;
 import ui.manager.Refresher;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
-
+/**
+ * The EventPane displays a list of possible events that user may add. Upon selection of one of these options,
+ * a window will pop up specific to that particular action for the user to input values needed to instantiate such
+ * an event, which is then tied to the current entity of concern. Additionally, this pane will use reflection to
+ * also instantiate Actions that the entity in focus will perform when the Event occurs while the game is running
+ * @see EventPane
+ * @author Anna Darwish
+ */
 public class EventPane extends Stage {
 
     private static final String EVENT_PARAMETERS = "event_parameters";

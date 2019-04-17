@@ -8,10 +8,7 @@ import engine.external.Engine;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.nio.file.Paths;
+
 import java.util.Collection;
 
 /**
@@ -41,20 +38,35 @@ public class ImageViewSystem extends VoogaSystem {
         }
     }
 
-
-    private ImageView generateImageView(Entity entity) {
-        //ImageView imageView = new ImageView();
+    private ImageView generateImageView(Entity entity){
         ImageView imageView;
         if (!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)) {
             imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity)));
         } else {
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }
-        imageView.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS, entity));
-        imageView.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS, entity));
-        imageView.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS, entity));
-        imageView.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS, entity));
-        return imageView;
+        return setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView,entity),entity),entity),entity);
+
+    }
+
+    private ImageView setImgViewX(ImageView m, Entity e){
+        m.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS, e));
+        return m;
+    }
+
+    private ImageView setImgViewY(ImageView m, Entity e){
+        m.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS, e));
+        return m;
+    }
+
+    private ImageView setImgViewWidth(ImageView m, Entity e){
+        m.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS, e));
+        return m;
+    }
+
+    private ImageView setImgViewHeight(ImageView m, Entity e){
+        m.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS, e));
+        return m;
     }
 
 

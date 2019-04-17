@@ -23,6 +23,11 @@ public class InformativeField extends TextField {
             }
         });
     }
+    /**
+     * Provides access to values of InformativeField, which displays information concerning what the user should input
+     * and displays whatever they have input so far, in order to validate their credentials
+     * @author Anna Darwish
+     */
     public CredentialValidator accessValue(){
         return myField;
     }
