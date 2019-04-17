@@ -38,6 +38,7 @@ public class CollisionSystem extends VoogaSystem {
     protected void run() {
         this.getEntities().forEach(e1->this.getEntities().forEach(e2->{
             if(seemColliding(e1,e2)&& e1!=e2){
+                System.out.println("colliding");
                 registerCollidedEntity(horizontalCollide(e1,e2),e1,e2);
                 registerCollidedEntity(verticalCollide(e1,e2),e1,e2);
                 if(horizontalCollide(e1,e2)!=null||verticalCollide(e1,e2)!=null){
