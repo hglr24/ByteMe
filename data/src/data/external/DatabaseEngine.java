@@ -89,12 +89,21 @@ public class DatabaseEngine {
             IMAGE_DATA_COLUMN
     );
 
+    public static final String SOUNDS_TABLE_NAME = "Sounds";
+    public static final String SOUND_NAME_COLUMN = "SoundName";
+    public static final String SOUND_DATA_COLUMN = "SoundData";
+    public static final List<String> SOUNDS_COLUMN_NAMES = List.of(
+            SOUND_NAME_COLUMN,
+            SOUND_DATA_COLUMN
+    );
+
     public static final Map<String, List<String>> DATABASE_SCHEMA = Map.of(
             GAME_INFORMATION_TABLE_NAME, GAME_INFORMATION_COLUMN_NAMES,
             GAME_STATISTICS_TABLE_NAME, GAME_STATISTICS_COLUMN_NAMES,
             USERS_TABLE_NAME, USERS_COLUMN_NAMES,
             CHECKPOINTS_TABLE_NAME, CHECKPOINTS_COLUMN_NAMES,
-            IMAGES_TABLE_NAME, IMAGES_COLUMN_NAMES
+            IMAGES_TABLE_NAME, IMAGES_COLUMN_NAMES,
+            SOUNDS_TABLE_NAME, SOUNDS_COLUMN_NAMES
     );
 
     private Connection myConnection;
@@ -212,31 +221,46 @@ public class DatabaseEngine {
 
 
     public void saveImage(String imageName, File imageToSave) {
-        try (PreparedStatement statement = myConnection.prepareStatement("INSERT INTO Images (ImageName, ImageData) " +
-                "VALUES (?, ?)")){
-            statement.setString(1, imageName);
-            statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(imageToSave)));
-            statement.execute();
-        } catch (SQLException exception){
-            System.out.println("Statement failed: " + exception.getMessage());
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not find the file: " + imageToSave.toString());
-        }
+        saveAsset(imageName, imageToSave, "INSERT INTO Images (ImageName, ImageData) VALUES (?, ?)");
+    }
+
+    public void saveSound(String soundName, File soundToSave){
+        saveAsset(soundName, soundToSave, "INSERT INTO Sounds (SoundName, SoundData) VALUES (?, ?)");
     }
 
     public InputStream loadImage(String imageName){
-        try (PreparedStatement statement = myConnection.prepareStatement("SELECT ImageData FROM Images WHERE " +
-                "ImageName = ?")){
-            statement.setString(1, imageName);
+        return loadAsset(imageName, IMAGE_DATA_COLUMN,"SELECT ImageData FROM Images WHERE ImageName = ?");
+    }
+
+    public InputStream loadSound(String soundName){
+        return loadAsset(soundName, SOUND_DATA_COLUMN,"SELECT SoundData FROM Sounds WHERE SoundName = ?");
+    }
+
+    private InputStream loadAsset(String assetName, String columnName, String sqlQuery) {
+        try (PreparedStatement statement = myConnection.prepareStatement(sqlQuery)){
+            statement.setString(1, assetName);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()){
-                InputStream imageInputStream = resultSet.getBinaryStream(IMAGE_DATA_COLUMN);
+                InputStream imageInputStream = resultSet.getBinaryStream(columnName);
                 resultSet.close();
                 return  imageInputStream;
             }
         } catch (SQLException e) {
-            System.out.println("Could not load image");
+            System.out.println("Could not load asset: " + e.getMessage());
+            e.printStackTrace();
         }
         return null;
+    }
+
+    private void saveAsset (String assetName, File assetToSave, String sqlQuery) {
+        try (PreparedStatement statement = myConnection.prepareStatement(sqlQuery)){
+            statement.setString(1, assetName);
+            statement.setBinaryStream(2, new BufferedInputStream(new FileInputStream(assetToSave)));
+            statement.execute();
+        } catch (SQLException exception){
+            System.out.println("Statement failed: " + exception.getMessage());
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not find the file: " + assetToSave.toString());
+        }
     }
 }

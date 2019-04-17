@@ -12,9 +12,16 @@ public class SerializationRunner {
 //        myTester.testGameCenterInfo();
 //        myTester.testDatabaseConnection();
 //        myTester.testSavingImages();
+//
+//        try {
+//            myTester.testLoadingImages();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        myTester.testSavingSounds();
 
         try {
-            myTester.testLoadingImages();
+            myTester.testLoadingSounds();
         } catch (IOException e) {
             e.printStackTrace();
         }

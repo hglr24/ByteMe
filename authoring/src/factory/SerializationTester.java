@@ -73,21 +73,36 @@ public class SerializationTester {
 
     public void testSavingImages(){
         DataManager dm = new DataManager();
-        dm.saveImage("basketball", new File("Images/basketball.png"));
+        dm.saveImage("flappy_bird", new File("Images/flappy_bird.png"));
         DatabaseEngine de = new DatabaseEngine();
-        try {
-            de.printTable("Images");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            de.printTable("Images");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void testLoadingImages() throws IOException {
         DataManager dm = new DataManager();
-        InputStream is = dm.loadImage("basketball");
+        InputStream is = dm.loadImage("flappy_bird");
         byte[] buffer = new byte[is.available()];
         is.read(buffer);
-        File targetFile = new File("C:\\Users\\Owner\\Desktop\\basketball_test.png");
+        File targetFile = new File("C:\\Users\\Owner\\Desktop\\flappy_bird.png");
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+    }
+
+    public void testSavingSounds(){
+        DataManager dm = new DataManager();
+        dm.saveSound("bach_chaconne", new File("Sounds/Bach Chaconne - Ryan Culhane.mp3"));
+    }
+
+    public void testLoadingSounds() throws IOException {
+        DataManager dm = new DataManager();
+        InputStream is = dm.loadSound("bach_chaconne");
+        byte[] buffer = new byte[is.available()];
+        is.read(buffer);
+        File targetFile = new File("C:\\Users\\Owner\\Desktop\\bc.mp3");
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
     }

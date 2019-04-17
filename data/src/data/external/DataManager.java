@@ -178,6 +178,19 @@ public class DataManager implements ExternalData{
         myDatabaseEngine.close();
     }
 
+    public void saveSound(String soundName, File soundToSave){
+        myDatabaseEngine.open();
+        myDatabaseEngine.saveSound(soundName, soundToSave);
+        myDatabaseEngine.close();
+    }
+
+    public InputStream loadSound(String soundName){
+        myDatabaseEngine.open();
+        InputStream inputStream = myDatabaseEngine.loadSound(soundName);
+        myDatabaseEngine.close();
+        return inputStream;
+    }
+
     public InputStream loadImage(String imageName){
         myDatabaseEngine.open();
         InputStream inputStream = myDatabaseEngine.loadImage(imageName);
