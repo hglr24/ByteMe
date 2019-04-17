@@ -3,10 +3,7 @@ package data.external;
 import data.internal.ResultsProcessor;
 import data.internal.TablePrinter;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
@@ -84,11 +81,20 @@ public class DatabaseEngine {
             CHECKPOINT_COLUMN
     );
 
+    public static final String IMAGES_TABLE_NAME = "Images";
+    public static final String IMAGE_NAME_COLUMN = "ImageName";
+    public static final String IMAGE_DATA_COLUMN = "ImageData";
+    public static final List<String> IMAGES_COLUMN_NAMES = List.of(
+            IMAGE_NAME_COLUMN,
+            IMAGE_DATA_COLUMN
+    );
+
     public static final Map<String, List<String>> DATABASE_SCHEMA = Map.of(
             GAME_INFORMATION_TABLE_NAME, GAME_INFORMATION_COLUMN_NAMES,
             GAME_STATISTICS_TABLE_NAME, GAME_STATISTICS_COLUMN_NAMES,
             USERS_TABLE_NAME, USERS_COLUMN_NAMES,
-            CHECKPOINTS_TABLE_NAME, CHECKPOINTS_COLUMN_NAMES
+            CHECKPOINTS_TABLE_NAME, CHECKPOINTS_COLUMN_NAMES,
+            IMAGES_TABLE_NAME, IMAGES_COLUMN_NAMES
     );
 
     private Connection myConnection;
@@ -129,7 +135,7 @@ public class DatabaseEngine {
         }
     }
 
-    private void printTable(String tableToPrint) throws SQLException{
+    public void printTable(String tableToPrint) throws SQLException{
         executeQuery("SELECT * FROM " + tableToPrint, new TablePrinter(tableToPrint));
     }
 
@@ -142,12 +148,14 @@ public class DatabaseEngine {
     }
 
     private void executeQuery(String sqlQuery, ResultsProcessor resultsProcessor) {
+        open();
         try (Statement statement = myConnection.createStatement();
              ResultSet resultSet = statement.executeQuery(sqlQuery)){
             resultsProcessor.processResults(resultSet);
         } catch (SQLException exception){
             System.out.println("Query failed: " + exception.getMessage());
         }
+        close();
     }
 
     private String executeQuery(String sqlQuery, String columnName){
@@ -214,5 +222,21 @@ public class DatabaseEngine {
         } catch (FileNotFoundException e) {
             System.out.println("Could not find the file: " + imageToSave.toString());
         }
+    }
+
+    public InputStream loadImage(String imageName){
+        try (PreparedStatement statement = myConnection.prepareStatement("SELECT ImageData FROM Images WHERE " +
+                "ImageName = ?")){
+            statement.setString(1, imageName);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                InputStream imageInputStream = resultSet.getBinaryStream(IMAGE_DATA_COLUMN);
+                resultSet.close();
+                return  imageInputStream;
+            }
+        } catch (SQLException e) {
+            System.out.println("Could not load image");
+        }
+        return null;
     }
 }
