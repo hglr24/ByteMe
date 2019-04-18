@@ -4,7 +4,7 @@ import engine.external.actions.NumericAction;
 import engine.external.conditions.Condition;
 import engine.external.conditions.ConditionType;
 import engine.external.events.Event;
-import engine.external.events.EventFactory;
+import events.EventFactory;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;

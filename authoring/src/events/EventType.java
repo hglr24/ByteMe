@@ -1,4 +1,11 @@
-package engine.external.events;
+package events;
+
+import engine.external.events.BottomCollisionEvent;
+import engine.external.events.Event;
+import engine.external.events.LeftCollisionEvent;
+import engine.external.events.RightCollisionEvent;
+import engine.external.events.TimerEvent;
+import engine.external.events.TopCollisionEvent;
 
 import java.util.Arrays;
 import java.util.List;

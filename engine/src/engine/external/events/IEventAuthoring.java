@@ -58,14 +58,6 @@ public interface IEventAuthoring {
      */
     void removeConditions(List<Condition> conditionsToRemove);
 
-    /**
-     * Returns the set of all available engine.external.events
-     * @return set of all available engine.external.events
-     */
-    Collection<String> getAllEvents();
-
-
-
     void setInputs(Set<KeyCode> inputs);
 
     /**

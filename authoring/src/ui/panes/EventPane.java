@@ -3,7 +3,7 @@ import engine.external.actions.Action;
 import engine.external.actions.HealthAction;
 import engine.external.actions.NumericAction;
 import engine.external.events.Event;
-import engine.external.events.EventFactory;
+import events.EventFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

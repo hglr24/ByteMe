@@ -1,4 +1,4 @@
-package engine.external.events;
+package events;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;

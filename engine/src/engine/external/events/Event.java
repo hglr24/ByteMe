@@ -8,7 +8,10 @@ import engine.external.IEventEngine;
 import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
+import java.io.Serializable;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
@@ -17,7 +20,6 @@ import java.util.*;
  * @author Feroze Mohideen
  */
 public class Event implements IEventEngine, IEventAuthoring {
-    private final ResourceBundle EVENT_TYPES_RESOURCES = ResourceBundle.getBundle("Events");
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
     private String myType;
@@ -31,6 +33,11 @@ public class Event implements IEventEngine, IEventAuthoring {
      */
     public Event(String name) {
         myType = name;
+        init();
+    }
+
+    private void init() {
+
     }
 
     //need to make this method take in keycode inputs as well
@@ -59,7 +66,7 @@ public class Event implements IEventEngine, IEventAuthoring {
 
     private boolean conditionsMet(Entity entity) {
         try {
-            return conditions.stream().allMatch(condition -> condition.getPredicate().test(entity));
+            return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> condition.getPredicate().test(entity));
         }catch(Exception e){
             e.printStackTrace(); //TODO find exact exceptions to catch
             return false;
@@ -67,7 +74,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     private void executeActions(Entity entity) {
-        actions.forEach(action -> action.getAction().accept(entity));
+        actions.forEach((Consumer<Action> & Serializable) action -> action.getAction().accept(entity));
     }
 
     public void addActions(List<Action> actionsToAdd) {
@@ -102,10 +109,6 @@ public class Event implements IEventEngine, IEventAuthoring {
         actions.removeAll(actionsToRemove);
     }
 
-
-    public Collection<String> getAllEvents() {
-        return EVENT_TYPES_RESOURCES.keySet();
-    }
 
     @Override
     public void setInputs(Set<KeyCode> inputs) {
