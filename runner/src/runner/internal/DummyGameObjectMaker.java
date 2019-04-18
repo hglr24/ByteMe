@@ -40,18 +40,25 @@ public class DummyGameObjectMaker {
         event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
         Event event2 = new Event("one");
         event2.addInputs(KeyCode.S);
-        event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+        event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
         RightCollisionEvent lce = new RightCollisionEvent("one", "two");
         //lce.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
-        lce.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.0));
-        lce.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
+        lce.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.1));
+//        lce.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
         Event event3 = new Event("one");
         event3.addInputs(KeyCode.LEFT);
         event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
+
+        //add up down keycodes
+        Event moveup = new Event("one");
+        moveup.addInputs(KeyCode.UP);
+        moveup.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
+
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
+        level1.addEvent(moveup);
         level1.addEvent(lce);
     }
 
@@ -62,21 +69,21 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
-        dummy1.addComponent(new XPositionComponent(60.0));
+        dummy1.addComponent(new XPositionComponent(40.0));
         dummy1.addComponent(new YPositionComponent(30.0));
         dummy1.addComponent(new ZPositionComponent(0.0));
-        dummy2.addComponent(new XPositionComponent(420.0));
+        dummy2.addComponent(new XPositionComponent(400.0));
         dummy2.addComponent(new YPositionComponent(20.0));
         dummy2.addComponent(new ZPositionComponent(0.0));
         dummy3.addComponent(new XPositionComponent(90.0));
         dummy3.addComponent(new YPositionComponent(100.0));
         dummy3.addComponent(new ZPositionComponent(0.0));
 
-        dummy1.addComponent(new WidthComponent(100.0));
-        dummy1.addComponent(new HeightComponent(100.0));
+        dummy1.addComponent(new WidthComponent(40.0));
+        dummy1.addComponent(new HeightComponent(50.0));
         dummy2.addComponent(new WidthComponent(80.0));
         dummy2.addComponent(new HeightComponent(80.0));
-        dummy3.addComponent(new WidthComponent(80.0));
+        dummy3.addComponent(new WidthComponent(200.0));
         dummy3.addComponent(new HeightComponent(80.0));
 
 //        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
