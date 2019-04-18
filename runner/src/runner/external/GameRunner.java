@@ -56,12 +56,18 @@ public class GameRunner {
         code below */
 
         DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        dm2.serializeObject();
+        //dm2.serializeObject();
         Game gameMade = dm2.getGame(game);
 
-        DataManager dm = new DataManager();
 
-        myGame = (Game) dm.loadGameData(game);
+        DataManager dm = new DataManager();
+        dm.createGameFolder("YeetRevised");
+        dm.saveGameData("YeetRevised", gameMade);
+        System.out.println("Serialization complete");
+
+
+        myGame = (Game) dm.loadGameData("YeetRevised");
+
 
 
 
