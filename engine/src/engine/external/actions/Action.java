@@ -3,6 +3,7 @@ package engine.external.actions;
 import engine.external.Entity;
 import engine.external.component.Component;
 
+import java.io.Serializable;
 import java.util.function.Consumer;
 
 /**
@@ -27,7 +28,7 @@ public abstract class Action<T> {
      * @param componentClass class that specifies the component type
      */
     protected void setAbsoluteAction(T newValue, Class<? extends Component<T>> componentClass) {
-        setAction((entity) -> {
+        setAction((Consumer<Entity> & Serializable) (entity) -> {
             Component component = entity.getComponent(componentClass);
             component.setValue(newValue);
         });

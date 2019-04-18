@@ -1,6 +1,10 @@
 package engine.external.actions;
 
+import engine.external.Entity;
 import engine.external.component.Component;
+
+import java.io.Serializable;
+import java.util.function.Consumer;
 
 /**
  * A NumericAction can alter the Double value of a component in three different ways:
@@ -49,7 +53,7 @@ public abstract class NumericAction<Double> extends Action<Double> {
      */
     @SuppressWarnings("unchecked")
     protected void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
-        super.setAction((entity) -> {
+        super.setAction((Consumer<Entity> & Serializable) (entity) -> {
             double oldValue = ((Number) entity.getComponent(componentClass).getValue()).doubleValue();
             Component component = entity.getComponent(componentClass);
             component.setValue(oldValue * scaleFactor.doubleValue());
@@ -63,7 +67,7 @@ public abstract class NumericAction<Double> extends Action<Double> {
      * @param componentClass
      */
     protected void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
-        setAction((entity) -> {
+        setAction((Consumer<Entity> & Serializable) (entity) -> {
             Component component = entity.getComponent(componentClass);
             component.setValue((double) component.getValue() + displacementFactor.doubleValue());
         });
