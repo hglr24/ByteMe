@@ -43,7 +43,7 @@ public abstract class Action<T> {
      * @param action a lambda
      */
     protected void setAction(Consumer<Entity> action) {
-        myAction = (Consumer<Entity> & Serializable) action;
+        myAction = action;
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class Action<T> {
      * @return lambda
      */
     public Consumer<Entity> getAction() {
-        return (Consumer<Entity> & Serializable) myAction;
+        return myAction;
     }
 
     /**

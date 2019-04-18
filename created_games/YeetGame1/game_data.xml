@@ -5,10 +5,22 @@
         <engine.external.Entity>
           <myComponents>
             <entry>
-              <java-class>engine.external.component.XVelocityComponent</java-class>
-              <engine.external.component.XVelocityComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.XVelocityComponent>
+              <java-class>engine.external.component.CollisionComponent</java-class>
+              <engine.external.component.CollisionComponent>
+                <myValue class="boolean">true</myValue>
+              </engine.external.component.CollisionComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.AnyCollidedComponent</java-class>
+              <engine.external.component.AnyCollidedComponent>
+                <myValue class="list"/>
+              </engine.external.component.AnyCollidedComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.LeftCollidedComponent</java-class>
+              <engine.external.component.LeftCollidedComponent>
+                <myValue class="list"/>
+              </engine.external.component.LeftCollidedComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.NameComponent</java-class>
@@ -17,16 +29,422 @@
               </engine.external.component.NameComponent>
             </entry>
             <entry>
+              <java-class>engine.external.component.SpriteComponent</java-class>
+              <engine.external.component.SpriteComponent>
+                <myValue class="string">flappy_bird.png</myValue>
+              </engine.external.component.SpriteComponent>
+            </entry>
+            <entry>
               <java-class>engine.external.component.YPositionComponent</java-class>
               <engine.external.component.YPositionComponent>
                 <myValue class="double">30.0</myValue>
               </engine.external.component.YPositionComponent>
             </entry>
             <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">100.0</myValue>
-              </engine.external.component.WidthComponent>
+              <java-class>engine.external.component.BottomCollidedComponent</java-class>
+              <engine.external.component.BottomCollidedComponent>
+                <myValue class="list">
+                  <engine.external.Entity>
+                    <myComponents>
+                      <entry>
+                        <java-class>engine.external.component.BottomCollidedComponent</java-class>
+                        <engine.external.component.BottomCollidedComponent>
+                          <myValue class="list"/>
+                        </engine.external.component.BottomCollidedComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.ZPositionComponent</java-class>
+                        <engine.external.component.ZPositionComponent>
+                          <myValue class="double">0.0</myValue>
+                        </engine.external.component.ZPositionComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.AnyCollidedComponent</java-class>
+                        <engine.external.component.AnyCollidedComponent>
+                          <myValue class="list"/>
+                        </engine.external.component.AnyCollidedComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.LeftCollidedComponent</java-class>
+                        <engine.external.component.LeftCollidedComponent>
+                          <myValue class="list"/>
+                        </engine.external.component.LeftCollidedComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.RightCollidedComponent</java-class>
+                        <engine.external.component.RightCollidedComponent>
+                          <myValue class="list"/>
+                        </engine.external.component.RightCollidedComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.XPositionComponent</java-class>
+                        <engine.external.component.XPositionComponent>
+                          <myValue class="double">90.0</myValue>
+                        </engine.external.component.XPositionComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.HeightComponent</java-class>
+                        <engine.external.component.HeightComponent>
+                          <myValue class="double">80.0</myValue>
+                        </engine.external.component.HeightComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.NameComponent</java-class>
+                        <engine.external.component.NameComponent>
+                          <myValue class="string">three</myValue>
+                        </engine.external.component.NameComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.WidthComponent</java-class>
+                        <engine.external.component.WidthComponent>
+                          <myValue class="double">80.0</myValue>
+                        </engine.external.component.WidthComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.TopCollidedComponent</java-class>
+                        <engine.external.component.TopCollidedComponent>
+                          <myValue class="list">
+                            <engine.external.Entity reference="../../../../../../../../../.."/>
+                            <engine.external.Entity>
+                              <myComponents>
+                                <entry>
+                                  <java-class>engine.external.component.CollisionComponent</java-class>
+                                  <engine.external.component.CollisionComponent>
+                                    <myValue class="boolean">true</myValue>
+                                  </engine.external.component.CollisionComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.AnyCollidedComponent</java-class>
+                                  <engine.external.component.AnyCollidedComponent>
+                                    <myValue class="list"/>
+                                  </engine.external.component.AnyCollidedComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.LeftCollidedComponent</java-class>
+                                  <engine.external.component.LeftCollidedComponent>
+                                    <myValue class="list"/>
+                                  </engine.external.component.LeftCollidedComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.NameComponent</java-class>
+                                  <engine.external.component.NameComponent>
+                                    <myValue class="string">two</myValue>
+                                  </engine.external.component.NameComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.SpriteComponent</java-class>
+                                  <engine.external.component.SpriteComponent>
+                                    <myValue class="string">mushroom.png</myValue>
+                                  </engine.external.component.SpriteComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.YPositionComponent</java-class>
+                                  <engine.external.component.YPositionComponent>
+                                    <myValue class="double">20.0</myValue>
+                                  </engine.external.component.YPositionComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.BottomCollidedComponent</java-class>
+                                  <engine.external.component.BottomCollidedComponent>
+                                    <myValue class="list">
+                                      <engine.external.Entity reference="../../../../../../../../../.."/>
+                                      <engine.external.Entity>
+                                        <myComponents>
+                                          <entry>
+                                            <java-class>engine.external.component.BottomCollidedComponent</java-class>
+                                            <engine.external.component.BottomCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.BottomCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.AnyCollidedComponent</java-class>
+                                            <engine.external.component.AnyCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.AnyCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.LeftCollidedComponent</java-class>
+                                            <engine.external.component.LeftCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.LeftCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.ZPositionComponent</java-class>
+                                            <engine.external.component.ZPositionComponent>
+                                              <myValue class="double">0.0</myValue>
+                                            </engine.external.component.ZPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.RightCollidedComponent</java-class>
+                                            <engine.external.component.RightCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.RightCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.XPositionComponent</java-class>
+                                            <engine.external.component.XPositionComponent>
+                                              <myValue class="double">170.0</myValue>
+                                            </engine.external.component.XPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.HeightComponent</java-class>
+                                            <engine.external.component.HeightComponent>
+                                              <myValue class="double">80.0</myValue>
+                                            </engine.external.component.HeightComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.NameComponent</java-class>
+                                            <engine.external.component.NameComponent>
+                                              <myValue class="string">four</myValue>
+                                            </engine.external.component.NameComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.TopCollidedComponent</java-class>
+                                            <engine.external.component.TopCollidedComponent>
+                                              <myValue class="list" reference="../../../../../../../../../.."/>
+                                            </engine.external.component.TopCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.WidthComponent</java-class>
+                                            <engine.external.component.WidthComponent>
+                                              <myValue class="double">80.0</myValue>
+                                            </engine.external.component.WidthComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.SpriteComponent</java-class>
+                                            <engine.external.component.SpriteComponent>
+                                              <myValue class="string">mario_block.png</myValue>
+                                            </engine.external.component.SpriteComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.YPositionComponent</java-class>
+                                            <engine.external.component.YPositionComponent>
+                                              <myValue class="double">100.0</myValue>
+                                            </engine.external.component.YPositionComponent>
+                                          </entry>
+                                        </myComponents>
+                                      </engine.external.Entity>
+                                      <engine.external.Entity>
+                                        <myComponents>
+                                          <entry>
+                                            <java-class>engine.external.component.BottomCollidedComponent</java-class>
+                                            <engine.external.component.BottomCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.BottomCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.AnyCollidedComponent</java-class>
+                                            <engine.external.component.AnyCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.AnyCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.LeftCollidedComponent</java-class>
+                                            <engine.external.component.LeftCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.LeftCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.ZPositionComponent</java-class>
+                                            <engine.external.component.ZPositionComponent>
+                                              <myValue class="double">0.0</myValue>
+                                            </engine.external.component.ZPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.RightCollidedComponent</java-class>
+                                            <engine.external.component.RightCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.RightCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.XPositionComponent</java-class>
+                                            <engine.external.component.XPositionComponent>
+                                              <myValue class="double">250.0</myValue>
+                                            </engine.external.component.XPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.HeightComponent</java-class>
+                                            <engine.external.component.HeightComponent>
+                                              <myValue class="double">80.0</myValue>
+                                            </engine.external.component.HeightComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.NameComponent</java-class>
+                                            <engine.external.component.NameComponent>
+                                              <myValue class="string">five</myValue>
+                                            </engine.external.component.NameComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.TopCollidedComponent</java-class>
+                                            <engine.external.component.TopCollidedComponent>
+                                              <myValue class="list" reference="../../../../../../../../../.."/>
+                                            </engine.external.component.TopCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.WidthComponent</java-class>
+                                            <engine.external.component.WidthComponent>
+                                              <myValue class="double">80.0</myValue>
+                                            </engine.external.component.WidthComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.SpriteComponent</java-class>
+                                            <engine.external.component.SpriteComponent>
+                                              <myValue class="string">mario_block.png</myValue>
+                                            </engine.external.component.SpriteComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.YPositionComponent</java-class>
+                                            <engine.external.component.YPositionComponent>
+                                              <myValue class="double">100.0</myValue>
+                                            </engine.external.component.YPositionComponent>
+                                          </entry>
+                                        </myComponents>
+                                      </engine.external.Entity>
+                                      <engine.external.Entity>
+                                        <myComponents>
+                                          <entry>
+                                            <java-class>engine.external.component.BottomCollidedComponent</java-class>
+                                            <engine.external.component.BottomCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.BottomCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.AnyCollidedComponent</java-class>
+                                            <engine.external.component.AnyCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.AnyCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.LeftCollidedComponent</java-class>
+                                            <engine.external.component.LeftCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.LeftCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.ZPositionComponent</java-class>
+                                            <engine.external.component.ZPositionComponent>
+                                              <myValue class="double">0.0</myValue>
+                                            </engine.external.component.ZPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.RightCollidedComponent</java-class>
+                                            <engine.external.component.RightCollidedComponent>
+                                              <myValue class="list"/>
+                                            </engine.external.component.RightCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.XPositionComponent</java-class>
+                                            <engine.external.component.XPositionComponent>
+                                              <myValue class="double">330.0</myValue>
+                                            </engine.external.component.XPositionComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.HeightComponent</java-class>
+                                            <engine.external.component.HeightComponent>
+                                              <myValue class="double">80.0</myValue>
+                                            </engine.external.component.HeightComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.NameComponent</java-class>
+                                            <engine.external.component.NameComponent>
+                                              <myValue class="string">six</myValue>
+                                            </engine.external.component.NameComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.TopCollidedComponent</java-class>
+                                            <engine.external.component.TopCollidedComponent>
+                                              <myValue class="list" reference="../../../../../../../../../.."/>
+                                            </engine.external.component.TopCollidedComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.WidthComponent</java-class>
+                                            <engine.external.component.WidthComponent>
+                                              <myValue class="double">160.0</myValue>
+                                            </engine.external.component.WidthComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.SpriteComponent</java-class>
+                                            <engine.external.component.SpriteComponent>
+                                              <myValue class="string">mario_block.png</myValue>
+                                            </engine.external.component.SpriteComponent>
+                                          </entry>
+                                          <entry>
+                                            <java-class>engine.external.component.YPositionComponent</java-class>
+                                            <engine.external.component.YPositionComponent>
+                                              <myValue class="double">100.0</myValue>
+                                            </engine.external.component.YPositionComponent>
+                                          </entry>
+                                        </myComponents>
+                                      </engine.external.Entity>
+                                    </myValue>
+                                  </engine.external.component.BottomCollidedComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.ZPositionComponent</java-class>
+                                  <engine.external.component.ZPositionComponent>
+                                    <myValue class="double">0.0</myValue>
+                                  </engine.external.component.ZPositionComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.RightCollidedComponent</java-class>
+                                  <engine.external.component.RightCollidedComponent>
+                                    <myValue class="list"/>
+                                  </engine.external.component.RightCollidedComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.XPositionComponent</java-class>
+                                  <engine.external.component.XPositionComponent>
+                                    <myValue class="double">420.0</myValue>
+                                  </engine.external.component.XPositionComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.HeightComponent</java-class>
+                                  <engine.external.component.HeightComponent>
+                                    <myValue class="double">80.0</myValue>
+                                  </engine.external.component.HeightComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.WidthComponent</java-class>
+                                  <engine.external.component.WidthComponent>
+                                    <myValue class="double">80.0</myValue>
+                                  </engine.external.component.WidthComponent>
+                                </entry>
+                                <entry>
+                                  <java-class>engine.external.component.TopCollidedComponent</java-class>
+                                  <engine.external.component.TopCollidedComponent>
+                                    <myValue class="list"/>
+                                  </engine.external.component.TopCollidedComponent>
+                                </entry>
+                              </myComponents>
+                            </engine.external.Entity>
+                          </myValue>
+                        </engine.external.component.TopCollidedComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.SpriteComponent</java-class>
+                        <engine.external.component.SpriteComponent>
+                          <myValue class="string">mario_block.png</myValue>
+                        </engine.external.component.SpriteComponent>
+                      </entry>
+                      <entry>
+                        <java-class>engine.external.component.YPositionComponent</java-class>
+                        <engine.external.component.YPositionComponent>
+                          <myValue class="double">100.0</myValue>
+                        </engine.external.component.YPositionComponent>
+                      </entry>
+                    </myComponents>
+                  </engine.external.Entity>
+                  <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[2]"/>
+                  <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[3]"/>
+                  <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[4]"/>
+                </myValue>
+              </engine.external.component.BottomCollidedComponent>
+            </entry>
+            <entry>
+              <java-class>engine.external.component.ZPositionComponent</java-class>
+              <engine.external.component.ZPositionComponent>
+                <myValue class="double">0.0</myValue>
+              </engine.external.component.ZPositionComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.YVelocityComponent</java-class>
@@ -35,16 +453,10 @@
               </engine.external.component.YVelocityComponent>
             </entry>
             <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">flappy_bird.png</myValue>
-              </engine.external.component.SpriteComponent>
+              <java-class>engine.external.component.RightCollidedComponent</java-class>
+              <engine.external.component.RightCollidedComponent>
+                <myValue class="list"/>
+              </engine.external.component.RightCollidedComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.XPositionComponent</java-class>
@@ -53,275 +465,38 @@
               </engine.external.component.XPositionComponent>
             </entry>
             <entry>
-              <java-class>engine.external.component.CollisionComponent</java-class>
-              <engine.external.component.CollisionComponent>
-                <myValue class="boolean">true</myValue>
-              </engine.external.component.CollisionComponent>
-            </entry>
-            <entry>
               <java-class>engine.external.component.HeightComponent</java-class>
               <engine.external.component.HeightComponent>
                 <myValue class="double">100.0</myValue>
               </engine.external.component.HeightComponent>
             </entry>
-          </myComponents>
-        </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
             <entry>
-              <java-class>engine.external.component.NameComponent</java-class>
-              <engine.external.component.NameComponent>
-                <myValue class="string">two</myValue>
-              </engine.external.component.NameComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">20.0</myValue>
-              </engine.external.component.YPositionComponent>
+              <java-class>engine.external.component.XVelocityComponent</java-class>
+              <engine.external.component.XVelocityComponent>
+                <myValue class="double">0.0</myValue>
+              </engine.external.component.XVelocityComponent>
             </entry>
             <entry>
               <java-class>engine.external.component.WidthComponent</java-class>
               <engine.external.component.WidthComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.WidthComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">mushroom.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">420.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.CollisionComponent</java-class>
-              <engine.external.component.CollisionComponent>
-                <myValue class="boolean">true</myValue>
-              </engine.external.component.CollisionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.HeightComponent>
-            </entry>
-          </myComponents>
-        </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
-            <entry>
-              <java-class>engine.external.component.NameComponent</java-class>
-              <engine.external.component.NameComponent>
-                <myValue class="string">three</myValue>
-              </engine.external.component.NameComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
                 <myValue class="double">100.0</myValue>
-              </engine.external.component.YPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">80.0</myValue>
               </engine.external.component.WidthComponent>
             </entry>
             <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">mario_block.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">90.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.HeightComponent>
+              <java-class>engine.external.component.TopCollidedComponent</java-class>
+              <engine.external.component.TopCollidedComponent>
+                <myValue class="list"/>
+              </engine.external.component.TopCollidedComponent>
             </entry>
           </myComponents>
         </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
-            <entry>
-              <java-class>engine.external.component.NameComponent</java-class>
-              <engine.external.component.NameComponent>
-                <myValue class="string">five</myValue>
-              </engine.external.component.NameComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">100.0</myValue>
-              </engine.external.component.YPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.WidthComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">mario_block.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">250.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.HeightComponent>
-            </entry>
-          </myComponents>
-        </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
-            <entry>
-              <java-class>engine.external.component.NameComponent</java-class>
-              <engine.external.component.NameComponent>
-                <myValue class="string">six</myValue>
-              </engine.external.component.NameComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">100.0</myValue>
-              </engine.external.component.YPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">160.0</myValue>
-              </engine.external.component.WidthComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">mario_block.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">330.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.HeightComponent>
-            </entry>
-          </myComponents>
-        </engine.external.Entity>
-        <engine.external.Entity>
-          <myComponents>
-            <entry>
-              <java-class>engine.external.component.NameComponent</java-class>
-              <engine.external.component.NameComponent>
-                <myValue class="string">four</myValue>
-              </engine.external.component.NameComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.YPositionComponent</java-class>
-              <engine.external.component.YPositionComponent>
-                <myValue class="double">100.0</myValue>
-              </engine.external.component.YPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.WidthComponent</java-class>
-              <engine.external.component.WidthComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.WidthComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.ZPositionComponent</java-class>
-              <engine.external.component.ZPositionComponent>
-                <myValue class="double">0.0</myValue>
-              </engine.external.component.ZPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.SpriteComponent</java-class>
-              <engine.external.component.SpriteComponent>
-                <myValue class="string">mario_block.png</myValue>
-              </engine.external.component.SpriteComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.XPositionComponent</java-class>
-              <engine.external.component.XPositionComponent>
-                <myValue class="double">170.0</myValue>
-              </engine.external.component.XPositionComponent>
-            </entry>
-            <entry>
-              <java-class>engine.external.component.HeightComponent</java-class>
-              <engine.external.component.HeightComponent>
-                <myValue class="double">80.0</myValue>
-              </engine.external.component.HeightComponent>
-            </entry>
-          </myComponents>
-        </engine.external.Entity>
+        <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[2]"/>
+        <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity"/>
+        <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[3]"/>
+        <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity[4]"/>
+        <engine.external.Entity reference="../engine.external.Entity/myComponents/entry[7]/engine.external.component.BottomCollidedComponent/myValue/engine.external.Entity/myComponents/entry[10]/engine.external.component.TopCollidedComponent/myValue/engine.external.Entity[2]"/>
       </myEntities>
       <myEvents class="set">
-        <events.RightCollisionEvent>
-          <actions>
-            <actions.XVelocityAction>
-              <myAction class="null"/>
-            </actions.XVelocityAction>
-            <actions.HeightAction>
-              <myAction class="null"/>
-            </actions.HeightAction>
-          </actions>
-          <conditions>
-            <conditions.CollisionCondition>
-              <myPredicate class="null"/>
-            </conditions.CollisionCondition>
-          </conditions>
-          <myType>one</myType>
-          <myInputs/>
-          <myCollisionWithEntity>two</myCollisionWithEntity>
-        </events.RightCollisionEvent>
         <events.Event>
           <actions>
             <actions.XVelocityAction>
@@ -351,25 +526,71 @@
         <events.Event>
           <actions>
             <actions.XPositionAction>
-              <myAction class="null"/>
+              <myAction resolves-to="serialized-lambda">
+                <capturingClass>actions.NumericAction</capturingClass>
+                <functionalInterfaceClass>java/util/function/Consumer</functionalInterfaceClass>
+                <functionalInterfaceMethodName>accept</functionalInterfaceMethodName>
+                <functionalInterfaceMethodSignature>(Ljava/lang/Object;)V</functionalInterfaceMethodSignature>
+                <implClass>actions/NumericAction</implClass>
+                <implMethodName>lambda$setRelativeAction$cbf39f88$1</implMethodName>
+                <implMethodSignature>(Ljava/lang/Class;Ljava/lang/Number;Lengine/external/Entity;)V</implMethodSignature>
+                <implMethodKind>6</implMethodKind>
+                <instantiatedMethodType>(Lengine/external/Entity;)V</instantiatedMethodType>
+                <capturedArgs>
+                  <java-class>engine.external.component.XPositionComponent</java-class>
+                  <double>5.0</double>
+                </capturedArgs>
+              </myAction>
+            </actions.XPositionAction>
+          </actions>
+          <conditions>
+            <conditions.GreaterThanCondition>
+              <myPredicate resolves-to="serialized-lambda">
+                <capturingClass>conditions.GreaterThanCondition</capturingClass>
+                <functionalInterfaceClass>java/util/function/Predicate</functionalInterfaceClass>
+                <functionalInterfaceMethodName>test</functionalInterfaceMethodName>
+                <functionalInterfaceMethodSignature>(Ljava/lang/Object;)Z</functionalInterfaceMethodSignature>
+                <implClass>conditions/GreaterThanCondition</implClass>
+                <implMethodName>lambda$new$880ceeee$1</implMethodName>
+                <implMethodSignature>(Ljava/lang/Class;Ljava/lang/Double;Lengine/external/Entity;)Z</implMethodSignature>
+                <implMethodKind>6</implMethodKind>
+                <instantiatedMethodType>(Lengine/external/Entity;)Z</instantiatedMethodType>
+                <capturedArgs>
+                  <java-class>engine.external.component.YPositionComponent</java-class>
+                  <double>-50.0</double>
+                </capturedArgs>
+              </myPredicate>
+            </conditions.GreaterThanCondition>
+          </conditions>
+          <myType>one</myType>
+          <myInputs>
+            <javafx.scene.input.KeyCode>RIGHT</javafx.scene.input.KeyCode>
+          </myInputs>
+        </events.Event>
+        <events.Event>
+          <actions>
+            <actions.XPositionAction>
+              <myAction resolves-to="serialized-lambda">
+                <capturingClass>actions.NumericAction</capturingClass>
+                <functionalInterfaceClass>java/util/function/Consumer</functionalInterfaceClass>
+                <functionalInterfaceMethodName>accept</functionalInterfaceMethodName>
+                <functionalInterfaceMethodSignature>(Ljava/lang/Object;)V</functionalInterfaceMethodSignature>
+                <implClass>actions/NumericAction</implClass>
+                <implMethodName>lambda$setRelativeAction$cbf39f88$1</implMethodName>
+                <implMethodSignature>(Ljava/lang/Class;Ljava/lang/Number;Lengine/external/Entity;)V</implMethodSignature>
+                <implMethodKind>6</implMethodKind>
+                <instantiatedMethodType>(Lengine/external/Entity;)V</instantiatedMethodType>
+                <capturedArgs>
+                  <java-class>engine.external.component.XPositionComponent</java-class>
+                  <double>-5.0</double>
+                </capturedArgs>
+              </myAction>
             </actions.XPositionAction>
           </actions>
           <conditions/>
           <myType>one</myType>
           <myInputs>
             <javafx.scene.input.KeyCode>LEFT</javafx.scene.input.KeyCode>
-          </myInputs>
-        </events.Event>
-        <events.Event>
-          <actions>
-            <actions.XPositionAction>
-              <myAction class="null"/>
-            </actions.XPositionAction>
-          </actions>
-          <conditions/>
-          <myType>one</myType>
-          <myInputs>
-            <javafx.scene.input.KeyCode>RIGHT</javafx.scene.input.KeyCode>
           </myInputs>
         </events.Event>
       </myEvents>

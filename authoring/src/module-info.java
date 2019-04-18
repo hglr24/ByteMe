@@ -9,9 +9,6 @@ module authoring {
     requires xstream;
     requires java.desktop;
 
-    opens events to xstream;
-    opens conditions to xstream;
-    opens actions to xstream;
 
 
     exports authoring.external;

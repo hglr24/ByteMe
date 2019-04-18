@@ -13,4 +13,8 @@ module runner {
     opens events to xstream;
     opens conditions to xstream;
     opens actions to xstream;
+
+    exports actions;
+    exports conditions;
+    exports events;
 }

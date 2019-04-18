@@ -1,5 +1,8 @@
 package factory;
 
+import actions.Action;
+import actions.NumericAction;
+import actions.XPositionAction;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import data.external.DataManager;
@@ -8,9 +11,12 @@ import engine.external.component.HealthComponent;
 import runner.external.Game;
 import runner.external.GameCenterData;
 
+import java.io.FileNotFoundException;
+
 
 public class SerializationTester {
     private XStream mySerializer;
+    private Action deserialized;
 
     public SerializationTester(){
         mySerializer = new XStream(new DomDriver());
@@ -58,6 +64,21 @@ public class SerializationTester {
         DataManager dm = new DataManager();
         dm.createGameFolder("YeetGame1");
         dm.saveGameData("YeetGame1", game);
+    }
+
+    public void testActions(){
+        DataManager dm = new DataManager();
+        XPositionAction myPos = new XPositionAction(NumericAction.ModifyType.RELATIVE, 10.0);
+        dm.createGameFolder("ActionTest");
+        dm.saveGameData("ActionTest", myPos);
+
+        try {
+            deserialized = (Action) dm.loadGameData("ActionTest");
+            System.out.println("Here");
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't load game data");
+            e.printStackTrace();
+        }
     }
 }
 

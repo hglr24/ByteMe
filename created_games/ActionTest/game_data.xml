@@ -1,0 +1,17 @@
+<actions.XPositionAction>
+  <myAction resolves-to="serialized-lambda">
+    <capturingClass>actions.NumericAction</capturingClass>
+    <functionalInterfaceClass>java/util/function/Consumer</functionalInterfaceClass>
+    <functionalInterfaceMethodName>accept</functionalInterfaceMethodName>
+    <functionalInterfaceMethodSignature>(Ljava/lang/Object;)V</functionalInterfaceMethodSignature>
+    <implClass>actions/NumericAction</implClass>
+    <implMethodName>lambda$setRelativeAction$cbf39f88$1</implMethodName>
+    <implMethodSignature>(Ljava/lang/Class;Ljava/lang/Number;Lengine/external/Entity;)V</implMethodSignature>
+    <implMethodKind>6</implMethodKind>
+    <instantiatedMethodType>(Lengine/external/Entity;)V</instantiatedMethodType>
+    <capturedArgs>
+      <java-class>engine.external.component.XPositionComponent</java-class>
+      <double>10.0</double>
+    </capturedArgs>
+  </myAction>
+</actions.XPositionAction>

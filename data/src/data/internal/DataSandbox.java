@@ -1,10 +1,7 @@
 package data.internal;
 
 import data.external.DataManager;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+//import data.external.DatabaseEngine;
 
 public class DataSandbox {
 
@@ -29,8 +26,19 @@ public class DataSandbox {
 //            }
 //        }
 
-        DataManager dm = new DataManager();
-        dm.createGameFolder("testGameFolder");
+//        DataManager dm = new DataManager();
+//        dm.createGameFolder("testGameFolder");
+//        DatabaseEngine de = new DatabaseEngine();
+////        de.createEntryForNewGame("Ryan Game");
+////        de.printGameTable();
+//        if (! de.open()){
+//            System.out.println("Couldn't open datasource");
+//            return;
+//        }
+//        System.out.println("Game data: " + de.loadGameData("Ryan Game"));
+//        de.printGameTable();
+//        de.updateGameEntryData("Ryan Game", "changed");
+//        de.close();
 
     }
 }

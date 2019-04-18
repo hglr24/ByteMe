@@ -1,9 +1,7 @@
 package factory;
 
-import actions.HeightAction;
-import actions.NumericAction;
-import actions.XPositionAction;
-import actions.XVelocityAction;
+import actions.*;
+import conditions.GreaterThanCondition;
 import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.Level;
@@ -11,13 +9,14 @@ import engine.external.component.*;
 
 import events.Event;
 import events.RightCollisionEvent;
-import events.RyanEvent;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class DummyGameMaker {
     private Game myGame;
@@ -43,18 +42,18 @@ public class DummyGameMaker {
         event2.addInputs(KeyCode.S);
         event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
         RightCollisionEvent lce = new RightCollisionEvent("one", "two");
-        //lce.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
-        lce.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.0));
+        lce.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
+        lce.addActions(new YVelocityAction(NumericAction.ModifyType.RELATIVE, -3.0));
         lce.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
-
+//
         Event event3 = new Event("one");
         event3.addInputs(KeyCode.LEFT);
         event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
-        //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
+        event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
-        level1.addEvent(lce);
+//        level1.addEvent(lce);
     }
 
     private void addDummyEntities(Level level) {
@@ -80,6 +79,45 @@ public class DummyGameMaker {
         dummy2.addComponent(new HeightComponent(80.0));
         dummy3.addComponent(new WidthComponent(80.0));
         dummy3.addComponent(new HeightComponent(80.0));
+
+        ArrayList<Entity> list = new ArrayList<>();
+        list.add(dummy2);
+        ArrayList<Entity> listTop = new ArrayList<>();
+        listTop.add(dummy1);
+        listTop.add(dummy2);
+        dummy1.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy2.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy3.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy4.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy5.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy6.addComponent(new RightCollidedComponent(new ArrayList<>()));
+        dummy1.addComponent(new TopCollidedComponent(new ArrayList<>()));
+        dummy2.addComponent(new TopCollidedComponent(new ArrayList<>()));
+        dummy3.addComponent(new TopCollidedComponent(listTop));
+        dummy4.addComponent(new TopCollidedComponent(listTop));
+        dummy5.addComponent(new TopCollidedComponent(listTop));
+        dummy6.addComponent(new TopCollidedComponent(listTop));
+
+        dummy1.addComponent(new BottomCollidedComponent(new ArrayList<>(List.of(dummy3, dummy4, dummy5, dummy6))));
+        dummy2.addComponent(new BottomCollidedComponent(new ArrayList<>(List.of(dummy3, dummy4, dummy5, dummy6))));
+        dummy3.addComponent(new BottomCollidedComponent(new ArrayList<>()));
+        dummy4.addComponent(new BottomCollidedComponent(new ArrayList<>()));
+        dummy5.addComponent(new BottomCollidedComponent(new ArrayList<>()));
+        dummy6.addComponent(new BottomCollidedComponent(new ArrayList<>()));
+
+        dummy1.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+        dummy2.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+        dummy3.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+        dummy4.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+        dummy5.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+        dummy6.addComponent(new AnyCollidedComponent(new ArrayList<>()));
+
+        dummy1.addComponent(new LeftCollidedComponent(new ArrayList<>()));
+        dummy2.addComponent(new LeftCollidedComponent(new ArrayList<>()));
+        dummy3.addComponent(new LeftCollidedComponent(new ArrayList<>()));
+        dummy4.addComponent(new LeftCollidedComponent(new ArrayList<>()));
+        dummy5.addComponent(new LeftCollidedComponent(new ArrayList<>()));
+        dummy6.addComponent(new LeftCollidedComponent(new ArrayList<>()));
 
 //        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
