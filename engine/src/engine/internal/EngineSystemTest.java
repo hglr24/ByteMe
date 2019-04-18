@@ -231,6 +231,9 @@ public class EngineSystemTest extends Application{
         assertTrue(!bird.hasComponents(RightCollidedComponent.class)||!((Collection)bird.getComponent(RightCollidedComponent.class).getValue()).contains(mushroom));
     }
 
+    /**
+     *
+     */
     @Test
     public void testSetPosition(){
         XPositionComponent c1 = new XPositionComponent(10.0);

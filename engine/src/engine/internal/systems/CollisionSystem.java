@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
+ *
  * @author Hsingchih Tang
  * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
  * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain actions (defined

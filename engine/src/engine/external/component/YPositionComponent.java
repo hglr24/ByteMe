@@ -1,5 +1,8 @@
 package engine.external.component;
 
+/**
+ *
+ */
 public class YPositionComponent extends Component<Double> {
 
     private Double oldValue;

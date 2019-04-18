@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
+ *
  * @author Hsingchih Tang
  * Garbage Collection System to be invoked at the end of each game loop.
  * Checks all Entities' DestroyComponent, and permanantly removes those
@@ -28,7 +29,7 @@ public class CleanupSystem extends VoogaSystem {
     }
 
     /**
-     * Loops through the collection of Entities, probes each Entity's DestroyComponent,
+     * Loops through the collection of Entities, removes any CollidedComponent, probes each Entity's DestroyComponent,
      * and notifies Engine to get rid of all Entities whose DestroyComponent hold "true" value
      */
     @Override

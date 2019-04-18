@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
+ *
  * @author Hsingchih Tang
  * Updates the PositionComponents for every movable Entity on each game loop based on its position and velocity values
  */
