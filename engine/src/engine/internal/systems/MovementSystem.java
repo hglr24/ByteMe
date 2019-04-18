@@ -4,9 +4,11 @@ import engine.external.Entity;
 import engine.external.component.*;
 import engine.external.Engine;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
+ *
  * @author Hsingchih Tang
  * Updates the PositionComponents for every movable Entity on each game loop based on its position and velocity values
  */
@@ -43,6 +45,11 @@ public class MovementSystem extends VoogaSystem {
             ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
             ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
             ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
+//            if(e.getComponent(SpriteComponent.class).getValue().equals("flappy_bird.png")){
+//                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
+//                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);
+//            }
+
         }
     }
 
@@ -53,5 +60,6 @@ public class MovementSystem extends VoogaSystem {
     private double calcVelocity(double velocity, double acceleration){
         return velocity+acceleration;
     }
+
 
 }

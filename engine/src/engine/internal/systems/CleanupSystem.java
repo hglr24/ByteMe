@@ -3,10 +3,14 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.Engine;
+import engine.external.component.LeftCollidedComponent;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
 /**
+ *
  * @author Hsingchih Tang
  * Garbage Collection System to be invoked at the end of each game loop.
  * Checks all Entities' DestroyComponent, and permanantly removes those
@@ -25,13 +29,14 @@ public class CleanupSystem extends VoogaSystem {
     }
 
     /**
-     * Loops through the collection of Entities, probes each Entity's DestroyComponent,
+     * Loops through the collection of Entities, removes any CollidedComponent, probes each Entity's DestroyComponent,
      * and notifies Engine to get rid of all Entities whose DestroyComponent hold "true" value
      */
     @Override
     protected void run() {
         for(Entity entity:this.getEntities()){
-            if(getBooleanComponentValue(DESTROY_COMPONENT_CLASS,entity)){
+            entity.removeComponent(Arrays.asList(LEFT_COLLIDED_COMPONENT_CLASS,RIGHT_COLLIDED_COMPONENT_CLASS,TOP_COLLIDED_COMPONENT_CLASS,BOTTOM_COLLIDED_COMPONENT_CLASS,ANY_COLLIDED_COMPONENT_CLASS));
+            if(entity.hasComponents(DESTROY_COMPONENT_CLASS)&&getBooleanComponentValue(DESTROY_COMPONENT_CLASS,entity)){
                 myEngine.removeEntity(entity);
             }
         }
