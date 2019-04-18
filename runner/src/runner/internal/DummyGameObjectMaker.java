@@ -53,12 +53,18 @@ public class DummyGameObjectMaker {
         //add up down keycodes
         Event moveup = new Event("one");
         moveup.addInputs(KeyCode.UP);
-        moveup.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
+        moveup.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
+
+        Event movedown = new Event("one");
+        movedown.addInputs(KeyCode.DOWN);
+        movedown.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
 
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
         level1.addEvent(moveup);
+        level1.addEvent(movedown);
+
         level1.addEvent(lce);
     }
 
@@ -106,6 +112,21 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));
 
+        dummy1.addComponent(new AnyCollidedComponent(Arrays.asList(dummy2)));
+        dummy2.addComponent(new AnyCollidedComponent(Arrays.asList(dummy1)));
+
+        dummy1.addComponent(new RightCollidedComponent(Arrays.asList(dummy2)));
+        dummy2.addComponent(new RightCollidedComponent(Arrays.asList(dummy1)));
+        dummy2.addComponent(new LeftCollidedComponent(Arrays.asList(dummy1)));
+        dummy1.addComponent(new LeftCollidedComponent(Arrays.asList(dummy2)));
+
+        dummy1.addComponent(new TopCollidedComponent(Arrays.asList(dummy2)));
+        dummy2.addComponent(new TopCollidedComponent(Arrays.asList(dummy1)));
+
+        dummy1.addComponent(new BottomCollidedComponent(Arrays.asList(dummy2)));
+        dummy2.addComponent(new BottomCollidedComponent(Arrays.asList(dummy1)));
+
+
         dummy4.addComponent(new XPositionComponent(170.0));
         dummy4.addComponent(new YPositionComponent(100.0));
         dummy4.addComponent(new ZPositionComponent(0.0));
@@ -132,10 +153,10 @@ public class DummyGameObjectMaker {
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
-        level.addEntity(dummy3);
-        level.addEntity(dummy4);
-        level.addEntity(dummy5);
-        level.addEntity(dummy6);
+//        level.addEntity(dummy3);
+//        level.addEntity(dummy4);
+//        level.addEntity(dummy5);
+//        level.addEntity(dummy6);
 
     }
 

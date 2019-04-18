@@ -11,10 +11,10 @@ import java.util.function.Predicate;
 public class CollisionCondition extends Condition {
     String myDirection;
     public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType) {
-        setPredicate((Predicate<Entity> & Serializable) entity ->
+        setPredicate((Predicate<Entity> & Serializable) (entity ->
                 ((Collection<Entity>)entity.getComponent(directionalCollidedComponent).getValue()).stream().anyMatch((Predicate<Entity> & Serializable) entity2 ->
                         matchNames(entityType, entity2)
-                ));
+                )));
 
         myDirection = directionalCollidedComponent.getSimpleName();
     }
