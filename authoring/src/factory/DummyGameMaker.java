@@ -9,13 +9,10 @@ import engine.external.component.*;
 
 import events.Event;
 import events.RightCollisionEvent;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class DummyGameMaker {
