@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Manager class (System in the ECS design) that checks for collisions between GameObjects
- * and invoke CollisionComponents of collided GameObjects to perform actions
+ * and invoke CollisionComponents of collided GameObjects to perform engine.external.actions
  * myComponentIndex indicates the bit index of collision component as stored in a GameObject's entityID field
  */
 public class CollisionManager {

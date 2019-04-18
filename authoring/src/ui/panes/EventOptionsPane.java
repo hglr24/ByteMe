@@ -1,18 +1,15 @@
 package ui.panes;
-import actions.Action;
-import actions.NumericAction;
-import conditions.Condition;
-import conditions.ConditionType;
-import events.Event;
-import events.EventFactory;
+import engine.external.actions.Action;
+import engine.external.actions.NumericAction;
+import engine.external.conditions.Condition;
+import engine.external.conditions.ConditionType;
+import engine.external.events.Event;
+import engine.external.events.EventFactory;
 import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ui.UIException;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class EventOptionsPane extends VBox {
@@ -95,7 +92,7 @@ public class EventOptionsPane extends VBox {
         }
         try {
 
-            Class actionClass = Class.forName("actions." + myActionOptionsListener.get(0).getValue()+ "Action");
+            Class actionClass = Class.forName("engine.external.actions." + myActionOptionsListener.get(0).getValue()+ "Action");
             Constructor actionConstructor = actionClass.getConstructor(NumericAction.ModifyType.class,Double.class); //@TODO handle different action constructors
             Object[] actionConstructorParameters = {NumericAction.ModifyType.valueOf(myActionOptionsListener.get(1).getValue()),
                     Double.parseDouble(myActionOptionsListener.get(2).getValue())};

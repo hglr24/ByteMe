@@ -34,7 +34,7 @@ public class ButtonProperty extends Button implements ControlProperty {
             Stage instance = (Stage) constructor.newInstance(prop);
             this.setOnAction(e -> instance.show());
         } catch (Exception e) {
-            throw new UIException("Error binding property control actions");
+            throw new UIException("Error binding property control engine.external.actions");
         }
     }
 }

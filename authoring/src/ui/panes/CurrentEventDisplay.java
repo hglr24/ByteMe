@@ -1,7 +1,7 @@
 package ui.panes;
-import actions.Action;
-import conditions.Condition;
-import events.Event;
+import engine.external.actions.Action;
+import engine.external.conditions.Condition;
+import engine.external.events.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,8 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
 import java.util.List;

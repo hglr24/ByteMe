@@ -11,7 +11,7 @@ import engine.external.component.WidthComponent;
 import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
 import engine.external.component.ZPositionComponent;
-import events.Event;
+import engine.external.events.Event;
 import runner.external.Game;
 import runner.external.GameCenterData;
 import ui.AuthoringEntity;

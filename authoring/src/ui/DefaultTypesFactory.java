@@ -107,7 +107,7 @@ public class DefaultTypesFactory {
         return block;
     }
 
-    //TODO: Add key input and events - collisions
+    //TODO: Add key input and engine.external.events - collisions
     private Entity createHero(){
         Entity hero = new Entity();
         NameComponent nameComponent = new NameComponent("Hero");

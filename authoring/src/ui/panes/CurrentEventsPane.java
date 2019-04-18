@@ -1,5 +1,5 @@
 package ui.panes;
-import events.Event;
+import engine.external.events.Event;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;

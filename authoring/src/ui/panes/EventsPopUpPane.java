@@ -1,7 +1,7 @@
 package ui.panes;
-import events.Event;
-import events.EventFactory;
-import events.EventType;
+import engine.external.events.Event;
+import engine.external.events.EventFactory;
+import engine.external.events.EventType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;

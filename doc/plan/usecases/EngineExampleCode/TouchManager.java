@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 /**
- * Manager class that checks for touching events between GameObjects and invokes CollisionComponents to perform actions
+ * Manager class that checks for touching engine.external.events between GameObjects and invokes CollisionComponents to perform engine.external.actions
  */
 public class TouchManager {
     private GameEngine myEngine;
@@ -31,7 +31,7 @@ public class TouchManager {
                 myGameObjects.add(o);
             }
         }
-        // check for new touching events that might have occurred
+        // check for new touching engine.external.events that might have occurred
         for(int i = 0; i<myGameObjects.size();i++){
             GameObject o1 = myGameObjects.get(i);
             for(int j = i; j<myGameObjects.size(); j++){
@@ -42,7 +42,7 @@ public class TouchManager {
                 }
             }
         }
-        // invoke EngineExampleCode.CollisionComponent to perform actions on pairs of GameObjects that are still touching
+        // invoke EngineExampleCode.CollisionComponent to perform engine.external.actions on pairs of GameObjects that are still touching
         // or remove pairs of no-longer-touching GameObjects
         for(Map.Entry<GameObject,GameObject> pair:myTouchingPairs.entrySet()){
             if(pair.getKey().getMyNode().intersects(pair.getValue().getMyNode().getBoundsInLocal())){
