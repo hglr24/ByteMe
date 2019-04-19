@@ -22,7 +22,9 @@ public class YPositionComponent extends Component<Double> {
         return oldValue;
     }
 
-    public void revertValue(){
-        myValue = Double.valueOf(oldValue);
+    public void revertValue(Double value){
+        myValue = Double.valueOf(value);
+        oldValue = Double.valueOf(value);
     }
+
 }
