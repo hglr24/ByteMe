@@ -1,5 +1,6 @@
 package ui.manager;
 
+import engine.external.Entity;
 import events.Event;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.collections.ObservableList;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
+import ui.LevelField;
 import ui.Propertable;
 
 import java.util.ArrayList;
@@ -43,10 +45,12 @@ public class ObjectManager {
 
     public void addLevel(AuthoringLevel level) {
         myLevels.add(level);
+        myLabelManager.addLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
     }
 
     public void removeLevel(AuthoringLevel level) {
         myLevels.remove(level);
+        myLabelManager.removeLabel(LevelField.LABEL, level.getPropertyMap().get(LevelField.LABEL));
     }
 
     /**
@@ -74,11 +78,19 @@ public class ObjectManager {
         for (AuthoringEntity entity : myEntities) {
             if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                myLabelManager.addLabel(EntityField.LABEL, newValue);
+                if (property.equals(EntityField.LABEL)) // TODO this may have solved group/entity label mix-up issue
+                    myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
         } //TODO propagate changed label into Event Map
         if (property.equals(EntityField.LABEL))
             myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
+    }
+
+    public void flushCameraAssignment(Propertable propagator) {
+        for(AuthoringEntity entity : ((AuthoringLevel) myCurrentLevel.getValue()).getEntities()) {
+            if (!entity.equals(propagator))
+                entity.getPropertyMap().put(EntityField.CAMERA, "false");
+        }
     }
 
     private void groupRemoveAction(ListChangeListener.Change<? extends String> change) {
@@ -100,6 +112,11 @@ public class ObjectManager {
         }
     }
 
+    public void updateLevelLabel(String oldValue, String newValue) {
+        myLabelManager.getLabels(LevelField.LABEL).add(myLabelManager.getLabels(LevelField.LABEL).indexOf(oldValue), newValue);
+        myLabelManager.getLabels(LevelField.LABEL).remove(oldValue);
+    }
+
     public LabelManager getLabelManager() {
         return myLabelManager;
     }
@@ -108,7 +125,7 @@ public class ObjectManager {
         return myEventMap.get(objectType);
     }
 
-    public List<AuthoringLevel> getLevels() {
+    public ObservableList<AuthoringLevel> getLevels() {
         return myLevels;
     }
 }

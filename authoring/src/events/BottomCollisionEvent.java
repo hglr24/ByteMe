@@ -1,8 +1,15 @@
 package events;
 
+import actions.Action;
 import conditions.CollisionCondition;
+import conditions.Condition;
 import engine.external.component.BottomCollidedComponent;
 import engine.external.component.YPositionComponent;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BottomCollisionEvent extends Event{
     private String myCollisionWithEntity;
@@ -10,7 +17,6 @@ public class BottomCollisionEvent extends Event{
     public BottomCollisionEvent(String name, String collideWithEntity){
         super(name);
         myCollisionWithEntity = collideWithEntity;
-
         makeBottomCollisionCondition();
     }
     /**
@@ -21,4 +27,5 @@ public class BottomCollisionEvent extends Event{
         CollisionCondition containsCollidedComponentCondition = new CollisionCondition(BottomCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
+
 }

@@ -9,5 +9,4 @@ module engine {
     opens engine.external to xstream;
     exports engine.external;
     exports engine.external.component;
-
 }

@@ -1,0 +1,9 @@
+<DefaultEntity>
+    <Category>Obstacle</Category>
+    <Components>
+        <NameComponent>Block</NameComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <WidthComponent>50.0</WidthComponent>
+        <HeightComponent>50.0</HeightComponent>
+    </Components>
+</DefaultEntity>

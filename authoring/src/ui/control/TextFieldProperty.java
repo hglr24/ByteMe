@@ -6,6 +6,7 @@ import ui.EntityField;
 import ui.Propertable;
 import ui.Utility;
 import ui.manager.LabelManager;
+import ui.manager.ObjectManager;
 
 /**
  * @author Harry Ross
@@ -32,21 +33,21 @@ public class TextFieldProperty extends TextField implements ControlProperty {
         myCurrentValue = newVal;
         myLabelManager = labels;
         myLabelGroup = labelGroup;
-        prop.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change -> updateValue(change));
+        prop.getPropertyMap().addListener((MapChangeListener<? super Enum, ? super String>) change -> updateDisplayFromProp(change));
     }
 
     @Override
-    public void setAction(Propertable propertable, Enum label, String action) {
-        this.focusedProperty().addListener(e -> updateProperty(propertable, label, this.getText()));
+    public void setAction(ObjectManager manager, Propertable propertable, Enum label, String action) {
+        this.focusedProperty().addListener(e -> updatePropFromDisplay(propertable, label, this.getText()));
     }
 
-    private void updateValue(MapChangeListener.Change change) {
+    private void updateDisplayFromProp(MapChangeListener.Change change) {
         if (change.getKey().equals(myLabelGroup)) {
             this.setText((String) change.getValueAdded());
         }
     }
 
-    private void updateProperty(Propertable prop, Enum propLabel, String value) {
+    private void updatePropFromDisplay(Propertable prop, Enum propLabel, String value) {
         if (isValidValue(propLabel, value)) {
             prop.getPropertyMap().put(propLabel, value); // Ask immediately if new value if valid, not later
             myCurrentValue = value;

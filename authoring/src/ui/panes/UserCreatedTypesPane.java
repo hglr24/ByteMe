@@ -22,13 +22,12 @@ import java.util.ResourceBundle;
  */
 public class UserCreatedTypesPane extends VBox {
     private EntityMenu myEntityMenu;
-    private ResourceBundle myResources;
+    private static final ResourceBundle myResources = ResourceBundle.getBundle("default_entity_type");
+    private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private ObjectManager myObjectManager;
     private DefaultTypesFactory myDefaultTypesFactory;
     private Entity myDraggedEntity;
     private AuthoringEntity myDraggedAuthoringEntity;
-    private static final String RESOURCE = "default_entity_type";
-    private static final String ASSET_IMAGE_FOLDER_PATH = "authoring/Assets/Images";
 
 
     /**
@@ -36,7 +35,6 @@ public class UserCreatedTypesPane extends VBox {
      * @param objectManager
      */
     public UserCreatedTypesPane(ObjectManager objectManager){
-        myResources = ResourceBundle.getBundle(RESOURCE);
         myObjectManager = objectManager;
         String title = myResources.getString("UserCreatedTitle");
         myEntityMenu = new EntityMenu(title);
@@ -73,21 +71,18 @@ public class UserCreatedTypesPane extends VBox {
         try {
             AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
             originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(ASSET_IMAGE_FOLDER_PATH + "/" + imageName), originalAuthoringEntity);
+            String assetImagesFilePath = myGeneralResources.getString("images_filepath");
+            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
             UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
             List<Pane> paneList = new ArrayList<>();
             paneList.add(subPane);
             myEntityMenu.addToDropDown(category, paneList);
-            subPane.setOnDragDetected(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
-                    myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(category, basedOn);
-                    myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
-                    myDraggedEntity.addComponent(new SpriteComponent(imageName));
-                    myDraggedAuthoringEntity = originalAuthoringEntity;
-                    System.out.println("Width " + imageWithEntity.getFitWidth());
-                    Utility.setupDragAndDropImage(imageWithEntity);
-                }
+            subPane.setOnDragDetected(mouseEvent -> {
+                myDraggedEntity = myDefaultTypesFactory.getDefaultEntity(category, basedOn);
+                myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
+                myDraggedEntity.addComponent(new SpriteComponent(imageName));
+                myDraggedAuthoringEntity = originalAuthoringEntity;
+                Utility.setupDragAndDropImage(imageWithEntity);
             });
         } catch (FileNotFoundException e) {
             //TODO: deal with this

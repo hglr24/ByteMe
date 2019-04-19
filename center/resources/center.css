@@ -22,11 +22,6 @@
     -fx-background-color: #27242d;
 }
 
-.rectangle {
-    -fx-arc-width: 25;
-    -fx-arc-height: 25;
-}
-
 .cardtitle {
     -fx-font-size: 24;
 }
@@ -37,6 +32,8 @@
 }
 
 .rectangle1 {
+    -fx-arc-width: 25;
+    -fx-arc-height: 25;
     -fx-fill: #aa84dc;
 }
 
@@ -45,6 +42,8 @@
 }
 
 .rectangle2 {
+    -fx-arc-width: 25;
+    -fx-arc-height: 25;
     -fx-fill: #412472;
 }
 
@@ -55,4 +54,41 @@
 .buttons {
     -fx-spacing: 15;
     -fx-alignment: center;
+}
+
+.button {
+    -fx-pref-width: 100;
+}
+
+.titlefont {
+    -fx-fill: white;
+    -fx-font-size: 48;
+    -fx-alignment: center;
+}
+
+.subtitlefont {
+    -fx-fill: white;
+    -fx-font-size: 32;
+    -fx-alignment: center;
+}
+
+.cardpadding {
+    -fx-padding: 0 0 20 0;
+}
+
+.contentpadding {
+    -fx-padding: 7;
+}
+
+.cardlist {
+    -fx-vgap: 50;
+    -fx-hgap: 50;
+    -fx-background-color: transparent;
+}
+
+.scroller {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-hbar-policy: never;
+    -fx-vbar-policy: never;
 }

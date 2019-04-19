@@ -8,11 +8,13 @@
 
 package frontend.games;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import runner.external.GameCenterData;
@@ -25,7 +27,6 @@ import java.util.ResourceBundle;
 
 public class GameCard {
     private static final int GAME_IMAGE_SIZE = 200;
-    private static final int BUTTON_WIDTH = 100;
     private static final int WRAP_OFFSET = 25;
 
     public static final double DISPLAY_WIDTH = 300;
@@ -37,6 +38,9 @@ public class GameCard {
     private static final String TITLE_SELECTOR = "cardtitle";
     private static final String BODY_SELECTOR = "cardbody";
     private static final String BUTTONS_SELECTOR = "buttons";
+    private static final String FOREGROUND_SELECTOR = "cardpadding";
+    private static final String INDIVIDUAL_BUTTON_SELECTOR = "button";
+    private static final String CONTENT_SELECTOR = "contentpadding";
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
@@ -65,8 +69,7 @@ public class GameCard {
 
     private void initializeDisplay() {
         BorderPane tempDisplay = new BorderPane();
-        StackPane cardContents = null;
-        cardContents = fillCardContents();
+        StackPane cardContents = fillCardContents();
         tempDisplay.setCenter(cardContents);
         myDisplay = tempDisplay;
     }
@@ -80,9 +83,7 @@ public class GameCard {
 
     private void addBackground(Pane pane) {
         BorderPane background = new BorderPane();
-        background.setBackground(Background.EMPTY);
         Rectangle display = new Rectangle(DISPLAY_WIDTH, DISPLAY_HEIGHT);
-        display.getStyleClass().add(BACKGROUND_SELECTOR);
         display.getStyleClass().add(BACKGROUND_SELECTOR + myIndex);
         background.setCenter(display);
         pane.getChildren().add(background);
@@ -90,7 +91,7 @@ public class GameCard {
 
     private void addForeGround(Pane pane) {
         BorderPane foreground = new BorderPane();
-        foreground.setPadding(new Insets(0, 0, 20, 0));
+        foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
@@ -99,9 +100,9 @@ public class GameCard {
 
     private void addButtons(BorderPane foreground) {
         Button readMore = new Button(Utilities.getValue(myLanguageBundle, "readMoreButton"));
-        readMore.setPrefWidth(BUTTON_WIDTH);
+        readMore.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
         Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
-        play.setPrefWidth(BUTTON_WIDTH);
+        play.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
         play.setOnAction(e -> handleButton(myGame.getFolderName()));
         HBox buttons = new HBox(readMore, play);
         buttons.getStyleClass().add(BUTTONS_SELECTOR);
@@ -112,7 +113,7 @@ public class GameCard {
 
     private void handleButton(String folderName) {
         try {
-            GameRunner gameRunner = new GameRunner(folderName);
+            new GameRunner(folderName);
         } catch (FileNotFoundException e) {
             // todo: print error message
         }
@@ -122,7 +123,7 @@ public class GameCard {
         BorderPane contentPane = new BorderPane();
         try {
             addImage(contentPane);
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) { // this means that even the default image could not be found
             // do nothing, because in this case there would just be no image on the card which is fine
             // todo: possibly create a type of card with no image & turn this into a factory type class
         }
@@ -131,21 +132,21 @@ public class GameCard {
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
-        contentPane.setPadding(new Insets(7));
+        contentPane.getStyleClass().add(CONTENT_SELECTOR);
         foreground.setCenter(contentPane);
     }
 
     private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView noGameFound;
+        ImageView gameImage;
         try {
-            noGameFound = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
-        } catch (Exception e) {
-            noGameFound = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+            gameImage = new ImageView(new Image(new FileInputStream(myGame.getImageLocation())));
+        } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
+            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }
-        noGameFound.setPreserveRatio(true);
-        noGameFound.setFitWidth(GAME_IMAGE_SIZE);
+        gameImage.setPreserveRatio(true);
+        gameImage.setFitWidth(GAME_IMAGE_SIZE);
         BorderPane imagePane = new BorderPane();
-        imagePane.setCenter(noGameFound);
+        imagePane.setCenter(gameImage);
         contentPane.setTop(imagePane);
     }
 

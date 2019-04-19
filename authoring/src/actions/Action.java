@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * @author Dima
  */
 public abstract class Action<T> {
-    private final ResourceBundle ACTION_TYPES_RESOURCES = ResourceBundle.getBundle("Actions");
+
     private Consumer<Entity> myAction;
 
     /**
@@ -51,9 +51,4 @@ public abstract class Action<T> {
         return myAction;
     }
 
-    /**
-     * Returns the complete set of all available actions
-     * @return Collection<String> representing set of all available actions
-     */
-    public Collection<String> getAllActions(){ return ACTION_TYPES_RESOURCES.keySet();}
 }

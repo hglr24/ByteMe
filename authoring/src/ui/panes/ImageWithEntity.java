@@ -12,20 +12,25 @@ import ui.Utility;
 import java.io.FileInputStream;
 import java.util.ResourceBundle;
 
+/**
+ * @author Carrie Hunner
+ * This class extends ImageView and holds an AuthoringEntity associated with it
+ * This is the object that is displayed on the Viewer and allows for the properties
+ * necessary to travel with the object
+ */
 public class ImageWithEntity extends ImageView {
     private AuthoringEntity myAuthoringEntity;
     private static final ResourceBundle myResources = ResourceBundle.getBundle("image_with_entity");
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
-    private FileInputStream myInputStream;
 
     public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {
         super(new Image(s, (Double) authoringEntity.getBackingEntity().getComponent(WidthComponent.class).getValue(), (Double) authoringEntity.getBackingEntity().getComponent(HeightComponent.class).getValue(), false, false));
-        myInputStream = s;
         myAuthoringEntity = authoringEntity;
         myAuthoringEntity.getPropertyMap().addListener((MapChangeListener<Enum, String>) change -> {handleChange(change);
             System.out.println("Change observed");});
     }
 
+    //takes in a change and determines which method to call
     private void handleChange(MapChangeListener.Change<? extends Enum,? extends String> change) {
         if(change.wasAdded() && myResources.containsKey(change.getKey().toString())){
             Utility.makeAndCallMethod(myResources, change, this);
@@ -45,12 +50,9 @@ public class ImageWithEntity extends ImageView {
         Double heightDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         this.setFitWidth(widthDouble);
         this.setFitHeight(heightDouble);
-        System.out.println("updateWidth called");
     }
 
-
     private void updateImage(String imageName){
-        System.out.println("Update Image called");
         FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath") + imageName);
         Double width = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         Double height = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
@@ -58,11 +60,9 @@ public class ImageWithEntity extends ImageView {
         this.setImage(image);
         this.setFitHeight(height);
         this.setFitWidth(width);
-        myInputStream = inputStream;
     }
 
     private void updateHeight(String height){
-        System.out.println("Update height called");
         Double heightDouble = Double.parseDouble(height);
         Double widthDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         this.setFitHeight(heightDouble);

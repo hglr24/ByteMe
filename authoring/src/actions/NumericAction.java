@@ -14,6 +14,9 @@ import engine.external.component.Component;
  * @author Lucas
  */
 public abstract class NumericAction<Double> extends Action<Double> {
+    private ModifyType myModifier;
+    private Double myArgument;
+    private Class<? extends Component<Double>> myComponentClass;
     /**
      * This method is used when subclass objects are constructed in order to specify what kind of
      * operation is being done to the existing value
@@ -33,6 +36,9 @@ public abstract class NumericAction<Double> extends Action<Double> {
                 setRelativeAction((Number) newValue, componentClass);
                 break;
         }
+        myModifier = type;
+        myArgument = newValue;
+        myComponentClass = componentClass;
     }
 
 
@@ -68,8 +74,22 @@ public abstract class NumericAction<Double> extends Action<Double> {
      * value
      */
     public enum ModifyType {
-        ABSOLUTE,
-        RELATIVE,
-        SCALE,
+        ABSOLUTE("ABSOLUTE"),
+        RELATIVE("RELATIVE"),
+        SCALE("SCALE");
+
+        private final String displayName;
+        ModifyType(String displayName) {
+            this.displayName = displayName;
+        }
+        public String getDisplayName(){
+            return this.displayName;
+        }
+    }
+
+    public String toString() {
+        return myModifier.getDisplayName() +
+                " " + myComponentClass.getSimpleName() + " " + myArgument.toString();
+
     }
 }

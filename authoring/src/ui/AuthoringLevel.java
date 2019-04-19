@@ -1,6 +1,7 @@
 package ui;
 
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
@@ -13,6 +14,7 @@ import java.util.List;
  */
 public class AuthoringLevel implements Propertable {
 
+    private ObjectManager myObjectManager;
     private ObservableMap<Enum, String> myPropertyMap;
     private List<AuthoringEntity> myEntities;
 
@@ -27,6 +29,16 @@ public class AuthoringLevel implements Propertable {
         myPropertyMap.put(LevelField.LABEL, label);
         myPropertyMap.put(LevelField.HEIGHT, DEFAULT_ROOM_SIZE.toString());
         myPropertyMap.put(LevelField.WIDTH, DEFAULT_ROOM_SIZE.toString());
+    }
+
+    private void addPropertyListeners() {
+        myPropertyMap.addListener((MapChangeListener<Enum, String>) change ->
+                propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
+    }
+
+    private void propagateChanges(Enum key, String valueRemoved, String valueAdded) {
+        if (key.equals(LevelField.LABEL)) // If we're changing the label, preserve old label for propagation purposes
+            myObjectManager.updateLevelLabel(valueRemoved, valueAdded);
     }
 
     public ObservableMap<Enum, String> getPropertyMap() {

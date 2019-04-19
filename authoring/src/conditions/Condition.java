@@ -21,4 +21,6 @@ public abstract class Condition {
     public Predicate<Entity> getPredicate() {
         return myPredicate;
     }
+
+    public String toString(){return this.getClass().getSimpleName();}
 }

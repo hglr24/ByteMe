@@ -1,7 +1,8 @@
 package engine.external;
 
-import engine.external.component.*;
-import engine.internal.systems.*;
+import engine.external.component.Component;
+import engine.internal.systems.EventHandlerSystem;
+import engine.internal.systems.CollisionSystem;
 import engine.internal.systems.VoogaSystem;
 import javafx.scene.input.KeyCode;
 
@@ -16,10 +17,11 @@ import java.util.*;
 public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
     private final ResourceBundle SYSTEM_ORDER_RESOURCES = ResourceBundle.getBundle("SystemUpdateOrder");
-    private final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
-    private final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
+    public static final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
+    public static final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
 
     private HashMap<Integer,VoogaSystem> mySystems;
+    private CollisionSystem myCollisionSystem;
     protected Collection<Entity> myEntities;
     protected Collection<IEventEngine> myEvents;
 
@@ -45,6 +47,7 @@ public class Engine {
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
             mySystems.get(i).update(myEntities,inputs);
         }
+        myCollisionSystem.adjustCollidedEntities();
         return this.getEntities();
     }
 
@@ -65,20 +68,24 @@ public class Engine {
 
     private void initSystemMap() {
         mySystems = new HashMap<>();
-        Enumeration<String> enumSystems= SYSTEM_COMPONENTS_RESOURCES.getKeys();
+        Enumeration<String> enumSystems= SYSTEM_ORDER_RESOURCES.getKeys();
         while (enumSystems.hasMoreElements()){
-            initSystem(enumSystems.nextElement());
+            Integer order = Integer.valueOf(enumSystems.nextElement());
+            initSystem(order,SYSTEM_ORDER_RESOURCES.getString(String.valueOf(order)));
         }
     }
 
-    private void initSystem(String systemName) {
+    private void initSystem(Integer order, String systemName) {
         Class systemClazz = Class.forName(this.getClass().getModule(),SYSTEMS_PACKAGE_PATH+systemName);
         Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemName);
         try {
             if (systemClazz == EventHandlerSystem.class) {
-                mySystems.put(Integer.valueOf(SYSTEM_ORDER_RESOURCES.getString(systemName)), (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class, Collection.class}).newInstance(systemComponents, this, myEvents));
+                mySystems.put(order, (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class, Collection.class}).newInstance(systemComponents, this, myEvents));
             } else {
-                mySystems.put(Integer.valueOf(SYSTEM_ORDER_RESOURCES.getString(systemName)), (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class}).newInstance(systemComponents, this));
+                mySystems.put(order, (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class}).newInstance(systemComponents, this));
+                if(systemClazz==CollisionSystem.class){
+                    myCollisionSystem = (CollisionSystem) mySystems.get(order);
+                }
             }
         }catch(NoSuchMethodException|InstantiationException|IllegalAccessException e){
             System.out.println("Invalid reflection instantiation call on System: "+systemName);

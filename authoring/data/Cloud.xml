@@ -1,0 +1,11 @@
+<DefaultEntity>
+    <Category>Miscellaneous</Category>
+    <Components>
+        <NameComponent>Cloud</NameComponent>
+        <XVelocityComponent>10.0</XVelocityComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <WidthComponent>100.0</WidthComponent>
+        <HeightComponent>50.0</HeightComponent>
+        <GravityComponent>0.0</GravityComponent>
+    </Components>
+</DefaultEntity>

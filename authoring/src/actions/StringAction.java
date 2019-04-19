@@ -9,6 +9,8 @@ import engine.external.component.Component;
  * @author Feroze
  */
 public abstract class StringAction extends Action<String> {
+    private String myNewValue;
+    private Class<? extends Component<String>>  myComponentClass;
     /**
      * This method used by subclass objects when they are constructed specifies the lambda, which
      * performs a set operation on this new value.
@@ -17,5 +19,10 @@ public abstract class StringAction extends Action<String> {
      */
     public void setAction(String newValue, Class<? extends Component<String>> componentClass) {
         super.setAbsoluteAction(newValue, componentClass);
+        myNewValue = newValue;
+        myComponentClass = componentClass;
+    }
+    public String toString(){
+        return "CHANGE " + myComponentClass.getSimpleName() + " TO " + myNewValue;
     }
 }

@@ -34,9 +34,9 @@ public class PaneTester extends Application {
         SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1"));
 
         try {
-            PropertiesPane testPaneObj = new PropertiesPane(PropertableType.OBJECT, testObj, manager.getLabelManager());
-            PropertiesPane testPaneLvl = new PropertiesPane(PropertableType.LEVEL, testLvl, manager.getLabelManager());
-            PropertiesPane testPaneIns = new PropertiesPane(PropertableType.INSTANCE, testObj, manager.getLabelManager());
+            PropertiesPane testPaneObj = new PropertiesPane(manager, PropertableType.OBJECT, testObj, manager.getLabelManager());
+            PropertiesPane testPaneLvl = new PropertiesPane(manager, PropertableType.LEVEL, testLvl, manager.getLabelManager());
+            PropertiesPane testPaneIns = new PropertiesPane(manager, PropertableType.INSTANCE, testObj, manager.getLabelManager());
             GroupManager testCreateGroup = new GroupManager(manager);
 
             Scene testScene = new Scene(testPaneObj);

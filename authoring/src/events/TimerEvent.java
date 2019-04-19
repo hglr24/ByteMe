@@ -32,4 +32,9 @@ public class TimerEvent extends Event {
         addConditions(timerCondition);
     }
 
+    @Override
+    public String toString() {
+        return "TIMER EQUALS ";
+    }
+
 }

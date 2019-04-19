@@ -4,6 +4,10 @@ import conditions.CollisionCondition;
 import engine.external.component.TopCollidedComponent;
 import engine.external.component.YPositionComponent;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 public class TopCollisionEvent extends Event {
 
     private String myCollisionWithEntity;
@@ -22,4 +26,6 @@ public class TopCollisionEvent extends Event {
         CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
+
+
 }

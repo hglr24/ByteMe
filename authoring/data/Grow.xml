@@ -1,0 +1,9 @@
+<DefaultEntity>
+    <Category>Power-Ups</Category>
+    <Components>
+        <NameComponent>Grow</NameComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <WidthComponent>25.0</WidthComponent>
+        <HeightComponent>25.0</HeightComponent>
+    </Components>
+</DefaultEntity>

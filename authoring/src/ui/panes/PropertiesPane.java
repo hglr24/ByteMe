@@ -14,6 +14,7 @@ import ui.PropertableType;
 import ui.UIException;
 import ui.control.ControlProperty;
 import ui.manager.LabelManager;
+import ui.manager.ObjectManager;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -27,14 +28,14 @@ public class PropertiesPane extends TitledPane {
 
     private ObjectProperty<Propertable> myProp;
     private String myPropFile;
-    private LabelManager myLabelManager;
+    private ObjectManager myObjectManager;
 
     private static final String PROP_TYPE_EXT = " Properties";
 
-    public PropertiesPane(PropertableType propType, ObjectProperty<Propertable> prop, LabelManager labelManager) throws UIException {
+    public PropertiesPane(ObjectManager manager, PropertableType propType, ObjectProperty<Propertable> prop, LabelManager labelManager) throws UIException {
         myProp = prop;
         myPropFile = propType.getPropFile();
-        myLabelManager = labelManager;
+        myObjectManager = manager;
         this.setText(propType.toString() + PROP_TYPE_EXT);
         this.setContent(createPropertiesGrid());
         this.getStyleClass().add("prop-pane");
@@ -93,8 +94,8 @@ public class PropertiesPane extends TitledPane {
                     (ControlProperty) constructor.newInstance() : (ControlProperty) constructor.newInstance(sep[1]);
             newProp.getChildren().addAll(propName, (Node) instance);
             instance.populateValue(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()),
-                    myProp.getValue().getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myLabelManager);
-            instance.setAction(myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
+                    myProp.getValue().getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myObjectManager.getLabelManager());
+            instance.setAction(myObjectManager, myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
         } catch (Exception e) {
             throw new UIException("Error creating properties controls");
         }

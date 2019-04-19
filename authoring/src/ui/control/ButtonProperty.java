@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import ui.Propertable;
 import ui.UIException;
 import ui.manager.LabelManager;
+import ui.manager.ObjectManager;
 
 import java.lang.reflect.Constructor;
 
@@ -26,7 +27,7 @@ public class ButtonProperty extends Button implements ControlProperty {
      * @param action Class name of new stage to open
      */
     @Override
-    public void setAction(Propertable prop, Enum propLabel, String action) throws UIException {
+    public void setAction(ObjectManager manager, Propertable prop, Enum propLabel, String action) throws UIException {
         try {
             Class<?> clazz = Class.forName(action);
             Constructor<?> constructor = clazz.getConstructor(Propertable.class);

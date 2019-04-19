@@ -1,0 +1,11 @@
+.label {
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-text-alignment: left;
+    -fx-alignment: center;
+    -fx-font-size: 18;
+    -fx-text-fill: black;
+    -fx-border-width: 2;
+    -fx-border-color: black;
+    -fx-border-style: solid;
+}

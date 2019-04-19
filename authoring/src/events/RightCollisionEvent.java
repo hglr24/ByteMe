@@ -3,6 +3,10 @@ package events;
 import conditions.CollisionCondition;
 import engine.external.component.RightCollidedComponent;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 public class RightCollisionEvent extends Event {
 
     private String myCollisionWithEntity;
@@ -21,4 +25,6 @@ public class RightCollisionEvent extends Event {
         CollisionCondition containsCollidedComponentCondition = new CollisionCondition(RightCollidedComponent.class, myCollisionWithEntity);
         addConditions(containsCollidedComponentCondition);
     }
+
+
 }

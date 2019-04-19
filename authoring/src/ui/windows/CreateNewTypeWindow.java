@@ -1,10 +1,8 @@
-package ui.panes;
+package ui.windows;
 
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -17,19 +15,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ui.DefaultTypesFactory;
-import ui.EntityField;
 import ui.ErrorBox;
 import ui.Utility;
-import ui.manager.AssetManager;
 
 import java.util.*;
 
-
+/**
+ * @author Carrie Hunner
+ * This class creates a pop-up window that allows the
+ * user to create a new object type
+ */
 public class CreateNewTypeWindow extends Stage {
     private GridPane myGridPane;
     private static final ResourceBundle SYNTAX_RESOURCES = ResourceBundle.getBundle("property_syntax");
-    private ResourceBundle myWindowResources;
-    private ResourceBundle myTypeResources;
+    private static final ResourceBundle myWindowResources = ResourceBundle.getBundle("new_object_window");
+    private static final ResourceBundle myTypeResources = ResourceBundle.getBundle("default_entity_type");
     private ComboBox myTypeOfComboBox;
     private ComboBox myBasedOnComboBox;
     private TextField myTextField;
@@ -45,15 +45,16 @@ public class CreateNewTypeWindow extends Stage {
     private static final int INPUT_WIDTH = 100;
     private static final int PICTURE_SIZE = 50;
     private static final String STYLE_SHEET = "default.css";
-    private static final String WINDOW_RESOURCES = "new_object_window";
-    private static final String TYPE_RESOURCES = "default_entity_type";
 
+    /**
+     * Creates and displays a stage
+     * @param isANewTypeOf the String corresponding to a category that the new object is a typeOf
+     * @param isBasedOn the default Entity type it is based in
+     */
     public CreateNewTypeWindow(String isANewTypeOf, String isBasedOn){
         mySelectedImageName = null;
         initializeGridPane();
         initializeVariables();
-        myWindowResources = ResourceBundle.getBundle(WINDOW_RESOURCES);
-        myTypeResources = ResourceBundle.getBundle(TYPE_RESOURCES);
         createContent(isANewTypeOf, isBasedOn);
         initializeAndDisplayStage();
     }
@@ -71,6 +72,8 @@ public class CreateNewTypeWindow extends Stage {
      * Gets the typeOf
      * Called by UserCreatedTypesPane to determine what category to display
      * the new type in
+     * The 0th position contains the category (isTypeOf)
+     * and the 1st position contains what it is based on
      * @return String of the category
      */
     public String[] getCategoryInfo(){
@@ -106,11 +109,11 @@ public class CreateNewTypeWindow extends Stage {
         createAndAddTypeOfOnDropDown(isANewTypeOf);
         createAndAddLabel(myWindowResources.getString("Label3"));
         createAndAddBasedOnDropDown(isBasedOn);
-        createAssetManagerButtonPane();
+        createImageSelectionPane();
         createButtonPane();
     }
 
-    private void createAssetManagerButtonPane() {
+    private void createImageSelectionPane() {
         String[] buttonResources = myWindowResources.getString("AssetButton").split(",");
         Button button = Utility.makeButton(this, buttonResources[1], buttonResources[0]);
         myGridPane.add(button, 0, myGridPane.getRowCount());
@@ -121,14 +124,14 @@ public class CreateNewTypeWindow extends Stage {
 
     }
 
-    private void openAssetManager(){
-        AssetManager assetManager = new AssetManager();
+    private void openImageAssetManager(){
+        ImageManager assetManager = new ImageManager();
         assetManager.showAndWait();
         if(assetManager.getImageView() != null){
             ImageView imageView = assetManager.getImageView();
             mySelectedImagePane.getChildren().clear();
             mySelectedImagePane.getChildren().add(imageView);
-            mySelectedImageName = assetManager.getImageName();
+            mySelectedImageName = assetManager.getAssetName();
         }
     }
 
@@ -206,17 +209,19 @@ public class CreateNewTypeWindow extends Stage {
         myTypeOfComboBox.getItems().addAll(Arrays.asList(types));
         myTypeOfComboBox.setPrefWidth(INPUT_WIDTH);
         myGridPane.add(myTypeOfComboBox, 1, myGridPane.getRowCount()-1);
-        myTypeOfComboBox.valueProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observableValue, Object o, Object t1) {
-                populateBasedOnDropDown((String) t1);
-            }
-        });
+        myTypeOfComboBox.valueProperty().addListener((observableValue, o, t1) -> populateBasedOnDropDown((String) t1));
         myTypeOfComboBox.setValue(initialTypeOf);
     }
     private void initializeAndDisplayStage() {
         this.setWidth(STAGE_WIDTH);
         this.setHeight(STAGE_HEIGHT);
+        TitledPane titledPane = createAndFormatTitledPane();
+        Scene scene = new Scene(titledPane);
+        scene.getStylesheets().add(STYLE_SHEET);
+        this.setScene(scene);
+    }
+
+    private TitledPane createAndFormatTitledPane() {
         TitledPane titledPane = new TitledPane();
         titledPane.setText(myWindowResources.getString("Title"));
         VBox contents = new VBox();
@@ -224,8 +229,6 @@ public class CreateNewTypeWindow extends Stage {
         contents.setSpacing(10.0);
         titledPane.setContent(contents);
         titledPane.setCollapsible(false);
-        Scene scene = new Scene(titledPane);
-        scene.getStylesheets().add(STYLE_SHEET);
-        this.setScene(scene);
+        return titledPane;
     }
 }

@@ -1,16 +1,16 @@
 package engine.internal.systems;
 
 import engine.external.Entity;
-import engine.external.component.*;
+import engine.external.component.Component;
+import engine.external.component.XPositionComponent;
+import engine.external.component.YPositionComponent;
 import engine.external.Engine;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Point2D;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Predicate;
 
 /**
- *
  * @author Hsingchih Tang
  * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
  * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain actions (defined
@@ -18,7 +18,7 @@ import java.util.function.Predicate;
  */
 public class CollisionSystem extends VoogaSystem {
 
-    private HashSet<Entity> collidedEntities;
+    private Map<Entity, Point2D> collidedEntities;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -30,6 +30,13 @@ public class CollisionSystem extends VoogaSystem {
         super(requiredComponents, engine);
     }
 
+    public void adjustCollidedEntities(){
+        for (Map.Entry<Entity,Point2D> entry:collidedEntities.entrySet()){
+            ((XPositionComponent)entry.getKey().getComponent(X_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getX());
+            ((YPositionComponent)entry.getKey().getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getY());
+        }
+    }
+
 
     @Override
     /**
@@ -37,23 +44,22 @@ public class CollisionSystem extends VoogaSystem {
      * and record the other party in each collided Entity's Collided Component
      */
     protected void run() {
-        collidedEntities = new HashSet<>();
+        collidedEntities = new HashMap<>();
         this.getEntities().forEach(e1->this.getEntities().forEach(e2->{
             if(seemColliding(e1,e2)&& e1!=e2){
+//                System.out.println(e1.getComponent(SpriteComponent.class).getValue()+" collided by "+e2.getComponent(SpriteComponent.class).getValue());
                 Class horizontal = horizontalCollide(e1,e2);
                 Class vertical = verticalCollide(e1,e2);
                 registerCollidedEntity(horizontal,e1,e2);
                 registerCollidedEntity(vertical,e1,e2);
                 if(horizontal!=null||vertical!=null){
                     registerCollidedEntity(ANY_COLLIDED_COMPONENT_CLASS,e1,e2);
+                    Double oldX = ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
+                    Double oldY = ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
+                    collidedEntities.put(e1,new Point2D(oldX,oldY));
                 }
-                collidedEntities.addAll(Arrays.asList(e1,e2));
             }
         }));
-        for (Entity e:collidedEntities){
-            ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).revertValue();
-            ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue();
-        }
     }
 
 
@@ -88,7 +94,6 @@ public class CollisionSystem extends VoogaSystem {
      *         null if not e1, e2 are not performing collision behaviors on horizontal axis
      */
     private Class<? extends Component> horizontalCollide(Entity e1, Entity e2){
-        Double deltaX = Math.abs((Double)e1.getComponent(X_POSITION_COMPONENT_CLASS).getValue()-(Double)e2.getComponent(X_POSITION_COMPONENT_CLASS).getValue());
         if(isLeftTo(e2,e1)&&(isMovingRight(e2)||isMovingLeft(e1))){
 //            System.out.println(e2.getComponent(SpriteComponent.class).getValue()+" left collides on "+e1.getComponent(SpriteComponent.class).getValue());
             return LEFT_COLLIDED_COMPONENT_CLASS;

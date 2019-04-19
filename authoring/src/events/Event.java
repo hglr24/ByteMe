@@ -23,7 +23,6 @@ public class Event implements IEventEngine, IEventAuthoring {
     private String myType;
     private Set<KeyCode> myInputs = new HashSet<>();
 
-
     /**
      * An Event is created using the name of the type of entity that this event will apply to
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
@@ -128,5 +127,11 @@ public class Event implements IEventEngine, IEventAuthoring {
         myInputs.remove(inputsToRemove);
     }
 
+    public Map<Class<?>,List<?>> getEventInformation(){
+        Map<Class<?>,List<?>> myEventInformation = new HashMap<>();
+        myEventInformation.put(Condition.class,conditions);
+        myEventInformation.put(Action.class,actions);
+        return myEventInformation;
+    }
 
 }

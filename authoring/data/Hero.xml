@@ -1,0 +1,10 @@
+<DefaultEntity>
+    <Category>Characters</Category>
+    <Components>
+        <NameComponent>Hero</NameComponent>
+        <GravityComponent>9.8</GravityComponent>
+        <VisibilityComponent>true</VisibilityComponent>
+        <WidthComponent>25.0</WidthComponent>
+        <HeightComponent>75.0</HeightComponent>
+    </Components>
+</DefaultEntity>

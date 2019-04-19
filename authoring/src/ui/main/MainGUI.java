@@ -25,6 +25,7 @@ import ui.UIException;
 import ui.manager.GroupManager;
 import ui.manager.ObjectManager;
 import ui.panes.DefaultTypesPane;
+import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
@@ -57,9 +58,11 @@ public class MainGUI {
         myStage = new Stage();
 
         AuthoringLevel blankLevel = new AuthoringLevel("Level_1");
+        AuthoringLevel blankLevel2 = new AuthoringLevel("Level 2"); //TODO
         myCurrentLevel = new SimpleObjectProperty<>(blankLevel);
         myObjectManager = new ObjectManager(myCurrentLevel);
         myObjectManager.addLevel(blankLevel);
+        myObjectManager.addLevel(blankLevel2); //TODO
         mySelectedEntity = new SimpleObjectProperty<>(null);
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
@@ -123,16 +126,18 @@ public class MainGUI {
 
     private void createPropertiesPanes(HBox propPaneBox, Scene mainScene) {
         try {
+            LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
             PropertiesPane objectProperties =
-                    new PropertiesPane(PropertableType.OBJECT, mySelectedEntity, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.OBJECT, mySelectedEntity, myObjectManager.getLabelManager());
             PropertiesPane levelProperties =
-                    new PropertiesPane(PropertableType.LEVEL, myCurrentLevel, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.LEVEL, myCurrentLevel, myObjectManager.getLabelManager());
             PropertiesPane instanceProperties =
-                    new PropertiesPane(PropertableType.INSTANCE, mySelectedEntity, myObjectManager.getLabelManager());
-            objectProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(3));
-            levelProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(3));
-            instanceProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(3));
-            propPaneBox.getChildren().addAll(levelProperties, instanceProperties, objectProperties);
+                    new PropertiesPane(myObjectManager, PropertableType.INSTANCE, mySelectedEntity, myObjectManager.getLabelManager());
+            levelsPane.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
+            objectProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
+            levelProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
+            instanceProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
+            propPaneBox.getChildren().addAll(levelsPane, levelProperties, instanceProperties, objectProperties);
         } catch (UIException e) {
             ErrorBox errorbox = new ErrorBox("Properties Error", e.getMessage());
             errorbox.display();

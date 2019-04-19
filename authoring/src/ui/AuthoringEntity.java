@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class AuthoringEntity implements Propertable {
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
     private Entity myBackingEntity;
-
+    private List<String> myInteractionListing = new ArrayList<>();
     private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(EntityField.values());
 
     private AuthoringEntity() { // Initialize default property map
@@ -31,6 +32,8 @@ public class AuthoringEntity implements Propertable {
         myPropertyMap.put(EntityField.Y, "0.0");
         myPropertyMap.put(EntityField.XSCALE, "1.0");
         myPropertyMap.put(EntityField.YSCALE, "1.0");
+        myPropertyMap.put(EntityField.CAMERA, "false");
+        myPropertyMap.put(EntityField.VISIBLE, "true");
     }
 
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
@@ -87,6 +90,9 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
+        else if (key.equals(EntityField.CAMERA)) {
+            myObjectManager.flushCameraAssignment(this);
+        }
     }
 
     public ObservableMap<Enum, String> getPropertyMap() {
@@ -105,6 +111,8 @@ public class AuthoringEntity implements Propertable {
     public Entity getBackingEntity() {
         return myBackingEntity;
     }
+
+    public List<String> getInteractionListing(){ return myInteractionListing;}
 
 
 }

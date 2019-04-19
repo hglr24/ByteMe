@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 /**
- *
  * @author Hsingchih Tang
  * Updates the PositionComponents for every movable Entity on each game loop based on its position and velocity values
  */
@@ -40,7 +39,6 @@ public class MovementSystem extends VoogaSystem {
                             getDoubleComponentValue(Y_VELOCITY_COMPONENT_CLASS,e):0.0,
                     e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
                             getDoubleComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
-
             ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
             ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
             ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
