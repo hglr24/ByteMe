@@ -67,8 +67,8 @@ public class Event implements IEventEngine, IEventAuthoring {
     private boolean conditionsMet(Entity entity) {
         try {
             return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> ( condition.getPredicate()).test(entity));
-        }catch(Exception e){
-            e.printStackTrace(); //TODO find exact exceptions to catch
+        }catch(NullPointerException e){
+            //System.out.println("Condition not met, did not have required component");
             return false;
         }
     }
