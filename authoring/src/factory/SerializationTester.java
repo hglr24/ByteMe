@@ -9,9 +9,8 @@ import engine.external.component.HealthComponent;
 import runner.external.Game;
 import runner.external.GameCenterData;
 
-import java.awt.*;
 import java.io.*;
-import java.sql.SQLException;
+import java.util.List;
 
 
 public class SerializationTester {
@@ -105,6 +104,16 @@ public class SerializationTester {
         File targetFile = new File("C:\\Users\\Owner\\Desktop\\bc.mp3");
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
+    }
+
+    public void loadImagesToDatabase() {
+        DataManager dm = new DataManager();
+        List<String> images = List.of("Images/cat.jpg", "Images/ghost.png", "Images/mario_block.png", "Images" +
+                "/spaceship.png", "Images/wide_spaceship.png", "runner/resources/mushroom.png");
+        for (String image: images){
+            String[] split = image.split("/");
+            dm.saveImage(split[split.length-1], new File(image));
+        }
     }
 }
 
