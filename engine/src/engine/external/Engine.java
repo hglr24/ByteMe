@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * @author Hsingchih Tang
  * Game Engine class which interacts with Game Runner to maintain an ongoing game. Manages and updates Component values
- * of all Entities, and invokes pre-defined Events for checking conditions and triggering actions on each game loop.
+ * of all Entities, and invokes pre-defined Events for checking engine.external.conditions and triggering engine.external.actions on each game loop.
  */
 public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");

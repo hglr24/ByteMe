@@ -1,20 +1,18 @@
 package ui;
 
 
-import actions.DestroyAction;
-import actions.HealthAction;
-import actions.NumericAction;
-import actions.YPositionAction;
-import conditions.GreaterThanCondition;
-import conditions.LessThanCondition;
+import engine.external.actions.DestroyAction;
+import engine.external.actions.HealthAction;
+import engine.external.actions.NumericAction;
+import engine.external.actions.YPositionAction;
+import engine.external.conditions.GreaterThanCondition;
+import engine.external.conditions.LessThanCondition;
 import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
-import events.Event;
-import events.RightCollisionEvent;
+import engine.external.events.Event;
+import engine.external.events.RightCollisionEvent;
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import ui.manager.EventManager;
 import ui.manager.LabelManager;

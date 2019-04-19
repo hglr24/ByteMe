@@ -1,5 +1,5 @@
 package ui.panes;
-import events.Event;
+import engine.external.events.Event;
 import events.EventFactory;
 import events.EventType;
 import javafx.collections.FXCollections;

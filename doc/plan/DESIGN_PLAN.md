@@ -3,7 +3,7 @@ Plan
 ## Introduction
 Gamers are restricted by creators in regards to the environment, progression, and difficulty of the games they play. We wish to create an environment in which a user can not only design the aesthetics of the game they play, but also the objective and purpose of the game itself. With this goal in mind, our aim is to offer gamers the flexibility to create any world they can imagine. 
 
-We have ultimately chosen to let users create and play within a Scrolling Platformer game environment. The platforming genre centers around player-controlled characters who navigate across suspended platforms, often encountering items like obstacles and power-ups along a traversal of levels until the win/lose condition(s) is(are) met. Given the seemingly unlimited number of game elements, each with a specified appearance and behavior, that a user could come across in a platformer, we wish to allow as much freedom in user choice as we can through a flexible design. By abstracting the elements of a platformer as well as the possible events and actions surrounding them in our authoring environment, we offer users a great degree of liberty in the games that they would like to create.
+We have ultimately chosen to let users create and play within a Scrolling Platformer game environment. The platforming genre centers around player-controlled characters who navigate across suspended platforms, often encountering items like obstacles and power-ups along a traversal of levels until the win/lose condition(s) is(are) met. Given the seemingly unlimited number of game elements, each with a specified appearance and behavior, that a user could come across in a platformer, we wish to allow as much freedom in user choice as we can through a flexible design. By abstracting the elements of a platformer as well as the possible engine.external.events and engine.external.actions surrounding them in our authoring environment, we offer users a great degree of liberty in the games that they would like to create.
 
 ## Overview
 
@@ -29,7 +29,7 @@ The images above are of the wireframe of our intended Authoring Environment GUI.
 
 Our Authoring Environment GUI will have a main "Viewer" where the player can place game objects that create the level. On the right, there is a "Create New Type" dropdown page that contains some default starter GameObjects that the user can base their own object types off of. The objects in this page cannot be directly placed but can only be built off of. When selected, a pop-up window will appear where the user can create an actual object type. This will then show up in the "Created Object Types" window further to the right. These are object types created by the user that can be directly placed onto the "Viewer" once selected.
 
-Below the "Viewer" and the library panes, there are Level and Object Properties. These will populate with the information respective to the current level and object selected. There will be areas the user can edit such as size, level background, etc. In "Object Properties," the user can also select "Set Events" where a new window will open, allowing the user to set actions and events for the selected object.
+Below the "Viewer" and the library panes, there are Level and Object Properties. These will populate with the information respective to the current level and object selected. There will be areas the user can edit such as size, level background, etc. In "Object Properties," the user can also select "Set Events" where a new window will open, allowing the user to set engine.external.actions and engine.external.events for the selected object.
 
 Along the top of the screen, there is a tool bar with a "File", "Edit", and "View" tab. "File" allows for options such as new, open, save, close, exit. "Edit" will allow for options such as "Assets" and "Preferences". On the far right, "Test" will open the game and allow the author to test-run it.
 
@@ -47,7 +47,7 @@ The game runner will be different for each game as it will show the game that th
 * **Authoring**
 
 * **Engine**
-    * The engine handles the mechanics of the game including actions and events that can occur dynamically due to user input. This module will establish a common language between authoring as well in order to implement what the authoring environment allows for its creators. The game runner relies on the engine in order to figure out what should be rendered on each update cycle of the game loop.
+    * The engine handles the mechanics of the game including engine.external.actions and engine.external.events that can occur dynamically due to user input. This module will establish a common language between authoring as well in order to implement what the authoring environment allows for its creators. The game runner relies on the engine in order to figure out what should be rendered on each update cycle of the game loop.
 
 * **Data**
 
@@ -156,7 +156,7 @@ Authoring and Engine agree on the definition of a GameObject and import the same
 * Letting Authoring define the specific logics based on user input (i.e. how Object1.collide() is implemented). Serialization translates the implementation into XML and actual GameObjects implementing certain interfaces with defined logics are recreated by GameData and eventually passed into GameEngine.
 * More flexible; kind of mixing Authoring's and Engine's responsibilities
 #### Choice 2 (final decision):
-* Authoring and Engine agree on a finite set of behaviors that can possibly happen. Authoring stores information of GameObjects with basic parameters (e.g. x/y positions) and labels of the behaviors to perform on certain events (e.g. collision); Engine implements the specific logics for behaviors, and maps behaviors for GameObjects with labels.
+* Authoring and Engine agree on a finite set of behaviors that can possibly happen. Authoring stores information of GameObjects with basic parameters (e.g. x/y positions) and labels of the behaviors to perform on certain engine.external.events (e.g. collision); Engine implements the specific logics for behaviors, and maps behaviors for GameObjects with labels.
 * Separating front/back ends; easier implementation on Authoring side
 
 ### 2. How does Data communicate with Runner?

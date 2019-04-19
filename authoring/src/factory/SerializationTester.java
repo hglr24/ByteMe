@@ -3,10 +3,14 @@ package factory;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import data.external.DataManager;
+import data.external.DatabaseEngine;
 import engine.external.Entity;
 import engine.external.component.HealthComponent;
 import runner.external.Game;
 import runner.external.GameCenterData;
+
+import java.io.*;
+import java.util.List;
 
 
 public class SerializationTester {
@@ -50,6 +54,66 @@ public class SerializationTester {
         DataManager dm = new DataManager();
         dm.createGameFolder("testingGameInfo");
         dm.saveGameInfo("testingGameInfo", test);
+    }
+
+    public void testDatabaseConnection(){
+        DatabaseEngine de = new DatabaseEngine();
+        de.open();
+        System.out.println("Before: ==========================================================");
+        de.printGameTable();
+        System.out.println("Create new entry: ==================================================");
+        de.createEntryForNewGame("RyanGame");
+        de.printGameTable();
+        System.out.println("Update Entry: =======================================================");
+        de.updateGameEntryData("RyanGame", "testing");
+        de.printGameTable();
+        de.close();
+    }
+
+    public void testSavingImages(){
+        DataManager dm = new DataManager();
+        dm.saveImage("flower_test1", new File("D:\\Pictures\\2018-03\\IMG_1408.jpg"));
+        DatabaseEngine de = new DatabaseEngine();
+//        try {
+//            de.printTable("Images");
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    public void testLoadingImages() throws IOException {
+        DataManager dm = new DataManager();
+        InputStream is = dm.loadImage("flower_test1");
+        byte[] buffer = new byte[is.available()];
+        is.read(buffer);
+        File targetFile = new File("C:\\Users\\Owner\\Desktop\\whatever1.png");
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+    }
+
+    public void testSavingSounds(){
+        DataManager dm = new DataManager();
+        dm.saveSound("bach_chaconne", new File("Sounds/Bach Chaconne - Ryan Culhane.mp3"));
+    }
+
+    public void testLoadingSounds() throws IOException {
+        DataManager dm = new DataManager();
+        InputStream is = dm.loadSound("bach_chaconne");
+        byte[] buffer = new byte[is.available()];
+        is.read(buffer);
+        File targetFile = new File("C:\\Users\\Owner\\Desktop\\bc.mp3");
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);
+    }
+
+    public void loadImagesToDatabase() {
+        DataManager dm = new DataManager();
+        List<String> images = List.of("Images/cat.jpg", "Images/ghost.png", "Images/mario_block.png", "Images" +
+                "/spaceship.png", "Images/wide_spaceship.png", "runner/resources/mushroom.png");
+        for (String image: images){
+            String[] split = image.split("/");
+            dm.saveImage(split[split.length-1], new File(image));
+        }
     }
 }
 

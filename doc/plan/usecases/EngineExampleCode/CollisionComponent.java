@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ResourceBundle;
 
 /**
- * Component for handling collision and touching events
+ * Component for handling collision and touching engine.external.events
  * Interacts with CollisionManager and TouchManager
  */
 public class CollisionComponent extends Component {
@@ -19,7 +19,7 @@ public class CollisionComponent extends Component {
     }
 
     /**
-     * Look up the properties file for collision events to find actions mapped to a collision between this and the other GameObject
+     * Look up the properties file for collision engine.external.events to find engine.external.actions mapped to a collision between this and the other GameObject
      * Concatenate the UniqueIDs of two GameObjects as the key for looking up the specific collision event
      * @param otherObject the other GameObject with which the collision happens
      */
@@ -29,7 +29,7 @@ public class CollisionComponent extends Component {
     }
 
     /**
-     * Look up the properties file for touching events to find actions mapped to touching between this and the other GameObject
+     * Look up the properties file for touching engine.external.events to find engine.external.actions mapped to touching between this and the other GameObject
      * Concatenate the UniqueIDs of two GameObjects as the key for looking up the specific touching event
      * @param otherObject the other GameObject with which the touching happens
      */
@@ -41,7 +41,7 @@ public class CollisionComponent extends Component {
     /**
      * Each GameObject has a UniqueID field; different instances of GameObject of the same type share a common UniqueID
      * Every pair of UniqueID defines a unique event between two types of GameObjects, which can be used as a reference
-     * when looking up the properties file to find actions to perform
+     * when looking up the properties file to find engine.external.actions to perform
      * @param o
      * @return
      */
@@ -55,7 +55,7 @@ public class CollisionComponent extends Component {
     /**
      * Actions are labeled by integer, and are mapped to certain methods in EngineExampleCode.ActionManager
      * EngineExampleCode.ActionManager has access to the this GameObject and EngineExampleCode.CollisionComponent
-     * Implement reflection to make the call to EngineExampleCode.ActionManager so that the actions can take effect
+     * Implement reflection to make the call to EngineExampleCode.ActionManager so that the engine.external.actions can take effect
      * @param actions
      * @throws NoSuchMethodException
      * @throws InvocationTargetException

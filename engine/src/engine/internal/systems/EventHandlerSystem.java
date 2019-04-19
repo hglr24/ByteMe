@@ -23,7 +23,7 @@ public class EventHandlerSystem extends VoogaSystem {
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, a Collection of Component classes
      * that this System would require from an Entity in order to interact with its relevant Components, and a collection
-     * of Events defined by the game author that should take some actions when certain conditions are met
+     * of Events defined by the game author that should take some engine.external.actions when certain engine.external.conditions are met
      * @param requiredComponents collection of Component classes required for an Entity to be processed by this System
      * @param engine the main Engine which initializes all Systems for a game and makes update() calls on each game loop
      * @param events collection of Events that need to be invoked on each game loop
@@ -35,9 +35,9 @@ public class EventHandlerSystem extends VoogaSystem {
 
     /**
      * Loops through the collection of Events and invokes the Events by execute() call
-     * Each Event object has its own conditions and actions defined and embedded in the Event class,
-     * the execute() call would invoke an Event to check whether its pre-defined conditions have
-     * been met such that its actions could be triggered
+     * Each Event object has its own engine.external.conditions and engine.external.actions defined and embedded in the Event class,
+     * the execute() call would invoke an Event to check whether its pre-defined engine.external.conditions have
+     * been met such that its engine.external.actions could be triggered
      */
     @Override
     protected void run() {

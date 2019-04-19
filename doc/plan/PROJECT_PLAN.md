@@ -5,10 +5,10 @@ Project Plan
     * Ryan
         * A game will need to be represented in very different forms throughout the game. It must be represented as a simple view in the game center, a set of rules for the engine, and a mangeable display in the runner. Ryan's primary role will be to manage communicating information to the engine and runner via serialization, along with presenting the game center with an encapsulated set of information to display a brief summary/statistics associated with a specific game. Secondary role will be working on the front end of Game Center and working with other modules to make sure their classes are able to be serialized.
     * Anna
-        * The data files from authoring need to be stored in such a manner that they can be easily accessed and changed according to user preference from the perspective of the authoring environment and then saved into a format such that complex abstractions, such as characters and actions, can be emulated in the engine and runner. Anna's primary role will be to manage the data transfer to and from the data module and the authoring environment. Secondary role will be to update files when they are altered in the game center (such as a name change, or a reset)
+        * The data files from authoring need to be stored in such a manner that they can be easily accessed and changed according to user preference from the perspective of the authoring environment and then saved into a format such that complex abstractions, such as characters and engine.external.actions, can be emulated in the engine and runner. Anna's primary role will be to manage the data transfer to and from the data module and the authoring environment. Secondary role will be to update files when they are altered in the game center (such as a name change, or a reset)
 * **Game Authoring Environment**
     * Harry
-        * An object will need to define its behaviors relative to other objects in the authoring environment and can do so either by being a part of an aggregate group that responds similarly to the same object or can also define specific responses for itself. This will also include specifying events that occur when a particular action (either between two objectsor as a consequence of some logic) happens. 
+        * An object will need to define its behaviors relative to other objects in the authoring environment and can do so either by being a part of an aggregate group that responds similarly to the same object or can also define specific responses for itself. This will also include specifying engine.external.events that occur when a particular action (either between two objectsor as a consequence of some logic) happens. 
     * Carrie
         * Our authoring environment will allow the user to drag and drop objects into a scrollable canvas to design the level architecture, place characters (such as enemies), checkpoints, and other game objects the user wishes to interact with. There will be some default options and a way a user may add new elements.
     * Anna
@@ -53,7 +53,7 @@ Project Plan
     * able to create a reusable object, such as a power block
     * Users can drag and drop onto a scrollable page
     * Upload a new image
-    * Ability to respond to basic events
+    * Ability to respond to basic engine.external.events
     * Save a created game that can then be run by runner
     * Upload a game to edit 
 * Game Runner

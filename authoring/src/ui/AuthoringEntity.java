@@ -2,7 +2,7 @@ package ui;
 
 import engine.external.Entity;
 import engine.external.component.*;
-import events.Event;
+import engine.external.events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;

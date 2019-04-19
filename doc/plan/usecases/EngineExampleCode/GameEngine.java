@@ -46,7 +46,7 @@ public class GameEngine {
 
     /**
      * Allows managers to update the set of GameObjects to be returned to GameRunner
-     * @param o A GameObject whose properties have been changed by some events/actions
+     * @param o A GameObject whose properties have been changed by some engine.external.events/engine.external.actions
      */
     public void addUpdatedGameObject(GameObject o){
         myUpdatedGameObjects.add(o);
