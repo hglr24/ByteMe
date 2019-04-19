@@ -5,7 +5,8 @@ module engine {
     requires javafx.graphics;
     requires javafx.media;
     requires org.junit.jupiter.api;
-//    requires voogasalad_util;
+    requires data;
+    requires voogasalad_util;
     opens engine.external to xstream;
     opens engine.external.actions to xstream;
     opens engine.external.component to xstream;

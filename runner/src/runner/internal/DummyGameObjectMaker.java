@@ -95,9 +95,9 @@ public class DummyGameObjectMaker {
 //        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy1.addComponent(new SpriteComponent("basketball.png"));
-        dummy2.addComponent(new SpriteComponent("basketball.png"));
-        dummy3.addComponent(new SpriteComponent("basketball.png"));
+        dummy1.addComponent(new SpriteComponent("flappy_bird"));
+        dummy2.addComponent(new SpriteComponent("mushroom.png"));
+        dummy3.addComponent(new SpriteComponent("basketball"));
 
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
@@ -153,7 +153,7 @@ public class DummyGameObjectMaker {
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);
-//        level.addEntity(dummy3);
+        level.addEntity(dummy3);
 //        level.addEntity(dummy4);
 //        level.addEntity(dummy5);
 //        level.addEntity(dummy6);

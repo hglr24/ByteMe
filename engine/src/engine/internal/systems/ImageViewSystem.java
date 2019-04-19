@@ -1,5 +1,6 @@
 package engine.internal.systems;
 
+import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
@@ -8,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+import java.io.InputStream;
 import java.util.Collection;
 
 /**
@@ -15,6 +17,8 @@ import java.util.Collection;
  * Updates the ImageView visualization and positions for Entities that have a SpriteComponent and PositionComponents
  */
 public class ImageViewSystem extends VoogaSystem {
+
+    DataManager myDataManager;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -24,6 +28,7 @@ public class ImageViewSystem extends VoogaSystem {
      */
     public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
         super(requiredComponents, engine);
+        myDataManager = new DataManager();
     }
 
     @Override
@@ -39,7 +44,8 @@ public class ImageViewSystem extends VoogaSystem {
     private ImageView generateImageView(Entity entity){
         ImageView imageView;
         if (!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)) {
-            imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity)));
+            InputStream imageStream = myDataManager.loadImage(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity));
+            imageView = new ImageView(new Image(imageStream));
         } else {
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }
