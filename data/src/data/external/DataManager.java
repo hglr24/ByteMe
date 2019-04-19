@@ -63,12 +63,18 @@ public class DataManager implements ExternalData{
 
     @Override
     public void createGameFolder(String folderName) {
-        try {
-            Files.createDirectories(Paths.get(CREATED_GAMES_DIRECTORY + File.separator + folderName));
-        } catch (IOException e) {
-            System.out.println("Could not create directory");
-            e.printStackTrace();
+//        try {
+//            Files.createDirectories(Paths.get(CREATED_GAMES_DIRECTORY + File.separator + folderName));
+//        } catch (IOException e) {
+//            System.out.println("Could not create directory");
+//            e.printStackTrace();
+//        }
+        if (!myDatabaseEngine.open()){
+            System.out.println("Couldn't connect to database");
+            return;
         }
+        myDatabaseEngine.createEntryForNewGame(folderName);
+        myDatabaseEngine.close();
     }
 
     @Override
@@ -85,8 +91,8 @@ public class DataManager implements ExternalData{
 
     @Override
     public void saveGameData(String gameName, Object gameObject) {
-        String path = transformGameNameToPath(gameName, GAME_DATA);
-        saveObjectToXML(path, gameObject);
+//        String path = transformGameNameToPath(gameName, GAME_DATA);
+//        saveObjectToXML(path, gameObject);
         String myRawXML = mySerializer.toXML(gameObject);
         if (! myDatabaseEngine.open()){
             System.out.println("Couldn't load to database because couldn't connect");
@@ -115,14 +121,14 @@ public class DataManager implements ExternalData{
     }
 
     public void saveGameInfo(String gameName, Object gameInfoObject){
-        String path = transformGameNameToPath(gameName, GAME_INFO);
-        saveObjectToXML(path, gameInfoObject);
-//        String myRawXML = mySerializer.toXML(gameInfoObject);
-//        if (! myDatabaseEngine.open()){
-//            System.out.println("Couldn't load to database because couldn't connect");
-//        }
-//        myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
-//        myDatabaseEngine.close();
+//        String path = transformGameNameToPath(gameName, GAME_INFO);
+//        saveObjectToXML(path, gameInfoObject);
+        String myRawXML = mySerializer.toXML(gameInfoObject);
+        if (! myDatabaseEngine.open()){
+            System.out.println("Couldn't load to database because couldn't connect");
+        }
+        myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+        myDatabaseEngine.close();
     }
 
     @Override

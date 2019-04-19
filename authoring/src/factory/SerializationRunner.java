@@ -13,11 +13,11 @@ public class SerializationRunner {
 //        myTester.testDatabaseConnection();
         myTester.testSavingImages();
 
-//        try {
-//            myTester.testLoadingImages();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            myTester.testLoadingImages();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        myTester.testSavingSounds();
 //
 //        try {

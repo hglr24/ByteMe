@@ -73,7 +73,7 @@ public class SerializationTester {
 
     public void testSavingImages(){
         DataManager dm = new DataManager();
-        dm.saveImage("flower_test", new File("D:\\Pictures\\2018-03\\IMG_1409.jpg"));
+        dm.saveImage("flower_test1", new File("D:\\Pictures\\2018-03\\IMG_1408.jpg"));
         DatabaseEngine de = new DatabaseEngine();
 //        try {
 //            de.printTable("Images");
@@ -84,10 +84,10 @@ public class SerializationTester {
 
     public void testLoadingImages() throws IOException {
         DataManager dm = new DataManager();
-        InputStream is = dm.loadImage("carrie_image");
+        InputStream is = dm.loadImage("flower_test1");
         byte[] buffer = new byte[is.available()];
         is.read(buffer);
-        File targetFile = new File("C:\\Users\\Owner\\Desktop\\whatever.png");
+        File targetFile = new File("C:\\Users\\Owner\\Desktop\\whatever1.png");
         OutputStream outStream = new FileOutputStream(targetFile);
         outStream.write(buffer);
     }
