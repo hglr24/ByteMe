@@ -5,14 +5,13 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.component.*;
 
+
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import runner.Testing.actions.*;
 import runner.Testing.conditions.Condition;
 import runner.Testing.conditions.GreaterThanCondition;
-import runner.Testing.events.Event;
-import runner.Testing.events.LeftCollisionEvent;
-import runner.Testing.events.RightCollisionEvent;
+import runner.Testing.events.*;
 import runner.external.Game;
 import javafx.stage.Stage;
 
@@ -55,6 +54,14 @@ public class DummyGameObjectMaker {
         moveup.addInputs(KeyCode.UP);
         moveup.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
 
+        TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
+        platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
+
+        BottomCollisionEvent fallingOnPlatform = new BottomCollisionEvent("one","four");
+        fallingOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.SCALE,-1.0));
+
+
+
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
@@ -69,8 +76,8 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
-        dummy1.addComponent(new XPositionComponent(40.0));
-        dummy1.addComponent(new YPositionComponent(30.0));
+        dummy1.addComponent(new XPositionComponent(200.0));
+        dummy1.addComponent(new YPositionComponent(50.0));
         dummy1.addComponent(new ZPositionComponent(0.0));
         dummy2.addComponent(new XPositionComponent(400.0));
         dummy2.addComponent(new YPositionComponent(20.0));
@@ -99,6 +106,8 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new XVelocityComponent(0.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
+        dummy1.addComponent(new XAccelerationComponent(0.0));
+        dummy1.addComponent(new YAccelerationComponent(0.2));
 
         dummy2.addComponent(new XVelocityComponent(0.0));
         dummy2.addComponent(new YVelocityComponent(0.0));
@@ -107,27 +116,30 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new CollisionComponent(true));
 
         dummy4.addComponent(new XPositionComponent(170.0));
-        dummy4.addComponent(new YPositionComponent(100.0));
+        dummy4.addComponent(new YPositionComponent(400.0));
         dummy4.addComponent(new ZPositionComponent(0.0));
         dummy4.addComponent(new WidthComponent(80.0));
         dummy4.addComponent(new HeightComponent(80.0));
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
+        dummy4.addComponent(new CollisionComponent(true));
         dummy4.addComponent(new NameComponent("four"));
 
         dummy5.addComponent(new XPositionComponent(250.0));
-        dummy5.addComponent(new YPositionComponent(100.0));
+        dummy5.addComponent(new YPositionComponent(400.0));
         dummy5.addComponent(new ZPositionComponent(0.0));
         dummy5.addComponent(new WidthComponent(80.0));
         dummy5.addComponent(new HeightComponent(80.0));
         dummy5.addComponent(new SpriteComponent("mario_block.png"));
+        dummy5.addComponent(new CollisionComponent(true));
         dummy5.addComponent(new NameComponent("five"));
 
         dummy6.addComponent(new XPositionComponent(330.0));
-        dummy6.addComponent(new YPositionComponent(100.0));
+        dummy6.addComponent(new YPositionComponent(400.0));
         dummy6.addComponent(new ZPositionComponent(0.0));
         dummy6.addComponent(new WidthComponent(160.0));
         dummy6.addComponent(new HeightComponent(80.0));
         dummy6.addComponent(new SpriteComponent("mario_block.png"));
+        dummy6.addComponent(new CollisionComponent(true));
         dummy6.addComponent(new NameComponent("six"));
 
         level.addEntity(dummy1);

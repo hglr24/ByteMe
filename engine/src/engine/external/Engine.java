@@ -45,6 +45,8 @@ public class Engine {
      */
     public Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
+            if(mySystems.get(i).getClass().toString().indexOf("EventHandlerSystem")!=-1){
+            }
             mySystems.get(i).update(myEntities,inputs);
         }
         myCollisionSystem.adjustCollidedEntities();
