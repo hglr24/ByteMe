@@ -1,16 +1,12 @@
 package events;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import ui.UIException;
 import ui.panes.EventPane;
@@ -20,8 +16,8 @@ import java.util.*;
 
 /**
  * This is essentially a Utilities class that EventPane uses in order to display particular options and properties associated
- * with events and actions. This helps with reflection in creating events, as different events need to provide different
- * controls to the user to input information necessary to instantiate different events and actions
+ * with engine.external.events and engine.external.actions. This helps with reflection in creating engine.external.events, as different engine.external.events need to provide different
+ * controls to the user to input information necessary to instantiate different engine.external.events and engine.external.actions
  * @see EventPane
  * @author Anna Darwish
  */

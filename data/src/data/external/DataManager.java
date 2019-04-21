@@ -2,7 +2,6 @@ package data.external;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -19,9 +18,11 @@ public class DataManager implements ExternalData{
     private static final String GAME_INFO = "game_info";
 
     private XStream mySerializer;
+    private DatabaseEngine myDatabaseEngine;
 
     public DataManager(){
         mySerializer = new XStream(new DomDriver());
+        myDatabaseEngine = new DatabaseEngine();
     }
 
     @Override
@@ -52,16 +53,28 @@ public class DataManager implements ExternalData{
     public void createGameFolder(String folderName, String gameName){
 
         createGameFolder(folderName);
+        if (!myDatabaseEngine.open()){
+            System.out.println("Couldn't connect to database");
+            return;
+        }
+        myDatabaseEngine.createEntryForNewGame(gameName);
+        myDatabaseEngine.close();
     }
 
     @Override
     public void createGameFolder(String folderName) {
-        try {
-            Files.createDirectories(Paths.get(CREATED_GAMES_DIRECTORY + File.separator + folderName));
-        } catch (IOException e) {
-            System.out.println("Could not create directory");
-            e.printStackTrace();
+//        try {
+//            Files.createDirectories(Paths.get(CREATED_GAMES_DIRECTORY + File.separator + folderName));
+//        } catch (IOException e) {
+//            System.out.println("Could not create directory");
+//            e.printStackTrace();
+//        }
+        if (!myDatabaseEngine.open()){
+            System.out.println("Couldn't connect to database");
+            return;
         }
+        myDatabaseEngine.createEntryForNewGame(folderName);
+        myDatabaseEngine.close();
     }
 
     @Override
@@ -78,8 +91,15 @@ public class DataManager implements ExternalData{
 
     @Override
     public void saveGameData(String gameName, Object gameObject) {
-        String path = transformGameNameToPath(gameName, GAME_DATA);
-        saveObjectToXML(path, gameObject);
+//        String path = transformGameNameToPath(gameName, GAME_DATA);
+//        saveObjectToXML(path, gameObject);
+        String myRawXML = mySerializer.toXML(gameObject);
+        if (! myDatabaseEngine.open()){
+            System.out.println("Couldn't load to database because couldn't connect");
+        }
+        myDatabaseEngine.updateGameEntryData(gameName, myRawXML);
+        myDatabaseEngine.close();
+
     }
 
     public Object loadGameInfo(String gameName) throws FileNotFoundException{
@@ -101,8 +121,14 @@ public class DataManager implements ExternalData{
     }
 
     public void saveGameInfo(String gameName, Object gameInfoObject){
-        String path = transformGameNameToPath(gameName, GAME_INFO);
-        saveObjectToXML(path, gameInfoObject);
+//        String path = transformGameNameToPath(gameName, GAME_INFO);
+//        saveObjectToXML(path, gameInfoObject);
+        String myRawXML = mySerializer.toXML(gameInfoObject);
+        if (! myDatabaseEngine.open()){
+            System.out.println("Couldn't load to database because couldn't connect");
+        }
+        myDatabaseEngine.updateGameEntryInfo(gameName, myRawXML);
+        myDatabaseEngine.close();
     }
 
     @Override
@@ -111,10 +137,17 @@ public class DataManager implements ExternalData{
     }
 
     @Override
-    public Object loadGameData(String gameName) throws FileNotFoundException{
+    public Object loadGameData(String gameName) {
 
-        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_DATA));
+//        return loadObjectFromXML(transformGameNameToPath(gameName, GAME_DATA));
+        if(!myDatabaseEngine.open()){
+            System.out.println("Couldn't connect");
+        }
+        Object ret = mySerializer.fromXML(myDatabaseEngine.loadGameData(gameName));
+        myDatabaseEngine.close();
+        return ret;
     }
+
 
     private String readFromXML(String path) throws FileNotFoundException {
         BufferedReader bufferedReader = null;
@@ -143,6 +176,32 @@ public class DataManager implements ExternalData{
             }
         }
         return rawXML.toString();
+    }
+
+    public void saveImage(String imageName, File imageToSave){
+        myDatabaseEngine.open();
+        myDatabaseEngine.saveImage(imageName, imageToSave);
+        myDatabaseEngine.close();
+    }
+
+    public void saveSound(String soundName, File soundToSave){
+        myDatabaseEngine.open();
+        myDatabaseEngine.saveSound(soundName, soundToSave);
+        myDatabaseEngine.close();
+    }
+
+    public InputStream loadSound(String soundName){
+        myDatabaseEngine.open();
+        InputStream inputStream = myDatabaseEngine.loadSound(soundName);
+        myDatabaseEngine.close();
+        return inputStream;
+    }
+
+    public InputStream loadImage(String imageName){
+        myDatabaseEngine.open();
+        InputStream inputStream = myDatabaseEngine.loadImage(imageName);
+        myDatabaseEngine.close();
+        return inputStream;
     }
 
     public List<String> getGameNames(){

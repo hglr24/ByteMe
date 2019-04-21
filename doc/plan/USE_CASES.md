@@ -34,7 +34,7 @@ USE_CASES
 
 ## 8. User uploads new image file to be used in the game
 * Add the image to the global directory storing images so that it can be accessed in later uses of the game
-* This directory will need to be global in order for runner, authoring, and potentially engine to access. Engine may need to access this resources file in the future if certain aesthetic options (such as the music) change according to particular logic/events (timer is running low, so music may speed up to motivate the user to move faster)
+* This directory will need to be global in order for runner, authoring, and potentially engine to access. Engine may need to access this resources file in the future if certain aesthetic options (such as the music) change according to particular logic/engine.external.events (timer is running low, so music may speed up to motivate the user to move faster)
 
 ## 9. An attempt is made to access a faulty resource
 * Throw an error that the resource was faulty that and display an error message to the user that the file for game "game name" was corrupted. 
@@ -65,20 +65,20 @@ USE_CASES
 * In each `Engine.updateState(input)` call (made by GameRunner), `TouchManager.update()` is called for iterating through the list of already touching objects and check if they are still touching (i.e. intersecting)
     * If still touching
         * call O1.getcomponent(COLLISION_COMPONENT_INDEX).touch(O2) and O2.getcomponent(COLLISION_COMPONENT_INDEX).touch(O1)
-        * CollisionComponent concatenates the UniqueIDs of this component's GameObject and the other collided GameObject to generate a key, and uses the key to look up in a properties file for actions to be triggerred by the certain touching event.
-        * CollisionComponent retrieves an array of integers indicating actions to be triggerred, and looks up the other properties file to find methods mapped to these actions inside ActionManager, which has information about the CollisionComponent and its tied GameObject
+        * CollisionComponent concatenates the UniqueIDs of this component's GameObject and the other collided GameObject to generate a key, and uses the key to look up in a properties file for engine.external.actions to be triggerred by the certain touching event.
+        * CollisionComponent retrieves an array of integers indicating engine.external.actions to be triggerred, and looks up the other properties file to find methods mapped to these engine.external.actions inside ActionManager, which has information about the CollisionComponent and its tied GameObject
         * ActionManager performs the action (reduce the number of lives of Mario if it touches Spiny)
         * TouchManager calls Engine.addUpdatedGameObject(O1) and Engine.addUpdatedGameObject(O2), so that O1 and O2 will eventually be returned to GameRunner at the end of `Engine.updateState(input)`.
     * Else, call O1.untouch(O2) and O2.untouch(O1), and remove the pair from its list of touching objects.
 
 
 ## 13. Character collides with an object (objects O1 and O2 collide)
-* In each `Engine.updateState(input)` call, MovementManager updates position parameters of GameObjects that should move, and calls CollisionManager.addMovedObject(Object o) such that CollisionManager can maintain a list of GameObjects that have moved since the last frame, and will check on collision events for these objects.
+* In each `Engine.updateState(input)` call, MovementManager updates position parameters of GameObjects that should move, and calls CollisionManager.addMovedObject(Object o) such that CollisionManager can maintain a list of GameObjects that have moved since the last frame, and will check on collision engine.external.events for these objects.
 * The `CollisionManager.update()` call, made inside `Engine.updateState(input)`, checks intersections between every pair of moved and collidable objects
 * If two collidable objects seem to be intersecting, CollisionManager calls `TouchManager.areTouching(O1,O2)` 
     * If false:
         * a new collision is detected and CollisionManager calls O1.getcomponent(COLLISION_COMPONENT_INDEX).collide(O2),O2.getcomponent(COLLISION_COMPONENT_INDEX).collide(O1) to perform the collision action
-        * The rest of the steps are similar to handling touching, except that CollisionComponents of O1 and O2 now looks up a different properties file to figure out actions to perform on a collision event
+        * The rest of the steps are similar to handling touching, except that CollisionComponents of O1 and O2 now looks up a different properties file to figure out engine.external.actions to perform on a collision event
     * If true: 
         * This is a touching event instead of collision event. Nothing needs to be performed by CollisionManager
 
@@ -287,7 +287,7 @@ USE_CASES
 ## 51. User uses cheat-keys to test the game
 ## 52. User adds a new level to the game
 ## 53. User changes the ordering of the levels
-## 54. User creates a new playable character and the GUI automatically inputs events
+## 54. User creates a new playable character and the GUI automatically inputs engine.external.events
 ## 55. User creates an enemy and their inputs are not populated since it is not controlled by the user
 ## 56. User tries to create a room that is smaller than the view
 ## 57. User moves their character towards the edge of the view and the view scrolls to keep the character in the center

@@ -1,10 +1,9 @@
 package ui.panes;
-import actions.Action;
-import actions.HealthAction;
-import actions.NumericAction;
-import events.Event;
+import engine.external.actions.Action;
+import engine.external.actions.HealthAction;
+import engine.external.actions.NumericAction;
+import engine.external.events.Event;
 import events.EventFactory;
-import events.EventType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,13 +19,12 @@ import ui.UIException;
 import ui.Utility;
 import ui.manager.Refresher;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ResourceBundle;
+
 /**
- * The EventPane displays a list of possible events that user may add. Upon selection of one of these options,
+ * The EventPane displays a list of possible engine.external.events that user may add. Upon selection of one of these options,
  * a window will pop up specific to that particular action for the user to input values needed to instantiate such
  * an event, which is then tied to the current entity of concern. Additionally, this pane will use reflection to
  * also instantiate Actions that the entity in focus will perform when the Event occurs while the game is running

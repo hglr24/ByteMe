@@ -1,8 +1,8 @@
 package EngineExampleCode;
 
 /**
- * Place where functions for executing certain actions reside
- * Will be able to access a certain GameObject and its related Component associated to some actions triggered by events
+ * Place where functions for executing certain engine.external.actions reside
+ * Will be able to access a certain GameObject and its related Component associated to some engine.external.actions triggered by engine.external.events
  */
 public class ActionManager {
 

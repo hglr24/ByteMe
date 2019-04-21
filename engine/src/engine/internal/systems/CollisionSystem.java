@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @author Hsingchih Tang
  * Responsible for detecting collisions between the ImageView of two collidable Entities via JavaFX Node.intersects(),
- * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain actions (defined
+ * and register the two parties of every collision in each other's BottomCollidedComponent, such that certain engine.external.actions (defined
  * in the Event tied to an Entity) could be triggered by the execute() call fired from EventHandlerSystem
  */
 public class CollisionSystem extends VoogaSystem {
