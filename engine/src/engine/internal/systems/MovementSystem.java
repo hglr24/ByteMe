@@ -47,6 +47,7 @@ public class MovementSystem extends VoogaSystem {
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);
 //            }
+
         }
     }
 

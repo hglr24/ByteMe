@@ -1,14 +1,15 @@
 package engine.internal.systems;
 
+import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.component.Component;
-import engine.external.component.DirectionComponent;
 import engine.external.component.ImageViewComponent;
 import engine.external.Engine;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 
+import java.io.InputStream;
 import java.util.Collection;
 
 /**
@@ -17,15 +18,17 @@ import java.util.Collection;
  */
 public class ImageViewSystem extends VoogaSystem {
 
+    DataManager myDataManager;
+
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
      * that this System would require from an Entity in order to interact with its relevant Components
-     *
      * @param requiredComponents collection of Component classes required for an Entity to be processed by this System
-     * @param engine             the main Engine which initializes all Systems for a game and makes update() calls on each game loop
+     * @param engine the main Engine which initializes all Systems for a game and makes update() calls on each game loop
      */
-    public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
+    public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
         super(requiredComponents, engine);
+        myDataManager = new DataManager();
     }
 
     @Override
@@ -33,15 +36,24 @@ public class ImageViewSystem extends VoogaSystem {
      * Assign or update the ImageViewComponents for each eligible Entity
      */
     protected void run() {
-        for (Entity entity : this.getEntities()) {
-            entity.addComponent(new ImageViewComponent(generateImageView(entity)));
+        for(Entity entity:this.getEntities()){
+            try{
+                entity.addComponent(new ImageViewComponent(generateImageView(entity)));
+            }catch (NullPointerException e){
+                System.out.println("Image doesn't exist in database");
+            }
         }
     }
 
-    private ImageView generateImageView(Entity entity){
+    private ImageView generateImageView(Entity entity) throws NullPointerException{
         ImageView imageView;
         if (!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)) {
-            imageView = new ImageView(new Image(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity)));
+            try{
+                InputStream imageStream = myDataManager.loadImage(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity));
+                imageView = new ImageView(new Image(imageStream));
+            }catch (NullPointerException e){
+                throw e;
+            }
         } else {
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }

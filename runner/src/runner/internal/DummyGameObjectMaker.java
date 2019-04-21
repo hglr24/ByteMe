@@ -89,9 +89,9 @@ public class DummyGameObjectMaker {
 //        dummy1.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy2.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
 //        dummy3.addComponent(new ImageViewComponent(new ImageView("basketball.png")));
-        dummy1.addComponent(new SpriteComponent("flappy_bird.png"));
-        dummy2.addComponent(new SpriteComponent("goomba.png"));
-        dummy3.addComponent(new SpriteComponent("mario_block.png"));
+        dummy1.addComponent(new SpriteComponent("flappy_bird"));
+        dummy2.addComponent(new SpriteComponent("mushroom.png"));
+        dummy3.addComponent(new SpriteComponent("basketball"));
 
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
