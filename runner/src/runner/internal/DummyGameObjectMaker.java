@@ -65,6 +65,8 @@ public class DummyGameObjectMaker {
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(event3);
+        level1.addEvent(platformKnocked);
+        level1.addEvent(fallingOnPlatform);
         level1.addEvent(moveup);
         level1.addEvent(lce);
     }
@@ -122,6 +124,7 @@ public class DummyGameObjectMaker {
         dummy4.addComponent(new HeightComponent(80.0));
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
         dummy4.addComponent(new CollisionComponent(true));
+        dummy4.addComponent(new HealthComponent(100.0));
         dummy4.addComponent(new NameComponent("four"));
 
         dummy5.addComponent(new XPositionComponent(250.0));
