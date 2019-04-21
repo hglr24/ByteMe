@@ -124,7 +124,7 @@ public class DummyGameObjectMaker {
         dummy4.addComponent(new HeightComponent(80.0));
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
         dummy4.addComponent(new CollisionComponent(true));
-        dummy4.addComponent(new HealthComponent(100.0));
+        dummy4.addComponent(new HealthComponent(2.0));
         dummy4.addComponent(new NameComponent("four"));
 
         dummy5.addComponent(new XPositionComponent(250.0));
