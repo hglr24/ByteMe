@@ -35,7 +35,6 @@ public class CleanupSystem extends VoogaSystem {
     @Override
     protected void run() {
         for(Entity entity:this.getEntities()){
-            entity.removeComponent(Arrays.asList(LEFT_COLLIDED_COMPONENT_CLASS,RIGHT_COLLIDED_COMPONENT_CLASS,TOP_COLLIDED_COMPONENT_CLASS,BOTTOM_COLLIDED_COMPONENT_CLASS,ANY_COLLIDED_COMPONENT_CLASS));
             if(entity.hasComponents(DESTROY_COMPONENT_CLASS)&&getBooleanComponentValue(DESTROY_COMPONENT_CLASS,entity)){
                 myEngine.removeEntity(entity);
             }

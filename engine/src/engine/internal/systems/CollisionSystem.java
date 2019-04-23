@@ -2,6 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.LeftCollidedComponent;
 import engine.external.component.XPositionComponent;
 import engine.external.component.YPositionComponent;
 import engine.external.Engine;
@@ -32,8 +33,14 @@ public class CollisionSystem extends VoogaSystem {
 
     public void adjustCollidedEntities(){
         for (Map.Entry<Entity,Point2D> entry:collidedEntities.entrySet()){
-            ((XPositionComponent)entry.getKey().getComponent(X_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getX());
-            ((YPositionComponent)entry.getKey().getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getY());
+            Entity entity = entry.getKey();
+            if(entity.hasComponents(LEFT_COLLIDED_COMPONENT_CLASS)||entity.hasComponents(RIGHT_COLLIDED_COMPONENT_CLASS)){
+                ((XPositionComponent)entity.getComponent(X_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getX());
+            }
+            if(entity.hasComponents(TOP_COLLIDED_COMPONENT_CLASS)||entity.hasComponents(BOTTOM_COLLIDED_COMPONENT_CLASS)){
+                ((YPositionComponent)entity.getComponent(Y_POSITION_COMPONENT_CLASS)).revertValue(entry.getValue().getY());
+            }
+            entity.removeComponent(Arrays.asList(LEFT_COLLIDED_COMPONENT_CLASS,RIGHT_COLLIDED_COMPONENT_CLASS,TOP_COLLIDED_COMPONENT_CLASS,BOTTOM_COLLIDED_COMPONENT_CLASS,ANY_COLLIDED_COMPONENT_CLASS));
         }
     }
 
