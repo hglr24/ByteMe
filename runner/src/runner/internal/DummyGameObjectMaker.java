@@ -6,6 +6,7 @@ import engine.external.Level;
 import engine.external.actions.*;
 import engine.external.component.*;
 import engine.external.conditions.CollisionCondition;
+import engine.external.conditions.EqualToCondition;
 import engine.external.conditions.GreaterThanCondition;
 import engine.external.events.*;
 
@@ -14,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 import runner.Testing.conditions.Condition;
+import engine.external.conditions.LessThanCondition;
 import runner.external.Game;
 import javafx.stage.Stage;
 
@@ -65,12 +67,19 @@ public class DummyGameObjectMaker {
         mushroomJump.addInputs(KeyCode.J);
         mushroomJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
 
-        Event flappyJump = new BottomCollisionEvent("one","four");
-        //Event flappyJump = new Event("one");
+        //double jump logic (next 2 events)
+        Event flappyJump = new Event("one");
         flappyJump.addInputs(KeyCode.UP);
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,5.0));
         flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
         flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
+        flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
 
+
+        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
+        flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+        flappyOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.01));
+        flappyOnPlatform.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE,-5.0));
 
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
         platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
@@ -84,10 +93,8 @@ public class DummyGameObjectMaker {
          * setting both acceleration and velocity to zero will allow flappy to "float" above the platform without
          * triggering any further collision -- this could probably be useful in some cases depending on user's decision
          */
-        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
-        //flappyOnPlatform.addConditions(new GreaterThanCondition(YVelocityComponent.class,.01));
-        flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
-        flappyOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.01));
+
+
 
         BottomCollisionEvent mushroomOnPlatform = new BottomCollisionEvent("two","four");
         mushroomOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
@@ -115,6 +122,11 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
+
+
+        //flappy double jump
+        Component vc = new ValueComponent(0.0);
+        dummy1.addComponent(vc);
         dummy1.addComponent(new XPositionComponent(200.0));
         dummy1.addComponent(new YPositionComponent(50.0));
         dummy1.addComponent(new ZPositionComponent(0.0));
