@@ -47,15 +47,21 @@ public class DummyGameObjectMaker {
 //        oneByTwo.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
         LeftCollisionEvent twoByOne = new LeftCollisionEvent("two", "one");
         twoByOne.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.1));
-        Event event3 = new Event("one");
-        event3.addInputs(KeyCode.LEFT);
-        event3.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
+
+        Event flappyMoveLeft = new Event("one");
+        flappyMoveLeft.addInputs(KeyCode.LEFT);
+        flappyMoveLeft.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
 
         //add up down keycodes
-        Event moveup = new Event("one");
-        moveup.addInputs(KeyCode.UP);
-        moveup.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
+        Event flappyMoveUp = new Event("one");
+        flappyMoveUp.addInputs(KeyCode.UP);
+        flappyMoveUp.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
+
+        // let the Entity jump
+        Event mushroomJump = new Event("two");
+        mushroomJump.addInputs(KeyCode.J);
+        mushroomJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
 
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
         platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
@@ -81,8 +87,9 @@ public class DummyGameObjectMaker {
 
         level1.addEvent(event);
         level1.addEvent(event2);
-        level1.addEvent(event3);
-        level1.addEvent(moveup);
+        level1.addEvent(flappyMoveLeft);
+        level1.addEvent(flappyMoveUp);
+        level1.addEvent(mushroomJump);
         level1.addEvent(oneByTwo);
         level1.addEvent(twoByOne);
         level1.addEvent(platformKnocked);
@@ -128,12 +135,12 @@ public class DummyGameObjectMaker {
         dummy1.addComponent(new XVelocityComponent(2.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
         dummy1.addComponent(new XAccelerationComponent(0.0));
-        dummy1.addComponent(new YAccelerationComponent(0.1));
+        dummy1.addComponent(new YAccelerationComponent(0.2));
 
         dummy2.addComponent(new XVelocityComponent(-2.0));
         dummy2.addComponent(new YVelocityComponent(0.0));
         dummy2.addComponent(new XAccelerationComponent(0.0));
-        dummy2.addComponent(new YAccelerationComponent(0.1));
+        dummy2.addComponent(new YAccelerationComponent(0.2));
 
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));
@@ -141,7 +148,7 @@ public class DummyGameObjectMaker {
         dummy4.addComponent(new XPositionComponent(170.0));
         dummy4.addComponent(new YPositionComponent(400.0));
         dummy4.addComponent(new ZPositionComponent(0.0));
-        dummy4.addComponent(new WidthComponent(300.0));
+        dummy4.addComponent(new WidthComponent(500.0));
         dummy4.addComponent(new HeightComponent(80.0));
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
         dummy4.addComponent(new CollisionComponent(true));
