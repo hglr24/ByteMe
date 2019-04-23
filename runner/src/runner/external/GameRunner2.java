@@ -127,9 +127,9 @@ public class GameRunner2 {
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
        // updateMap();
-        showEntities();
+        //showEntities();
         //printKeys();
-        //printEntityLocations();
+        printEntityLocations();
     }
 
     private void printKeys() {
@@ -150,6 +150,7 @@ public class GameRunner2 {
 
         toUpdate.setLayoutX(xyz.get(0));
         toUpdate.setLayoutY(xyz.get(1));
+        System.out.println("value: "+xyz.get(xyz.size()-1));
 
         return toUpdate;
     }
@@ -165,6 +166,14 @@ public class GameRunner2 {
         list.add(xPosition);
         list.add(yPosition);
         list.add(zPosition);
+        try {
+            double a = (Double) (entity.getComponent(ValueComponent.class).getValue());
+            System.out.println(a);
+            list.add(a);
+        }catch (Exception e){
+
+        }
+
         return list;
     }
 
