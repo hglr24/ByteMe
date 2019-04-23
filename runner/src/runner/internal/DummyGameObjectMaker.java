@@ -58,6 +58,15 @@ public class DummyGameObjectMaker {
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
         platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
 
+        /**
+         * When flappy falls onto a platform with both nonzero acceleration and velocity,
+         * setting its velocity to zero and not modifying acceleration will allow flappy to stand above the platform
+         * and trigger CollisionEvent in every game loop until the platform crumbles;
+         * setting its acceleration to zero and not modifying velocity will achieve a similar effect, except that
+         * flappy's oscillation will be more obvious, so for the purpose of game display I'd recommend the first option;
+         * setting both acceleration and velocity to zero will allow flappy to "float" above the platform without
+         * triggering any further collision -- this could probably be useful in some cases depending on user's decision
+         */
         BottomCollisionEvent fallingOnPlatform = new BottomCollisionEvent("one","four");
         fallingOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
         fallingOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
@@ -125,7 +134,7 @@ public class DummyGameObjectMaker {
         dummy4.addComponent(new HeightComponent(80.0));
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
         dummy4.addComponent(new CollisionComponent(true));
-        dummy4.addComponent(new HealthComponent(2.0));
+        dummy4.addComponent(new HealthComponent(100.0));
         dummy4.addComponent(new NameComponent("four"));
 
         dummy5.addComponent(new XPositionComponent(250.0));
