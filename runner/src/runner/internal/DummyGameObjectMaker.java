@@ -3,15 +3,16 @@ package runner.internal;
 import data.external.DataManager;
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.actions.*;
 import engine.external.component.*;
+import engine.external.events.*;
 
 
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import runner.Testing.actions.*;
+
 import runner.Testing.conditions.Condition;
 import runner.Testing.conditions.GreaterThanCondition;
-import runner.Testing.events.*;
 import runner.external.Game;
 import javafx.stage.Stage;
 
@@ -58,8 +59,8 @@ public class DummyGameObjectMaker {
         platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
 
         BottomCollisionEvent fallingOnPlatform = new BottomCollisionEvent("one","four");
-        fallingOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.SCALE,-1.0));
-
+        fallingOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+        fallingOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 
 
         level1.addEvent(event);
