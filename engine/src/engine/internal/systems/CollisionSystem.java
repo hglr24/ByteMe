@@ -140,19 +140,19 @@ public class CollisionSystem extends VoogaSystem {
     }
 
     private boolean isLeftTo(Entity e1, Entity e2){
-        return ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()<((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
+        return (((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()+(Double) e1.getComponent(WIDTH_COMPONENT_CLASS).getValue())<((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
     }
 
     private boolean isRightTo(Entity e1, Entity e2){
-        return ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()>((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue();
+        return ((XPositionComponent)e1.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()>(((XPositionComponent)e2.getComponent(X_POSITION_COMPONENT_CLASS)).getOldValue()+(Double) e2.getComponent(WIDTH_COMPONENT_CLASS).getValue());
     }
 
     private boolean isAbove(Entity e1, Entity e2){
-        return ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()<((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
+        return (((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()+(Double) e1.getComponent(HEIGHT_COMPONENT_CLASS).getValue())<((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
     }
 
     private boolean isBelow(Entity e1, Entity e2){
-        return ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()>((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue();
+        return ((YPositionComponent)e1.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()>(((YPositionComponent)e2.getComponent(Y_POSITION_COMPONENT_CLASS)).getOldValue()+(Double)e2.getComponent(HEIGHT_COMPONENT_CLASS).getValue());
     }
 
     private boolean isMovingLeft(Entity entity){
