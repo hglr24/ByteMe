@@ -43,7 +43,7 @@ public class Engine {
      * @param inputs collection of user Keycode inputs received on this game loop
      * @return all game Entities after being updated by Systems in current game loop
      */
-    public Collection<Entity> updateState(Collection<KeyCode> inputs){
+    public synchronized Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
 //            if(mySystems.get(i).getClass().toString().indexOf("EventHandlerSystem")!=-1){
 //            }

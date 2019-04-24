@@ -83,7 +83,7 @@ public class DummyGameObjectMaker {
 
 
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
-        //platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
+        platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
 
         /**
          * When flappy falls onto a platform with both nonzero acceleration and velocity,
