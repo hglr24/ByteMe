@@ -18,8 +18,8 @@ public class Game {
         myLevels = new ArrayList<Level>();
 
         //Temporary defaults
-        myHeight = 200;
-        myWidth = 400;
+        myHeight = 700;
+        myWidth = 700;
     }
 
     public void addLevel(Level level){

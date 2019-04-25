@@ -56,6 +56,7 @@ public class ImageViewSystem extends VoogaSystem {
         ImageView imageView;
         String imageName = (String)getComponentValue(SPRITE_COMPONENT_CLASS, entity);
         if (!myEntityPastSprite.containsKey(entity)||!myEntityPastSprite.get(entity).equals(imageName)) {
+//            System.out.println("generating ImageView for "+imageName);
             InputStream imageStream = myDataManager.loadImage(imageName);
             if(imageStream==null){
                 throw new ReflectionException("Image file "+imageName+" not found in database.");

@@ -98,7 +98,6 @@ public abstract class VoogaSystem {
             }
         }
         run();
-        // myInputs.clear();
     }
 
     /**
@@ -106,7 +105,7 @@ public abstract class VoogaSystem {
      * @param e Entity to verify
      * @return boolean value indicating whether the Entity is a match to the System
      */
-    protected boolean filter(Entity e) {
+    private boolean filter(Entity e) {
         return e.hasComponents(myRequiredComponents);
     }
 

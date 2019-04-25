@@ -66,20 +66,20 @@ public class DummyGameObjectMaker {
         //double jump logic (next 2 events)
         Event flappyJump = new Event("one");
         flappyJump.addInputs(KeyCode.UP);
-        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,3.0));
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,5.0));
         flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+        flappyJump.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-2.0));
         //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
         flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
 
 
         BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
         flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
-        //flappyOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.1));
         flappyOnPlatform.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 
 
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
-        platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
+        //platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
 
         /**
          * When flappy falls onto a platform with both nonzero acceleration and velocity,

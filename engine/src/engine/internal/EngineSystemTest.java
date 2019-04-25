@@ -2,26 +2,11 @@
 
 package engine.internal;
 
+import data.external.DatabaseEngine;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
-import engine.external.component.SpriteComponent;
-import engine.external.component.XPositionComponent;
-import engine.external.component.XVelocityComponent;
-import engine.external.component.XAccelerationComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.YVelocityComponent;
-import engine.external.component.YAccelerationComponent;
-import engine.external.component.ZPositionComponent;
-import engine.external.component.ImageViewComponent;
-import engine.external.component.CollisionComponent;
-import engine.external.component.WidthComponent;
-import engine.external.component.HeightComponent;
-import engine.external.component.AnyCollidedComponent;
-import engine.external.component.TopCollidedComponent;
-import engine.external.component.BottomCollidedComponent;
-import engine.external.component.LeftCollidedComponent;
-import engine.external.component.RightCollidedComponent;
+import engine.external.component.*;
 
 
 import engine.internal.systems.CollisionSystem;
@@ -89,6 +74,7 @@ public class EngineSystemTest extends Application{
         initLevel();
         initEngine();
         initSystems();
+        DatabaseEngine.getInstance().open();
     }
 
 
@@ -277,7 +263,7 @@ public class EngineSystemTest extends Application{
     }
 
     /**
-     *
+     * Test on the old/new value fields in PositionComponents
      */
     @Test
     public void testSetPosition(){
@@ -285,7 +271,24 @@ public class EngineSystemTest extends Application{
         c1.setValue(20.0);
         assertTrue(c1.getValue()==20.0);
         assertTrue(c1.getOldValue()==10.0);
+    }
 
+    /**
+     * Test that saveGame call returns a copy of the Entities running in the game instead of the original Entities
+     */
+    @Test
+    public void testSaveGame(){
+        testEngine.updateState(new ArrayList<>());
+        Collection<Entity> savedEntities = testEngine.saveGame();
+        for (Entity entity:savedEntities){
+            if(entity.getComponent(SpriteComponent.class).getValue().equals("flappy_bird")){
+                assertTrue(entity!=bird);
+                assertFalse(entity.hasComponents(AnyCollidedComponent.class));
+                assertTrue(bird.hasComponents(AnyCollidedComponent.class));
+                entity.addComponent(new ZPositionComponent(0.0));
+                assertFalse(bird.hasComponents(ZPositionComponent.class));
+            }
+        }
     }
 }
 

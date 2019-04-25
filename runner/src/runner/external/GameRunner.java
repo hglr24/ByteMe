@@ -135,7 +135,7 @@ public class GameRunner {
         return map;
     }
 
-    private void step (double elapsedTime) {
+    private synchronized void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
        // updateMap();
         showEntities();
@@ -205,7 +205,7 @@ public class GameRunner {
 //            System.out.println("end");
 //            myGroup.getChildren().add((Node) myEntitiesAndNodes.get(entity));
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            System.out.println(imageViewComponent);
+            //System.out.println(imageViewComponent);
             ImageView image = (ImageView) imageViewComponent.getValue();
 
             myGroup.getChildren().add(image);

@@ -2,6 +2,7 @@ package engine.external;
 
 import engine.external.component.Component;
 import engine.internal.systems.CollisionSystem;
+import engine.internal.systems.SaveGameSystem;
 import engine.internal.systems.VoogaSystem;
 import javafx.scene.input.KeyCode;
 import voogasalad.util.reflection.Reflection;
@@ -21,15 +22,19 @@ import java.util.ArrayList;
 public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
     private final ResourceBundle SYSTEM_ORDER_RESOURCES = ResourceBundle.getBundle("SystemUpdateOrder");
-    private static final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
-    private static final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
+    private final ResourceBundle REMOVABLE_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRemoveComponents");
+
+    public static final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
+    public static final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
     private static final String EVENT_HANDLER_SYSTEM = "EventHandlerSystem";
     private static final String COLLISION_SYSTEM = "CollisionSystem";
+    private static final String SAVE_GAME_SYSTEM = "SaveGameSystem";
 
     private HashMap<Integer,VoogaSystem> mySystems;
     private CollisionSystem myCollisionSystem;
-    protected Collection<Entity> myEntities;
-    protected Collection<IEventEngine> myEvents;
+    private SaveGameSystem mySaveGameSystem;
+    private Collection<Entity> myEntities;
+    private Collection<IEventEngine> myEvents;
 
     /**
      * An Engine is expected be initialized by a GameRunner and accepts a Level object containing all data (Entities and
@@ -51,7 +56,9 @@ public class Engine {
      */
     public synchronized Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
-            mySystems.get(i).update(myEntities,inputs);
+            if(mySystems.get(i)!=null){
+                mySystems.get(i).update(myEntities,inputs);
+            }
         }
         myCollisionSystem.adjustCollidedEntities();
         return this.getEntities();
@@ -72,6 +79,17 @@ public class Engine {
         myEntities.remove(e);
     }
 
+    /**
+     * Clean up all Components that have been created in Engine for Runner to save the status of game
+     * @return a copy of all currently existing Entities that have had Components cleaned up
+     */
+    public Collection<Entity> saveGame(){
+        ArrayList<Entity> entityCopy = new ArrayList<>(myEntities);
+        Collection<Class<? extends Component>> componentsToRemove = retrieveComponentClazz(REMOVABLE_COMPONENTS_RESOURCES,mySaveGameSystem.getClass().getSimpleName());
+        return mySaveGameSystem.getSavedEntities(entityCopy,componentsToRemove);
+    }
+
+
     private void initSystemMap() {
         mySystems = new HashMap<>();
         Enumeration<String> enumSystems= SYSTEM_ORDER_RESOURCES.getKeys();
@@ -83,7 +101,7 @@ public class Engine {
 
     private void initSystem(Integer order, String systemName) throws ReflectionException{
         try {
-            Collection<Class<? extends Component>> systemComponents = retrieveComponentClasses(systemName);
+            Collection<Class<? extends Component>> systemComponents = retrieveComponentClazz(SYSTEM_COMPONENTS_RESOURCES,systemName);
             if (systemName.contains(EVENT_HANDLER_SYSTEM)) {
                 mySystems.put(order, (VoogaSystem) Reflection.createInstance(SYSTEMS_PACKAGE_PATH+systemName,systemComponents, this, myEvents));
             } else {
@@ -91,14 +109,18 @@ public class Engine {
                 if(systemName.contains(COLLISION_SYSTEM)){
                     myCollisionSystem = (CollisionSystem) mySystems.get(order);
                 }
+                if(systemName.contains(SAVE_GAME_SYSTEM)){
+                    mySaveGameSystem = (SaveGameSystem) mySystems.get(order);
+                    mySystems.remove(order);
+                }
             }
         }catch(ReflectionException e){
             throw new ReflectionException(e,"Cannot create System "+systemName+" for Engine");
         }
     }
 
-    private Collection<Class<? extends Component>> retrieveComponentClasses(String systemName) throws ReflectionException {
-        String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getString(systemName).split(",");
+    public Collection<Class<? extends Component>> retrieveComponentClazz(ResourceBundle resource, String systemName) throws ReflectionException {
+        String[] componentArr = resource.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
             try {
