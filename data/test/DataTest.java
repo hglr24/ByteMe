@@ -1,11 +1,16 @@
 import data.external.DataManager;
 import data.external.DatabaseEngine;
-import data.internal.UserQuerier;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -134,6 +139,39 @@ public class DataTest {
             assertEquals(loadedData3, myFakeGameData3);
         } catch (SQLException exception){
             exception.printStackTrace(); // for debugging info in tests
+        }
+    }
+
+    @Test
+    public void testUpdatePassword(){
+        try {
+            myDataManager.createUser(myUserName1, myCorrectPassword);
+            assertTrue(myDataManager.validateUser(myUserName1, myCorrectPassword));
+            assertTrue(myDataManager.updatePassword(myUserName1, myIncorrectPassword));
+            assertTrue(myDataManager.validateUser(myUserName1, myIncorrectPassword));
+            assertFalse(myDataManager.validateUser(myUserName1, myCorrectPassword));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Just used for debugging purposes in tests
+        }
+    }
+
+    @Test
+    public void testLoadAllGameNames(){
+        try {
+            Map<String, InputStream> map = myDataManager.loadAllImages("center/");
+            for (String imageName : map.keySet()){
+                System.out.println(imageName);
+            }
+            List<String> expected = new ArrayList<>(Arrays.asList(myFakeGameName1, myFakeGameName2));
+            Collections.sort(expected);
+            myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
+            myDataManager.saveGameData(myFakeGameName2, myUserName1, myFakeGameData2);
+            List<String> gameNames = myDataManager.loadUserGameNames(myUserName1);
+            Collections.sort(gameNames);
+            assertEquals(gameNames,expected);
+
+        } catch (SQLException e){
+            e.printStackTrace(); // Just for debugging purposes in tests
         }
     }
 }

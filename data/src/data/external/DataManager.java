@@ -394,5 +394,5 @@ public class DataManager implements ExternalData {
     public boolean updatePassword(String userName, String newPassword) throws SQLException {
         return myDatabaseEngine.updatePassword(userName, newPassword);
     }
-    
+
 }

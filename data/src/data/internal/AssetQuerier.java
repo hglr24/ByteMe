@@ -26,6 +26,8 @@ public class AssetQuerier extends Querier {
     private static final String SOUND_NAME_COLUMN = "SoundName";
     private static final String SOUND_DATA_COLUMN = "SoundData";
 
+    private static final String SQL_WILDCARD = "%";
+
     private static final String LOAD_ALL_ASSETS = "SELECT %s, %s FROM %s WHERE %s LIKE ?";
 
     private static final String IMAGES_INSERT = String.format(INSERT_TWO_VALUES, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN,
@@ -169,7 +171,7 @@ public class AssetQuerier extends Querier {
 
     private Map<String, InputStream> loadAllAssets(String prefix, PreparedStatement statement,
                                                    String assetNameColumn, String assetDataColumn) throws SQLException {
-        statement.setString(1, prefix);
+        statement.setString(1, prefix + SQL_WILDCARD);
         ResultSet resultSet = statement.executeQuery();
         Map<String, InputStream> allAssets = new HashMap<>();
         while (resultSet.next()) {
