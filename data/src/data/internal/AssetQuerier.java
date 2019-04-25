@@ -84,7 +84,8 @@ public class AssetQuerier extends Querier {
         myLoadAllImagesStatement = myConnection.prepareStatement(LOAD_ALL_IMAGES);
         myLoadAllSoundsStatement = myConnection.prepareStatement(LOAD_ALL_SOUNDS);
         myPreparedStatements = List.of(myUpdateImagesStatement, myUpdateSoundsStatement, myLoadImageStatement,
-                myLoadSoundStatement, myRemoveImageStatement, myRemoveSoundStatement);
+                myLoadSoundStatement, myRemoveImageStatement, myRemoveSoundStatement, myLoadAllSoundsStatement,
+                myLoadAllImagesStatement);
     }
 
     /**

@@ -148,4 +148,12 @@ public interface ExternalData {
      */
     Map<String, InputStream> loadAllSounds(String prefix) throws SQLException;
 
+    /**
+     * Loads all the names of the games that a user has created
+     * @param userName user name of the user whose games are to be loaded
+     * @return list of the names of all the games of the user has created
+     * @throws SQLException if operation fails
+     */
+    public List<String> loadUserGameNames (String userName) throws SQLException;
+
 }

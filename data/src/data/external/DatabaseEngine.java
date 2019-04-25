@@ -153,4 +153,8 @@ public class DatabaseEngine {
     public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
         return myAssetQuerier.loadAllSounds(prefix);
     }
+
+    public List<String> loadAllGameNames(String userName) throws SQLException {
+        return myGameInformationQuerier.loadAllGameNames(userName);
+    }
 }

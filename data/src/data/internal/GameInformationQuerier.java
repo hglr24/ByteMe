@@ -40,6 +40,8 @@ public class GameInformationQuerier extends Querier {
             String.format(SELECT_TWO_WHOLE_COLUMNS, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME);
     private static final String REMOVE_GAME =
             String.format(DELETE_TWO_CONDITIONS, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN);
+    private static final String LOAD_GAME_NAMES = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, GAME_NAME_COLUMN,
+            GAME_INFORMATION_TABLE_NAME, AUTHOR_NAME_COLUMN);
 
     private PreparedStatement myUpdateGameEntryDataStatement;
     private PreparedStatement myUpdateGameEntryInfoStatement;
@@ -47,6 +49,7 @@ public class GameInformationQuerier extends Querier {
     private PreparedStatement myLoadGameInformationStatement;
     private PreparedStatement myFindAllGameNamesStatement;
     private PreparedStatement myRemoveGameStatement;
+    private PreparedStatement myLoadGameNamesStatement;
 
     /**
      * GameInformationQuerier constructor
@@ -65,8 +68,10 @@ public class GameInformationQuerier extends Querier {
         myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
         myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAMES);
         myRemoveGameStatement = myConnection.prepareStatement(REMOVE_GAME);
+        myLoadGameNamesStatement = myConnection.prepareStatement(LOAD_GAME_NAMES);
         myPreparedStatements = List.of(myUpdateGameEntryDataStatement, myUpdateGameEntryInfoStatement,
-                myLoadGameDataStatement, myLoadGameInformationStatement, myFindAllGameNamesStatement, myRemoveGameStatement);
+                myLoadGameDataStatement, myLoadGameInformationStatement, myFindAllGameNamesStatement,
+                myRemoveGameStatement, myLoadGameNamesStatement);
     }
 
 
@@ -169,4 +174,13 @@ public class GameInformationQuerier extends Querier {
         return myRemoveGameStatement.executeUpdate() > 0;
     }
 
+    public List<String> loadAllGameNames(String userName) throws SQLException {
+        List<String> gameNames = new ArrayList<>();
+        myLoadGameNamesStatement.setString(1, userName);
+        ResultSet resultSet = myLoadGameNamesStatement.executeQuery();
+        while(resultSet.next()){
+            gameNames.add(resultSet.getString(GAME_NAME_COLUMN));
+        }
+        return gameNames;
+    }
 }

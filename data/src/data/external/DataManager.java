@@ -385,7 +385,10 @@ public class DataManager implements ExternalData {
         return myDatabaseEngine.loadAllSounds(prefix);
     }
 
-//    public List<String> loadAllImages(String prefix)
+    @Override
+    public List<String> loadUserGameNames(String userName) throws SQLException {
+        return myDatabaseEngine.loadAllGameNames(userName);
+    }
 
 
 }
