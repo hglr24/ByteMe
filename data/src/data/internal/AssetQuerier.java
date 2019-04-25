@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Querier that is used to manage saving and loading assets (sounds and images)
@@ -24,20 +26,28 @@ public class AssetQuerier extends Querier {
     private static final String SOUND_NAME_COLUMN = "SoundName";
     private static final String SOUND_DATA_COLUMN = "SoundData";
 
-    private static final String IMAGES_INSERT = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN, IMAGE_DATA_COLUMN);
-    private static final String SOUNDS_INSERT = String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN, SOUND_DATA_COLUMN);
+    private static final String LOAD_ALL_ASSETS = "SELECT %s, %s FROM %s WHERE %s LIKE ?";
+
+    private static final String IMAGES_INSERT = String.format(INSERT_TWO_VALUES, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN,
+            IMAGE_DATA_COLUMN);
+    private static final String SOUNDS_INSERT = String.format(INSERT_TWO_VALUES, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN,
+            SOUND_DATA_COLUMN);
     private static final String UPDATE_IMAGES =
-            String.format("%s %s %s = ?", IMAGES_INSERT, ON_DUPLICATE_UPDATE, IMAGE_DATA_COLUMN);
+            String.format(UPDATE_ONE_COLUMN, IMAGES_INSERT, ON_DUPLICATE_UPDATE, IMAGE_DATA_COLUMN);
     private static final String UPDATE_SOUNDS =
-            String.format("%s %s %s = ?", SOUNDS_INSERT, ON_DUPLICATE_UPDATE, SOUND_DATA_COLUMN);
+            String.format(UPDATE_ONE_COLUMN, SOUNDS_INSERT, ON_DUPLICATE_UPDATE, SOUND_DATA_COLUMN);
     private static final String LOAD_SOUND =
-            String.format("SELECT %s FROM %s WHERE %s = ?", SOUND_DATA_COLUMN, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
+            String.format(SELECT_ONE_COLUMN_ONE_CONDITION, SOUND_DATA_COLUMN, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
     private static final String LOAD_IMAGE =
-            String.format("SELECT %s FROM %s WHERE %s = ?", IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
+            String.format(SELECT_ONE_COLUMN_ONE_CONDITION, IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
     private static final String REMOVE_IMAGE =
-            String.format("DELETE FROM %s WHERE %s = ?", IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
+            String.format(DELETE_ONE_CONDITION, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
     private static final String REMOVE_SOUND =
-            String.format("DELETE FROM %s WHERE %s = ?", SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
+            String.format(DELETE_ONE_CONDITION, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
+    private static final String LOAD_ALL_IMAGES =
+            String.format(LOAD_ALL_ASSETS, IMAGE_NAME_COLUMN, IMAGE_DATA_COLUMN, IMAGES_TABLE_NAME, IMAGE_NAME_COLUMN);
+    private static final String LOAD_ALL_SOUNDS =
+            String.format(LOAD_ALL_ASSETS, SOUND_NAME_COLUMN, SOUND_DATA_COLUMN, SOUNDS_TABLE_NAME, SOUND_NAME_COLUMN);
 
     private static final String COULD_NOT_LOAD_ASSET = "Could not load asset: ";
     private static final String COULD_NOT_SAVE_THE_ASSET = "Could not save the asset: ";
@@ -50,6 +60,8 @@ public class AssetQuerier extends Querier {
     private PreparedStatement myLoadSoundStatement;
     private PreparedStatement myRemoveImageStatement;
     private PreparedStatement myRemoveSoundStatement;
+    private PreparedStatement myLoadAllImagesStatement;
+    private PreparedStatement myLoadAllSoundsStatement;
 
     /**
      * AssetQuerier constructor calls super constructor to initialize prepared statements
@@ -69,6 +81,8 @@ public class AssetQuerier extends Querier {
         myLoadSoundStatement = myConnection.prepareStatement(LOAD_SOUND);
         myRemoveImageStatement = myConnection.prepareStatement(REMOVE_IMAGE);
         myRemoveSoundStatement = myConnection.prepareStatement(REMOVE_SOUND);
+        myLoadAllImagesStatement = myConnection.prepareStatement(LOAD_ALL_IMAGES);
+        myLoadAllSoundsStatement = myConnection.prepareStatement(LOAD_ALL_SOUNDS);
         myPreparedStatements = List.of(myUpdateImagesStatement, myUpdateSoundsStatement, myLoadImageStatement,
                 myLoadSoundStatement, myRemoveImageStatement, myRemoveSoundStatement);
     }
@@ -142,6 +156,25 @@ public class AssetQuerier extends Querier {
         } catch (FileNotFoundException e) {
             System.out.println(COULD_NOT_FIND_THE_FILE + assetToSave.toString());
         }
+    }
+
+    public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
+        return loadAllAssets(prefix, myLoadAllSoundsStatement, SOUND_NAME_COLUMN, IMAGE_NAME_COLUMN);
+    }
+
+    public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
+        return loadAllAssets(prefix, myLoadAllImagesStatement, IMAGE_NAME_COLUMN, IMAGE_DATA_COLUMN);
+    }
+
+    private Map<String, InputStream> loadAllAssets(String prefix, PreparedStatement statement,
+                                                   String assetNameColumn, String assetDataColumn) throws SQLException {
+        statement.setString(1, prefix);
+        ResultSet resultSet = statement.executeQuery();
+        Map<String, InputStream> allAssets = new HashMap<>();
+        while (resultSet.next()) {
+            allAssets.put(resultSet.getString(assetNameColumn), resultSet.getBinaryStream(assetDataColumn));
+        }
+        return allAssets;
     }
 
     public boolean removeImage(String imageName) throws SQLException {

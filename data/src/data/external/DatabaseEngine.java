@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The DatabaseEngine establishes the connection to the database and has several Querier objects that it delegates
@@ -43,6 +44,7 @@ public class DatabaseEngine {
     /**
      * The DatabaseEngine class is supposed to be used as a singleton so the connection is only opened once,
      * The getInstance method allows other parts of the program to access the instance to open the connection
+     *
      * @return DatabaseEngine
      */
     public static DatabaseEngine getInstance() {
@@ -51,6 +53,7 @@ public class DatabaseEngine {
 
     /**
      * Opens the connection to the database, should be called at the very beginning of the program
+     *
      * @return true if successfully opened connection to the database
      */
     public boolean open() {
@@ -123,23 +126,31 @@ public class DatabaseEngine {
         return myUserQuerier.authenticateUser(userName, password);
     }
 
-    boolean removeUser(String userName) throws SQLException{
+    boolean removeUser(String userName) throws SQLException {
         return myUserQuerier.removeUser(userName);
     }
 
-    boolean removeGame(String gameName, String authorName) throws SQLException{
+    boolean removeGame(String gameName, String authorName) throws SQLException {
         return myGameInformationQuerier.removeGame(gameName, authorName);
     }
 
-    boolean removeImage(String imageName) throws SQLException{
+    boolean removeImage(String imageName) throws SQLException {
         return myAssetQuerier.removeImage(imageName);
     }
 
-    public boolean removeSound(String soundName) throws SQLException{
+    public boolean removeSound(String soundName) throws SQLException {
         return myAssetQuerier.removeSound(soundName);
     }
 
-    public String loadGameData(String gameName, String authorName) throws SQLException{
+    public String loadGameData(String gameName, String authorName) throws SQLException {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
+    }
+
+    public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
+        return myAssetQuerier.loadAllImages(prefix);
+    }
+
+    public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
+        return myAssetQuerier.loadAllSounds(prefix);
     }
 }

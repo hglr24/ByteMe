@@ -17,10 +17,11 @@ public class UserQuerier extends Querier{
     private static final String USERNAME_COLUMN = "UserName";
     private static final String PASSWORD_COLUMN = "Password";
 
-    private static final String GET_HASHED_PASSWORD = String.format("SELECT %s FROM %s WHERE %s = ?", PASSWORD_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
+    private static final String GET_HASHED_PASSWORD = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, PASSWORD_COLUMN, USERS_TABLE_NAME,
+            USERNAME_COLUMN);
     private static final String CREATE_USER =
-            String.format("INSERT INTO %s (%s, %s) VALUES (?, ?)", USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
-    private static final String DELETE_USER = String.format("DELETE FROM %s WHERE %s = ?", USERS_TABLE_NAME, USERNAME_COLUMN);
+            String.format(INSERT_TWO_VALUES, USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
+    private static final String DELETE_USER = String.format(DELETE_ONE_CONDITION, USERS_TABLE_NAME, USERNAME_COLUMN);
 
     private static final String HASH_ALGORITHM = "SHA-256";
 

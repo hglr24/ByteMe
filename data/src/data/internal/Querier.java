@@ -12,6 +12,13 @@ import java.util.List;
 public abstract class Querier {
 
     protected static final String ON_DUPLICATE_UPDATE = "ON DUPLICATE KEY UPDATE";
+    protected static final String DELETE_ONE_CONDITION = "DELETE FROM %s WHERE %s = ?";
+    protected static final String DELETE_TWO_CONDITIONS = "DELETE FROM %s WHERE %s = ? AND %s = ?";
+    protected static final String SELECT_ONE_COLUMN_ONE_CONDITION = "SELECT %s FROM %s WHERE %s = ?";
+    protected static final String SELECT_TWO_WHOLE_COLUMNS = "SELECT %s, %s FROM %s;";
+    protected static final String INSERT_TWO_VALUES = "INSERT INTO %s (%s, %s) VALUES (?, ?)";
+    protected static final String INSERT_THREE_VALUES = "INSERT INTO %s (%s, %s, %s) VALUES (?, ?, ?)";
+    protected static final String UPDATE_ONE_COLUMN = "%s %s %s = ?";
 
     protected Connection myConnection;
     protected List<PreparedStatement> myPreparedStatements;
