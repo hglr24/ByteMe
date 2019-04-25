@@ -1,13 +1,17 @@
 package engine.external;
 
 import engine.external.component.Component;
-import engine.internal.systems.EventHandlerSystem;
 import engine.internal.systems.CollisionSystem;
 import engine.internal.systems.VoogaSystem;
 import javafx.scene.input.KeyCode;
+import voogasalad.util.reflection.Reflection;
+import voogasalad.util.reflection.ReflectionException;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.ArrayList;
 
 /**
  * @author Hsingchih Tang
@@ -17,8 +21,10 @@ import java.util.*;
 public class Engine {
     private final ResourceBundle SYSTEM_COMPONENTS_RESOURCES = ResourceBundle.getBundle("SystemRequiredComponents");
     private final ResourceBundle SYSTEM_ORDER_RESOURCES = ResourceBundle.getBundle("SystemUpdateOrder");
-    public static final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
-    public static final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
+    private static final String SYSTEMS_PACKAGE_PATH = "engine.internal.systems.";
+    private static final String COMPONENTS_PACKAGE_PATH = "engine.external.component.";
+    private static final String EVENT_HANDLER_SYSTEM = "EventHandlerSystem";
+    private static final String COLLISION_SYSTEM = "CollisionSystem";
 
     private HashMap<Integer,VoogaSystem> mySystems;
     private CollisionSystem myCollisionSystem;
@@ -43,7 +49,7 @@ public class Engine {
      * @param inputs collection of user Keycode inputs received on this game loop
      * @return all game Entities after being updated by Systems in current game loop
      */
-    public Collection<Entity> updateState(Collection<KeyCode> inputs){
+    public synchronized Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
             mySystems.get(i).update(myEntities,inputs);
         }
@@ -75,31 +81,31 @@ public class Engine {
         }
     }
 
-    private void initSystem(Integer order, String systemName) {
-        Class systemClazz = Class.forName(this.getClass().getModule(),SYSTEMS_PACKAGE_PATH+systemName);
-        Collection<Class<?extends Component>> systemComponents = retrieveComponentClasses(systemName);
+    private void initSystem(Integer order, String systemName) throws ReflectionException{
         try {
-            if (systemClazz == EventHandlerSystem.class) {
-                mySystems.put(order, (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class, Collection.class}).newInstance(systemComponents, this, myEvents));
+            Collection<Class<? extends Component>> systemComponents = retrieveComponentClasses(systemName);
+            if (systemName.contains(EVENT_HANDLER_SYSTEM)) {
+                mySystems.put(order, (VoogaSystem) Reflection.createInstance(SYSTEMS_PACKAGE_PATH+systemName,systemComponents, this, myEvents));
             } else {
-                mySystems.put(order, (VoogaSystem) systemClazz.getConstructor(new Class[]{Collection.class, Engine.class}).newInstance(systemComponents, this));
-                if(systemClazz==CollisionSystem.class){
+                mySystems.put(order, (VoogaSystem) Reflection.createInstance(SYSTEMS_PACKAGE_PATH+systemName,systemComponents, this));
+                if(systemName.contains(COLLISION_SYSTEM)){
                     myCollisionSystem = (CollisionSystem) mySystems.get(order);
                 }
             }
-        }catch(NoSuchMethodException|InstantiationException|IllegalAccessException e){
-            System.out.println("Invalid reflection instantiation call on System: "+systemName);
-        }catch(InvocationTargetException e){
-            System.out.println("Exception occurred in constructor of "+systemName);
+        }catch(ReflectionException e){
+            throw new ReflectionException(e,"Cannot create System "+systemName+" for Engine");
         }
     }
 
-    @SuppressWarnings({"unchecked"})
-    private Collection<Class<? extends Component>> retrieveComponentClasses(String systemName) {
+    private Collection<Class<? extends Component>> retrieveComponentClasses(String systemName) throws ReflectionException {
         String[] componentArr = SYSTEM_COMPONENTS_RESOURCES.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
-            componentList.add((Class) Class.forName(this.getClass().getModule(),COMPONENTS_PACKAGE_PATH+component));
+            try {
+                componentList.add((Class) Class.forName(COMPONENTS_PACKAGE_PATH + component));
+            }catch (ClassNotFoundException e){
+                throw new ReflectionException("Required Component "+COMPONENTS_PACKAGE_PATH+component+" nor found");
+            }
         }
         return componentList;
     }

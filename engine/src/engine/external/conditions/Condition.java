@@ -1,6 +1,7 @@
 package engine.external.conditions;
 
 import engine.external.Entity;
+
 import java.util.function.Predicate;
 
 /**
@@ -22,5 +23,7 @@ public abstract class Condition {
         return myPredicate;
     }
 
-    public String toString(){return this.getClass().getSimpleName();}
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

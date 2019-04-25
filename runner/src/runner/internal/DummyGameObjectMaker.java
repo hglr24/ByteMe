@@ -5,13 +5,16 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
 import engine.external.component.*;
+import engine.external.conditions.*;
 import engine.external.events.*;
 
 
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
-
+import engine.external.conditions.LessThanCondition;
 import runner.external.Game;
+import javafx.stage.Stage;
 
 
 public class DummyGameObjectMaker {
@@ -34,15 +37,16 @@ public class DummyGameObjectMaker {
         Event event = new Event("one");
         event.addInputs(KeyCode.RIGHT);
         event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
+
         Event event2 = new Event("one");
         event2.addInputs(KeyCode.S);
         event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
         RightCollisionEvent oneByTwo = new RightCollisionEvent("one", "two");
         //oneByTwo.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
-        oneByTwo.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.1));
+        oneByTwo.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
 //        oneByTwo.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
         LeftCollisionEvent twoByOne = new LeftCollisionEvent("two", "one");
-        twoByOne.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.1));
+        twoByOne.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.0));
 
         Event flappyMoveLeft = new Event("one");
         flappyMoveLeft.addInputs(KeyCode.LEFT);
@@ -50,14 +54,29 @@ public class DummyGameObjectMaker {
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
 
         //add up down keycodes
-        Event flappyMoveUp = new Event("one");
-        flappyMoveUp.addInputs(KeyCode.UP);
-        flappyMoveUp.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
+//        Event flappyMoveUp = new Event("one");
+//        flappyMoveUp.addInputs(KeyCode.UP);
+//        flappyMoveUp.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));
 
         // let the Entity jump
         Event mushroomJump = new Event("two");
         mushroomJump.addInputs(KeyCode.J);
         mushroomJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+
+        //double jump logic (next 2 events)
+        Event flappyJump = new Event("one");
+        flappyJump.addInputs(KeyCode.UP);
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,3.0));
+        flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+        //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
+        flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
+
+
+        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
+        flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+        //flappyOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.1));
+        flappyOnPlatform.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+
 
         TopCollisionEvent platformKnocked = new TopCollisionEvent("four","one");
         platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
@@ -71,9 +90,8 @@ public class DummyGameObjectMaker {
          * setting both acceleration and velocity to zero will allow flappy to "float" above the platform without
          * triggering any further collision -- this could probably be useful in some cases depending on user's decision
          */
-        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("one","four");
-        flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
-        flappyOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+
+
 
         BottomCollisionEvent mushroomOnPlatform = new BottomCollisionEvent("two","four");
         mushroomOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
@@ -84,13 +102,14 @@ public class DummyGameObjectMaker {
         level1.addEvent(event);
         level1.addEvent(event2);
         level1.addEvent(flappyMoveLeft);
-        level1.addEvent(flappyMoveUp);
+        //level1.addEvent(flappyMoveUp);
         level1.addEvent(mushroomJump);
         level1.addEvent(oneByTwo);
         level1.addEvent(twoByOne);
         level1.addEvent(platformKnocked);
         level1.addEvent(flappyOnPlatform);
         level1.addEvent(mushroomOnPlatform);
+        level1.addEvent(flappyJump);
     }
 
     private void addDummyEntities(Level level) {
@@ -100,6 +119,11 @@ public class DummyGameObjectMaker {
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
+
+
+        //flappy double jump
+        Component vc = new ValueComponent(0.0);
+        dummy1.addComponent(vc);
         dummy1.addComponent(new XPositionComponent(200.0));
         dummy1.addComponent(new YPositionComponent(50.0));
         dummy1.addComponent(new ZPositionComponent(0.0));

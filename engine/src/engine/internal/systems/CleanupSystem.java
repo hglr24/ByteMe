@@ -3,10 +3,8 @@ package engine.internal.systems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.Engine;
-import engine.external.component.LeftCollidedComponent;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Collection;
 
 /**
@@ -35,7 +33,7 @@ public class CleanupSystem extends VoogaSystem {
     @Override
     protected void run() {
         for(Entity entity:this.getEntities()){
-            if(entity.hasComponents(DESTROY_COMPONENT_CLASS)&&getBooleanComponentValue(DESTROY_COMPONENT_CLASS,entity)){
+            if(entity.hasComponents(DESTROY_COMPONENT_CLASS)&&(Boolean) getComponentValue(DESTROY_COMPONENT_CLASS,entity)){
                 myEngine.removeEntity(entity);
             }
         }

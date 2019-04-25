@@ -7,10 +7,13 @@ import engine.external.component.ImageViewComponent;
 import engine.external.Engine;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import voogasalad.util.reflection.Reflection;
+import voogasalad.util.reflection.ReflectionException;
 
 
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @author Hsingchih Tang
@@ -19,6 +22,7 @@ import java.util.Collection;
 public class ImageViewSystem extends VoogaSystem {
 
     DataManager myDataManager;
+    HashMap<Entity,String> myEntityPastSprite;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -29,23 +33,35 @@ public class ImageViewSystem extends VoogaSystem {
     public ImageViewSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine){
         super(requiredComponents, engine);
         myDataManager = new DataManager();
+        myEntityPastSprite = new HashMap<>();
     }
 
     @Override
     /**
-     * Assign or update the ImageViewComponents for each eligible Entity
+     * Assign or update the ImageViewComponents for each eligible Entity.
+     * Sizes and positions of each Entity's Imageview are updated on every game loop.
+     * The system keeps track of the Sprites of Entities and creates a new ImageView if an Entity's Sprite has changed.
      */
-    protected void run() {
+    protected void run() throws ReflectionException{
         for(Entity entity:this.getEntities()){
-            entity.addComponent(new ImageViewComponent(generateImageView(entity)));
+            try{
+                entity.addComponent(new ImageViewComponent(generateImageView(entity)));
+            }catch (ReflectionException e){
+                throw e;
+            }
         }
     }
 
-    private ImageView generateImageView(Entity entity){
+    private ImageView generateImageView(Entity entity) throws ReflectionException{
         ImageView imageView;
-        if (!entity.hasComponents(IMAGEVIEW_COMPONENT_CLASS)) {
-            InputStream imageStream = myDataManager.loadImage(getStringComponentValue(SPRITE_COMPONENT_CLASS, entity));
+        String imageName = (String)getComponentValue(SPRITE_COMPONENT_CLASS, entity);
+        if (!myEntityPastSprite.containsKey(entity)||!myEntityPastSprite.get(entity).equals(imageName)) {
+            InputStream imageStream = myDataManager.loadImage(imageName);
+            if(imageStream==null){
+                throw new ReflectionException("Image file "+imageName+" not found in database.");
+            }
             imageView = new ImageView(new Image(imageStream));
+            myEntityPastSprite.put(entity,imageName);
         } else {
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }
@@ -54,24 +70,23 @@ public class ImageViewSystem extends VoogaSystem {
     }
 
     private ImageView setImgViewX(ImageView m, Entity e){
-        m.setX(getDoubleComponentValue(X_POSITION_COMPONENT_CLASS, e));
+        m.setX((Double) getComponentValue(X_POSITION_COMPONENT_CLASS, e));
         return m;
     }
 
     private ImageView setImgViewY(ImageView m, Entity e){
-        m.setY(getDoubleComponentValue(Y_POSITION_COMPONENT_CLASS, e));
+        m.setY((Double) getComponentValue(Y_POSITION_COMPONENT_CLASS, e));
         return m;
     }
 
     private ImageView setImgViewWidth(ImageView m, Entity e){
-        m.setFitWidth(getDoubleComponentValue(WIDTH_COMPONENT_CLASS, e));
+        m.setFitWidth((Double) getComponentValue(WIDTH_COMPONENT_CLASS, e));
         return m;
     }
 
     private ImageView setImgViewHeight(ImageView m, Entity e){
-        m.setFitHeight(getDoubleComponentValue(HEIGHT_COMPONENT_CLASS, e));
+        m.setFitHeight((Double) getComponentValue(HEIGHT_COMPONENT_CLASS, e));
         return m;
     }
-
 
 }

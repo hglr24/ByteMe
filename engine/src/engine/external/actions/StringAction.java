@@ -16,7 +16,8 @@ public abstract class StringAction extends Action<String> {
     /**
      * This method used by subclass objects when they are constructed specifies the lambda, which
      * performs a set operation on this new value.
-     * @param newValue new String to change the component value to
+     *
+     * @param newValue       new String to change the component value to
      * @param componentClass the class of the specified component
      */
     public void setAction(String newValue, Class<? extends Component<String>> componentClass) {

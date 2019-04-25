@@ -1,10 +1,32 @@
 package engine.internal.systems;
 
 import engine.external.Entity;
-import engine.external.component.*;
 import engine.external.Engine;
-import javafx.scene.image.ImageView;
+import engine.external.component.Component;
+import engine.external.component.XPositionComponent;
+import engine.external.component.XVelocityComponent;
+import engine.external.component.YPositionComponent;
+import engine.external.component.YVelocityComponent;
+import engine.external.component.XAccelerationComponent;
+import engine.external.component.YAccelerationComponent;
+import engine.external.component.BottomCollidedComponent;
+import engine.external.component.TopCollidedComponent;
+import engine.external.component.RightCollidedComponent;
+import engine.external.component.LeftCollidedComponent;
+import engine.external.component.AnyCollidedComponent;
+import engine.external.component.CollisionComponent;
+import engine.external.component.DestroyComponent;
+import engine.external.component.HealthComponent;
+import engine.external.component.ImageViewComponent;
+import engine.external.component.NameComponent;
+import engine.external.component.WidthComponent;
+import engine.external.component.HeightComponent;
+import engine.external.component.SoundComponent;
+import engine.external.component.SpriteComponent;
+
+
 import javafx.scene.input.KeyCode;
+import voogasalad.util.reflection.Reflection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,7 +40,6 @@ import java.util.Collection;
 public abstract class VoogaSystem {
     protected final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
     protected final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
-    protected final Class<? extends Component> Z_POSITION_COMPONENT_CLASS = ZPositionComponent.class;
     protected final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
     protected final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
     protected final Class<? extends Component> X_ACCELERATION_COMPONENT_CLASS = XAccelerationComponent.class;
@@ -30,8 +51,6 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> ANY_COLLIDED_COMPONENT_CLASS = AnyCollidedComponent.class;
     protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
     protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
-    protected final Class<? extends Component> DIRECTION_COMPONENT_CLASS = DirectionComponent.class;
-    protected final Class<? extends Component> GRAVITY_COMPONENT_CLASS = GravityComponent.class;
     protected final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
     protected final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
     protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
@@ -39,9 +58,7 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
     protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
     protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
-    protected final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
-    protected final Class<? extends Component> VALUE_COMPONENT_CLASS = ValueComponent.class;
-    protected final Class<? extends Component> VISIBILITY_COMPONENT_CLASS = VisibilityComponent.class;
+    protected final String GET_OLD_VALUE = "getOldValue";
 
 
     private Collection<Class<? extends Component>> myRequiredComponents;
@@ -114,20 +131,13 @@ public abstract class VoogaSystem {
         return myInputs;
     }
 
-
-    protected Double getDoubleComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (Double)entity.getComponent(componentClazz).getValue();
+    protected Object getComponentValue(Class<? extends Component> componentClazz,Entity entity){
+        return entity.getComponent(componentClazz).getValue();
     }
 
-    protected Boolean getBooleanComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (Boolean)entity.getComponent(componentClazz).getValue();
+    protected Object getComponentValue(Class<? extends Component> componentClazz,Entity entity, String method){
+        return Reflection.callMethod(entity.getComponent(componentClazz),method);
     }
+    
 
-    protected String getStringComponentValue(Class<? extends Component> componentClazz,Entity entity){
-        return (String)entity.getComponent(componentClazz).getValue();
-    }
-
-    protected ImageView getImageViewComponentValue(Class<? extends Component> componentClazz, Entity entity){
-        return (ImageView) entity.getComponent(componentClazz).getValue();
-    }
 }

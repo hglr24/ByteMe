@@ -11,7 +11,9 @@ import java.util.Set;
 /**
  * This is the API that Authoring can refer to when constructing Events
  *
- * @author this API brought to u by da engine gang
+ * @author Lucas Liu
+ * @author Dima Fayyad
+ * @author Feroze Mohideen
  */
 public interface IEventAuthoring {
     /**
@@ -24,6 +26,7 @@ public interface IEventAuthoring {
      * This method adds a list of ACTIONS to the current list of engine.external.actions
      * associated with this event. The next method allows you to add a single
      * ACTION to the list.
+     *
      * @param actionsToAdd
      */
     void addActions(List<Action> actionsToAdd);
@@ -32,6 +35,7 @@ public interface IEventAuthoring {
 
     /**
      * Removes a set of engine.external.actions associated with this event
+     *
      * @param actionsToRemove
      */
     void removeActions(List<Action> actionsToRemove);
@@ -39,6 +43,7 @@ public interface IEventAuthoring {
     /**
      * This method allows you to set the CONDITIONS associated with an event to
      * a new list of engine.external.conditions.
+     *
      * @param newSetOfConditions new list of engine.external.conditions to set
      */
     void setConditions(List<Condition> newSetOfConditions);
@@ -46,6 +51,7 @@ public interface IEventAuthoring {
     /**
      * Allows you to add a list of CONDITIONS to the current list of engine.external.conditions
      * associated with this event. The next method allows you to add a single condition.
+     *
      * @param conditionsToAdd
      */
     void addConditions(List<Condition> conditionsToAdd);
@@ -54,6 +60,7 @@ public interface IEventAuthoring {
 
     /**
      * Removes a set of engine.external.conditions from the list of engine.external.conditions associated with this event.
+     *
      * @param conditionsToRemove
      */
     void removeConditions(List<Condition> conditionsToRemove);
@@ -63,6 +70,7 @@ public interface IEventAuthoring {
     /**
      * Allows you to add a list of INPUTS to the current list of inputs
      * associated with this event. The next method allows you to add a single input.
+     *
      * @param
      */
     void addInputs(Set<KeyCode> inputsToAdd);
@@ -71,6 +79,7 @@ public interface IEventAuthoring {
 
     /**
      * Removes a set of required inputs from the list  associated with this event.
+     *
      * @param inputsToRemove
      */
     void removeInputs(Set<KeyCode> inputsToRemove);

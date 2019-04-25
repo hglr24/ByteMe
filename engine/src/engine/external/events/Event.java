@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 
 /**
  * Events are intended for creating/handling custom logic that is specific to a game, and cannot be reasonably anticipated by the engine beforehand
+ * Events execute their actions if their Conditions are met, and the relevant input keys have been pressed.
  *
  * @author Lucas Liu
  * @author Feroze Mohideen
@@ -66,8 +67,8 @@ public class Event implements IEventEngine, IEventAuthoring {
 
     private boolean conditionsMet(Entity entity) {
         try {
-            return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> ( condition.getPredicate()).test(entity));
-        }catch(NullPointerException e){
+            return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));
+        } catch (NullPointerException e) {
             //System.out.println("Condition not met, did not have required component");
             return false;
         }

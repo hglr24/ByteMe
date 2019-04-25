@@ -1,5 +1,8 @@
 package engine.external.conditions;
 
+/**
+ * @author Anna Darwish
+ */
 public enum ConditionType {
 
         Collision ("engine.external.conditions.CollisionCondition", new Class<?>[]{String.class,String.class}),
@@ -15,14 +18,14 @@ public enum ConditionType {
 
         ConditionType(String className, Class<?>[] constructorTypes) {
 
-            this.className = className;
-            this.classConstructorTypes = constructorTypes;
-        }
+        this.className = className;
+        this.classConstructorTypes = constructorTypes;
+    }
 
 
-        public Class<?>[] getConstructorTypes(){
-            return this.classConstructorTypes;
-        }
+    public Class<?>[] getConstructorTypes() {
+        return this.classConstructorTypes;
+    }
 
         public String getClassName(){
             return this.className;

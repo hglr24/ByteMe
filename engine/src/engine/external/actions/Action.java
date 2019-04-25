@@ -13,7 +13,6 @@ import java.util.function.Consumer;
  * each of which handle components of the different types.
  *
  * @param <T> Abstract type handled by an action, e.g. NumericAction<Double> can be used to alter the XPositionComponent
- *
  * @author Feroze
  * @author Lucas
  * @author Dima
@@ -24,7 +23,8 @@ public abstract class Action<T> {
 
     /**
      * Sets the value of a component to a new value.
-     * @param newValue new value for the component
+     *
+     * @param newValue       new value for the component
      * @param componentClass class that specifies the component type
      */
     protected void setAbsoluteAction(T newValue, Class<? extends Component<T>> componentClass) {
@@ -36,6 +36,7 @@ public abstract class Action<T> {
 
     /**
      * Sets the lambda of this action
+     *
      * @param action a lambda
      */
     protected void setAction(Consumer<Entity> action) {
@@ -44,6 +45,7 @@ public abstract class Action<T> {
 
     /**
      * Returns the lambda associated with this action
+     *
      * @return lambda
      */
     public Consumer<Entity> getAction() {
