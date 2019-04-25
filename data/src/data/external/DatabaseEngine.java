@@ -157,4 +157,8 @@ public class DatabaseEngine {
     public List<String> loadAllGameNames(String userName) throws SQLException {
         return myGameInformationQuerier.loadAllGameNames(userName);
     }
+
+    public boolean updatePassword(String userName, String newPassword) throws SQLException {
+        return myUserQuerier.updatePassword(userName, newPassword);
+    }
 }

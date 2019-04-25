@@ -86,6 +86,13 @@ public class UserQuerier extends Querier{
         return updates == 1;
     }
 
+    public boolean updatePassword(String userName, String password) throws SQLException {
+        if (removeUser(userName)) {
+            return createUser(userName, password);
+        }
+        return false;
+    }
+
     private String retrieveStoredHash(String userName) throws SQLException{
         myGetPasswordStatement.setString(1, userName);
         ResultSet resultSet = myGetPasswordStatement.executeQuery();

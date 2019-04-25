@@ -390,5 +390,9 @@ public class DataManager implements ExternalData {
         return myDatabaseEngine.loadAllGameNames(userName);
     }
 
-
+    @Override
+    public boolean updatePassword(String userName, String newPassword) throws SQLException {
+        return myDatabaseEngine.updatePassword(userName, newPassword);
+    }
+    
 }
