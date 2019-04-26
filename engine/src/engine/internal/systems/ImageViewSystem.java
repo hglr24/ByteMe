@@ -23,6 +23,7 @@ public class ImageViewSystem extends VoogaSystem {
 
     DataManager myDataManager;
     HashMap<Entity, String> myEntityPastSprite;
+    HashMap<String, Image> myImages;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -35,6 +36,7 @@ public class ImageViewSystem extends VoogaSystem {
         super(requiredComponents, engine);
         myDataManager = new DataManager();
         myEntityPastSprite = new HashMap<>();
+        myImages = new HashMap<>();
     }
 
     @Override
@@ -45,26 +47,51 @@ public class ImageViewSystem extends VoogaSystem {
      */
     protected void run() throws ReflectionException {
         for (Entity entity : this.getEntities()) {
-            entity.addComponent(new ImageViewComponent(generateImageView(entity)));
+            generateImageView(entity);
         }
     }
 
-    private ImageView generateImageView(Entity entity) {
+    /**
+     * Generate or adjust the height/width/positions of an Entity's ImageView
+     * Only access database to retrieve new image if the Sprite String has changed since the last game loop
+     * Cache all seen images with corresponding Sprite Strings in the System to reduce database accesses
+     * Set an Entity as not collidable if its image cannot be found from database
+     * @param entity the entity for which to manage ImageView
+     */
+    private void generateImageView(Entity entity) {
         ImageView imageView;
         String imageName = (String) getComponentValue(SPRITE_COMPONENT_CLASS, entity);
         if (!myEntityPastSprite.containsKey(entity) || !myEntityPastSprite.get(entity).equals(imageName)) {
 //            System.out.println("generating ImageView for "+imageName);
-            InputStream imageStream = myDataManager.loadImage(imageName);
-            if (imageStream == null) {
-                System.out.println("Image file " + imageName + " not found in database.");
-            }
-            imageView = new ImageView(new Image(imageStream));
             myEntityPastSprite.put(entity, imageName);
+            retrieveImage(imageName);
+            if(myImages.get(imageName)==null){
+                System.out.println("Image file " + imageName + " not found in database.");
+                entity.removeComponent(COLLISION_COMPONENT_CLASS);
+                return;
+            }
+            imageView = new ImageView(myImages.get(imageName));
         } else {
+            if(myImages.get(imageName)==null){
+                return;
+            }
             imageView = (ImageView) entity.getComponent(IMAGEVIEW_COMPONENT_CLASS).getValue();
         }
-        return setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity);
+        entity.addComponent(new ImageViewComponent(setImgViewHeight(setImgViewWidth(setImgViewY(setImgViewX(imageView, entity), entity), entity), entity)));
 
+    }
+
+
+    private void retrieveImage(String imageName) {
+        if (!myImages.containsKey(imageName)) {
+            InputStream imageStream = myDataManager.loadImage(imageName);
+            if (imageStream == null) {
+                myImages.put(imageName, null);
+            } else {
+                myImages.put(imageName, new Image(imageStream));
+            }
+            return;
+        }
     }
 
     private ImageView setImgViewX(ImageView m, Entity e) {
