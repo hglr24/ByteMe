@@ -1,7 +1,9 @@
 package pane;
 
 import controls.LauncherSymbol;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import manager.SwitchToUserOptions;
 
@@ -14,10 +16,11 @@ public class UserStartDisplay extends HBox {
      * here
      * @author Anna Darwish
      */
-    public UserStartDisplay(SwitchToUserOptions switchPage){
+    public UserStartDisplay(SwitchToUserOptions switchPage, SwitchToUserOptions switchNewUser){
         this.getStyleClass().add(CSS_STYLE_NAME);
         this.setTranslateY(100);
-        this.getChildren().add(0,new LauncherSymbol(START_ACTION));
+        LauncherSymbol mySymbol = new LauncherSymbol(START_ACTION,switchNewUser);
+        this.getChildren().add(0,mySymbol);
         this.getChildren().add(1, new UserLoginDisplay(switchPage));
         this.setAlignment(Pos.CENTER);
         this.setSpacing(100);

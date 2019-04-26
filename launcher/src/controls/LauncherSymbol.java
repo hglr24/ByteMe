@@ -2,6 +2,7 @@ package controls;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import manager.SwitchToUserOptions;
 
 import java.util.ResourceBundle;
 
@@ -25,6 +26,17 @@ public class LauncherSymbol extends ImageView {
        this.setScaleY(DEFAULT_SCALE);
        this.setOnMousePressed(mouseEvent -> switchImage(myPressedImage));
         this.setOnMouseReleased(mouseEvent -> switchImage(myDefaultImage));
+    }
+
+    public LauncherSymbol(String action, SwitchToUserOptions switchPage){
+        myDefaultImage = new Image(myResources.getString(DEFAULT_KEY + action));
+        myPressedImage = new Image(myResources.getString(ACTIVE_KEY + action));
+        this.setImage(myDefaultImage);
+        this.setScaleX(DEFAULT_SCALE);
+        this.setScaleY(DEFAULT_SCALE);
+        this.setOnMousePressed(mouseEvent -> switchImage(myPressedImage));
+        this.setOnMouseReleased(mouseEvent -> switchImage(myDefaultImage));
+        this.setOnMouseClicked(mouseEvent -> switchPage.switchPage());
     }
 
     private void switchImage(Image switchedImage){

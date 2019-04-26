@@ -11,10 +11,10 @@ public class SplashPage extends VBox{
      * This page will prompt the user to enter their credentials so they can login to their future account
      * @author Anna Darwish
      */
-    public SplashPage(SwitchToUserOptions switchDisplay){
+    public SplashPage(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchNewUser){
         this.getStyleClass().add(MY_STYLE);
         this.getChildren().add(0,new WelcomeDisplay(WELCOME_LABEL_KEY));
-        this.getChildren().add(1,new UserStartDisplay(switchDisplay));//@TODO add in a way for the user to create a new account as well
+        this.getChildren().add(1,new UserStartDisplay(switchDisplay,switchNewUser));//@TODO add in a way for the user to create a new account as well
     }
 
 }

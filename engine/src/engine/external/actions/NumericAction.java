@@ -20,7 +20,7 @@ public abstract class NumericAction<Double> extends Action<Double> {
     private ModifyType myModifier;
     private Double myArgument;
     private Class<? extends Component<Double>> myComponentClass;
-
+    private static final String COMPONENT = "Component";
     /**
      * This method is used when subclass objects are constructed in order to specify what kind of
      * operation is being done to the existing value
@@ -80,24 +80,27 @@ public abstract class NumericAction<Double> extends Action<Double> {
      * value
      */
     public enum ModifyType {
-        ABSOLUTE("ABSOLUTE"),
-        RELATIVE("RELATIVE"),
-        SCALE("SCALE");
+        ABSOLUTE("Set","to"),
+        RELATIVE("Change","by"),
+        SCALE("Scale","by");
 
         private final String displayName;
+        private final String modifierName;
+        ModifyType(String displayName, String modifierName) {
 
-        ModifyType(String displayName) {
             this.displayName = displayName;
+            this.modifierName = modifierName;
         }
 
         public String getDisplayName() {
             return this.displayName;
         }
+        public String getModifierName(){ return this.modifierName; }
     }
 
     public String toString() {
         return myModifier.getDisplayName() +
-                " " + myComponentClass.getSimpleName() + " " + myArgument.toString();
+                " " + myComponentClass.getSimpleName().replaceAll(COMPONENT,"") + " " + myModifier.modifierName + " " + myArgument.toString();
 
     }
 }

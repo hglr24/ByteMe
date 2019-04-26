@@ -7,7 +7,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import ui.panes.EventPane;
 import voogasalad.util.reflection.Reflection;
 import java.util.*;
 
@@ -15,7 +14,6 @@ import java.util.*;
  * This is essentially a Utilities class that EventPane uses in order to display particular options and properties associated
  * with engine.external.events and engine.external.actions. This helps with reflection in creating engine.external.events, as different engine.external.events need to provide different
  * controls to the user to input information necessary to instantiate different engine.external.events and engine.external.actions
- * @see EventPane
  * @author Anna Darwish
  */
 public class EventFactory {
@@ -34,19 +32,7 @@ public class EventFactory {
             String factoryInformation = controlInformation.substring(controlInformation.indexOf(KEY_CODE_DELIMITER)+1);
             String methodName = factoryInformation.substring(0, factoryInformation.indexOf(PARAMETER_SEPARATOR));
             String methodParameter = factoryInformation.substring(factoryInformation.indexOf(PARAMETER_SEPARATOR) + 1);
-
-//            Class<?>[] myClazz = {String.class, String.class, Map.class};
-//            Object[] myParams = {methodParameter, keyCode, myBinding};
             myParent.getChildren().add((Node) Reflection.callMethod(this,methodName,methodParameter,keyCode,myBinding));
-//            try {
-//                Method m = this.getClass().getDeclaredMethod(methodName, myClazz);
-//                Object addedOption = m.invoke(this, myParams);
-//                myParent.getChildren().add((Node) addedOption);
-//            } catch (Exception e) {
-//                ResourceBundle errorBundle = ResourceBundle.getBundle(ERROR_RESOURCES);
-//                UIException myEventCreatorException = new UIException(errorBundle.getString(this.getClass().getSimpleName())); //@TODO refactor to get message from properties file
-//                myEventCreatorException.displayUIException();
-//            }
         }
     }
 

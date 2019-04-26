@@ -5,6 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
@@ -27,6 +28,7 @@ public class ObjectManager {
     private LabelManager myLabelManager;
     private ObservableList<AuthoringLevel> myLevels;
     private ObjectProperty<Propertable> myCurrentLevel;
+    private ObservableMap<AuthoringEntity, String> myEntityTypeMap;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
@@ -39,6 +41,7 @@ public class ObjectManager {
         myLevels = FXCollections.observableArrayList(new ArrayList<>());
         myLabelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
         myCurrentLevel = levelProperty;
+        myEntityTypeMap = FXCollections.observableHashMap();
     }
 
     /**
@@ -68,10 +71,11 @@ public class ObjectManager {
      * Use this for adding a new general type
      * @param entity AuthoringEntity whose type is to be added
      */
-    public void addEntityType(AuthoringEntity entity) {
+    public void addEntityType(AuthoringEntity entity, String backingString) {
         myEntities.add(entity);
         myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
         myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
+        myEntityTypeMap.put(entity, backingString);
     }
 
     /**
@@ -87,7 +91,7 @@ public class ObjectManager {
      * Use to remove all instances of an entity type from ObjectManager, removes Instances, Events, Label for complete deletion
      * @param entity AuthoringEntity with label corresponding to the type being deleted
      */
-    public void removeEntityType(AuthoringEntity entity) { //TODO test to check working
+    public void removeEntityType(AuthoringEntity entity) {
         myEntities.removeIf(authEntity ->
                 authEntity.getPropertyMap().get(EntityField.LABEL).equals(entity.getPropertyMap().get(EntityField.LABEL)));
         for (AuthoringLevel level : myLevels)
@@ -96,6 +100,7 @@ public class ObjectManager {
 
         myLabelManager.removeLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
         myEventMap.remove(entity.getPropertyMap().get(EntityField.LABEL));
+        myEntityTypeMap.remove(entity);
     }
 
     /**
@@ -111,12 +116,15 @@ public class ObjectManager {
         for (AuthoringEntity entity : myEntities) {
             if (entity.getPropertyMap().get(EntityField.LABEL).equals(objectLabel)) { // Match found
                 entity.getPropertyMap().put(property, newValue);
-                if (property.equals(EntityField.LABEL)) // TODO this may have solved group/entity label mix-up issue
+                if (property.equals(EntityField.LABEL))
                     myLabelManager.addLabel(EntityField.LABEL, newValue);
             }
-        } //TODO propagate changed label into Event Map
-        if (property.equals(EntityField.LABEL))
+        }
+        if (property.equals(EntityField.LABEL)) {
+            myEventMap.putIfAbsent(newValue, myEventMap.get(objectLabel));
+            myEventMap.remove(objectLabel);
             myLabelManager.removeLabel(EntityField.LABEL, objectLabel); // Remove old label from LabelManager if a label was just propagated
+        }
     }
 
     public void flushCameraAssignment(Propertable propagator) {
@@ -132,9 +140,6 @@ public class ObjectManager {
 
         if (change.wasReplaced())
             str = change.getAddedSubList().get(0);
-
-        if (change.wasRemoved())
-            System.out.println("REMOVED"); //TODO still debugging
 
         if (change.wasReplaced() || change.wasRemoved()) {
             for (AuthoringEntity entity : myEntities) {
@@ -160,5 +165,9 @@ public class ObjectManager {
 
     public ObservableList<AuthoringLevel> getLevels() {
         return myLevels;
+    }
+
+    public ObservableMap<AuthoringEntity, String> getTypeMap() {
+        return myEntityTypeMap;
     }
 }

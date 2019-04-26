@@ -8,24 +8,23 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.TextAlignment;
 import ui.UIException;
 
 import java.util.*;
 
-    class CurrentEventDisplay extends VBox {
+    class CurrentEventDisplay extends GridPane {
     private Event myEvent;
     private Editor myEventRemover;
     private Editor myEventModifier;
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
     private ResourceBundle myErrorMessage = ResourceBundle.getBundle("error_messages");
-    private static final String IF = "IF    ";
     private static final String EDIT = "Edit";
     private static final String REMOVE = "Remove";
-    private static final String STYLE = "event_options_style.css";
     private static final String DELIMITER = ".";
+    private static final String CSS = "current-events-display";
+
     CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
         this.myEvent = myEvent;
         this.myEventRemover = eventRemover;
@@ -33,46 +32,49 @@ import java.util.*;
         if (invalidEvent(myMap)){
             return;
         }
-        this.setAlignment(Pos.CENTER);
-        setUpLabel(myMap);
+        this.getStyleClass().add(CSS);
+        setUpEventInformation(myMap);
         setUpEditToolBar();
 
     }
-    private void setUpLabel(Map<Class<?>, List<?>> myMap){
-        StringBuilder labelText = new StringBuilder(IF);
+
+    private void setUpEventInformation(Map<Class<?>, List<?>> myMap){
+        Label myConditions = setUpLabel(myMap.get(Condition.class));
+        Label myActions = setUpLabel(myMap.get(Action.class));
+        this.add(myConditions,0,0);
+        this.add(myActions,1,0);
+    }
+    private Label setUpLabel(List<?> myEventComponents){
+        StringBuilder text = new StringBuilder();
         try {
-            for (Condition c : (List<Condition>) myMap.get(Condition.class)) {
-                labelText.append(c.toString()).append("\n");
-            }
-            for (Action a : (List<Action>) myMap.get(Action.class)) {
-                labelText.append("\u26AB ").append(a.toString()).append("\n");
+            for (Object eventComponent : myEventComponents) {
+                text.append(eventComponent.toString());
+                text.append("\n");
             }
         }
         catch(ClassCastException e){
             UIException wrongCast = new UIException(myErrorMessage.getString(this.getClass().getSimpleName()));
             wrongCast.displayUIException();
         }
-        Label myLabel = new Label(labelText.toString());
-        myLabel.getStylesheets().clear();
-        myLabel.getStylesheets().add(STYLE);
-        myLabel.setTextAlignment(TextAlignment.LEFT);
-        this.getChildren().add(new Label(labelText.toString()));
-
+        Label label = new Label(text.toString());
+        label.getStyleClass().add(CSS);
+        return label;
 
     }
     private void setUpEditToolBar(){
         Button editButton = new Button(EDIT);
         Button removeButton = new Button(REMOVE);
         ChoiceBox<String> keyCode = new ChoiceBox<>();
+
         setUpKeyCodes(keyCode);
         removeButton.setOnMouseClicked(mouseEvent -> myEventRemover.editEvent(myEvent));
         editButton.setOnMouseClicked(mouseEvent -> myEventModifier.editEvent(myEvent));
 
-        HBox buttons = new HBox();
+        VBox buttons = new VBox();
         buttons.getChildren().add(editButton);
         buttons.getChildren().add(removeButton);
         buttons.getChildren().add(keyCode);
-        this.getChildren().add(buttons);
+        this.add(buttons,2,0);
     }
 
     private boolean invalidEvent(Map<Class<?>, List<?>> myMap) {

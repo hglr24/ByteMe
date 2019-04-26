@@ -6,9 +6,12 @@ import engine.external.events.Event;
 import events.EventBuilder;
 import events.EventFactory;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -34,6 +37,8 @@ import java.util.Map;
     private static final String CONDITION = "Condition";
 
     private static final String STYLE = "default.css";
+    private static final String STYLE_CLASS = "event-editor";
+    private static final String VBOX_STYE = "event-component-vbox";
     private Stage myPopUpStage;
 
     EventEditorPane(Event unfinishedEvent,Refresher eventDisplayRefresher){
@@ -42,28 +47,31 @@ import java.util.Map;
         List<?> myEventConditions = unfinishedEvent.getEventInformation().get(Condition.class);
         List<?> myEventActions = unfinishedEvent.getEventInformation().get(Action.class);
 
-        ScrollPane myConditionScroll = conditionsPane(myEventConditions,unfinishedEvent, REMOVE_CONDITIONS_METHOD_NAME,CONDITION,ADD_CONDITIONS_METHOD_NAME);
-        ScrollPane myActionScroll = conditionsPane(myEventActions,unfinishedEvent,REMOVE_ACTIONS_METHOD_NAME,ACTION,ADD_ACTIONS_METHOD_NAME);
+        TitledPane myConditionScroll = eventComponentPane(myEventConditions,unfinishedEvent, REMOVE_CONDITIONS_METHOD_NAME,CONDITION,ADD_CONDITIONS_METHOD_NAME,CONDITION);
+        TitledPane myActionScroll = eventComponentPane(myEventActions,unfinishedEvent,REMOVE_ACTIONS_METHOD_NAME,ACTION,ADD_ACTIONS_METHOD_NAME,ACTION);
         splitEditorPane.getChildren().add(myConditionScroll);
         splitEditorPane.getChildren().add(myActionScroll);
 
-        splitEditorPane.setMinSize(600,400);
-        myConditionScroll.setMaxSize(300,400);
-        myActionScroll.setMaxSize(300,400);
-
         Scene myScene = new Scene(splitEditorPane);
         myScene.getStylesheets().add(STYLE);
+        splitEditorPane.getStyleClass().add(STYLE_CLASS);
         this.setOnCloseRequest(windowEvent -> eventDisplayRefresher.refresh());
         this.setScene(myScene);
     }
 
-    private ScrollPane conditionsPane(List<?> myConditions, Event event, String removeMethodName, String addFactoryResources, String addMethodName){
+    private TitledPane eventComponentPane(List<?> myConditions, Event event, String removeMethodName, String addFactoryResources, String addMethodName, String title){
+        ScrollPane eventComponentList = eventComponentScrollPane(myConditions,event,removeMethodName,addFactoryResources,addMethodName);
+        return new TitledPane(title,eventComponentList);
+    }
+
+
+    private ScrollPane eventComponentScrollPane(List<?> myConditions, Event event, String removeMethodName, String addFactoryResources, String addMethodName){
         ScrollPane myPane = new ScrollPane();
         VBox myListing = new VBox();
         for (Object eventElement: myConditions){
             VBox eventSubInformation = new VBox();
+            eventSubInformation.getStyleClass().add(VBOX_STYE);
             Button removeButton = new Button(REMOVE);
-
             eventSubInformation.getChildren().add(EventFactory.createLabel(eventElement.toString()));
             eventSubInformation.getChildren().add(removeButton);
 
@@ -71,6 +79,7 @@ import java.util.Map;
             setUpRemoveButton(removeButton,eventElement,event,removeMethodName,myListing,eventSubInformation);
         }
         Button addButton = new Button(ADD);
+
         myListing.getChildren().add(addButton);
         setUpAddButton(addButton,event,myListing,addFactoryResources,addMethodName);
         myPane.setContent(myListing);
@@ -92,7 +101,7 @@ import java.util.Map;
 
     private void displayEventComponentMaker(Event event,VBox parent, String factoryResources, String addMethod){
         VBox myDisplay = getEventControls(event,parent,factoryResources,addMethod);
-        myDisplay.getStylesheets().add("default.css");
+        myDisplay.getStylesheets().add(STYLE);
         myPopUpStage = new Stage();
         myPopUpStage.setScene(new Scene(myDisplay));
         myPopUpStage.show();

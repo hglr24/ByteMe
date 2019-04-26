@@ -16,6 +16,7 @@ public class LessThanCondition extends Condition {
     private String myComponentName;
     private Double myValue;
     private static final String DISPLAY = " Less Than ";
+    private static final String COMPONENT = "Component";
     public LessThanCondition(Class<? extends Component> component, Double value) {
         setPredicate((Predicate<Entity> & Serializable) entity -> (Double) entity.getComponent(component).getValue() < value);
         myComponentName = component.getSimpleName();
@@ -24,6 +25,6 @@ public class LessThanCondition extends Condition {
 
     @Override
     public String toString(){
-        return myComponentName + DISPLAY + myValue;
+        return myComponentName.replaceAll(COMPONENT,"") + DISPLAY + myValue;
     }
 }

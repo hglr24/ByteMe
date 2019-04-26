@@ -14,7 +14,8 @@ public class EventOptionsPane extends VBox {
     private static final String CONTROLS = "event_controls";
     private static final String DISPLAY = "event_classes";
 
-    private static final ResourceBundle DISPLAY_RESOURCES = ResourceBundle.getBundle(DISPLAY);
+    private static final String STYLE = "default.css";
+    private static final String STYLE_CLASS = "event-options-pane";
 
     private EventFactory myEventFactory = new EventFactory();
     private Map<String,StringProperty> myEventOptionsListener = new HashMap<>();
@@ -29,12 +30,9 @@ public class EventOptionsPane extends VBox {
     private static final String ERROR_TWO_KEY = "InvalidAction";
     private EventBuilder myBuilder = new EventBuilder();
     public EventOptionsPane(){
-        this.getStylesheets().clear();
-//        this.getStylesheets().add("events_pop_up.css");
-//        this.getStyleClass().add("event-pane");
-        this.setMinSize(500,140);
-        this.setMaxSize(500,140);
-        this.setSpacing(30);
+        this.getStylesheets().add(STYLE);
+        this.getStyleClass().add(STYLE_CLASS);
+
     }
 
     void displayEventOptions(String eventName) {
@@ -65,7 +63,7 @@ public class EventOptionsPane extends VBox {
         }
         Action userMadeAction = null;
         try {
-            userMadeAction = myBuilder.createGeneralAction(myActionOptionsListener);
+             userMadeAction = myBuilder.createGeneralAction(myActionOptionsListener);
         }
         catch(Exception e){
             UIException myException = new UIException(myErrors.getString(ERROR_TWO_KEY));

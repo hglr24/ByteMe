@@ -73,8 +73,8 @@ public class GameTranslator {
         return newLevel;
     }
 
-    private Entity translateEntity(AuthoringEntity authEntity) {
-        Entity basisEntity = authEntity.getBackingEntity();
+    private Entity translateEntity(AuthoringEntity authEntity) { //TODO save type map to game object
+        Entity basisEntity = new Entity();
 
         // TODO account for new property types later
         addDoubleComponent(basisEntity, authEntity, XPositionComponent.class, EntityField.X); // Components!!!

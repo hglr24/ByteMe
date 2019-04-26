@@ -24,7 +24,7 @@ public class ImageWithEntity extends ImageView {
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
 
     public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {
-        super(new Image(s, (Double) authoringEntity.getBackingEntity().getComponent(WidthComponent.class).getValue(), (Double) authoringEntity.getBackingEntity().getComponent(HeightComponent.class).getValue(), false, false));
+        super(new Image(s, Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.XSCALE)), Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.YSCALE)), false, false));
         myAuthoringEntity = authoringEntity;
         myAuthoringEntity.getPropertyMap().addListener((MapChangeListener<Enum, String>) change -> {handleChange(change);
             System.out.println("Change observed");});

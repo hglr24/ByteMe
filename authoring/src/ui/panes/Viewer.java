@@ -167,10 +167,9 @@ public class Viewer extends ScrollPane {
                 isDragOnView = false;
             }
             else{
-                Entity entity = myUserCreatedPane.getDraggedEntity();
                 authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
-                String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
-                authoringEntity = new AuthoringEntity(authoringEntity, entity);
+                String imageName = authoringEntity.getPropertyMap().get(EntityField.IMAGE);
+                authoringEntity = new AuthoringEntity(authoringEntity);
                 authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
                 addImage(Utility.createImageWithEntity(authoringEntity));
             }
@@ -202,6 +201,17 @@ public class Viewer extends ScrollPane {
         applyDragHandler(imageView);
         applyRightClickHandler(imageView);
         myStackPane.getChildren().add(imageView);
+        myObjectManager.getTypeMap().addListener(new MapChangeListener<AuthoringEntity, String>() {
+            @Override
+            public void onChanged(Change<? extends AuthoringEntity, ? extends String> change) {
+                if(change.wasRemoved()){
+                    if(imageView.getAuthoringEntity().getPropertyMap().get(EntityField.LABEL).equals(change.getKey().getPropertyMap().get(EntityField.LABEL))){
+                        myStackPane.getChildren().remove(imageView);
+                    }
+
+                }
+            }
+        });
     }
 
     private void applyRightClickHandler(ImageWithEntity imageView) {

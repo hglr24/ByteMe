@@ -32,6 +32,14 @@ import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -144,11 +152,11 @@ public class MainGUI {
         try {
             LevelsPane levelsPane = new LevelsPane(myObjectManager, myCurrentLevel);
             PropertiesPane objectProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.OBJECT, mySelectedEntity, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.OBJECT, mySelectedEntity);
             PropertiesPane levelProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.LEVEL, myCurrentLevel, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.LEVEL, myCurrentLevel);
             PropertiesPane instanceProperties =
-                    new PropertiesPane(myObjectManager, PropertableType.INSTANCE, mySelectedEntity, myObjectManager.getLabelManager());
+                    new PropertiesPane(myObjectManager, PropertableType.INSTANCE, mySelectedEntity);
             levelsPane.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
             objectProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
             levelProperties.prefWidthProperty().bind(mainScene.widthProperty().divide(4));
@@ -259,21 +267,45 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
-    private void saveAndClearFolder(DataManager dataManager, String folderFilePath){
+    //TODO make this work for audio too - need to differentiate which dataManager method using
+    //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
+    private void saveAndClearFolder(DataManager dataManager, File outerDirectory){
         System.out.println("Save and clear folder called");
-        File assetFolder = new File(folderFilePath);
-        System.out.println(assetFolder.getName());
-        for(File temp : assetFolder.listFiles()){
-            System.out.println(temp.getName());
-            String gameTitle = myGameData.getTitle();
-            //TODO: add actual author name
-            String authorUsername = "";
-            String imageTitle = gameTitle + authorUsername + temp.getName();
-            dataManager.saveImage(imageTitle, temp);
-            //TODO: uncomment this
-            if(temp.delete()){
-                System.out.println("deleted");
+        System.out.println(outerDirectory.getName());
+        for(File innerFolder : outerDirectory.listFiles()){
+            if(innerFolder.isDirectory()){
+                for(File asset : innerFolder.listFiles()){
+                    System.out.println(asset.getName());
+                    String gameTitle = myGameData.getTitle();
+                    String authorUsername = myGameData.getAuthorName();
+                    String imageTitle = gameTitle + authorUsername + asset.getName();
+                    dataManager.saveImage(imageTitle, asset);
+                    //TODO: uncomment this
+//            if(temp.delete()){
+//                System.out.println("deleted");
+//            }
+                }
             }
+
+
+        }
+    }
+
+    //TODO: differentiate between images and audio
+    //TODO: test the file copying
+    private void loadAssets(DataManager dataManager, String folderFilePath){
+        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        try {
+            Map<String, InputStream> imagesMap = dataManager.loadAllImages(prefix);
+            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
+                Files.copy(entry.getValue(), Paths.get(GENERAL_RESOURCES.getString("images_filepath")), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (SQLException e) {
+            //TODO: handle error
+            e.printStackTrace();
+        } catch (IOException e) {
+            //TODO: handle error
+            e.printStackTrace();
         }
     }
 

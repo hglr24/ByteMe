@@ -16,6 +16,7 @@ public class StringEqualToCondition extends Condition {
     private String myComponentName;
     private String myValue;
     private static final String DISPLAY = " Is ";
+    private static final String COMPONENT = "Component";
     public StringEqualToCondition(Class<? extends Component> component, String value) {
         setPredicate((Predicate<Entity> & Serializable) entity -> (entity.getComponent(component).getValue()).equals(value));
         myComponentName = component.getSimpleName();
@@ -24,6 +25,6 @@ public class StringEqualToCondition extends Condition {
 
     @Override
     public String toString(){
-        return myComponentName + DISPLAY + myValue;
+        return myComponentName.replaceAll(COMPONENT,"") + DISPLAY + myValue;
     }
 }

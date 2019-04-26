@@ -8,6 +8,7 @@ import engine.external.component.Component;
  *
  * @author Feroze
  */
+@Deprecated
 public abstract class BooleanAction extends Action<Boolean> {
     private Boolean myValue;
     private Class<? extends Component<Boolean>> myComponentClass;

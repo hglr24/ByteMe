@@ -75,7 +75,7 @@
 }
 
 .combo-box:hover, .combo-box .list-cell:hover, .combo-box:focused, .button:hover,
-    .combo-box-popup .list-cell:hover, .text-field:focused, .text-field:hover{
+.combo-box-popup .list-cell:hover, .text-field:focused, .text-field:hover{
     -fx-background-color: #555555;
 }
 
@@ -309,4 +309,202 @@
     -fx-font-weight: normal;
     -fx-font-size: 14;
     -fx-text-fill: #aaaaaa;
+}
+
+.current-events-pane {
+    -fx-min-width: 900;
+    -fx-max-width: 900;
+}
+
+.current-events-pane .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-border-color: #202020;
+    -fx-alignment: center;
+}
+
+.current-events-display {
+    -fx-background-color: transparent;
+    -fx-fit-to-width: true;
+    -fx-border-color: #202020;
+    -fx-alignment: center
+}
+
+.current-events-display .list-view {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.current-events-display .label{
+    -fx-text-fill: white;
+    -fx-min-height: 150;
+    -fx-min-width: 300;
+    -fx-max-height: 150;
+    -fx-max-width: 300;
+    -fx-background-color: #303030;
+    -fx-text-alignment: center;
+    -fx-font-weight: normal;
+}
+
+
+.current-events-display .list-cell:selected {
+    -fx-background-color: #404040;
+}
+
+.current-events-display .button{
+    -fx-min-height: 49;
+    -fx-min-width: 275;
+    -fx-max-height: 49;
+    -fx-max-width: 275;
+    -fx-border-radius: 3;
+    -fx-border-color: black;
+    -fx-font-size: 18;-fx-font-weight: bold;
+}
+
+.BigButton {
+    -fx-min-height: 50;
+    -fx-min-width: 900;
+    -fx-max-height: 50;
+    -fx-max-width: 900;
+    -fx-border-radius: 3;
+    -fx-border-color: black;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.current-events-display .choice-box{
+    -fx-min-height: 49;
+    -fx-min-width: 275;
+    -fx-max-height: 49;
+    -fx-max-width: 275;
+    -fx-border-radius: 3;
+    -fx-border-color: black;
+    -fx-background-color: #606060;
+    -fx-fill: #606060;
+    -fx-text-alignment: center;
+    -fx-alignment: center;
+    -fx-tile-alignment: center;
+}
+
+.event-component-vbox {
+    -fx-min-width: 350;
+    -fx-pref-width: 350;
+    -fx-max-width: 370;
+    -fx-padding: 10;
+    -fx-border-style: none none solid none;
+    -fx-border-width: 2;
+    -fx-border-insets: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: white;
+}
+.event-component-vbox .button {
+    -fx-min-width: 350;
+    -fx-pref-width: 350;
+    -fx-max-width: 370;
+}
+.event-manager {
+    -fx-min-width: 900;
+    -fx-max-height: 600;
+}
+
+.event-manager-vbox {
+     -fx-border-insets: 20 0 0 0;
+     -fx-alignment: center;
+     -fx-text-alignment: center;
+ }
+
+.event-manager-vbox .label {
+    -fx-border-insets: 20 0 0 0;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.event-manager .center-pane {
+    -fx-alignment: center;
+    -fx-max-height: infinity;
+}
+
+.event-manager .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-max-height: infinity;
+    -fx-fit-to-width: true;
+    -fx-border-color: #202020;
+
+}
+
+.event-manager .list-view {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.event-manager .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.event-manager .list-cell:odd{
+    -fx-background-color: #303030;
+}
+
+.event-manager .list-cell:selected {
+    -fx-background-color: #303030;
+}
+
+.event-editor {
+    -fx-min-height: 400;
+    -fx-min-width: 700;
+    -fx-max-height: 400;
+    -fx-max-width: 700;
+}
+
+.event-editor .titled-pane {
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+    -fx-page-information-alignment: center;
+}
+
+.event-editor .titled-pane > .title{
+    -fx-font-size: 18;
+    -fx-min-height: 400;
+    -fx-min-width: 350;
+    -fx-max-height: 400;
+    -fx-max-width: 350;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+
+}
+
+.event-editor .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-pref-height: 380;
+    -fx-max-width: 350;
+    -fx-border-color: #202020;
+}
+
+.event-editor .list-view {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.event-editor .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.event-editor .list-cell:odd{
+    -fx-background-color: #303030;
+}
+
+.event-editor .list-cell:selected {
+    -fx-background-color: #303030;
+}
+
+.event-editor .button{
+    -fx-min-width: 350;
+    -fx-max-width: 350;
+}
+
+.event-pop-up {
+    -fx-min-height: 400;
+    -fx-min-width: 500;
 }

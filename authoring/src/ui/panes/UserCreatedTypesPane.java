@@ -32,7 +32,6 @@ public class UserCreatedTypesPane extends VBox {
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
     private ObjectManager myObjectManager;
     private DefaultTypeXMLReaderFactory myDefaultTypesFactory;
-    private Entity myDraggedEntity;
     private AuthoringEntity myDraggedAuthoringEntity;
     private Map<String, List<Pane>> myCategoryToList;
 
@@ -52,11 +51,18 @@ public class UserCreatedTypesPane extends VBox {
     }
 
     /**
-     * Used by Viewer to get the dragged Entity
-     * @return Entity
+     * This creates the same pane but allows for a map of previously defined user-created types to be
+     * passed in. Used for loading in a past game
+     * @param objectManager
+     * @param previouslyDefinedTypesMap the key is the String name of the default type it is associates with
+     *                                  and the value is the original entity it is associated with
      */
-    public Entity getDraggedEntity(){
-        return myDraggedEntity;
+    public UserCreatedTypesPane(ObjectManager objectManager, Map<String, Entity> previouslyDefinedTypesMap){
+        this(objectManager);
+        System.out.println("Map Size: " + previouslyDefinedTypesMap.size());
+        for(Map.Entry<String, Entity> entry : previouslyDefinedTypesMap.entrySet()){
+            addUserDefinedType(entry.getValue(), entry.getKey());
+        }
     }
 
     /**
@@ -72,13 +78,13 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(Entity entity,String defaultName){
-        String label = (String) entity.getComponent(NameComponent.class).getValue();
+    public void addUserDefinedType(Entity originalEntity,String defaultName){
+        String label = (String) originalEntity.getComponent(NameComponent.class).getValue();
         String category = myDefaultTypesFactory.getCategory(defaultName);
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
-        String imageName = (String) entity.getComponent(SpriteComponent.class).getValue();
+        String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
         try {
-            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(entity, myObjectManager);
+            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
             originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
             String assetImagesFilePath = myGeneralResources.getString("images_filepath");
             ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
@@ -86,9 +92,6 @@ public class UserCreatedTypesPane extends VBox {
             myCategoryToList.get(category).add(subPane);
             myEntityMenu.setDropDown(category, myCategoryToList.get(category));
             subPane.setOnDragDetected(mouseEvent -> {
-                myDraggedEntity = myDefaultTypesFactory.createEntity(defaultName);
-                myDraggedEntity.addComponent(new NameComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.LABEL)));
-                myDraggedEntity.addComponent(new SpriteComponent(originalAuthoringEntity.getPropertyMap().get(EntityField.IMAGE)));
                 myDraggedAuthoringEntity = originalAuthoringEntity;
                 Utility.setupDragAndDropImage(imageWithEntity);
             });

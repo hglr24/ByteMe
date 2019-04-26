@@ -1,13 +1,16 @@
 package runner.external;
 
+import engine.external.Entity;
 import engine.external.Level;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class Game {
     private List<Level> myLevels;
+    private Map<String, Entity> myUserCreatedTypes;
     private String myIconName;
     private String myGameName;
     private String myGameDescription;
@@ -36,5 +39,9 @@ public class Game {
 
     public int getHeight(){
         return myHeight;
+    }
+
+    public void addUserCreatedTypes(Map<String, Entity> userCreatedTypes){
+        myUserCreatedTypes = userCreatedTypes;
     }
 }

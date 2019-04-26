@@ -11,8 +11,9 @@ import engine.external.component.Component;
 public abstract class StringAction extends Action<String> {
     private String myNewValue;
     private Class<? extends Component<String>>  myComponentClass;
-    private static final String CHANGE = "CHANGE ";
-    private static final String TO = "TO ";
+    private static final String CHANGE = "Switch ";
+    private static final String TO = " to ";
+    private static final String COMPONENT = "Component";
     /**
      * This method used by subclass objects when they are constructed specifies the lambda, which
      * performs a set operation on this new value.
@@ -26,6 +27,6 @@ public abstract class StringAction extends Action<String> {
         myComponentClass = componentClass;
     }
     public String toString(){
-        return CHANGE + myComponentClass.getSimpleName() + TO + myNewValue;
+        return CHANGE + myComponentClass.getSimpleName().replaceAll(COMPONENT,"") + TO + myNewValue;
     }
 }

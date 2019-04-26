@@ -20,66 +20,45 @@ public class AuthoringEntity implements Propertable {
 
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
-    private Entity myBackingEntity;
     private List<String> myInteractionListing = new ArrayList<>();
-    private static final List<? extends Enum> PROP_VAR_NAMES = Arrays.asList(EntityField.values());
+    private String myBackingString;
 
     private AuthoringEntity() { // Initialize default property map
         myPropertyMap = FXCollections.observableHashMap();
-        for (Enum name : PROP_VAR_NAMES)
-            myPropertyMap.put(name, null);
-        myPropertyMap.put(EntityField.X, "0.0");
-        myPropertyMap.put(EntityField.Y, "0.0");
-        myPropertyMap.put(EntityField.Z, "0.0");
-        myPropertyMap.put(EntityField.XSCALE, "1.0");
-        myPropertyMap.put(EntityField.YSCALE, "1.0");
-        myPropertyMap.put(EntityField.CAMERA, "false");
-        myPropertyMap.put(EntityField.VISIBLE, "true");
+        for (EntityField defaultField : EntityField.getDefaultFields()) {
+            myPropertyMap.put(defaultField, defaultField.getDefaultValue());
+        }
     }
 
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
         this();
         myObjectManager = manager;
-        myBackingEntity = new Entity(); // Brand new backing Entity
-        myPropertyMap.put(EntityField.LABEL, label);
+        myPropertyMap.put(EntityField.LABEL, label); //TODO see if this can be removed
         addPropertyListeners();
-        myObjectManager.addEntityType(this);
+        myObjectManager.addEntityType(this, "");
     }
 
-    public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
+    public AuthoringEntity(Entity basis, String backingString, ObjectManager manager) { // Create new AuthoringEntity type from Entity
         this();
-        myBackingEntity = basis;
         myObjectManager = manager;
-        if (basis.hasComponents(NameComponent.class)) // TODO try to fix this
-            myPropertyMap.put(EntityField.LABEL, (String) basis.getComponent(NameComponent.class).getValue());
-        if (basis.hasComponents(SpriteComponent.class))
-            myPropertyMap.put(EntityField.IMAGE, (String) basis.getComponent(SpriteComponent.class).getValue());
-        if (basis.hasComponents(XPositionComponent.class))
-            myPropertyMap.put(EntityField.X, ("" + (basis.getComponent(XPositionComponent.class).getValue())));
-        if (basis.hasComponents(YPositionComponent.class))
-            myPropertyMap.put(EntityField.Y, ("" + (basis.getComponent(YPositionComponent.class).getValue())));
-        if (basis.hasComponents(ZPositionComponent.class))
-            myPropertyMap.put(EntityField.Z, ("" + (basis.getComponent(ZPositionComponent.class).getValue())));
-        if (basis.hasComponents(WidthComponent.class))
-            myPropertyMap.put(EntityField.XSCALE, ("" + (basis.getComponent(WidthComponent.class).getValue()))); //TODO add Group & other things??
-        if (basis.hasComponents(HeightComponent.class))
-            myPropertyMap.put(EntityField.YSCALE, ("" + (basis.getComponent(HeightComponent.class).getValue())));
+        myBackingString = backingString;
+
+        for (EntityField field : EntityField.values())
+            if (basis.hasComponents(field.getComponentClass()))
+                myPropertyMap.put(field, String.valueOf(basis.getComponent(field.getComponentClass()).getValue()));
+
         addPropertyListeners();
-        myObjectManager.addEntityType(this);
+        myObjectManager.addEntityType(this, backingString);
     }
 
-    public AuthoringEntity(AuthoringEntity copyBasis, Entity backingEntity) { // Create new AuthoringEntity instance from pre-existing type
+    public AuthoringEntity(AuthoringEntity copyBasis) { // Create new AuthoringEntity instance from pre-existing type
         this();
+        myBackingString = copyBasis.myBackingString;
         myObjectManager = copyBasis.myObjectManager;
-        myPropertyMap.put(EntityField.LABEL, copyBasis.myPropertyMap.get(EntityField.LABEL));
-        myPropertyMap.put(EntityField.IMAGE, copyBasis.myPropertyMap.get(EntityField.IMAGE));
-        myPropertyMap.put(EntityField.GROUP, copyBasis.myPropertyMap.get(EntityField.GROUP));
-        myPropertyMap.put(EntityField.X, copyBasis.myPropertyMap.get(EntityField.X));
-        myPropertyMap.put(EntityField.Y, copyBasis.myPropertyMap.get(EntityField.Y));
-        myPropertyMap.put(EntityField.Z, copyBasis.myPropertyMap.get(EntityField.Z));
-        myPropertyMap.put(EntityField.XSCALE, copyBasis.myPropertyMap.get(EntityField.XSCALE));
-        myPropertyMap.put(EntityField.YSCALE, copyBasis.myPropertyMap.get(EntityField.YSCALE));
-        myBackingEntity = backingEntity;
+        for (EntityField commonField : EntityField.getCommonFields()) {
+            if (copyBasis.myPropertyMap.containsKey(commonField))
+                myPropertyMap.put(commonField, copyBasis.myPropertyMap.get(commonField));
+        }
         addPropertyListeners();
         myObjectManager.addEntityInstance(this);
     }
@@ -94,8 +73,10 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
-        else if (key.equals(EntityField.CAMERA)) {
+        else if (key.equals(EntityField.CAMERA))
             myObjectManager.flushCameraAssignment(this);
+        else if (!((EntityField) key).isDefault()) {
+            myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
         }
     }
 
@@ -110,10 +91,6 @@ public class AuthoringEntity implements Propertable {
 
     public ObservableList<Event> getEvents() {
         return myObjectManager.getEvents(this.myPropertyMap.get(EntityField.LABEL));
-    }
-
-    public Entity getBackingEntity() {
-        return myBackingEntity;
     }
 
     public List<String> getInteractionListing(){ return myInteractionListing;}

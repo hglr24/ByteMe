@@ -4,17 +4,21 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ui.EntityField;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
+import ui.Utility;
 import ui.control.ControlProperty;
-import ui.manager.LabelManager;
 import ui.manager.ObjectManager;
+import ui.windows.PropertySelector;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -27,13 +31,16 @@ import java.util.ResourceBundle;
 public class PropertiesPane extends TitledPane {
 
     private ObjectProperty<Propertable> myProp;
+    private PropertableType myPropType;
     private String myPropFile;
     private ObjectManager myObjectManager;
+    private GridPane myPropertyGrid;
 
     private static final String PROP_TYPE_EXT = " Properties";
 
-    public PropertiesPane(ObjectManager manager, PropertableType propType, ObjectProperty<Propertable> prop, LabelManager labelManager) throws UIException {
+    public PropertiesPane(ObjectManager manager, PropertableType propType, ObjectProperty<Propertable> prop) throws UIException {
         myProp = prop;
+        myPropType = propType;
         myPropFile = propType.getPropFile();
         myObjectManager = manager;
         this.setText(propType.toString() + PROP_TYPE_EXT);
@@ -54,18 +61,20 @@ public class PropertiesPane extends TitledPane {
 
     private Node createPropertiesGrid() throws UIException {
         Platform.runLater(this::requestFocus);
-        GridPane gridlist = new GridPane();
-        gridlist.getStyleClass().add("prop-grid");
-        ScrollPane scrollpane = new ScrollPane(gridlist);
+        myPropertyGrid = new GridPane();
+        myPropertyGrid.getStyleClass().add("prop-grid");
+        VBox gridContainer = new VBox(myPropertyGrid);
+        ScrollPane scrollpane = new ScrollPane(gridContainer);
         if (myProp.getValue() != null)
-            extractNewProperties(gridlist);
+            extractNewProperties();
         else {
             return new Label("Create an Object Type to Start");
         }
+        addNewPropButton(gridContainer);
         return scrollpane;
     }
 
-    private void extractNewProperties(GridPane gridlist) throws UIException {
+    private void extractNewProperties() throws UIException {
         ResourceBundle bundle = ResourceBundle.getBundle(myPropFile);
         ArrayList<String> types = Collections.list(bundle.getKeys());
         Collections.sort(types);
@@ -73,15 +82,28 @@ public class PropertiesPane extends TitledPane {
             try {
                 String name = type.split("\\.")[1];
                 String value = bundle.getString(type);
-                gridlist.add(createProperty(myProp.getValue().getEnumClass(), name, value), 0, gridlist.getRowCount());
+                myPropertyGrid.add(createProperty(name, value), 0, myPropertyGrid.getRowCount());
             } catch (IndexOutOfBoundsException e) {
                 throw new UIException("Invalid properties file");
             }
         }
+        addExtraProperties();
     }
 
-    private VBox createProperty(Class<? extends Enum> enumClass, String name, String info) throws UIException {
+    private void addExtraProperties() throws UIException {
+        if (myPropType.equals(PropertableType.OBJECT)) {
+            for (Enum field : myProp.getValue().getPropertyMap().keySet()) {
+                if (!((EntityField) field).isDefault() && ((EntityField) field).isTextable()) {
+                    myPropertyGrid.add(createProperty(((EntityField) field).getLabel(), "ui.control.TextFieldProperty:none:none"),
+                            0, myPropertyGrid.getRowCount());
+                }
+            }
+        }
+    }
+
+    private VBox createProperty(String name, String info) throws UIException {
         VBox newProp = new VBox();
+        Class<? extends Enum> enumClass = myProp.getValue().getEnumClass();
         newProp.getStyleClass().add("prop-cell");
         Label propName = new Label(name);
         propName.getStyleClass().add("sub-label");
@@ -100,5 +122,24 @@ public class PropertiesPane extends TitledPane {
             throw new UIException("Error creating properties controls");
         }
         return newProp;
+    }
+
+    private void addNewPropButton(VBox container) {
+        if (myPropType.equals(PropertableType.OBJECT)) {
+            Button addButton = Utility.makeButton(this, "selectProperty", "Add Property");
+            HBox addButtonBox = new HBox(addButton);
+            container.getChildren().add(addButtonBox);
+            addButtonBox.getStyleClass().add("prop-grid");
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private void selectProperty() throws UIException {
+        PropertySelector propertySelector = new PropertySelector(myProp.getValue());
+        propertySelector.showAndWait();
+        if (propertySelector.getAddedField() != null) {
+            myPropertyGrid.add(createProperty(propertySelector.getAddedField().getLabel(), "ui.control.TextFieldProperty:none:none"),
+                    0, myPropertyGrid.getRowCount());
+        }
     }
 }

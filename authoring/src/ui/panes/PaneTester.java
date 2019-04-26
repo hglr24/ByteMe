@@ -34,9 +34,9 @@ public class PaneTester extends Application {
         SimpleObjectProperty<Propertable> testLvl = new SimpleObjectProperty<>(new AuthoringLevel("Level_1", manager));
 
         try {
-            PropertiesPane testPaneObj = new PropertiesPane(manager, PropertableType.OBJECT, testObj, manager.getLabelManager());
-            PropertiesPane testPaneLvl = new PropertiesPane(manager, PropertableType.LEVEL, testLvl, manager.getLabelManager());
-            PropertiesPane testPaneIns = new PropertiesPane(manager, PropertableType.INSTANCE, testObj, manager.getLabelManager());
+            PropertiesPane testPaneObj = new PropertiesPane(manager, PropertableType.OBJECT, testObj);
+            PropertiesPane testPaneLvl = new PropertiesPane(manager, PropertableType.LEVEL, testLvl);
+            PropertiesPane testPaneIns = new PropertiesPane(manager, PropertableType.INSTANCE, testObj);
             GroupManager testCreateGroup = new GroupManager(manager);
 
             Scene testScene = new Scene(testPaneObj);
@@ -80,12 +80,12 @@ public class PaneTester extends Application {
         AuthoringEntity d = new AuthoringEntity("object4", manager);
         AuthoringEntity e = new AuthoringEntity("object1", manager);
         AuthoringEntity f = new AuthoringEntity("object1", manager);
-        manager.addEntityType(a);
-        manager.addEntityType(b);
-        manager.addEntityType(c);
-        manager.addEntityType(d);
-        manager.addEntityType(e);
-        manager.addEntityType(f);
+        manager.addEntityType(a, "");
+        manager.addEntityType(b, "");
+        manager.addEntityType(c, "");
+        manager.addEntityType(d, "");
+        manager.addEntityType(e, "");
+        manager.addEntityType(f, "");
         a.getPropertyMap().put(EntityField.GROUP, "Enemies");
         b.getPropertyMap().put(EntityField.GROUP, "Platforms");
         c.getPropertyMap().put(EntityField.GROUP, "Enemies");
