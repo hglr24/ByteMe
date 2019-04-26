@@ -174,4 +174,9 @@ public class DataTest {
             e.printStackTrace(); // Just for debugging purposes in tests
         }
     }
+
+    public void getYeet3() {
+        myDataManager.saveGameData("903", "Ryan", "Testing string");
+
+    }
 }

@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A Querier used to access the GameInformation table to save and load game information
@@ -100,7 +99,7 @@ public class GameInformationQuerier extends Querier {
         List<String> gameInformations = new ArrayList<>();
         List<GamePrimaryKey> games = getGameNames();
         for (GamePrimaryKey game : games){
-            String gameInfoXML = loadGameInformation(game.getMyGameName(), game.getMyAuthorName());
+            String gameInfoXML = loadGameInformation(game.getGameName(), game.getAuthorName());
             if (gameInfoXML != null){
                 gameInformations.add(gameInfoXML);
             }
