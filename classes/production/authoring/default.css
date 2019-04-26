@@ -413,10 +413,14 @@
      -fx-text-alignment: center;
  }
 
+
 .event-manager-vbox .label {
     -fx-border-insets: 20 0 0 0;
     -fx-alignment: center;
     -fx-text-alignment: center;
+}
+.event-manager-vbox .scroll-pane {
+    -fx-min-height: 600;
 }
 
 .event-manager .center-pane {
@@ -426,6 +430,7 @@
 
 .event-manager .scroll-pane {
     -fx-background-color: transparent;
+    -fx-min-height: 600;
     -fx-max-height: infinity;
     -fx-fit-to-width: true;
     -fx-border-color: #202020;
