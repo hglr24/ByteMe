@@ -5,11 +5,13 @@ import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.component.AudioComponent;
 import engine.external.component.Component;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import voogasalad.util.reflection.ReflectionException;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @Author Hsingchih Tang
@@ -19,6 +21,8 @@ import java.util.Collection;
 public class AudioSystem extends VoogaSystem {
 
     DataManager myDataManager;
+    HashMap<Entity, String> myEntityPastSound;
+    HashMap<String, Media> myMedia;
 
     /**
      * Accepts a reference to the Engine in charge of all Systems in current game, and a Collection of Component classes
@@ -30,6 +34,8 @@ public class AudioSystem extends VoogaSystem {
     public AudioSystem(Collection<Class<? extends Component>> requiredComponents, Engine engine) {
         super(requiredComponents, engine);
         myDataManager = new DataManager();
+        myEntityPastSound = new HashMap<>();
+        myMedia = new HashMap<>();
     }
 
 
@@ -41,15 +47,37 @@ public class AudioSystem extends VoogaSystem {
         }
     }
 
+
     private void generateAudio(Entity entity) {
         String audioName = (String) getComponentValue(SOUND_COMPONENT_CLASS, entity);
-        InputStream audioStream = myDataManager.loadImage(audioName);
-        Media audio;
-        try {
-            audio = new Media(convertInputStreamToFile(audioStream).toURI().toString());
-            entity.addComponent(new AudioComponent(audio));
-        } catch (IOException e) {
-            System.out.println("AudioSystem couldn't create audio file for " + audioName);
+        if (!myEntityPastSound.containsKey(entity) || !myEntityPastSound.get(entity).equals(audioName)) {
+//            System.out.println("generating Audio for "+audioName);
+            myEntityPastSound.put(entity, audioName);
+            retrieveAudio(audioName);
+            if (myMedia.get(audioName) != null) {
+                entity.addComponent(new AudioComponent(myMedia.get(audioName)));
+            }
+        }
+    }
+
+
+    private void retrieveAudio(String audioName) {
+        if (!myMedia.containsKey(audioName)) {
+            InputStream audioStream = myDataManager.loadSound(audioName);
+            if (audioStream == null) {
+                System.out.println("Audio file " + audioName + " not found in database");
+                myMedia.put(audioName, null);
+                return;
+            }
+            Media audio;
+            try {
+                audio = new Media(convertInputStreamToFile(audioStream).toURI().toString());
+            } catch (IOException e) {
+                System.out.println("AudioSystem couldn't create audio file for " + audioName);
+                myMedia.put(audioName, null);
+                return;
+            }
+            myMedia.put(audioName, audio);
         }
     }
 
