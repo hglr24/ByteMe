@@ -1,6 +1,6 @@
-<runner.external.GameCenterData>
+<data.external.GameCenterData>
     <myTitle>Downwell</myTitle>
     <myDescription>Downwell is a roguelike vertically scrolling shooter platform video game developed by Ojiro "Moppin" Fumoto and published by Devolver Digital. </myDescription>
     <myImageLocation>center/data/game_information/images/downwell.jpg</myImageLocation>
     <myFolderName>downwell</myFolderName>
-</runner.external.GameCenterData>
+</data.external.GameCenterData>

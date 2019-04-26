@@ -16,7 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import runner.external.Game;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 import ui.AuthoringLevel;
 import ui.ErrorBox;
 import ui.Propertable;

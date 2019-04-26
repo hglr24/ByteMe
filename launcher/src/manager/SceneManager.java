@@ -7,7 +7,7 @@ import page.CreateNewGamePage;
 import page.SplashPage;
 import page.WelcomeUserPage;
 import runner.external.Game;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 import ui.main.MainGUI;
 
 public class SceneManager {

@@ -109,16 +109,20 @@ public class DataManager implements ExternalData {
      * @return deserialized game center data objects
      */
     @Override
-    public List<Object> loadAllGameInfoObjects() {
-        List<Object> gameInfoObjects = new ArrayList<>();
+    public List<GameCenterData> loadAllGameInfoObjects() {
         List<String> gameInfoObjectXMLs = new ArrayList<>();
         try {
             gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs();
         } catch (SQLException e) {
             System.out.println(CANT_LOAD_GAME_INFORMATION_XMLS + e.getMessage());
         }
-        for (String xml : gameInfoObjectXMLs) {
-            gameInfoObjects.add(mySerializer.fromXML(xml));
+        return deserializeGameInfoObjects(gameInfoObjectXMLs);
+    }
+
+    private List<GameCenterData> deserializeGameInfoObjects(List<String> serializedGameInfoObjects) {
+        List<GameCenterData> gameInfoObjects = new ArrayList<>();
+        for (String xml : serializedGameInfoObjects) {
+            gameInfoObjects.add((GameCenterData) mySerializer.fromXML(xml));
         }
         return gameInfoObjects;
     }
@@ -394,5 +398,37 @@ public class DataManager implements ExternalData {
     public boolean updatePassword(String userName, String newPassword) throws SQLException {
         return myDatabaseEngine.updatePassword(userName, newPassword);
     }
+
+    @Override
+    public void addRating(GameRating rating) throws SQLException {
+        myDatabaseEngine.addGameRating(rating);
+    }
+
+    @Override
+    public double getAverageRating(String gameName) throws SQLException {
+        return myDatabaseEngine.getAverageRating(gameName);
+    }
+
+    @Override
+    public List<GameRating> getAllRatings(String gameName) throws SQLException {
+        return myDatabaseEngine.getAllRatings(gameName);
+    }
+
+    @Override
+    public List<GameCenterData> loadAllGameInfoObjects(String userName) {
+        List<String> gameInfoObjectXMLs = new ArrayList<>();
+        try {
+            gameInfoObjectXMLs = myDatabaseEngine.loadAllGameInformationXMLs(userName);
+        } catch (SQLException e) {
+            System.out.println(CANT_LOAD_GAME_INFORMATION_XMLS + e.getMessage());
+        }
+        return deserializeGameInfoObjects(gameInfoObjectXMLs);
+    }
+
+    @Override
+    public Map<String, InputStream> loadDefaultImages() {
+        return null;
+    }
+
 
 }

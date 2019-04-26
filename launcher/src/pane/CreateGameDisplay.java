@@ -9,7 +9,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.SwitchToAuthoring;
 import manager.SwitchToUserOptions;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 
 import java.io.File;
 
