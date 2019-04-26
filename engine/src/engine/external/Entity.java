@@ -72,5 +72,9 @@ public class Entity implements Serializable {
         return myComponents.get(clazz);
     }
 
+    public Map<Class<? extends Component>, Component<?>> getComponentMap(){
+        return myComponents;
+    }
+
 
 }

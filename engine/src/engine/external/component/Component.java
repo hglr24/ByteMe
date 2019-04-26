@@ -9,9 +9,11 @@ import java.io.Serializable;
  */
 public abstract class Component<T> implements Serializable {
     protected T myValue;
+    protected T myOriginalValue;
 
     public Component(T value) {
         myValue = value;
+        myOriginalValue = value;
     }
 
     public void setValue(T value) {
@@ -20,5 +22,9 @@ public abstract class Component<T> implements Serializable {
 
     public T getValue() {
         return myValue;
+    }
+
+    public void resetToOriginal(){
+        myValue = myOriginalValue;
     }
 }

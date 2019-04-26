@@ -9,6 +9,11 @@ import engine.external.conditions.*;
 import engine.external.events.*;
 
 
+import engine.external.conditions.CollisionCondition;
+import engine.external.events.Event;
+import engine.external.events.RightCollisionEvent;
+import engine.external.events.TopCollisionEvent;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
@@ -27,13 +32,28 @@ public class DummyGameObjectMaker {
 
     private void initializeGame(Game dummyGame) {
         Level level1 = new Level();
-        addDummyEntities(level1);
-        addDummyEvents(level1);
+        addDummyEntities(level1, 1.0);
+        addDummyEvents(level1, 2.0);
         dummyGame.addLevel(level1);
+
+        Level level2 = new Level();
+        addDummyEntities(level2, 2.0);
+        addDummyEvents(level2, 3.0);
+        dummyGame.addLevel(level2);
+
+        Level level3 = new Level();
+        addDummyEntities(level3, 3.0);
+        addDummyEvents(level3, 4.0);
+        dummyGame.addLevel(level3);
+
+        Level level4 = new Level();
+        addDummyEntities(level4, 4.0);
+        addDummyEvents(level4, 5.0);
+        dummyGame.addLevel(level4);
 
     }
 
-    private void addDummyEvents(Level level1) {
+    private void addDummyEvents(Level level1, Double next) {
         Event event = new Event("one");
         event.addInputs(KeyCode.RIGHT);
         event.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
@@ -99,8 +119,16 @@ public class DummyGameObjectMaker {
 
 
 
+
+
+        RightCollisionEvent rce = new RightCollisionEvent("one", "three");
+        rce.addActions(new ProgressionAction(true));
+        rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+
+
         level1.addEvent(event);
         level1.addEvent(event2);
+
         level1.addEvent(flappyMoveLeft);
         //level1.addEvent(flappyMoveUp);
         level1.addEvent(mushroomJump);
@@ -112,13 +140,14 @@ public class DummyGameObjectMaker {
         level1.addEvent(flappyJump);
     }
 
-    private void addDummyEntities(Level level) {
+    private void addDummyEntities(Level level, Double current) {
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
         Entity dummy3 = new Entity();
         Entity dummy4 = new Entity();
         Entity dummy5 = new Entity();
         Entity dummy6 = new Entity();
+
 
 
         //flappy double jump
@@ -148,6 +177,8 @@ public class DummyGameObjectMaker {
         dummy2.addComponent(new SpriteComponent("mushroom.png"));
         dummy3.addComponent(new SpriteComponent("basketball"));
 
+        dummy1.addComponent(new CameraComponent(true));
+
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));
@@ -164,6 +195,7 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new CollisionComponent(true));
         dummy2.addComponent(new CollisionComponent(true));
+
 
         dummy4.addComponent(new XPositionComponent(170.0));
         dummy4.addComponent(new YPositionComponent(400.0));
@@ -192,6 +224,9 @@ public class DummyGameObjectMaker {
         dummy6.addComponent(new SpriteComponent("mario_block.png"));
         dummy6.addComponent(new CollisionComponent(true));
         dummy6.addComponent(new NameComponent("six"));
+
+        dummy1.addComponent(new NextLevelComponent(current));
+        dummy1.addComponent(new ProgressionComponent(false));
 
         level.addEntity(dummy1);
         level.addEntity(dummy2);

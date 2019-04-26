@@ -1,7 +1,7 @@
 package engine.external.component;
 
-public class NextLevelComponent extends Component<Integer> {
-    public NextLevelComponent(Integer level) {
+public class NextLevelComponent extends Component<Double> {
+    public NextLevelComponent(Double level){
         super(level);
     }
 }
