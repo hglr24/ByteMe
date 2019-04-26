@@ -179,4 +179,8 @@ public class DataTest {
         myDataManager.saveGameData("903", "Ryan", "Testing string");
 
     }
+
+    public void testAddRating() {
+//        myDataManager.
+    }
 }

@@ -26,10 +26,12 @@ public class RatingsQuerier extends Querier {
             RATING_COLUMN, AVERAGE, GAME_RATINGS_TABLE_NAME, GAME_NAME_COLUMN);
     private static final String ALL_RATINGS_STATEMENT = String.format("SELECT * FROM %s WHERE %s = ?", GAME_RATINGS_TABLE_NAME, GAME_NAME_COLUMN);
     private static final String UPDATE_RATING_STATEMENT = String.format("%s %s %s", INSERT_GAME_RATINGS, ON_DUPLICATE_UPDATE, UPDATE_GAME_RATINGS);
+    private static final String REMOVE_RATING_STATEMENT = String.format(DELETE_TWO_CONDITIONS, GAME_RATINGS_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN);
 
     private PreparedStatement myAverageRatingsStatement;
     private PreparedStatement myAllRatingsStatement;
     private PreparedStatement myUpdateRatingStatement;
+    private PreparedStatement myRemoveRatingsStatement;
 
     public RatingsQuerier(Connection connection) throws SQLException {
         super(connection);
@@ -40,7 +42,8 @@ public class RatingsQuerier extends Querier {
         myAverageRatingsStatement = myConnection.prepareStatement(AVERAGE_RATINGS_STATEMENT);
         myAllRatingsStatement = myConnection.prepareStatement(ALL_RATINGS_STATEMENT);
         myUpdateRatingStatement = myConnection.prepareStatement(UPDATE_RATING_STATEMENT);
-        myPreparedStatements = List.of(myAverageRatingsStatement, myAllRatingsStatement, myUpdateRatingStatement);
+        myRemoveRatingsStatement = myConnection.prepareStatement(REMOVE_RATING_STATEMENT);
+        myPreparedStatements = List.of(myAverageRatingsStatement, myAllRatingsStatement, myUpdateRatingStatement, myRemoveRatingsStatement);
     }
 
     public void addGameRating(GameRating rating) throws SQLException {
@@ -76,5 +79,11 @@ public class RatingsQuerier extends Querier {
             return resultSet.getDouble(AVERAGE);
         }
         return -1.0D;
+    }
+
+    public void removeAllGameRatings(String gameName, String authorName) throws SQLException{
+        myRemoveRatingsStatement.setString(1, gameName);
+        myRemoveRatingsStatement.setString(2, authorName);
+        myRemoveRatingsStatement.executeUpdate();
     }
 }
