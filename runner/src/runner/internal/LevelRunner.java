@@ -37,6 +37,8 @@ public class LevelRunner {
     private boolean canPause = false;
     private Consumer<Double> myLevelChanger;
 
+    private AudioManager myAudioManager;
+
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
         mySceneWidth = width;
@@ -44,6 +46,7 @@ public class LevelRunner {
         myCurrentKeys = new HashSet<>();
         myEngine = new Engine(level);
         myEntities = myEngine.updateState(myCurrentKeys);
+        myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         buildStage(stage);
         startAnimation();
@@ -121,6 +124,9 @@ public class LevelRunner {
         myGroup.getChildren().retainAll(myPause);
         //myGroup.getChildren().clear();
         for(Entity entity : myEntities){
+            if (entity.hasComponents(PlayAudioComponent.class)) {
+                myAudioManager.playSound(entity);
+            }
             try {
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
