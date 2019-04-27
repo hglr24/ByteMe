@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -216,4 +217,5 @@ public interface ExternalData {
     List<GameCenterData> loadAllGameInfoObjects(String userName);
 
 
+    Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException;
 }

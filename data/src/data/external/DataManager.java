@@ -6,7 +6,9 @@ import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -433,6 +435,16 @@ public class DataManager implements ExternalData {
 
     public void removeRating(String gameName, String authorName) throws SQLException {
         myDatabaseEngine.removeRating(gameName, authorName);
+    }
+
+    @Override
+    public Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        Map<Timestamp, Object> deserializedCheckpoints = new HashMap<>();
+        Map<Timestamp, String> serializedCheckpoints = myDatabaseEngine.getCheckpoints(userName, gameName, authorName);
+        for (Timestamp time : serializedCheckpoints.keySet()) {
+            deserializedCheckpoints.put(time, mySerializer.fromXML(serializedCheckpoints.get(time)));
+        }
+        return deserializedCheckpoints;
     }
 
 
