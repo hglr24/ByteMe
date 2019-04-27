@@ -2,6 +2,7 @@ package engine.external.actions;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.PlayAudioComponent;
 import engine.external.component.SoundComponent;
 
 import java.io.Serializable;
@@ -18,7 +19,7 @@ public class SoundAction extends StringAction {
             Component soundComponent = entity.getComponent(SoundComponent.class);
             soundComponent.setValue(newValue);
 
-         //   entity.addComponent(new PlayAudioComponent()); //TODO: make the PlayAudioComponent
+            entity.addComponent(new PlayAudioComponent(true));
         });
     }
 }

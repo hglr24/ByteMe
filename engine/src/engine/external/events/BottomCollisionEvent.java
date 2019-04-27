@@ -11,8 +11,7 @@ import engine.external.conditions.Condition;
 public class BottomCollisionEvent extends Event {
     private String myCollisionWithEntity;
 
-    public BottomCollisionEvent(String name, String collideWithEntity) {
-        super(name);
+    public BottomCollisionEvent(String collideWithEntity) {
         myCollisionWithEntity = collideWithEntity;
         makeBottomCollisionCondition();
     }
