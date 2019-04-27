@@ -3,4 +3,5 @@
     <myDescription>Fez is an indie puzzle-platform video game developed by Polytron Corporation and published by Trapdoor. </myDescription>
     <myImageLocation>center/data/game_information/images/fez.jpg</myImageLocation>
     <myFolderName>fez</myFolderName>
+    <myAuthorName>Megan</myAuthorName>
 </data.external.GameCenterData>

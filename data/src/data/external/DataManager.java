@@ -2,6 +2,7 @@ package data.external;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -122,7 +123,12 @@ public class DataManager implements ExternalData {
     private List<GameCenterData> deserializeGameInfoObjects(List<String> serializedGameInfoObjects) {
         List<GameCenterData> gameInfoObjects = new ArrayList<>();
         for (String xml : serializedGameInfoObjects) {
-            gameInfoObjects.add((GameCenterData) mySerializer.fromXML(xml));
+            try {
+                GameCenterData gameCenterDataToAdd = (GameCenterData) mySerializer.fromXML(xml);
+                gameInfoObjects.add(gameCenterDataToAdd);
+            } catch (CannotResolveClassException exception){
+                // do nothing, invalid objects should not be added to the list sent to game center
+            }
         }
         return gameInfoObjects;
     }

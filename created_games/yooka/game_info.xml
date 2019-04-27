@@ -3,4 +3,5 @@
     <myDescription>Yooka-Laylee is a platform game published by Team17 in 2017 for Linux, macOS, Windows, PlayStation 4, Xbox One, and Nintendo Switch. </myDescription>
     <myImageLocation>center/data/game_information/images/yooka.jpg</myImageLocation>
     <myFolderName>yooka</myFolderName>
+    <myAuthorName>Megan</myAuthorName>
 </data.external.GameCenterData>
