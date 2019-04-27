@@ -56,13 +56,13 @@ public class DummyGameObjectMaker {
         event2.addInputs(KeyCode.S);
         event2.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
 
-        RightCollisionEvent oneByTwo = new RightCollisionEvent("two");
+        RightCollisionEvent oneByTwo = new RightCollisionEvent("two", false);
         oneByTwo.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         //oneByTwo.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
         oneByTwo.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
 //        oneByTwo.addActions(new HeightAction(NumericAction.ModifyType.SCALE, 2.0));
 
-        LeftCollisionEvent twoByOne = new LeftCollisionEvent("one");
+        LeftCollisionEvent twoByOne = new LeftCollisionEvent("one", false);
         twoByOne.addConditions(new StringEqualToCondition(NameComponent.class, "two"));
         twoByOne.addActions(new XVelocityAction(NumericAction.ModifyType.SCALE, -1.0));
 
@@ -95,13 +95,13 @@ public class DummyGameObjectMaker {
         flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
         //flappyJump.addActions(new SoundAction("bach_chaconne"));
 
-        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("four");
+        BottomCollisionEvent flappyOnPlatform = new BottomCollisionEvent("four", false);
         flappyOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         flappyOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
         flappyOnPlatform.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 
 
-        TopCollisionEvent platformKnocked = new TopCollisionEvent("one");
+        TopCollisionEvent platformKnocked = new TopCollisionEvent("one", false);
         platformKnocked.addConditions(new StringEqualToCondition(NameComponent.class, "four"));
         //platformKnocked.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE,-1.0));
 
@@ -117,7 +117,7 @@ public class DummyGameObjectMaker {
 
 
 
-        BottomCollisionEvent mushroomOnPlatform = new BottomCollisionEvent("four");
+        BottomCollisionEvent mushroomOnPlatform = new BottomCollisionEvent("four", false);
         mushroomOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "two"));
         mushroomOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 //        mushroomOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
@@ -126,7 +126,7 @@ public class DummyGameObjectMaker {
 
 
 
-        RightCollisionEvent rce = new RightCollisionEvent("three");
+        RightCollisionEvent rce = new RightCollisionEvent("three", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
         rce.addActions(new ProgressionAction(true));
         rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
@@ -151,6 +151,8 @@ public class DummyGameObjectMaker {
         dummy7.addComponent(new CollisionComponent(true));
         AddEntity.addActions(new AddEntityAction(dummy7));
         AddEntity.addActions(new SoundAction("mario_theme"));
+
+
 
 
         level1.addEvent(event);
@@ -189,7 +191,8 @@ public class DummyGameObjectMaker {
         Entity dummy6 = new Entity();
         Entity dummy8 = new Entity();
 
-
+        dummy1.addComponent(new GroupComponent("one"));
+        dummy4.addComponent(new GroupComponent("four"));
 
         //flappy double jump
         Component vc = new ValueComponent(0.0);
@@ -258,6 +261,7 @@ public class DummyGameObjectMaker {
         dummy4.addComponent(new SpriteComponent("mario_block.png"));
         dummy4.addComponent(new CollisionComponent(true));
         dummy4.addComponent(new HealthComponent(100.0));
+        //dummy4.addComponent(new GroupComponent("four"));
         dummy4.addComponent(new NameComponent("four"));
 
         dummy5.addComponent(new XPositionComponent(250.0));

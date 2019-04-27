@@ -8,46 +8,26 @@ import engine.external.conditions.Condition;
 /**
  * @author Dima Fayyad
  */
-public class TopCollisionEvent extends Event {
+public class TopCollisionEvent extends CollisionEvent {
 
-    private String myCollisionWithEntity;
 
-    public TopCollisionEvent(String collideWithEntity) {
-        myCollisionWithEntity = collideWithEntity;
+    public TopCollisionEvent(String collideWithEntity, boolean grouped) {
+        setCollisionWithEntity(collideWithEntity);
+        setGrouped(grouped);
 
-        makeTopCollisionCondition();
+        makeTopCollisionCondition(grouped);
     }
 
     /**
      * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
      * Adds a condition to the Event that verifies the collision is on top of entity
      */
-    private void makeTopCollisionCondition() {
-        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class, myCollisionWithEntity);
+    private void makeTopCollisionCondition(boolean grouped) {
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class,
+                getCollisionWithEntity(), grouped);
         super.addConditions(containsCollidedComponentCondition);
     }
 
-    public void removeActions(Action actionToRemove){
-        super.removeActions(actionToRemove);
-    }
-
-    public void addActions(Action actionToAdd){
-        super.addActions(actionToAdd);
-    }
-
-    public void addConditions(Condition addCondition){
-        if (addCondition.getClass().equals(CollisionCondition.class)){
-            return;
-        }
-        super.addConditions(addCondition);
-    }
-
-    public void removeConditions(Condition removeCondition){
-        if (removeCondition.getClass().equals(CollisionCondition.class)){
-            return;
-        }
-        super.removeConditions(removeCondition);
-    }
 
 
 }

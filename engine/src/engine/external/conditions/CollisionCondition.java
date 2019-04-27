@@ -2,6 +2,7 @@ package engine.external.conditions;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.GroupComponent;
 import engine.external.component.NameComponent;
 
 import java.io.Serializable;
@@ -25,17 +26,29 @@ public class CollisionCondition extends Condition {
      * @param directionalCollidedComponent
      * @param entityType
      */
-    public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType) {
+    public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType,
+                              boolean grouped) {
+
+        Class<? extends Component> componentClass = grouped ? GroupComponent.class : NameComponent.class;
         setPredicate((Predicate<Entity> & Serializable) (entity ->
                 ((Collection<Entity>) entity.getComponent(directionalCollidedComponent).getValue()).stream().anyMatch((Predicate<Entity> & Serializable) entity2 ->
-                        matchNames(entityType, entity2)
+                        matchNames(entityType, entity2, componentClass)
                 )));
+
 
         myDirection = directionalCollidedComponent.getSimpleName();
     }
 
-    private boolean matchNames(String entityType, Entity entity) {
-        return new StringEqualToCondition(NameComponent.class, entityType).getPredicate().test(entity);
+    private boolean matchNames(String entityType, Entity entity, Class<? extends Component> componentClass) {
+//        if (entity.hasComponents(NameComponent.class)) {
+//            return entityType == entity.getComponent(NameComponent.class).getValue();
+//        }
+//        else if (entity.hasComponents(GroupComponent.class)) {
+//            return entityType == entity.getComponent(GroupComponent.class).getValue();
+//        }
+
+        return new StringEqualToCondition(componentClass, entityType).getPredicate().test(entity);
+
     }
 
     @Override
