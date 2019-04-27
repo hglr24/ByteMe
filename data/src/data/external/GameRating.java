@@ -35,4 +35,16 @@ public class GameRating {
         return myAuthorName;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof GameRating) {
+            GameRating other = (GameRating) obj;
+            return myUsername.equals(other.myUsername) &&
+                    myAuthorName.equals(other.myAuthorName) &&
+                    myComment.equals(other.myComment) &&
+                    myGameName.equals(other.myGameName) &&
+                    myNumberOfStars == other.myNumberOfStars;
+        }
+        return false;
+    }
 }

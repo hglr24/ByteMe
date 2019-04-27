@@ -180,4 +180,8 @@ public class DatabaseEngine {
     public List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
         return myGameInformationQuerier.loadAllGameInformationXMLs(userName);
     }
+
+    public void removeRating(String gameName, String authorName) throws SQLException{
+        myRatingsQuerier.removeAllGameRatings(gameName, authorName);
+    }
 }

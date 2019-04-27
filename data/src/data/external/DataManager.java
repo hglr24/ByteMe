@@ -425,9 +425,8 @@ public class DataManager implements ExternalData {
         return deserializeGameInfoObjects(gameInfoObjectXMLs);
     }
 
-    @Override
-    public Map<String, InputStream> loadDefaultImages() {
-        return null;
+    public void removeRating(String gameName, String authorName) throws SQLException {
+        myDatabaseEngine.removeRating(gameName, authorName);
     }
 
 

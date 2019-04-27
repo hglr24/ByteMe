@@ -19,7 +19,7 @@ public class RatingsQuerier extends Querier {
     private static final String COMMENTS_COLUMN = "Comments";
     private static final String AVERAGE = "average";
 
-    private static final String UPDATE_GAME_RATINGS = String.format("UPDATE %s SET(%s = ?, %s = ?) WHERE %s = ? AND %s = ? AND %s = ?", GAME_RATINGS_TABLE_NAME, RATING_COLUMN, COMMENTS_COLUMN, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, USER_NAME_COLUMN);
+    private static final String UPDATE_GAME_RATINGS = String.format(" %s = ?, %s = ?", RATING_COLUMN, COMMENTS_COLUMN);
     private static final String INSERT_GAME_RATINGS = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?, ?, ?, ?, ?)", GAME_RATINGS_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, USER_NAME_COLUMN, RATING_COLUMN, COMMENTS_COLUMN);
 
     private static final String AVERAGE_RATINGS_STATEMENT = String.format("SELECT AVG(%s) AS %s FROM %s WHERE %s = ?",
@@ -54,9 +54,6 @@ public class RatingsQuerier extends Querier {
         myUpdateRatingStatement.setString(5, rating.getComment());
         myUpdateRatingStatement.setInt(6, rating.getNumberOfStars());
         myUpdateRatingStatement.setString(7, rating.getComment());
-        myUpdateRatingStatement.setString(8, rating.getGameName());
-        myUpdateRatingStatement.setString(9, rating.getAuthorName());
-        myUpdateRatingStatement.setString(10, rating.getUsername());
         myUpdateRatingStatement.execute();
     }
 
