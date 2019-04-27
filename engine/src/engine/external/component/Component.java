@@ -10,6 +10,7 @@ import java.io.Serializable;
 public abstract class Component<T> implements Serializable {
     protected T myValue;
     protected T myOriginalValue;
+    protected T myDefault;
 
     public Component(T value) {
         myValue = value;
@@ -22,6 +23,9 @@ public abstract class Component<T> implements Serializable {
 
     public T getValue() {
         return myValue;
+    }
+    protected void setDefault(T value){
+        myDefault = value;
     }
 
     public void resetToOriginal(){
