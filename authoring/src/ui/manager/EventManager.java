@@ -46,16 +46,12 @@ public class EventManager extends Stage {
         myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents(), refreshEventsListing));
         myEventsDisplay.setRight(null);
         myEventsDisplay.setBottom(createEventsToolPane());
-
-
-
         return myScene;
     }
 
     private VBox createTitle(){
         VBox myEntityTile = new VBox();
         myEntityTile.getStyleClass().add(STYLE_VBOX);
-//        myEntityTile.setPadding(new Insets(20,0,0,0));
         Label myTitle = new Label(TITLE);
         myEntityTile.getChildren().add(myTitle);
         return myEntityTile;

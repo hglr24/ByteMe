@@ -58,7 +58,7 @@ public class EventBuilder {
             return (Condition)Reflection.createInstance(conditionClassName,componentClass,value);
         }
     }
-    public Action createGeneralAction(Map<String,StringProperty> myEventOptionsListener, Event modifiableEvent) throws Exception{
+    public Action createGeneralAction(Map<String,StringProperty> myEventOptionsListener, Event modifiableEvent) {
         Action generatedAction = createGeneralAction(myEventOptionsListener);
         modifiableEvent.addActions(generatedAction);
         return generatedAction;
