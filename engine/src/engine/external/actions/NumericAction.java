@@ -43,6 +43,7 @@ public abstract class NumericAction extends Action<Double> {
         }
         myModifier = type;
         myArgument = newValue;
+        myComponentClass = componentClass;
         super.setMyComponentClass(componentClass);
     }
 

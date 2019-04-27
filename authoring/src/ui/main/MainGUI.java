@@ -22,6 +22,7 @@ import ui.ErrorBox;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
+import ui.Utility;
 import ui.manager.GroupManager;
 import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
@@ -30,14 +31,12 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -49,7 +48,7 @@ import java.util.ResourceBundle;
  */
 public class MainGUI {
 
-    private Game myGame;
+    private Game myLoadedGame;
     private GameCenterData myGameData;
     private Stage myStage;
     private HBox myViewerBox;
@@ -67,9 +66,10 @@ public class MainGUI {
     private static final String MENU_ITEMS_FILE = "main_menu_items";
     private static final String STAGE_TITLE = "ByteMe Authoring Environment";
     private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
+    private static final ResourceBundle SAVING_ASSETS_RESOURCES = ResourceBundle.getBundle("mainGUI_assets");
 
     public MainGUI() { // Default constructor for creating a new game from scratch
-        myGame = new Game();
+        myLoadedGame = new Game();
         myGameData = new GameCenterData();
         myStage = new Stage();
         myViewers = new HashMap<>();
@@ -89,7 +89,7 @@ public class MainGUI {
 
     public MainGUI(Game game, GameCenterData gameData) {
         this();
-        myGame = game;
+        myLoadedGame = game;
         myGameData = gameData;
     }
 
@@ -205,24 +205,24 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void openGame() {
         System.out.println("Open"); //TODO
+        DataManager dataManager = new DataManager();
+        loadAllAssets(dataManager);
     }
 
     @SuppressWarnings("unused")
     private void saveGame() {
-        System.out.println("save game called");
-        GameTranslator translator = new GameTranslator(myGame, myGameData, myObjectManager);
-        Game exportableGame = translator.translate();
-        GameCenterData gameData = translator.getNewGameData();
-
-        System.out.println("Made it to line");
-        DataManager dm = new DataManager();
-        System.out.println("Made it after the line");
-//        dm.createGameFolder(gameData.getFolderName());
-//        dm.saveGameData(gameData.getFolderName(), exportableGame);
-//        dm.saveGameInfo(gameData.getFolderName(), gameData);
-        dm.saveGameData(gameData.getFolderName(), gameData.getAuthorName(), exportableGame);
-        dm.saveGameInfo(gameData.getFolderName(), gameData.getAuthorName(), gameData);
-        System.out.println("Game saved");
+        GameTranslator translator = new GameTranslator(myObjectManager);
+        try {
+            Game exportableGame = translator.translate();
+            DataManager dm = new DataManager();
+            dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
+            dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+            saveAndClearFolder(dm, "authoring/assets/images/");
+            saveAndClearFolder(dm, "authoring/assets/audio");
+        } catch (UIException e) {
+            ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
+            errorBox.showAndWait();
+        }
     }
 
     @SuppressWarnings("unused")
@@ -269,44 +269,39 @@ public class MainGUI {
 
     //TODO make this work for audio too - need to differentiate which dataManager method using
     //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
-    private void saveAndClearFolder(DataManager dataManager, File outerDirectory){
-        System.out.println("Save and clear folder called");
-        System.out.println(outerDirectory.getName());
-        for(File innerFolder : outerDirectory.listFiles()){
-            if(innerFolder.isDirectory()){
-                for(File asset : innerFolder.listFiles()){
-                    System.out.println(asset.getName());
-                    String gameTitle = myGameData.getTitle();
-                    String authorUsername = myGameData.getAuthorName();
-                    String imageTitle = gameTitle + authorUsername + asset.getName();
-                    dataManager.saveImage(imageTitle, asset);
-                    //TODO: uncomment this
-//            if(temp.delete()){
-//                System.out.println("deleted");
-//            }
-                }
-            }
-
-
+    private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        for(File file : outerDirectory.listFiles()){
+            dataManager.saveImage(file.getName(), file);
+            //TODO uncomment file.delete();
         }
     }
+
+    private void loadAllAssets(DataManager dataManager){
+        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
+        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), prefix);
+        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
+    }
+
 
     //TODO: differentiate between images and audio
     //TODO: test the file copying
-    private void loadAssets(DataManager dataManager, String folderFilePath){
-        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
-        try {
-            Map<String, InputStream> imagesMap = dataManager.loadAllImages(prefix);
-            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
-                Files.copy(entry.getValue(), Paths.get(GENERAL_RESOURCES.getString("images_filepath")), StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (SQLException e) {
-            //TODO: handle error
-            e.printStackTrace();
-        } catch (IOException e) {
-            //TODO: handle error
-            e.printStackTrace();
-        }
+    private void loadAssets(DataManager dataManager, String folderFilePath, String prefix){
+//        System.out.println("Made it to loadAssets");
+//        String key = folderFilePath.split("/")[folderFilePath.split("/").length-1];
+//        try {
+//            System.out.println("Key: " + key);
+//            Map<String, InputStream> imagesMap = (Map<String, InputStream>) Reflection.callMethod(dataManager, GENERAL_RESOURCES.getString(key), prefix);
+//            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
+//                InputStream inputStream = entry.getValue();
+//                File destination = new File(folderFilePath + entry.getKey());
+//                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+//            }
+//        } catch (IOException e) {
+//            //TODO: handle error
+//            e.printStackTrace();
+//        }
     }
-
 }

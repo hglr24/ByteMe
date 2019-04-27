@@ -1,7 +1,66 @@
 package ui;
+import engine.external.component.NameComponent;
+import engine.external.conditions.StringEqualToCondition;
+import engine.external.events.Event;
+import events.EventBuilder;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import ui.manager.RefreshLabels;
+import ui.manager.Refresher;
+
 
 public class AuthoringConditionalEvent extends AuthoringEvent {
-    public AuthoringConditionalEvent(String actorName, String conditionalType, String componentName, String actionName){
-        super(actorName);
+    private static final String USER_PROMPT = "Select Condition...";
+    private static final String CONDITION_RESOURCE = "conditions";
+
+    private static final String SAVE = "Save";
+    private static final String CANCEL = "Cancel";
+    private String myEntityName;
+    private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
+    private StringProperty conditionOperator = new SimpleStringProperty(); //type of condition, such as a LessThanCondition
+    private StringProperty triggerValue = new SimpleStringProperty();  //value bound to trigger the actions associated with this event
+
+    private Refresher myRefresher;
+    private ObservableList<Event> myEntityEvents;
+    public AuthoringConditionalEvent(String entityName){
+        myEntityName = entityName;
+    }
+    @Override
+    public VBox generateEventOptions(){
+        VBox eventOptions = new VBox();
+        eventOptions.getChildren().add(generateConditionOptions());
+        eventOptions.getChildren().add(super.createActionOptions());
+        eventOptions.getChildren().add(createToolBar());
+        return eventOptions;
+    }
+
+
+    @Override
+    public void addSaveComponents(Refresher refresher, ObservableList<Event> entityEvents) {
+        myRefresher = refresher;
+        myEntityEvents = entityEvents;
+    }
+
+    private HBox generateConditionOptions() {
+        return super.createEventComponentOptions(USER_PROMPT,CONDITION_RESOURCE,componentName,conditionOperator,triggerValue);
+    }
+
+    private HBox createToolBar(){
+        Button saveButton = new Button(SAVE);
+        saveButton.setOnMouseClicked(mouseEvent -> saveConditionalEvent());
+        return super.createToolBar(saveButton);
+    }
+
+    private void saveConditionalEvent(){
+        Event conditionalEvent = new Event();
+        conditionalEvent.addConditions(new StringEqualToCondition(NameComponent.class,myEntityName));
+        EventBuilder myBuilder = new EventBuilder();
+        myBuilder.createGeneralCondition(conditionOperator.getValue(),componentName.getValue(), triggerValue.getValue(),conditionalEvent);
+        super.saveAction(conditionalEvent);
+        super.saveEvent(conditionalEvent,myRefresher,myEntityEvents);
     }
 }

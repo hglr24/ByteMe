@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import ui.EntityField;
+import ui.manager.LabelManager;
 import voogasalad.util.reflection.Reflection;
 import java.util.*;
 
@@ -28,7 +30,6 @@ public class EventFactory {
         ResourceBundle myControlsOptions = ResourceBundle.getBundle(controlResources);
         for (String controlInformation: myControlsOptions.getString(controlKey.replaceAll(" ","")).split(CONTROL_SEPARATOR)) {
             String keyCode = controlInformation.substring(0,controlInformation.indexOf(KEY_CODE_DELIMITER));
-
             String factoryInformation = controlInformation.substring(controlInformation.indexOf(KEY_CODE_DELIMITER)+1);
             String methodName = factoryInformation.substring(0, factoryInformation.indexOf(PARAMETER_SEPARATOR));
             String methodParameter = factoryInformation.substring(factoryInformation.indexOf(PARAMETER_SEPARATOR) + 1);
@@ -80,31 +81,53 @@ public class EventFactory {
                                                  Map<String,StringProperty> myBinding){
         String myIndependentKey = myKeys.substring(0,myKeys.indexOf("%"));
         String myDependentKey = myKeys.substring(myKeys.indexOf("%") + 1);
-        ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myIndependentKey,myBinding);
-        ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
-        myDependentChoice.setMinSize(100,40);
-        myDependentChoice.setMaxSize(100,40);
-        bindBox(myDependentChoice,myDependentKey,myBinding);
-        Map<String,ObservableList> choiceSelector = new HashMap<>();
         ResourceBundle myIndependentResources = ResourceBundle.getBundle(independentBundle);
+        Map<String,ObservableList> choiceSelector = new HashMap<>();
         choiceSelector.put("", FXCollections.observableArrayList());
-
         for (String key : ResourceBundle.getBundle(independentBundle).keySet()){
             String[] dependentOptions = myIndependentResources.getString(key).split("::");
             List dependentOptionsList = Arrays.asList(dependentOptions);
             choiceSelector.put(key,FXCollections.observableArrayList(dependentOptionsList));
         }
+
+        ChoiceBox<String> myControllingChoice = createBoxFromResources(independentBundle,myIndependentKey,myBinding);
+        ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
+        myDependentChoice.setMinSize(100,40);
+        myDependentChoice.setMaxSize(100,40);
+        bindBox(myDependentChoice,myDependentKey,myBinding);
+        return makeChoiceBoxesDependent(choiceSelector, myControllingChoice,myDependentChoice);
+    }
+
+    public static HBox createInteractionOptions(String keyOptionsBundle, String[] myKeys, LabelManager myDisplayOptions, Map<String,StringProperty> myBinding){
+        ResourceBundle independentBundle = ResourceBundle.getBundle(keyOptionsBundle);
+        List<String> interactiveTypes = new ArrayList<>(independentBundle.keySet());
+        Collections.sort(interactiveTypes);
+        Map<String,ObservableList> choiceSelector = new HashMap<>();
+        choiceSelector.put("", FXCollections.observableArrayList());
+        for (String interactive: interactiveTypes){
+            List<String> myInteractiveList = myDisplayOptions.getLabels(EntityField.valueOf(interactive));
+            choiceSelector.put(interactive,FXCollections.observableArrayList(myInteractiveList));
+        }
+        ChoiceBox<String> myControllingChoice = new ChoiceBox<>(FXCollections.observableArrayList(interactiveTypes));
+        ChoiceBox<String> myDependentChoice = new ChoiceBox<>(FXCollections.observableArrayList());
+        bindBox(myControllingChoice,myKeys[0],myBinding);
+        bindBox(myDependentChoice,myKeys[1],myBinding);
+        return makeChoiceBoxesDependent(choiceSelector,myControllingChoice,myDependentChoice);
+
+
+    }
+
+    private static HBox makeChoiceBoxesDependent(Map<String,ObservableList> choiceSelector, ChoiceBox<String> myControllingChoice, ChoiceBox<String> myDependentChoice){
+
         myControllingChoice.getSelectionModel().selectedItemProperty().addListener((observableEvent, previousEvent, selectedEvent) ->
-        {
-            myDependentChoice.setItems(FXCollections.observableList(choiceSelector.get(selectedEvent)));
-        });
 
-
-
+            myDependentChoice.setItems(FXCollections.observableList(choiceSelector.get(selectedEvent)))
+        );
         HBox myHBox = new HBox();
         myHBox.getChildren().add(myControllingChoice);
         myHBox.getChildren().add(myDependentChoice);
         return myHBox;
+
     }
 
 

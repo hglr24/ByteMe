@@ -83,23 +83,18 @@ public class UserCreatedTypesPane extends VBox {
         String category = myDefaultTypesFactory.getCategory(defaultName);
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
         String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
-        try {
-            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
-            originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
-            String assetImagesFilePath = myGeneralResources.getString("images_filepath");
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
-            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
-            myCategoryToList.get(category).add(subPane);
-            myEntityMenu.setDropDown(category, myCategoryToList.get(category));
-            subPane.setOnDragDetected(mouseEvent -> {
-                myDraggedAuthoringEntity = originalAuthoringEntity;
-                Utility.setupDragAndDropImage(imageWithEntity);
-            });
-            subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
-        } catch (FileNotFoundException e) {
-            //TODO: deal with this
-            e.printStackTrace();
-        }
+        AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
+        originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
+        ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity);
+        UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
+        myCategoryToList.get(category).add(subPane);
+        myEntityMenu.setDropDown(category, myCategoryToList.get(category));
+        subPane.setOnDragDetected(mouseEvent -> {
+            myDraggedAuthoringEntity = originalAuthoringEntity;
+            Utility.setupDragAndDropImage(imageWithEntity);
+        });
+        subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
+
     }
 
     private void handleRightClick(ContextMenuEvent contextMenuEvent, UserDefinedTypeSubPane userDefinedTypeSubPane, String category){

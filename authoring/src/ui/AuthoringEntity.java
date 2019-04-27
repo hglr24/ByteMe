@@ -1,7 +1,6 @@
 package ui;
 
 import engine.external.Entity;
-import engine.external.component.*;
 import engine.external.events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -73,8 +71,8 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
-        else if (key.equals(EntityField.CAMERA))
-            myObjectManager.flushCameraAssignment(this);
+        else if (key.equals(EntityField.FOCUS))
+            myObjectManager.flushFocusAssignment(this);
         else if (!((EntityField) key).isDefault()) {
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
         }
@@ -95,5 +93,8 @@ public class AuthoringEntity implements Propertable {
 
     public List<String> getInteractionListing(){ return myInteractionListing;}
 
+    public ObjectManager getObjectManager() {
+        return myObjectManager;
+    }
 
 }

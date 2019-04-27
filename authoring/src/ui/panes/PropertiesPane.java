@@ -68,7 +68,7 @@ public class PropertiesPane extends TitledPane {
         if (myProp.getValue() != null)
             extractNewProperties();
         else {
-            return new Label("Create an Object Type to Start");
+            return new Label("Create an Entity Type to Start");
         }
         addNewPropButton(gridContainer);
         return scrollpane;

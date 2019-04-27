@@ -1,7 +1,5 @@
 package ui.panes;
 
-import engine.external.component.HeightComponent;
-import engine.external.component.WidthComponent;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -53,7 +51,7 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateImage(String imageName){
-        FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath") + imageName);
+        FileInputStream inputStream = Utility.makeImageAssetInputStream(imageName);
         Double width = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         Double height = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         Image image = new Image(inputStream, width, height, false, false);

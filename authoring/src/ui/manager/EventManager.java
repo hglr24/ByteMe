@@ -1,5 +1,11 @@
 package ui.manager;
 
+import events.EventType;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -19,15 +25,17 @@ public class EventManager extends Stage {
 
     private AuthoringEntity myEntity;
     private String myEntityName;
-    private Refresher refreshEventsListing = this::refreshEventListing;
+    private Refresher myRefresher = this::refreshEventListing;
     private static final String TITLE = "Conditions \t\t\t\t Actions \t\t\t\t Modify Event";
     private static final String ADD_EVENT = "+ Event";
     private static final String STYLE = "default.css";
     private static final String STYLE_CLASS = "event-manager";
     private static final String STYLE_VBOX = "event-manager-vbox";
     private static final String BIGBUTTON = "BigButton";
+    private LabelManager myLabelManager;
     public EventManager(Propertable prop) { // Loads common Events for object instance based on type label
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
+        myLabelManager = myEntity.getObjectManager().getLabelManager();
         Scene myDefaultScene = createPane();
         this.setScene(myDefaultScene);
         myEntityName = myEntity.getPropertyMap().get(EntityField.LABEL);
@@ -43,7 +51,7 @@ public class EventManager extends Stage {
 
         myEventsDisplay.setTop(createTitle());
         myEventsDisplay.setLeft(null);
-        myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents(), refreshEventsListing));
+        myEventsDisplay.setCenter(new CurrentEventsPane(myEntity.getEvents(), myRefresher));
         myEventsDisplay.setRight(null);
         myEventsDisplay.setBottom(createEventsToolPane());
         return myScene;
@@ -59,10 +67,15 @@ public class EventManager extends Stage {
 
     private VBox createEventsToolPane(){
         VBox myTools = new VBox();
-        Button myEventsPopUp = new Button(ADD_EVENT);
-        myEventsPopUp.getStylesheets().add(STYLE);
-        myEventsPopUp.getStyleClass().add(BIGBUTTON);
-        myEventsPopUp.setOnMouseClicked(e -> new EventsPopUpPane(myEntity.getEvents(), myEntityName,refreshEventsListing ));
+        ChoiceBox<String> myEventsPopUp = new ChoiceBox<>(FXCollections.observableArrayList(EventType.allDisplayNames));
+        myEventsPopUp.getSelectionModel().selectedItemProperty().addListener((observableValue, s, eventName) -> {
+            AuthoringEvent myAuthoringEvent = makeAuthoringEvent(eventName.replaceAll(" ",""),myEntityName);
+            myAuthoringEvent.addSaveComponents(myRefresher,myEntity.getEvents());
+            myAuthoringEvent.render();
+
+        });
+//        myEventsPopUp.getStylesheets().add(STYLE);
+//        myEventsPopUp.getStyleClass().add(BIGBUTTON);
         myTools.getChildren().add(myEventsPopUp);
         return myTools;
     }
@@ -72,4 +85,12 @@ public class EventManager extends Stage {
         this.setScene(createPane());
     }
 
+    private AuthoringEvent makeAuthoringEvent(String eventName, String entityName){
+        if (EventType.valueOf(eventName).isInteractive()){
+            return new AuthoringInteractiveEvent(myLabelManager,eventName,entityName);
+        }
+        else {
+            return new AuthoringConditionalEvent(entityName);
+        }
+    }
 }

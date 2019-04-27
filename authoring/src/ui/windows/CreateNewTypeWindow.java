@@ -122,7 +122,7 @@ public class CreateNewTypeWindow extends Stage {
         Button button = Utility.makeButton(this, buttonResources[1], buttonResources[0]);
         myGridPane.add(button, 0, myGridPane.getRowCount());
 
-        FileInputStream fileInputStream = Utility.makeFileInputStream(GENERAL_RESOURCES.getString("no_image"));
+        FileInputStream fileInputStream = Utility.makeImageAssetInputStream("no_image.png");
         ImageView imageView = new ImageView(new Image(fileInputStream, 50, 50, false, false));
         mySelectedImagePane.getChildren().add(imageView);
         myGridPane.add(mySelectedImagePane, 1, myGridPane.getRowCount()-1);

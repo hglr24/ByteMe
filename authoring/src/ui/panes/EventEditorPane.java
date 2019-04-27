@@ -15,6 +15,8 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.manager.LabelManager;
+import ui.manager.RefreshLabels;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
 
@@ -41,7 +43,7 @@ import java.util.Map;
     private static final String VBOX_STYE = "event-component-vbox";
     private Stage myPopUpStage;
 
-    EventEditorPane(Event unfinishedEvent,Refresher eventDisplayRefresher){
+    EventEditorPane(Event unfinishedEvent, Refresher eventDisplayRefresher){
         HBox splitEditorPane = new HBox();
 
         List<?> myEventConditions = unfinishedEvent.getEventInformation().get(Condition.class);

@@ -1,12 +1,12 @@
 package ui.windows;
 
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
 import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
@@ -15,6 +15,8 @@ import ui.panes.AssetImageSubPane;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Carrie Hunner
@@ -25,14 +27,10 @@ import java.io.FileNotFoundException;
 public class ImageManager extends AssetManager {
     private ImageView mySelectedImageView;
     private Propertable myProp;
-    private GridPane myGridPane;
-    private int myRow;
-    private int myCol;
-    private static final int IMAGE_SUBPANE_SIZE = 60;
-    private static final int MAX_NUM_COLS = 5;
     private static final String EXTENSION_KEY = "AcceptableImageExtensions";
     private static final String TITLE_KEY = "ImagesTitle";
     private static final String ASSET_IMAGE_FOLDER_PATH = GENERAL_RESOURCES.getString("images_filepath");
+    private Map<Pane, FlowPane> myMap;
 
     /**
      * This default Constructor is needed when the user is choosing an image for
@@ -42,8 +40,6 @@ public class ImageManager extends AssetManager {
         super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
         mySelectedImageView = null;
         myProp = null;
-        myRow = 0;
-        myCol = 0;
     }
 
     /**
@@ -92,13 +88,21 @@ public class ImageManager extends AssetManager {
      * @param file File to be added
      */
     @Override
-    protected void addAsset(File file) {
-        if(myCol == MAX_NUM_COLS){
-            myCol = 0;
-            myRow += 1;
+    protected void addAsset(File file, Pane pane) {
+        myMap.putIfAbsent(pane, createAndFormatNewGridPane());
+        FlowPane flowpane = myMap.get(pane);
+        flowpane.setColumnHalignment(HPos.LEFT);
+        flowpane.setRowValignment(VPos.TOP);
+        flowpane.getChildren().add(createSubPane(file));
+        if(pane.getChildren().contains(flowpane)){
+            pane.getChildren().remove(flowpane);
         }
-        myGridPane.add(createSubPane(file), myCol, myRow);
-        myCol++;
+        pane.getChildren().add(flowpane);
+    }
+
+    @Override
+    protected void initializeSubClassVariables() {
+        myMap = new HashMap<>();
     }
 
     /**
@@ -106,16 +110,11 @@ public class ImageManager extends AssetManager {
      * will be the content of the Manger's scrollpane
      * @return Pane of the desired content
      */
-    @Override
-    protected Pane createAndFormatScrollPaneContent() {
-        myGridPane = new GridPane();
-        myGridPane.setPadding(INSETS);
-        ColumnConstraints colRestraint = new ColumnConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        myGridPane.getColumnConstraints().add(colRestraint);
-        RowConstraints rowRestraint = new RowConstraints(SPACING + IMAGE_SUBPANE_SIZE);
-        myGridPane.getRowConstraints().add(rowRestraint);
-        myGridPane.setAlignment(Pos.CENTER);
-        return myGridPane;
+    private FlowPane createAndFormatNewGridPane() {
+        FlowPane flow = new FlowPane();
+        flow.setPadding(INSETS);
+        flow.setAlignment(Pos.CENTER);
+        return flow;
     }
 
 

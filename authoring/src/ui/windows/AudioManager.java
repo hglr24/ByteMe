@@ -3,20 +3,22 @@ package ui.windows;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import ui.Propertable;
 
-import javax.sound.sampled.AudioInputStream;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AudioManager extends AssetManager {
 
     private static final String EXTENSION_KEY = "AcceptableAudioExtensions";
     private static final String TITLE_KEY = "AudioTitle";
     private static final String ASSET_AUDIO_FOLDER_PATH = GENERAL_RESOURCES.getString("audio_filepath");
-    private ListView myListView;
+    private Map<Pane, ListView> myMap;
     private Propertable myPropertable;
 
     public AudioManager(){
@@ -25,6 +27,7 @@ public class AudioManager extends AssetManager {
 
     public AudioManager(Propertable propertable){
         this();
+        System.out.println("Made it to constructor");
         myPropertable = propertable;
     }
 
@@ -33,7 +36,9 @@ public class AudioManager extends AssetManager {
      * @param file File to be added
      */
     @Override
-    protected void addAsset(File file) {
+    protected void addAsset(File file, Pane pane) {
+        myMap.putIfAbsent(pane, createAndFormatNewListView());
+        ListView listView = myMap.get(pane);
         Label text = new Label(file.getName());
         VBox vBox = new VBox(text);
         vBox.setOnMouseClicked(mouseEvent -> {
@@ -45,18 +50,28 @@ public class AudioManager extends AssetManager {
                 }
             }
         });
-        myListView.getItems().add(vBox);
+        if(listView.getItems().contains(vBox)){
+            listView.getItems().remove(vBox);
+        }
+        listView.getItems().add(vBox);
+        if(pane.getChildren().contains(listView)){
+            pane.getChildren().remove(listView);
+        }
+        pane.getChildren().add(listView);
     }
 
     /**
-     * Method that should create and format a pane that
-     * will be the content of the Manger's scrollpane
-     * @return Pane of the desired content
+     * initializes the hashmap for when populating the tabs
      */
     @Override
-    protected ListView createAndFormatScrollPaneContent() {
-        myListView = new ListView();
-        return myListView;
+    protected void initializeSubClassVariables() {
+        myMap = new HashMap<>();
+    }
+
+
+    protected ListView createAndFormatNewListView() {
+        ListView listView = new ListView();
+        return listView;
     }
 
 

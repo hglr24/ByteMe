@@ -1,7 +1,5 @@
 package ui.panes;
 
-import engine.external.Entity;
-import engine.external.component.SpriteComponent;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
@@ -89,7 +87,7 @@ public class Viewer extends ScrollPane {
 
         for(AuthoringEntity authoringEntity : authoringEntityList){
             String imagePath = GENERAL_RESOURCES.getString("images_filepath/") + authoringEntity.getPropertyMap().get(EntityField.IMAGE);
-            FileInputStream fileInputStream = Utility.makeFileInputStream(imagePath);
+            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath);
             ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity);
             myStackPane.getChildren().add(imageWithEntity);
         }
@@ -146,8 +144,7 @@ public class Viewer extends ScrollPane {
 
     private void updateBackground(String filename){
         if(filename != null){
-            String filepath = GENERAL_RESOURCES.getString("images_filepath") + filename;
-            FileInputStream fileInputStream = Utility.makeFileInputStream(filepath);
+            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(filename);
             Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false);
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
             myStackPane.setBackground(new Background(backgroundImage));
@@ -257,13 +254,13 @@ public class Viewer extends ScrollPane {
         myObjectManager.removeEntityInstance(imageWithEntity.getAuthoringEntity());
     }
 
-    private void applyDragHandler(ImageWithEntity imageView) {
-        imageView.setOnDragDetected(new EventHandler<MouseEvent>() {
+    private void applyDragHandler(ImageWithEntity imageWithEntity) {
+        imageWithEntity.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                Utility.setupDragAndDropImage(imageView);
+                Utility.setupDragAndDropImage(imageWithEntity);
                 isDragOnView = true;
-                myDraggedAuthoringEntity = imageView.getAuthoringEntity();
+                myDraggedAuthoringEntity = imageWithEntity.getAuthoringEntity();
             }
         });
     }

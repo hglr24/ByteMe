@@ -29,8 +29,10 @@ public class EventBuilder {
 
     private static final String ACTION_KEY = "Action";
     private static final String COMPONENT_KEY = "Component";
+    private static final String CONDITION_KEY = "Condition";
 
     private static final ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_PACKAGE_NAME);
+    private static final String ERROR_ONE_KEY = "InvalidCondition";
     private static final String ERROR_TWO_KEY = "InvalidAction";
 
 
@@ -44,6 +46,51 @@ public class EventBuilder {
         modifiableEvent.addConditions(generatedCondition);
         return generatedCondition;
     }
+
+    public void createGeneralCondition(String comparatorDisplayName, String componentName, String conditionValue, Event currentEvent) {
+        ConditionType myConditionType = ConditionType.valueOf(comparatorDisplayName.replaceAll(" ",""));
+        String conditionClassName = myConditionType.getClassName();
+        try{
+            Class componentClass = Class.forName(COMPONENT_PACKAGE_PREFIX + componentName + COMPONENT_KEY);
+            Double value = Double.parseDouble(conditionValue);
+            Condition createdCondition =  (Condition)Reflection.createInstance(conditionClassName,componentClass,value);
+            currentEvent.addConditions(createdCondition);
+        }
+        catch(Exception nonNumericCondition){
+            try {
+                Class componentClass = Class.forName(COMPONENT_PACKAGE_PREFIX + componentName + COMPONENT_KEY);
+                Condition createdCondition = (Condition)Reflection.createInstance(conditionClassName,componentClass,conditionValue) ;
+                currentEvent.addConditions(createdCondition);
+            }
+            catch(Exception e2) {
+                UIException myException = new UIException(myErrors.getString(ERROR_ONE_KEY));
+                myException.displayUIException();
+            }
+        }
+    }
+
+    public void createGeneralAction(String componentName, String modifierName, String conditionValue, Event currentEvent) {
+        String actionClassName = ACTION_PACKAGE_PREFIX + componentName + ACTION_KEY;
+        try {
+            Action createdAction = (Action) Reflection.createInstance(actionClassName, NumericAction.ModifyType.valueOf(modifierName),
+                    Double.parseDouble(conditionValue));
+            currentEvent.addActions(createdAction);
+        }
+        catch(Exception nonNumericAction){
+            try {
+                Action createdAction = (Action)Reflection.createInstance(actionClassName,conditionValue) ;
+                currentEvent.addActions(createdAction);
+            }
+            catch(Exception e){
+                UIException myException = new UIException(myErrors.getString(ERROR_TWO_KEY));
+                myException.displayUIException();
+            }
+        }
+
+    }
+
+
+
 
     public Condition createGeneralCondition(Map<String,StringProperty> myEventOptionsListener) throws Exception{
         ConditionType myConditionType = ConditionType.valueOf(myEventOptionsListener.get(COMPARATOR).getValue().replaceAll(" ",""));

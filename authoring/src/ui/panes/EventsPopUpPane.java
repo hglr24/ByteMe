@@ -10,6 +10,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.manager.LabelManager;
+import ui.manager.RefreshLabels;
 import ui.manager.Refresher;
 
 import java.util.ResourceBundle;
@@ -17,7 +19,7 @@ import java.util.ResourceBundle;
 
 public class EventsPopUpPane extends Stage {
     private ChoiceBox<String> myEvents;
-    private EventOptionsPane myOptions = new EventOptionsPane();
+    private EventOptionsPane myOptions = new EventOptionsPane(new LabelManager());
 
     private static final String EVENT_DISPLAY = "event_display";
     private ResourceBundle myEventDisplay = ResourceBundle.getBundle(EVENT_DISPLAY);
@@ -29,9 +31,9 @@ public class EventsPopUpPane extends Stage {
     private static final String STYLE = "default.css";
     private static final String STYLE_CLASS = "event-pop-up";
 
-    public EventsPopUpPane(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
+    public EventsPopUpPane(ObservableList<Event> myEntityEvents, String myEntityName, RefreshLabels myEventsRefresher, LabelManager myInteractionOptions){
         VBox eventTypeChooser = setUpScene();
-        HBox buttonOptions = setUpButtons(myEntityEvents,myEntityName,myEventsRefresher);
+        HBox buttonOptions = setUpButtons(myEntityEvents,myEntityName,myEventsRefresher,myInteractionOptions);
 
         eventTypeChooser.getChildren().add(buttonOptions);
         Scene myScene = new Scene(eventTypeChooser);
@@ -65,20 +67,20 @@ public class EventsPopUpPane extends Stage {
     }
 
 
-    private HBox setUpButtons(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher){
+    private HBox setUpButtons(ObservableList<Event> myEntityEvents, String myEntityName, RefreshLabels myEventsRefresher, LabelManager myInteractionOptions){
         HBox buttonOptions = new HBox();
-        buttonOptions.getChildren().add(makeSaveButton(myEntityEvents, myEntityName,myEventsRefresher));
+        buttonOptions.getChildren().add(makeSaveButton(myEntityEvents, myEntityName,myEventsRefresher, myInteractionOptions));
         buttonOptions.getChildren().add(makeCancelButton());
         return buttonOptions;
     }
 
-    private Button makeSaveButton(ObservableList<Event> myEntityEvents, String myEntityName, Refresher myEventsRefresher ){
+    private Button makeSaveButton(ObservableList<Event> myEntityEvents, String myEntityName, RefreshLabels myEventsRefresher,LabelManager myInteractionOptions ){
         Button saveButton = new Button(myEventDisplay.getString(SAVE));
         saveButton.setOnMouseClicked(mouseEvent -> {
             String eventKeyName = myEvents.getValue().replaceAll(" ","");
             Event userMadeEvent = myOptions.saveEvent(myEntityName, eventKeyName);
             myEntityEvents.add(userMadeEvent);
-            myEventsRefresher.refresh();
+            myEventsRefresher.refresh(myInteractionOptions);
             closePage();
         });
         return saveButton;

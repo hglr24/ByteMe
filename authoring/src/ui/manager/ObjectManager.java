@@ -127,10 +127,10 @@ public class ObjectManager {
         }
     }
 
-    public void flushCameraAssignment(Propertable propagator) {
+    public void flushFocusAssignment(Propertable propagator) {
         for(AuthoringEntity entity : ((AuthoringLevel) myCurrentLevel.getValue()).getEntities()) {
             if (!entity.equals(propagator))
-                entity.getPropertyMap().put(EntityField.CAMERA, "false");
+                entity.getPropertyMap().put(EntityField.FOCUS, "false");
         }
     }
 

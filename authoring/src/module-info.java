@@ -10,6 +10,7 @@ module authoring {
     requires java.desktop;
     requires voogasalad_util;
     opens events to voogasalad_util;
+    opens ui.control to voogasalad_util;
     exports ui;
     exports ui.panes;
     exports ui.main;

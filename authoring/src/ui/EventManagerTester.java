@@ -34,8 +34,8 @@ public class EventManagerTester extends Application {
         AuthoringEntity testEntity = populateTestObjects(manager);
         testEntity.getInteractionListing().add("object2");
         testEntity.getInteractionListing().add("object3");
-        testEntity.getEvents().add(new Event("object1"));
-        testEntity.getEvents().add(new Event(testEntity.getPropertyMap().get(EntityField.LABEL)));
+        testEntity.getEvents().add(new Event());
+        testEntity.getEvents().add(new Event());
         makeTestEvents(testEntity);
         EventManager testEventManager = new EventManager(testEntity);
 
@@ -56,21 +56,21 @@ public class EventManagerTester extends Application {
     private void makeTestEvents(AuthoringEntity currentEntity){
         List<Event> myTesterEvents = new ArrayList<>();
         RightCollisionEvent myRightCollisionEvent =  new RightCollisionEvent(currentEntity.getPropertyMap().get(EntityField.LABEL),
-               "object2");
+               false);
         myRightCollisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -10.0));
         myRightCollisionEvent.addActions(new HealthAction(NumericAction.ModifyType.RELATIVE, -10.0));
         myTesterEvents.add(myRightCollisionEvent);
         LeftCollisionEvent myLeftCollisionEvent =  new LeftCollisionEvent(currentEntity.getPropertyMap().get(EntityField.LABEL),
-                "object3");
+                false);
         myLeftCollisionEvent.addActions(new SpriteAction("happySprite"));
 
         myTesterEvents.add(myLeftCollisionEvent);
-        Event myMultipleConditionEvent = new Event("object1");
+        Event myMultipleConditionEvent = new Event();
         GreaterThanCondition myXBound = new GreaterThanCondition(new XPositionComponent(0.0).getClass(),30.0);
         LessThanCondition myYBound = new LessThanCondition(new YPositionComponent(20.0).getClass(),0.0);
         myMultipleConditionEvent.addActions(new SpriteAction("Happy Sprite"));
 
-        Event myHealthEvent = new Event("object1");
+        Event myHealthEvent = new Event();
         GreaterThanCondition myXVel = new GreaterThanCondition(new XVelocityComponent(10.0).getClass(),2.0);
         GreaterThanCondition myYVel = new GreaterThanCondition(new YVelocityComponent(10.0).getClass(),2.0);
         myHealthEvent.addConditions(myXVel);

@@ -4,21 +4,17 @@ import engine.external.Entity;
 import engine.external.Level;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class Game {
     private List<Level> myLevels;
-    private Map<String, Entity> myUserCreatedTypes;
-    private String myIconName;
-    private String myGameName;
-    private String myGameDescription;
+    private Map<Entity, String> myUserCreatedTypes;
     private int myWidth;
     private int myHeight;
 
     public Game(){
-        myLevels = new ArrayList<Level>();
+        myLevels = new ArrayList<>();
 
         //Temporary defaults
         myHeight = 700;
@@ -41,7 +37,7 @@ public class Game {
         return myHeight;
     }
 
-    public void addUserCreatedTypes(Map<String, Entity> userCreatedTypes){
+    public void addUserCreatedTypes(Map<Entity, String> userCreatedTypes){
         myUserCreatedTypes = userCreatedTypes;
     }
 }
