@@ -10,10 +10,11 @@ public class DatabaseLoader {
 
     public static void main(String[] args) {
         DatabaseEngine.getInstance().open();
-        createUser("Ryan", "testPassword");
-        createUser("Person2", "passwordTwo");
-        validateUsers();
-        System.out.println();
+//        createUser("Ryan", "testPassword");
+//        createUser("Person2", "passwordTwo");
+//        validateUsers();
+//        System.out.println();
+        loadGameCenterDataFromCreatedGames();
         DatabaseEngine.getInstance().close();
     }
 

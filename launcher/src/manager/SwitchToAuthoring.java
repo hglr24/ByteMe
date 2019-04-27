@@ -1,6 +1,6 @@
 package manager;
 
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 
 @FunctionalInterface
 

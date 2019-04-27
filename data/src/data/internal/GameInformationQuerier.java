@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A Querier used to access the GameInformation table to save and load game information
@@ -22,26 +21,15 @@ public class GameInformationQuerier extends Querier {
     private static final String SELECT_TWO_CONDITIONS_NOT_NULL = "SELECT %s FROM %s WHERE %s = ? AND %s = ? AND %s IS" +
             " NOT NULL;";
 
-    private static final String GAME_DATA_INSERT = String.format(INSERT_THREE_VALUES, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN,
-            AUTHOR_NAME_COLUMN, GAME_DATA_COLUMN);
-    private static final String GAME_INFO_INSERT = String.format(INSERT_THREE_VALUES, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN,
-            AUTHOR_NAME_COLUMN, GAME_INFO_COLUMN);
-    private static final String UPDATE_GAME_DATA =
-            String.format(UPDATE_ONE_COLUMN, GAME_DATA_INSERT, ON_DUPLICATE_UPDATE, GAME_DATA_COLUMN);
-    private static final String UPDATE_GAME_INFO =
-            String.format(UPDATE_ONE_COLUMN, GAME_INFO_INSERT, ON_DUPLICATE_UPDATE, GAME_INFO_COLUMN);
-    private static final String LOAD_GAME_DATA =
-            String.format(SELECT_TWO_CONDITIONS_NOT_NULL, GAME_DATA_COLUMN,
-                    GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_DATA_COLUMN);
-    private static final String LOAD_GAME_INFORMATION =
-            String.format(SELECT_TWO_CONDITIONS_NOT_NULL, GAME_INFO_COLUMN,
-                    GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFO_COLUMN);
-    private static final String FIND_ALL_GAMES =
-            String.format(SELECT_TWO_WHOLE_COLUMNS, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME);
-    private static final String REMOVE_GAME =
-            String.format(DELETE_TWO_CONDITIONS, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN);
-    private static final String LOAD_GAME_NAMES = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, GAME_NAME_COLUMN,
-            GAME_INFORMATION_TABLE_NAME, AUTHOR_NAME_COLUMN);
+    private static final String GAME_DATA_INSERT = String.format(INSERT_THREE_VALUES, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_DATA_COLUMN);
+    private static final String GAME_INFO_INSERT = String.format(INSERT_THREE_VALUES, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFO_COLUMN);
+    private static final String UPDATE_GAME_DATA = String.format(UPDATE_ONE_COLUMN, GAME_DATA_INSERT, ON_DUPLICATE_UPDATE, GAME_DATA_COLUMN);
+    private static final String UPDATE_GAME_INFO = String.format(UPDATE_ONE_COLUMN, GAME_INFO_INSERT, ON_DUPLICATE_UPDATE, GAME_INFO_COLUMN);
+    private static final String LOAD_GAME_DATA = String.format(SELECT_TWO_CONDITIONS_NOT_NULL, GAME_DATA_COLUMN, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_DATA_COLUMN);
+    private static final String LOAD_GAME_INFORMATION = String.format(SELECT_TWO_CONDITIONS_NOT_NULL, GAME_INFO_COLUMN, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFO_COLUMN);
+    private static final String FIND_ALL_GAMES = String.format(SELECT_TWO_WHOLE_COLUMNS, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME);
+    private static final String REMOVE_GAME = String.format(DELETE_TWO_CONDITIONS, GAME_INFORMATION_TABLE_NAME, GAME_NAME_COLUMN, AUTHOR_NAME_COLUMN);
+    private static final String LOAD_GAME_NAMES = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, GAME_NAME_COLUMN, GAME_INFORMATION_TABLE_NAME, AUTHOR_NAME_COLUMN);
 
     private PreparedStatement myUpdateGameEntryDataStatement;
     private PreparedStatement myUpdateGameEntryInfoStatement;
@@ -100,7 +88,7 @@ public class GameInformationQuerier extends Querier {
         List<String> gameInformations = new ArrayList<>();
         List<GamePrimaryKey> games = getGameNames();
         for (GamePrimaryKey game : games){
-            String gameInfoXML = loadGameInformation(game.getMyGameName(), game.getMyAuthorName());
+            String gameInfoXML = loadGameInformation(game.getGameName(), game.getAuthorName());
             if (gameInfoXML != null){
                 gameInformations.add(gameInfoXML);
             }
@@ -182,5 +170,19 @@ public class GameInformationQuerier extends Querier {
             gameNames.add(resultSet.getString(GAME_NAME_COLUMN));
         }
         return gameNames;
+    }
+
+    public List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
+        List<String> serializedGameInfoObjects = new ArrayList<>();
+        List<GamePrimaryKey> games = getGameNames();
+        for (GamePrimaryKey game : games){
+            if (game.getAuthorName().equals(userName)) {
+                String gameInfoXML = loadGameInformation(game.getGameName(), userName);
+                if (gameInfoXML != null) {
+                    serializedGameInfoObjects.add(gameInfoXML);
+                }
+            }
+        }
+        return serializedGameInfoObjects;
     }
 }

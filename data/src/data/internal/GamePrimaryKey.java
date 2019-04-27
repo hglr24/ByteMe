@@ -19,7 +19,7 @@ public class GamePrimaryKey {
      * Getter for game name
      * @return game name
      */
-    public String getMyGameName() {
+    public String getGameName() {
         return myGameName;
     }
 
@@ -27,7 +27,7 @@ public class GamePrimaryKey {
      * Getter for author name
      * @return author name
      */
-    public String getMyAuthorName() {
+    public String getAuthorName() {
         return myAuthorName;
     }
 

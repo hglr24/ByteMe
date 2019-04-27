@@ -50,8 +50,12 @@ public class MovementSystem extends VoogaSystem {
                             (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
             ((XPositionComponent)e.getComponent(X_POSITION_COMPONENT_CLASS)).setValue(x);
             ((YPositionComponent)e.getComponent(Y_POSITION_COMPONENT_CLASS)).setValue(y);
-            ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
-            ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
+            if(e.hasComponents(X_VELOCITY_COMPONENT_CLASS)){
+                ((XVelocityComponent)e.getComponent(X_VELOCITY_COMPONENT_CLASS)).setValue(vX);
+            }
+            if(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)){
+                ((YVelocityComponent)e.getComponent(Y_VELOCITY_COMPONENT_CLASS)).setValue(vY);
+            }
 //            if(e.getComponent(SpriteComponent.class).getValue().equals("flappy_bird.png")){
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x vel = "+vX+ " y vel = "+vY);

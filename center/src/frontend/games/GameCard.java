@@ -18,7 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 import frontend.Utilities;
 import runner.external.GameRunner;
 

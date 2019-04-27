@@ -1,6 +1,10 @@
 import data.external.DataManager;
 import data.external.DatabaseEngine;
+import data.external.GameRating;
+import data.internal.RatingsQuerier;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,21 +32,31 @@ public class DataTest {
     private String myFakeGameData1;
     private String myFakeGameData2;
     private String myFakeGameData3;
+    private GameRating myGameRating1;
+    private GameRating myGameRating2;
     private DataManager myDataManager;
 
-    @BeforeEach
-    protected void setUp(){
+    @BeforeAll
+    protected static void openDatabaseConnection(){
         // Must open the connection to the database before it can be used
         // DatabaseEngine uses the singleton design pattern
         DatabaseEngine.getInstance().open();
+    }
+
+    @BeforeEach
+    protected void clearData(){
         myDataManager = new DataManager();
         instantiateVariables();
         clearDatabase();
     }
 
     @AfterEach
-    protected void closeResources() {
+    protected void resetDatabase(){
         clearDatabase();
+    }
+
+    @AfterAll
+    protected static void closeResources() {
         DatabaseEngine.getInstance().close();
     }
 
@@ -54,6 +68,7 @@ public class DataTest {
             myDataManager.removeGame(myFakeGameName2, myUserName2);
             myDataManager.removeUser(myUserName1);
             myDataManager.removeUser(myUserName2);
+            myDataManager.removeRating(myFakeGameName1, myUserName1);
         } catch (SQLException exception) {
             // just debugging the test cases, does not get included
             exception.printStackTrace();
@@ -71,6 +86,8 @@ public class DataTest {
         myFakeGameData1 = "fakeGameData1";
         myFakeGameData2 = "fakeGameData2";
         myFakeGameData3 = "fakeGameData3";
+        myGameRating1 = new GameRating(myUserName1, myFakeGameName1, myUserName1, 4, "User1 comment");
+        myGameRating2 = new GameRating(myUserName2, myFakeGameName1, myUserName1, 5, "User2 comment");
     }
 
     @Test
@@ -98,6 +115,7 @@ public class DataTest {
             assertEquals(loadedData, myFakeGameData1);
         } catch (SQLException exception){
             exception.printStackTrace(); // for debugging purposes in the test
+            assertEquals(0,1);
         }
     }
 
@@ -120,6 +138,7 @@ public class DataTest {
             assertEquals(loadedData, myFakeGameData2);
         } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging info in the tests
+            assertEquals(0,1);
         }
     }
 
@@ -139,6 +158,7 @@ public class DataTest {
             assertEquals(loadedData3, myFakeGameData3);
         } catch (SQLException exception){
             exception.printStackTrace(); // for debugging info in tests
+            assertEquals(0,1);
         }
     }
 
@@ -152,6 +172,7 @@ public class DataTest {
             assertFalse(myDataManager.validateUser(myUserName1, myCorrectPassword));
         } catch (SQLException e) {
             e.printStackTrace(); // Just used for debugging purposes in tests
+            assertEquals(0,1);
         }
     }
 
@@ -172,6 +193,51 @@ public class DataTest {
 
         } catch (SQLException e){
             e.printStackTrace(); // Just for debugging purposes in tests
+            assertEquals(0,1);
         }
     }
+
+    public void getYeet3() {
+        myDataManager.saveGameData("903", "Ryan", "Testing string");
+
+    }
+
+    @Test
+    public void testAddRating() {
+        try {
+            myDataManager.addRating(myGameRating1);
+            assertEquals(myGameRating1, myDataManager.getAllRatings(myFakeGameName1).get(0));
+        } catch (SQLException e) {
+            e.printStackTrace(); //Just used for debugging purposes in tests
+            assertEquals(0,1);
+        }
+    }
+
+    @Test
+    void testGetAllRatings() {
+        try {
+            myDataManager.addRating(myGameRating1);
+            myDataManager.addRating(myGameRating2);
+            List<GameRating> loadedRatings = myDataManager.getAllRatings(myFakeGameName1);
+            assertTrue(loadedRatings.contains(myGameRating1));
+            assertTrue(loadedRatings.contains(myGameRating2));
+            assertEquals(loadedRatings.size(), 2);
+        } catch (SQLException e) {
+            e.printStackTrace(); //Just used for debugging purposes in tests
+            assertEquals(0,1);
+        }
+    }
+
+    @Test
+    void testAverageRating() {
+        try {
+            myDataManager.addRating(myGameRating1);
+            myDataManager.addRating(myGameRating2);
+            assertEquals(4.5, myDataManager.getAverageRating(myFakeGameName1), 1e-8);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            assertEquals(0,1);
+        }
+    }
+
 }

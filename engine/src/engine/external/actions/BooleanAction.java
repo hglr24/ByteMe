@@ -11,13 +11,11 @@ import engine.external.component.Component;
 @Deprecated
 public abstract class BooleanAction extends Action<Boolean> {
     private Boolean myValue;
-    private Class<? extends Component<Boolean>> myComponentClass;
     private static final String VALID = "DO ";
     private static final String INVALID = "DON'T ";
     public void setAction(Boolean newValue, Class<? extends Component<Boolean>> componentClass) {
         super.setAbsoluteAction(newValue, componentClass);
         myValue = newValue;
-        myComponentClass = componentClass;
     }
 
     public String toString() {
@@ -27,7 +25,7 @@ public abstract class BooleanAction extends Action<Boolean> {
         } else {
             actionMessage += INVALID;
         }
-        actionMessage += myComponentClass.getSimpleName();
+        actionMessage += getMyComponentClass().getSimpleName();
         return actionMessage;
     }
 }

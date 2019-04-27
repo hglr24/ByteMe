@@ -3,6 +3,7 @@ package data.external;
 import data.internal.AssetQuerier;
 import data.internal.GameInformationQuerier;
 import data.internal.Querier;
+import data.internal.RatingsQuerier;
 import data.internal.UserQuerier;
 
 import java.io.File;
@@ -33,6 +34,7 @@ public class DatabaseEngine {
     private GameInformationQuerier myGameInformationQuerier;
     private AssetQuerier myAssetQuerier;
     private UserQuerier myUserQuerier;
+    private RatingsQuerier myRatingsQuerier;
     private List<Querier> myQueriers;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
@@ -71,7 +73,8 @@ public class DatabaseEngine {
         myAssetQuerier = new AssetQuerier(myConnection);
         myGameInformationQuerier = new GameInformationQuerier(myConnection);
         myUserQuerier = new UserQuerier(myConnection);
-        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier);
+        myRatingsQuerier = new RatingsQuerier(myConnection);
+        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier);
     }
 
     /**
@@ -160,5 +163,25 @@ public class DatabaseEngine {
 
     public boolean updatePassword(String userName, String newPassword) throws SQLException {
         return myUserQuerier.updatePassword(userName, newPassword);
+    }
+
+    public void addGameRating(GameRating rating) throws SQLException {
+        myRatingsQuerier.addGameRating(rating);
+    }
+
+    public double getAverageRating(String gameName) throws SQLException {
+        return myRatingsQuerier.getAverageRating(gameName);
+    }
+
+    public List<GameRating> getAllRatings(String gameName) throws SQLException {
+        return myRatingsQuerier.getAllRatings(gameName);
+    }
+
+    public List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
+        return myGameInformationQuerier.loadAllGameInformationXMLs(userName);
+    }
+
+    public void removeRating(String gameName, String authorName) throws SQLException{
+        myRatingsQuerier.removeAllGameRatings(gameName, authorName);
     }
 }

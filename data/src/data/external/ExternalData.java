@@ -56,7 +56,7 @@ public interface ExternalData {
      *
      * @return deserialized game center data objects
      */
-    List<Object> loadAllGameInfoObjects();
+    List<GameCenterData> loadAllGameInfoObjects();
 
     /**
      * Saves an image to the database
@@ -174,7 +174,7 @@ public interface ExternalData {
      * @return list of the names of all the games of the user has created
      * @throws SQLException if operation fails
      */
-    public List<String> loadUserGameNames(String userName) throws SQLException;
+    List<String> loadUserGameNames(String userName) throws SQLException;
 
     /**
      * Updates the specified user's password in the database
@@ -183,6 +183,37 @@ public interface ExternalData {
      * @return true if successful, false else
      * @throws SQLException if statement fails
      */
-    public boolean updatePassword(String userName, String newPassword) throws SQLException;
+    boolean updatePassword(String userName, String newPassword) throws SQLException;
+
+    /**
+     *
+     * @param rating
+     * @throws SQLException
+     */
+    void addRating(GameRating rating) throws SQLException;
+
+    /**
+     *
+     * @param gameName
+     * @return
+     * @throws SQLException
+     */
+    double getAverageRating(String gameName) throws SQLException;
+
+    /**
+     *
+     * @param gameName
+     * @return
+     * @throws SQLException
+     */
+    List<GameRating> getAllRatings(String gameName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @return
+     */
+    List<GameCenterData> loadAllGameInfoObjects(String userName);
+
 
 }

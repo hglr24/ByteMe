@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 import ui.ErrorBox;
 import ui.Utility;
 import ui.windows.ImageManager;

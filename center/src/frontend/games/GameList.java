@@ -15,7 +15,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
-import runner.external.GameCenterData;
+import data.external.GameCenterData;
 
 import java.util.List;
 
@@ -32,8 +32,7 @@ public class GameList {
      */
     public GameList() {
         DataManager manager = new DataManager();
-        List<Object> originalList = manager.loadAllGameInfoObjects();
-        myGames = (List<GameCenterData>) (Object) originalList;
+        myGames = manager.loadAllGameInfoObjects();
         initializeDisplay();
     }
 

@@ -1,6 +1,7 @@
-<runner.external.GameCenterData>
+<data.external.GameCenterData>
     <myTitle>New Super Mario Bros</myTitle>
     <myDescription>New Super Mario Bros. is a 2D side-scrolling platform game developed and published by Nintendo for the Nintendo DS. It was first released in May 2006 in North America and Japan</myDescription>
     <myImageLocation>center/data/game_information/images/mario.jpg</myImageLocation>
     <myFolderName>mario</myFolderName>
-</runner.external.GameCenterData>
+    <myAuthorName>Megan</myAuthorName>
+</data.external.GameCenterData>

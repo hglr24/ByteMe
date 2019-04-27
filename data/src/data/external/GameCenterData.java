@@ -1,4 +1,4 @@
-package runner.external;
+package data.external;
 
 public class GameCenterData {
     private String myFolderName;
