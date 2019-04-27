@@ -6,8 +6,12 @@ package engine.external.component;
  * Component with one-step history
  */
 public class XPositionComponent extends Component<Double> {
-
+    private final static double DEFAULT = 0.0;
     private Double oldValue;
+
+    public XPositionComponent() {
+        super(DEFAULT);
+    }
 
     public XPositionComponent(Double value) {
         super(value);

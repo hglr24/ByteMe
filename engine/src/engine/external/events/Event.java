@@ -52,7 +52,7 @@ public class Event implements IEventEngine, IEventAuthoring {
         try {
             return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));
         } catch (NullPointerException e) {
-            System.out.println("Condition not met, did not have required component");
+            //System.out.println("Condition not met, did not have required component");
             return false;
         }
     }

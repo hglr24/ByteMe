@@ -6,6 +6,11 @@ package engine.external.component;
  * Indicates whether the owner Entity is collidable
  */
 public class CollisionComponent extends Component<Boolean> {
+    private final static boolean DEFAULT = false;
+
+    public CollisionComponent() {
+        super(DEFAULT);
+    }
 
     public CollisionComponent(Boolean collidable) {
         super(collidable);
