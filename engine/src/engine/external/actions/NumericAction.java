@@ -12,14 +12,12 @@ import java.util.function.Consumer;
  * - scaling the existing value by a new value
  * - adding a new value to the existing value
  *
- *
  * @author Feroze
  * @author Lucas
  */
 public abstract class NumericAction extends Action<Double> {
     private ModifyType myModifier;
     private Double myArgument;
-    private Class<? extends Component<Double>> myComponentClass;
 
     /**
      * This method is used when subclass objects are constructed in order to specify what kind of
@@ -35,15 +33,15 @@ public abstract class NumericAction extends Action<Double> {
                 super.setAbsoluteAction(newValue, componentClass);
                 break;
             case SCALE:
-                setScaledAction((Number) newValue, componentClass);
+                setScaledAction(newValue, componentClass);
                 break;
             case RELATIVE:
-                setRelativeAction((Number) newValue, componentClass);
+                setRelativeAction(newValue, componentClass);
                 break;
         }
         myModifier = type;
         myArgument = newValue;
-        myComponentClass = componentClass;
+        super.setMyComponentClass(componentClass);
     }
 
 
@@ -97,7 +95,7 @@ public abstract class NumericAction extends Action<Double> {
 
     public String toString() {
         return myModifier.getDisplayName() +
-                " " + myComponentClass.getSimpleName() + " " + myArgument.toString();
+                " " + getMyComponentClass().getSimpleName() + " " + myArgument.toString();
 
     }
 }

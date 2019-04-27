@@ -28,13 +28,10 @@ public class Event implements IEventEngine, IEventAuthoring {
     /**
      * An Event is created using the name of the type of entity that this event will apply to
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
-     *
      */
     public Event() {
 
     }
-
-
 
     //need to make this method take in keycode inputs as well
     @Override
@@ -55,13 +52,22 @@ public class Event implements IEventEngine, IEventAuthoring {
         try {
             return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));
         } catch (NullPointerException e) {
-            //System.out.println("Condition not met, did not have required component");
+            System.out.println("Condition not met, did not have required component");
             return false;
         }
     }
 
     private void executeActions(Entity entity) {
-        actions.forEach((Consumer<Action> & Serializable) action -> action.getAction().accept(entity));
+        try {
+            actions.forEach((Consumer<Action> & Serializable) action -> {
+                action.checkComponents(entity);
+                action.getAction().accept(entity);
+            });
+
+        } catch (NullPointerException e) {
+            System.out.println("Entity missing component for action");
+            return;
+        }
     }
 
     public void addActions(List<Action> actionsToAdd) {
@@ -88,7 +94,9 @@ public class Event implements IEventEngine, IEventAuthoring {
         conditions.removeAll(conditionsToRemove);
     }
 
-    public void removeConditions(Condition conditionToRemove){conditions.remove(conditionToRemove);}
+    public void removeConditions(Condition conditionToRemove) {
+        conditions.remove(conditionToRemove);
+    }
 
     public void setActions(List<Action> newSetOfActions) {
         actions = newSetOfActions;
@@ -98,7 +106,10 @@ public class Event implements IEventEngine, IEventAuthoring {
         actions.removeAll(actionsToRemove);
     }
 
-    public void removeActions(Action actionToRemove){ actions.remove(actionToRemove);}
+    public void removeActions(Action actionToRemove) {
+        actions.remove(actionToRemove);
+    }
+
     @Override
     public void setInputs(Set<KeyCode> inputs) {
         myInputs = inputs;
@@ -119,12 +130,14 @@ public class Event implements IEventEngine, IEventAuthoring {
         myInputs.remove(inputsToRemove);
     }
 
-    public void clearInputs(){myInputs.clear();}
+    public void clearInputs() {
+        myInputs.clear();
+    }
 
-    public Map<Class<?>,List<?>> getEventInformation(){
-        Map<Class<?>,List<?>> myEventInformation = new HashMap<>();
-        myEventInformation.put(Condition.class,conditions);
-        myEventInformation.put(Action.class,actions);
+    public Map<Class<?>, List<?>> getEventInformation() {
+        Map<Class<?>, List<?>> myEventInformation = new HashMap<>();
+        myEventInformation.put(Condition.class, conditions);
+        myEventInformation.put(Action.class, actions);
         return myEventInformation;
     }
 
