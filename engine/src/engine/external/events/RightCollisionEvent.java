@@ -13,8 +13,8 @@ public class RightCollisionEvent extends Event {
 
     private String myCollisionWithEntity;
 
-    public RightCollisionEvent(String name, String collideWithEntity) {
-        super(name);
+    public RightCollisionEvent(String collideWithEntity) {
+
         myCollisionWithEntity = collideWithEntity;
 
         makeRightCollisionCondition();

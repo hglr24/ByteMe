@@ -12,8 +12,7 @@ public class TopCollisionEvent extends Event {
 
     private String myCollisionWithEntity;
 
-    public TopCollisionEvent(String name, String collideWithEntity) {
-        super(name);
+    public TopCollisionEvent(String collideWithEntity) {
         myCollisionWithEntity = collideWithEntity;
 
         makeTopCollisionCondition();

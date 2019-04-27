@@ -23,23 +23,18 @@ import java.util.function.Predicate;
 public class Event implements IEventEngine, IEventAuthoring {
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
-    private String myType;
     private Set<KeyCode> myInputs = new HashSet<>();
 
     /**
      * An Event is created using the name of the type of entity that this event will apply to
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
      *
-     * @param name
      */
-    public Event(String name) {
-        myType = name;
-        init();
-    }
-
-    private void init() {
+    public Event() {
 
     }
+
+
 
     //need to make this method take in keycode inputs as well
     @Override
@@ -47,23 +42,14 @@ public class Event implements IEventEngine, IEventAuthoring {
         if (!inputs.containsAll(myInputs)) {
             return;
         }
-        List<Entity> filtered_entities = filter(entities);
-        for (Entity e : filtered_entities) {
+
+        for (Entity e : entities) {
             if (conditionsMet(e)) {
                 executeActions(e);
             }
         }
     }
 
-    private List<Entity> filter(List<Entity> entities) {
-        List<Entity> filtered_entities = new ArrayList<>();
-        for (Entity entity : entities) {
-            if (entity.getComponent(NameComponent.class).getValue().equals(myType)) {
-                filtered_entities.add(entity);
-            }
-        }
-        return filtered_entities;
-    }
 
     private boolean conditionsMet(Entity entity) {
         try {
