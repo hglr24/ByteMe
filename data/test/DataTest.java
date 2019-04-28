@@ -1,7 +1,7 @@
 import data.external.DataManager;
 import data.external.DatabaseEngine;
 import data.external.GameRating;
-import data.internal.RatingsQuerier;
+import data.external.UserScore;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -71,6 +71,8 @@ public class DataTest {
             myDataManager.removeRating(myFakeGameName1, myUserName1);
             myDataManager.deleteCheckpoints(myUserName1, myFakeGameName1, myUserName1);
             myDataManager.deleteCheckpoints(myUserName2, myFakeGameName1, myUserName1);
+            myDataManager.removeScores(myUserName1, myFakeGameName1, myUserName1);
+            myDataManager.removeScores(myUserName2, myFakeGameName1, myUserName1);
         } catch (SQLException exception) {
             // just debugging the test cases, does not get included
             exception.printStackTrace();
@@ -117,7 +119,7 @@ public class DataTest {
             assertEquals(loadedData, myFakeGameData1);
         } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging purposes in the test
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -140,7 +142,7 @@ public class DataTest {
             assertEquals(loadedData, myFakeGameData2);
         } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging info in the tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -160,7 +162,7 @@ public class DataTest {
             assertEquals(loadedData3, myFakeGameData3);
         } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging info in tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -174,7 +176,7 @@ public class DataTest {
             assertFalse(myDataManager.validateUser(myUserName1, myCorrectPassword));
         } catch (SQLException e) {
             e.printStackTrace(); // Just used for debugging purposes in tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -195,7 +197,7 @@ public class DataTest {
 
         } catch (SQLException e) {
             e.printStackTrace(); // Just for debugging purposes in tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -211,7 +213,7 @@ public class DataTest {
             assertEquals(myGameRating1, myDataManager.getAllRatings(myFakeGameName1).get(0));
         } catch (SQLException e) {
             e.printStackTrace(); //Just used for debugging purposes in tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -226,7 +228,7 @@ public class DataTest {
             assertEquals(loadedRatings.size(), 2);
         } catch (SQLException e) {
             e.printStackTrace(); //Just used for debugging purposes in tests
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -238,7 +240,7 @@ public class DataTest {
             assertEquals(4.5, myDataManager.getAverageRating(myFakeGameName1), 1e-8);
         } catch (SQLException e) {
             e.printStackTrace();
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -252,7 +254,7 @@ public class DataTest {
         } catch (SQLException e) {
             // Just debugging in tests so print stack trace
             e.printStackTrace();
-            assertEquals(0, 1);
+            fail();
         }
     }
 
@@ -264,9 +266,26 @@ public class DataTest {
             assertEquals("Expected", myDataManager.getBio(myUserName1));
         } catch (SQLException e) {
             e.printStackTrace(); // Just for testing/debugging purposes
-            assertEquals(0, 1);
+            fail();
         }
 
+    }
+
+    @Test
+    public void testUserScores() {
+        try {
+            myDataManager.saveScore(myUserName1, myFakeGameName1, myUserName1, 10.0D);
+            myDataManager.saveScore(myUserName1, myFakeGameName1, myUserName1, 12.0D);
+            myDataManager.saveScore(myUserName2, myFakeGameName1, myUserName1, 15.0D);
+            List<UserScore> userScores = myDataManager.loadScores(myFakeGameName1, myUserName1);
+            assertTrue(userScores.contains(new UserScore(myUserName2, 15.0D)));
+            assertTrue(userScores.contains(new UserScore(myUserName1, 10.0D)));
+            assertTrue(userScores.contains(new UserScore(myUserName1, 12.0D)));
+            assertEquals(3, userScores.size());
+        } catch (SQLException e){
+            e.printStackTrace(); // Just for testing/debugging purposes
+
+        }
     }
 
 }

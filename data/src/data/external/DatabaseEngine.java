@@ -5,6 +5,7 @@ import data.internal.CheckpointQuerier;
 import data.internal.GameInformationQuerier;
 import data.internal.Querier;
 import data.internal.RatingsQuerier;
+import data.internal.StatisticsQuerier;
 import data.internal.UserQuerier;
 
 import java.io.File;
@@ -37,6 +38,7 @@ public class DatabaseEngine {
     private UserQuerier myUserQuerier;
     private RatingsQuerier myRatingsQuerier;
     private CheckpointQuerier myCheckpointQuerier;
+    private StatisticsQuerier myStatisticsQuerier;
     private List<Querier> myQueriers;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
@@ -77,7 +79,9 @@ public class DatabaseEngine {
         myUserQuerier = new UserQuerier(myConnection);
         myRatingsQuerier = new RatingsQuerier(myConnection);
         myCheckpointQuerier = new CheckpointQuerier(myConnection);
-        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier, myCheckpointQuerier);
+        myStatisticsQuerier = new StatisticsQuerier(myConnection);
+        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier,
+                myCheckpointQuerier, myStatisticsQuerier);
     }
 
     /**
@@ -153,11 +157,11 @@ public class DatabaseEngine {
     }
 
 
-    public String loadGameInfo(String gameName, String authorName) throws SQLException {
+    String loadGameInfo(String gameName, String authorName) throws SQLException {
         return myGameInformationQuerier.loadGameInformation(gameName, authorName);
     }
 
-    public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
+    Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
         return myAssetQuerier.loadAllImages(prefix);
     }
 
@@ -219,5 +223,17 @@ public class DatabaseEngine {
 
     String getBio(String userName) throws SQLException {
         return myUserQuerier.getBio(userName);
+    }
+
+    void saveScore(String userName, String gameName, String authorName, Double score) throws SQLException {
+        myStatisticsQuerier.saveScore(userName, gameName, authorName, score);
+    }
+
+    List<UserScore> loadScores(String gameName, String authorName) throws SQLException {
+        return myStatisticsQuerier.loadScores(gameName, authorName);
+    }
+
+    public void removeScores(String userName, String gameName, String authorName) throws SQLException {
+        myStatisticsQuerier.removeScores(userName, gameName, authorName);
     }
 }
