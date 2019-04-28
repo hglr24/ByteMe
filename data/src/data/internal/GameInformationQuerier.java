@@ -79,7 +79,7 @@ public class GameInformationQuerier extends Querier {
         return loadXML(gameName, authorName, myLoadGameDataStatement, GAME_DATA_COLUMN);
     }
 
-    public String loadGameInformation(String gameName, String authorName) throws SQLException {
+    public String loadGameInformation(String gameName, String authorName) throws SQLException{
         return loadXML(gameName, authorName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
     }
 
