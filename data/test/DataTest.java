@@ -37,21 +37,21 @@ public class DataTest {
     private DataManager myDataManager;
 
     @BeforeAll
-    protected static void openDatabaseConnection(){
+    protected static void openDatabaseConnection() {
         // Must open the connection to the database before it can be used
         // DatabaseEngine uses the singleton design pattern
         DatabaseEngine.getInstance().open();
     }
 
     @BeforeEach
-    protected void clearData(){
+    protected void clearData() {
         myDataManager = new DataManager();
         instantiateVariables();
         clearDatabase();
     }
 
     @AfterEach
-    protected void resetDatabase(){
+    protected void resetDatabase() {
         clearDatabase();
     }
 
@@ -69,6 +69,8 @@ public class DataTest {
             myDataManager.removeUser(myUserName1);
             myDataManager.removeUser(myUserName2);
             myDataManager.removeRating(myFakeGameName1, myUserName1);
+            myDataManager.deleteCheckpoints(myUserName1, myFakeGameName1, myUserName1);
+            myDataManager.deleteCheckpoints(myUserName2, myFakeGameName1, myUserName1);
         } catch (SQLException exception) {
             // just debugging the test cases, does not get included
             exception.printStackTrace();
@@ -91,7 +93,7 @@ public class DataTest {
     }
 
     @Test
-    public void testCreateUser(){
+    public void testCreateUser() {
         // Can only create one user for each user name
         assertTrue(myDataManager.createUser(myUserName1, myCorrectPassword));
         assertFalse(myDataManager.createUser(myUserName1, myIncorrectPassword));
@@ -113,9 +115,9 @@ public class DataTest {
             myDataManager.saveGameData(myFakeGameName1, myUserName1, myFakeGameData1);
             String loadedData = (String) myDataManager.loadGameData(myFakeGameName1, myUserName1);
             assertEquals(loadedData, myFakeGameData1);
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging purposes in the test
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
@@ -138,7 +140,7 @@ public class DataTest {
             assertEquals(loadedData, myFakeGameData2);
         } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging info in the tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
@@ -156,14 +158,14 @@ public class DataTest {
             assertEquals(loadedData1, myFakeGameData1);
             assertEquals(loadedData2, myFakeGameData2);
             assertEquals(loadedData3, myFakeGameData3);
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace(); // for debugging info in tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
     @Test
-    public void testUpdatePassword(){
+    public void testUpdatePassword() {
         try {
             myDataManager.createUser(myUserName1, myCorrectPassword);
             assertTrue(myDataManager.validateUser(myUserName1, myCorrectPassword));
@@ -172,15 +174,15 @@ public class DataTest {
             assertFalse(myDataManager.validateUser(myUserName1, myCorrectPassword));
         } catch (SQLException e) {
             e.printStackTrace(); // Just used for debugging purposes in tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
     @Test
-    public void testLoadAllGameNames(){
+    public void testLoadAllGameNames() {
         try {
             Map<String, InputStream> map = myDataManager.loadAllImages("center/");
-            for (String imageName : map.keySet()){
+            for (String imageName : map.keySet()) {
                 System.out.println(imageName);
             }
             List<String> expected = new ArrayList<>(Arrays.asList(myFakeGameName1, myFakeGameName2));
@@ -189,11 +191,11 @@ public class DataTest {
             myDataManager.saveGameData(myFakeGameName2, myUserName1, myFakeGameData2);
             List<String> gameNames = myDataManager.loadUserGameNames(myUserName1);
             Collections.sort(gameNames);
-            assertEquals(gameNames,expected);
+            assertEquals(gameNames, expected);
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace(); // Just for debugging purposes in tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
@@ -209,7 +211,7 @@ public class DataTest {
             assertEquals(myGameRating1, myDataManager.getAllRatings(myFakeGameName1).get(0));
         } catch (SQLException e) {
             e.printStackTrace(); //Just used for debugging purposes in tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
@@ -224,7 +226,7 @@ public class DataTest {
             assertEquals(loadedRatings.size(), 2);
         } catch (SQLException e) {
             e.printStackTrace(); //Just used for debugging purposes in tests
-            assertEquals(0,1);
+            assertEquals(0, 1);
         }
     }
 
@@ -236,7 +238,21 @@ public class DataTest {
             assertEquals(4.5, myDataManager.getAverageRating(myFakeGameName1), 1e-8);
         } catch (SQLException e) {
             e.printStackTrace();
-            assertEquals(0,1);
+            assertEquals(0, 1);
+        }
+    }
+
+    @Test
+    void testSaveAndLoadCheckpoints() {
+        try {
+            myDataManager.saveCheckpoint(myUserName1, myFakeGameName1, myUserName1, myFakeGameData1);
+            myDataManager.saveCheckpoint(myUserName2, myFakeGameName1, myUserName1, myFakeGameData1);
+            assertEquals(1, myDataManager.getCheckpoints(myUserName1, myFakeGameName1, myUserName1).keySet().size());
+            assertEquals(1, myDataManager.getCheckpoints(myUserName2, myFakeGameName1, myUserName1).keySet().size());
+        } catch (SQLException e) {
+            // Just debugging in tests so print stack trace
+            e.printStackTrace();
+            assertEquals(0, 1);
         }
     }
 

@@ -1,6 +1,7 @@
 package data.external;
 
 import data.internal.AssetQuerier;
+import data.internal.CheckpointQuerier;
 import data.internal.GameInformationQuerier;
 import data.internal.Querier;
 import data.internal.RatingsQuerier;
@@ -35,6 +36,7 @@ public class DatabaseEngine {
     private AssetQuerier myAssetQuerier;
     private UserQuerier myUserQuerier;
     private RatingsQuerier myRatingsQuerier;
+    private CheckpointQuerier myCheckpointQuerier;
     private List<Querier> myQueriers;
 
     private static DatabaseEngine myInstance = new DatabaseEngine();
@@ -74,7 +76,8 @@ public class DatabaseEngine {
         myGameInformationQuerier = new GameInformationQuerier(myConnection);
         myUserQuerier = new UserQuerier(myConnection);
         myRatingsQuerier = new RatingsQuerier(myConnection);
-        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier);
+        myCheckpointQuerier = new CheckpointQuerier(myConnection);
+        myQueriers = List.of(myAssetQuerier, myGameInformationQuerier, myUserQuerier, myRatingsQuerier, myCheckpointQuerier);
     }
 
     /**
@@ -149,6 +152,10 @@ public class DatabaseEngine {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
     }
 
+    public String loadGameInfo(String gameName, String authorName) throws SQLException {
+        return myGameInformationQuerier.loadGameInformation(gameName, authorName);
+    }
+
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
         return myAssetQuerier.loadAllImages(prefix);
     }
@@ -183,5 +190,17 @@ public class DatabaseEngine {
 
     public void removeRating(String gameName, String authorName) throws SQLException{
         myRatingsQuerier.removeAllGameRatings(gameName, authorName);
+    }
+
+    public Map<Timestamp, String> getCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        return myCheckpointQuerier.getCheckpoints(userName, gameName, authorName);
+    }
+
+    public void saveCheckpoint(String userName, String gameName, String authorName, String rawXML) throws SQLException {
+        myCheckpointQuerier.saveCheckpoint(userName,gameName, authorName, rawXML);
+    }
+
+    public void deleteCheckpoint(String userName, String gameName, String authorName) throws SQLException {
+        myCheckpointQuerier.deleteCheckpoints(userName, gameName, authorName);
     }
 }

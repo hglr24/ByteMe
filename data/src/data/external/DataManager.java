@@ -6,7 +6,9 @@ import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,6 +150,11 @@ public class DataManager implements ExternalData {
         } catch (SQLException e) {
             System.out.println(CANT_UPDATE_GAME_ENTRY_INFO + e.getMessage());
         }
+    }
+
+    @Override
+    public GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException {
+        return (GameCenterData) mySerializer.fromXML(myDatabaseEngine.loadGameInfo(gameName, authorName));
     }
 
     /**
@@ -435,5 +442,23 @@ public class DataManager implements ExternalData {
         myDatabaseEngine.removeRating(gameName, authorName);
     }
 
+    @Override
+    public Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        Map<Timestamp, Object> deserializedCheckpoints = new HashMap<>();
+        Map<Timestamp, String> serializedCheckpoints = myDatabaseEngine.getCheckpoints(userName, gameName, authorName);
+        for (Timestamp time : serializedCheckpoints.keySet()) {
+            deserializedCheckpoints.put(time, mySerializer.fromXML(serializedCheckpoints.get(time)));
+        }
+        return deserializedCheckpoints;
+    }
+
+    @Override
+    public void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException {
+        myDatabaseEngine.saveCheckpoint(userName, gameName, authorName, mySerializer.toXML(checkpoint));
+    }
+
+    public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        myDatabaseEngine.deleteCheckpoint(userName, gameName, authorName);
+    }
 
 }

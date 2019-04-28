@@ -14,6 +14,7 @@ public class UserOptionsDisplay extends HBox {
      * into the game center
      * @author Anna Darwish
      */
+
     public UserOptionsDisplay(SwitchToUserOptions switchToPageBeforeAuthoring, SwitchToUserPage switchToLauncher, String userName){
         this.getStyleClass().add(CSS_STYLE_NAME);
         this.setTranslateY(OFFSET_VALUE);

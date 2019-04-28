@@ -14,6 +14,7 @@ public class WelcomeUserPage extends VBox {
      * they can play games
      * @author Anna Darwish
      */
+
     public WelcomeUserPage(SwitchToUserOptions switchToPageBeforeAuthoring, SwitchToUserPage switchToLauncher, String userName){
         this.getStyleClass().add(MY_STYLE);
         this.getChildren().add(new WelcomeDisplay(WELCOME_LABEL_KEY,userName));

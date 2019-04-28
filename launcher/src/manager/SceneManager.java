@@ -1,5 +1,4 @@
 package manager;
-
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import page.NewUserPage;
@@ -46,5 +45,7 @@ public class SceneManager {
         UserManager myLoggedInManager = new UserManager(userName);
         myLoggedInManager.render(myScene);
     }
+
+
 
 }

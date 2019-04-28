@@ -50,5 +50,13 @@ import ui.main.MainGUI;
         gameCenterStage.setScene(myCenter.getScene());
         gameCenterStage.show();
     }
-}
+ }
+
+
+//    private void goToAuthoring(GameCenterData myData){
+//        MainGUI myGUI = new MainGUI(new Game(), myData);
+//        myGUI.launch();
+//    }
+//
+
 

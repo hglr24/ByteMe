@@ -8,7 +8,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
-import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;
 
 public class NewUserPage extends VBox {
@@ -20,7 +19,6 @@ public class NewUserPage extends VBox {
     private InformativeField userName = new InformativeField(USERNAME);
     private InformativeField passWord = new InformativeField(PASSWORD);
     private InformativeField reenter = new InformativeField(REENTER_PASSWORD);
-    private Button createAccount = new Button("Create Account");
     private DataManager myDataManager  = new DataManager();
     /**
      * This page will prompt the user either enter the authoring environment to create games or go to the game center so
@@ -33,6 +31,7 @@ public class NewUserPage extends VBox {
         this.getChildren().add(userName);
         this.getChildren().add(passWord);
         this.getChildren().add(reenter);
+        Button createAccount = new Button("Create Account");
         this.getChildren().add(createAccount);
         createAccount.setOnMouseClicked(mouseEvent -> {
             if (validCredentials()){

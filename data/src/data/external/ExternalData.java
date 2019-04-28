@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,14 @@ public interface ExternalData {
      * @param gameInfoObject the game center data object to be serialized and saved
      */
     void saveGameInfo(String gameName, String authorName, Object gameInfoObject);
+
+    /**
+     *
+     * @param gameName
+     * @param authorName
+     * @return
+     */
+    GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException;
 
     /**
      * Loads and deserializes all the game info objects from the database to pass to the game center
@@ -215,5 +224,23 @@ public interface ExternalData {
      */
     List<GameCenterData> loadAllGameInfoObjects(String userName);
 
+    /**
+     * 
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @return
+     * @throws SQLException
+     */
+    Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException;
 
+    /**
+     *
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @param checkpoint
+     * @throws SQLException
+     */
+    void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException;
 }
