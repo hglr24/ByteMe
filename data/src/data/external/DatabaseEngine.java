@@ -152,6 +152,8 @@ public class DatabaseEngine {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
     }
 
+//    public String loadGameInfo(String gameName, String authorName)
+
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
         return myAssetQuerier.loadAllImages(prefix);
     }
@@ -190,5 +192,13 @@ public class DatabaseEngine {
 
     public Map<Timestamp, String> getCheckpoints(String userName, String gameName, String authorName) throws SQLException {
         return myCheckpointQuerier.getCheckpoints(userName, gameName, authorName);
+    }
+
+    public void saveCheckpoint(String userName, String gameName, String authorName, String rawXML) throws SQLException {
+        myCheckpointQuerier.saveCheckpoint(userName,gameName, authorName, rawXML);
+    }
+
+    public void deleteCheckpoint(String userName, String gameName, String authorName) throws SQLException {
+        myCheckpointQuerier.deleteCheckpoints(userName, gameName, authorName);
     }
 }

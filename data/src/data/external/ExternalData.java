@@ -216,6 +216,23 @@ public interface ExternalData {
      */
     List<GameCenterData> loadAllGameInfoObjects(String userName);
 
-
+    /**
+     * 
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @return
+     * @throws SQLException
+     */
     Map<Timestamp, Object> getCheckpoints(String userName, String gameName, String authorName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @param checkpoint
+     * @throws SQLException
+     */
+    void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException;
 }

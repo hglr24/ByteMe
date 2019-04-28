@@ -14,7 +14,8 @@ public class DatabaseLoader {
 //        createUser("Person2", "passwordTwo");
 //        validateUsers();
 //        System.out.println();
-        loadGameCenterDataFromCreatedGames();
+//        loadGameCenterDataFromCreatedGames();
+        loadImage();
         DatabaseEngine.getInstance().close();
     }
 
@@ -33,7 +34,7 @@ public class DatabaseLoader {
 
     private static void loadImage(){
         DataManager dm = new DataManager();
-        dm.saveImage("flappy_bird", new File("Images/flappy_bird.png"));
+        dm.saveImage("mushroom.png", new File("Images/mushroom.png"));
     }
 
     private static void loadGameCenterImages() {

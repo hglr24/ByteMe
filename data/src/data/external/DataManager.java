@@ -447,5 +447,14 @@ public class DataManager implements ExternalData {
         return deserializedCheckpoints;
     }
 
+    @Override
+    public void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException {
+        myDatabaseEngine.saveCheckpoint(userName, gameName, authorName, mySerializer.toXML(checkpoint));
+    }
+
+    public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {
+        myDatabaseEngine.deleteCheckpoint(userName, gameName, authorName);
+    }
+
 
 }
