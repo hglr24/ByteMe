@@ -3,7 +3,7 @@
     <Components>
         <NameComponent>Cloud</NameComponent>
         <XVelocityComponent>10.0</XVelocityComponent>
-        <VisibilityComponent>true</VisibilityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
         <WidthComponent>100.0</WidthComponent>
         <HeightComponent>50.0</HeightComponent>
         <YAccelerationComponent>0.0</YAccelerationComponent>

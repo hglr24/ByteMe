@@ -2,7 +2,7 @@
     <Category>Power-Ups</Category>
     <Components>
         <NameComponent>Grow</NameComponent>
-        <VisibilityComponent>true</VisibilityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
         <WidthComponent>25.0</WidthComponent>
         <HeightComponent>25.0</HeightComponent>
     </Components>

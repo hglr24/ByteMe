@@ -3,7 +3,7 @@
     <Components>
         <NameComponent>Hero</NameComponent>
         <YAccelerationComponent>9.8</YAccelerationComponent>
-        <VisibilityComponent>true</VisibilityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
         <WidthComponent>25.0</WidthComponent>
         <HeightComponent>75.0</HeightComponent>
     </Components>
