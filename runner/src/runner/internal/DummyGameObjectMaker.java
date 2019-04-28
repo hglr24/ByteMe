@@ -453,20 +453,34 @@ public class DummyGameObjectMaker {
             dummy.addComponent(new ZPositionComponent(0.0));
             dummy.addComponent(new WidthComponent(100.0));
             dummy.addComponent(new HeightComponent(100.0));
-            dummy.addComponent(new NameComponent("dummy"));
+            dummy.addComponent(new NameComponent("dummy"+time));
             dummy.addComponent(new XVelocityComponent(0.0));
             dummy.addComponent(new YVelocityComponent(0.0));
             dummy.addComponent(new XAccelerationComponent(0.0));
             dummy.addComponent(new YAccelerationComponent(0.2));
+            //dummy.addComponent(new CollisionComponent(false));
+
+//            BottomCollisionEvent bbOnPlatform = new BottomCollisionEvent("Block", true);
+//            bbOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "dummy"+time));
+//            bbOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,-10.0));
+//            bbOnPlatform.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE,-3.0));
 
 
             Event spawn = new Event();
             spawn.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
             spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
+            //spawn.addInputs(KeyCode.Q);
             spawn.addActions(new AddEntityAction(dummy));
+            //spawn.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
             eventlist.add(spawn);
+            //eventlist.add(bbOnPlatform);
         }
+        Event lastEvent = new Event();
+        lastEvent.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
+        lastEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
+        lastEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
+        eventlist.add(lastEvent);
         return eventlist;
     }
 
@@ -567,9 +581,11 @@ public class DummyGameObjectMaker {
         MarioBlock1.addComponent(new WidthComponent(100.0));
         MarioBlock1.addComponent(new HeightComponent(100.0));
         MarioBlock1.addComponent(new SpriteComponent("mario_block.png"));
-        MarioBlock1.addComponent(new CollisionComponent(true));
+        MarioBlock1.addComponent(new CollisionComponent(false));
         MarioBlock1.addComponent(new HealthComponent(100.0));
         MarioBlock1.addComponent(new NameComponent("Block1"));
+        MarioBlock1.addComponent(new GroupComponent("Block"));
+
         //MarioBlock1.addComponent(new WidthComponent(500.0));
 
         MarioBlock2.addComponent(new XPositionComponent(210.0));
@@ -578,8 +594,10 @@ public class DummyGameObjectMaker {
         MarioBlock2.addComponent(new WidthComponent(100.0));
         MarioBlock2.addComponent(new HeightComponent(100.0));
         MarioBlock2.addComponent(new SpriteComponent("mario_block.png"));
-        MarioBlock2.addComponent(new CollisionComponent(true));
+        MarioBlock2.addComponent(new CollisionComponent(false));
         MarioBlock2.addComponent(new NameComponent("Block2"));
+        MarioBlock2.addComponent(new GroupComponent("Block"));
+
 
         MarioBlock3.addComponent(new XPositionComponent(320.0));
         MarioBlock3.addComponent(new YPositionComponent(400.0));
@@ -587,8 +605,10 @@ public class DummyGameObjectMaker {
         MarioBlock3.addComponent(new WidthComponent(100.0));
         MarioBlock3.addComponent(new HeightComponent(100.0));
         MarioBlock3.addComponent(new SpriteComponent("mario_block.png"));
-        MarioBlock3.addComponent(new CollisionComponent(true));
+        MarioBlock3.addComponent(new CollisionComponent(false));
         MarioBlock3.addComponent(new NameComponent("Block3"));
+        MarioBlock3.addComponent(new GroupComponent("Block"));
+
 
         MarioBlock4.addComponent(new XPositionComponent(430.0));
         MarioBlock4.addComponent(new YPositionComponent(400.0));
@@ -596,8 +616,10 @@ public class DummyGameObjectMaker {
         MarioBlock4.addComponent(new WidthComponent(100.0));
         MarioBlock4.addComponent(new HeightComponent(100.0));
         MarioBlock4.addComponent(new SpriteComponent("mario_block.png"));
-        MarioBlock4.addComponent(new CollisionComponent(true));
+        MarioBlock4.addComponent(new CollisionComponent(false));
         MarioBlock4.addComponent(new NameComponent("Block4"));
+        MarioBlock4.addComponent(new GroupComponent("Block"));
+
 
         MarioBlock5.addComponent(new XPositionComponent(540.0));
         MarioBlock5.addComponent(new YPositionComponent(400.0));
@@ -605,8 +627,10 @@ public class DummyGameObjectMaker {
         MarioBlock5.addComponent(new WidthComponent(100.0));
         MarioBlock5.addComponent(new HeightComponent(100.0));
         MarioBlock5.addComponent(new SpriteComponent("mario_block.png"));
-        MarioBlock5.addComponent(new CollisionComponent(true));
+        MarioBlock5.addComponent(new CollisionComponent(false));
         MarioBlock5.addComponent(new NameComponent("Block5"));
+        MarioBlock5.addComponent(new GroupComponent("Block"));
+
 
         //Add the entities to the level
         level.addEntity(gameObject);
