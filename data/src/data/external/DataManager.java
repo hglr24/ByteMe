@@ -152,6 +152,11 @@ public class DataManager implements ExternalData {
         }
     }
 
+    @Override
+    public GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException {
+        return (GameCenterData) mySerializer.fromXML(myDatabaseEngine.loadGameInfo(gameName, authorName));
+    }
+
     /**
      * Save the game information (game center data) object using a default author name
      *
@@ -455,6 +460,5 @@ public class DataManager implements ExternalData {
     public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {
         myDatabaseEngine.deleteCheckpoint(userName, gameName, authorName);
     }
-
 
 }

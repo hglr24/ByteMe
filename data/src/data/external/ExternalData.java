@@ -53,6 +53,14 @@ public interface ExternalData {
     void saveGameInfo(String gameName, String authorName, Object gameInfoObject);
 
     /**
+     *
+     * @param gameName
+     * @param authorName
+     * @return
+     */
+    GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException;
+
+    /**
      * Loads and deserializes all the game info objects from the database to pass to the game center
      *
      * @return deserialized game center data objects

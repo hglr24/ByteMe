@@ -152,7 +152,9 @@ public class DatabaseEngine {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
     }
 
-//    public String loadGameInfo(String gameName, String authorName)
+    public String loadGameInfo(String gameName, String authorName) throws SQLException {
+        return myGameInformationQuerier.loadGameInformation(gameName, authorName);
+    }
 
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
         return myAssetQuerier.loadAllImages(prefix);
