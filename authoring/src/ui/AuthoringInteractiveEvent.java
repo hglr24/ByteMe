@@ -13,7 +13,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.manager.LabelManager;
-import ui.manager.RefreshLabels;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
 
@@ -23,7 +22,6 @@ import java.util.ResourceBundle;
 
 public class AuthoringInteractiveEvent extends AuthoringEvent {
     private static final String SAVE = "Save";
-    private static final String CANCEL = "Cancel";
 
     private static final String GROUP = "Group";
     private static final String ENTITY = "Entity";

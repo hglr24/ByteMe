@@ -1,11 +1,7 @@
 package ui.manager;
 
 import events.EventType;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -13,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ui.*;
 import ui.panes.CurrentEventsPane;
-import ui.panes.EventsPopUpPane;
 
 /**
  * The EventManager handles displaying options for the user to create a new event according to the particular AuthoringEntity
