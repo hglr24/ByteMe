@@ -180,11 +180,6 @@ public class AssetQuerier extends Querier {
 //    }
 
     private void saveAsset(String assetName, File assetToSave, PreparedStatement statement) {
-<<<<<<< HEAD
-        try (BufferedInputStream assetData = new BufferedInputStream(new FileInputStream(assetToSave));
-             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(assetToSave));
-             BufferedInputStream bufferedInputStream1 = new BufferedInputStream(new FileInputStream(assetToSave))){
-=======
         try {
             FileInputStream fileInputStream = new FileInputStream(assetToSave);
             BufferedInputStream assetData = new BufferedInputStream(fileInputStream);
@@ -195,12 +190,19 @@ public class AssetQuerier extends Querier {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream1);
             BufferedInputStream bufferedInputStream1 = new BufferedInputStream(fileInputStream2);
 
->>>>>>> 4a13c4553e3a5b4492a40bc911bbd8edfdbdaa54
             System.out.println(assetData);
             statement.setString(1, assetName);
             statement.setBinaryStream(2, bufferedInputStream);
             statement.setBinaryStream(3, bufferedInputStream1);
             statement.executeUpdate();
+
+
+            fileInputStream.close();
+            fileInputStream1.close();
+            fileInputStream2.close();
+            assetData.close();
+            bufferedInputStream.close();
+            bufferedInputStream1.close();
         } catch (SQLException e) {
             System.out.println(COULD_NOT_SAVE_THE_ASSET + e.getMessage());
         } catch (FileNotFoundException e) {
