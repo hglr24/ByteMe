@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CheckpointQuerier extends Querier{
+public class CheckpointQuerier extends Querier {
 
     private static final String CHECKPOINTS_TABLE_NAME = "Checkpoints";
     private static final String USER_NAME_COLUMN = "UserName";
@@ -50,7 +50,7 @@ public class CheckpointQuerier extends Querier{
         myLoadStatement.setString(2, gameName);
         myLoadStatement.setString(3, authorName);
         ResultSet resultSet = myLoadStatement.executeQuery();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             checkpoints.put(resultSet.getTimestamp(CHECKPOINT_TIME_COLUMN), resultSet.getString(LEVEL_COLUMN));
         }
         return checkpoints;
@@ -64,7 +64,7 @@ public class CheckpointQuerier extends Querier{
         mySaveStatement.execute();
     }
 
-    public void deleteCheckpoints(String userName, String gameName, String authorName) throws  SQLException {
+    public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {
         myDeleteStatement.setString(1, userName);
         myDeleteStatement.setString(2, gameName);
         myDeleteStatement.setString(3, authorName);

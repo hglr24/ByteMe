@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A Querier used to access the GameInformation table to save and load game information
@@ -41,6 +42,7 @@ public class GameInformationQuerier extends Querier {
 
     /**
      * GameInformationQuerier constructor
+     *
      * @param connection connection to the database
      * @throws SQLException if statements cannot be prepared
      */
@@ -51,7 +53,7 @@ public class GameInformationQuerier extends Querier {
     @Override
     protected void prepareStatements() throws SQLException {
         myUpdateGameEntryDataStatement = myConnection.prepareStatement(UPDATE_GAME_DATA);
-        myUpdateGameEntryInfoStatement =  myConnection.prepareStatement(UPDATE_GAME_INFO);
+        myUpdateGameEntryInfoStatement = myConnection.prepareStatement(UPDATE_GAME_INFO);
         myLoadGameDataStatement = myConnection.prepareStatement(LOAD_GAME_DATA);
         myLoadGameInformationStatement = myConnection.prepareStatement(LOAD_GAME_INFORMATION);
         myFindAllGameNamesStatement = myConnection.prepareStatement(FIND_ALL_GAMES);
@@ -69,37 +71,39 @@ public class GameInformationQuerier extends Querier {
 
     /**
      * Deserializes the xml file stored at created_games/gameName/game_data.xml into an object
+     *
      * @param gameName the game whose data is to be loaded
      * @return the deserialized game data that should then be cast to a game object
      */
-    public String loadGameData(String gameName, String authorName) throws SQLException{
+    public String loadGameData(String gameName, String authorName) throws SQLException {
         return loadXML(gameName, authorName, myLoadGameDataStatement, GAME_DATA_COLUMN);
     }
 
-    public String loadGameInformation(String gameName, String authorName) throws SQLException{
+    public String loadGameInformation(String gameName, String authorName) throws SQLException {
         return loadXML(gameName, authorName, myLoadGameInformationStatement, GAME_INFO_COLUMN);
     }
 
     /**
      * Loads the raw xml for all the game info objects from the database to pass to the serializer
+     *
      * @return raw xml of game info objects
      */
-    public List<String> loadAllGameInformationXMLs() throws SQLException{
+    public List<String> loadAllGameInformationXMLs() throws SQLException {
         List<String> gameInformations = new ArrayList<>();
         List<GamePrimaryKey> games = getGameNames();
-        for (GamePrimaryKey game : games){
+        for (GamePrimaryKey game : games) {
             String gameInfoXML = loadGameInformation(game.getGameName(), game.getAuthorName());
-            if (gameInfoXML != null){
+            if (gameInfoXML != null) {
                 gameInformations.add(gameInfoXML);
             }
         }
         return gameInformations;
     }
 
-    private List<GamePrimaryKey> getGameNames() throws SQLException{
+    private List<GamePrimaryKey> getGameNames() throws SQLException {
         List<GamePrimaryKey> games = new ArrayList<>();
         ResultSet resultSet = myFindAllGameNamesStatement.executeQuery();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             String gameName = resultSet.getString(GAME_NAME_COLUMN);
             String authorName = resultSet.getString(AUTHOR_NAME_COLUMN);
             games.add(new GamePrimaryKey(gameName, authorName));
@@ -112,7 +116,7 @@ public class GameInformationQuerier extends Querier {
         preparedStatement.setString(1, gameName);
         preparedStatement.setString(2, authorName);
         ResultSet resultSet = preparedStatement.executeQuery();
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return resultSet.getString(columnName);
         }
         return null;
@@ -120,12 +124,13 @@ public class GameInformationQuerier extends Querier {
 
     /**
      * Updates data entry for a game if it already exists, or creates new game if it doesn't
-     * @param gameName game name
+     *
+     * @param gameName   game name
      * @param authorName author name
-     * @param myRawXML serialized game object
+     * @param myRawXML   serialized game object
      * @throws SQLException if statement fails
      */
-    public void updateGameEntryData(String gameName, String authorName, String myRawXML) throws SQLException{
+    public void updateGameEntryData(String gameName, String authorName, String myRawXML) throws SQLException {
         prepareAndExecuteUpdate(myUpdateGameEntryDataStatement, gameName, authorName, myRawXML);
     }
 
@@ -140,23 +145,25 @@ public class GameInformationQuerier extends Querier {
 
     /**
      * Updates game info entry for a game if it already exists, or creates new game if it doesn't
-     * @param gameName game name
+     *
+     * @param gameName   game name
      * @param authorName author name
-     * @param myRawXML serialized game object
+     * @param myRawXML   serialized game object
      * @throws SQLException if statement fails
      */
-    public void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException{
+    public void updateGameEntryInfo(String gameName, String authorName, String myRawXML) throws SQLException {
         prepareAndExecuteUpdate(myUpdateGameEntryInfoStatement, gameName, authorName, myRawXML);
     }
 
     /**
      * Removes the game called gameName written by authorName
-     * @param gameName name of the game to remove
+     *
+     * @param gameName   name of the game to remove
      * @param authorName name of the author that wrote the game to remove
      * @return true if game successfully removed
      * @throws SQLException if statement fails
      */
-    public boolean removeGame(String gameName, String authorName) throws SQLException{
+    public boolean removeGame(String gameName, String authorName) throws SQLException {
         myRemoveGameStatement.setString(1, gameName);
         myRemoveGameStatement.setString(2, authorName);
         return myRemoveGameStatement.executeUpdate() > 0;
@@ -166,7 +173,7 @@ public class GameInformationQuerier extends Querier {
         List<String> gameNames = new ArrayList<>();
         myLoadGameNamesStatement.setString(1, userName);
         ResultSet resultSet = myLoadGameNamesStatement.executeQuery();
-        while(resultSet.next()){
+        while (resultSet.next()) {
             gameNames.add(resultSet.getString(GAME_NAME_COLUMN));
         }
         return gameNames;
@@ -175,7 +182,7 @@ public class GameInformationQuerier extends Querier {
     public List<String> loadAllGameInformationXMLs(String userName) throws SQLException {
         List<String> serializedGameInfoObjects = new ArrayList<>();
         List<GamePrimaryKey> games = getGameNames();
-        for (GamePrimaryKey game : games){
+        for (GamePrimaryKey game : games) {
             if (game.getAuthorName().equals(userName)) {
                 String gameInfoXML = loadGameInformation(game.getGameName(), userName);
                 if (gameInfoXML != null) {

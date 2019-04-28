@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class RatingsQuerier extends Querier {
 
@@ -61,7 +62,7 @@ public class RatingsQuerier extends Querier {
         List<GameRating> gameRatings = new LinkedList<>();
         myAllRatingsStatement.setString(1, gameName);
         ResultSet resultSet = myAllRatingsStatement.executeQuery();
-        while (resultSet.next()){
+        while (resultSet.next()) {
             gameRatings.add(new GameRating(resultSet.getString(USER_NAME_COLUMN),
                     resultSet.getString(GAME_NAME_COLUMN), resultSet.getString(AUTHOR_NAME_COLUMN),
                     resultSet.getInt(RATING_COLUMN), resultSet.getString(COMMENTS_COLUMN)));
@@ -72,13 +73,13 @@ public class RatingsQuerier extends Querier {
     public double getAverageRating(String gameName) throws SQLException {
         myAverageRatingsStatement.setString(1, gameName);
         ResultSet resultSet = myAverageRatingsStatement.executeQuery();
-        if (resultSet.next()){
+        if (resultSet.next()) {
             return resultSet.getDouble(AVERAGE);
         }
         return -1.0D;
     }
 
-    public void removeAllGameRatings(String gameName, String authorName) throws SQLException{
+    public void removeAllGameRatings(String gameName, String authorName) throws SQLException {
         myRemoveRatingsStatement.setString(1, gameName);
         myRemoveRatingsStatement.setString(2, authorName);
         myRemoveRatingsStatement.executeUpdate();
