@@ -1,6 +1,7 @@
 package manager;
 
 import center.external.CenterView;
+import controls.LogOutButton;
 import data.external.GameCenterData;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,6 +14,7 @@ import ui.main.MainGUI;
     private CreateNewGamePage myNewGamePage;
     private WelcomeUserPage myWelcomeUserPage;
 
+    private SwitchToUserOptions myLogOut;
     private SwitchToUserOptions switchToCreatePage = this::goToCreatePage;
     private SwitchToUserPage switchToGameCenter = this::goToGameCenter;
     private SwitchToAuthoring switchToAuthoring = this::goToAuthoring;
@@ -20,7 +22,8 @@ import ui.main.MainGUI;
     private String myUserName;
     private Scene myScene;
 
-    UserManager(String userName){
+    UserManager(SwitchToUserOptions logOut, String userName){
+        myLogOut = logOut;
         myUserName = userName;
 
     }
@@ -31,7 +34,7 @@ import ui.main.MainGUI;
     }
 
     private void makePages(){
-        myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName);
+        myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName,myLogOut);
         myNewGamePage = new CreateNewGamePage(myUserName);
     }
 

@@ -3,10 +3,15 @@ package controls;
 
 import data.external.DataManager;
 import manager.SwitchToUserPage;
+import popup.ErrorPopUp;
+import popup.LoginErrorPopUp;
 public class EnterGameButton extends SceneSwitchButton {
     private static final String STYLE = "default_launcher.css";
     private CredentialValidator userNameAccessor;
     private CredentialValidator passWordAccessor;
+
+    private static final String ERROR = "wrong_login";
+
     /**
      * Handles Validating the user input into the username and password fields in the main login page
      * @author Anna Darwish
@@ -18,8 +23,11 @@ public class EnterGameButton extends SceneSwitchButton {
         this.getStylesheets().add(STYLE);
         this.setOnMouseReleased(mouseEvent -> {
             if (validateUserCredentials()){
-                System.out.println("USER LOGGED IN SUCCESSFULLY");
+//                System.out.println("USER LOGGED IN SUCCESSFULLY");
                 loggedInPage.switchUserPage(userNameAccessor.currentFieldValue());
+            }
+            else{
+                displayInvalidLogin();
             }
 
         });
@@ -29,6 +37,11 @@ public class EnterGameButton extends SceneSwitchButton {
         String currentPassWord = passWordAccessor.currentFieldValue();
         DataManager dataManager = new DataManager();
         return dataManager.validateUser(currentUserName,currentPassWord);
+    }
+
+    private void displayInvalidLogin(){
+        ErrorPopUp invalidLogin = new LoginErrorPopUp(ERROR);
+        invalidLogin.display();
     }
 
 }
