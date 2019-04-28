@@ -13,6 +13,11 @@ import engine.external.events.*;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 /**
  * Makes a game object for use in Runner Test
  * @author Louis Jensen, Feroze Mohideen
@@ -401,34 +406,68 @@ public class DummyGameObjectMaker {
         /**
          * Add All Events to the Level
          */
-        level1.addEvent(flappyMoveRightEvent);
-        level1.addEvent(flappySpeedUpEvent);
-        level1.addEvent(timeEvent);
-        level1.addEvent(levelOver);
-        level1.addEvent(flappyMoveLeft);
-        level1.addEvent(Ghost1Jump);
-        level1.addEvent(RightFlappyCollisionWithGhost);
-        level1.addEvent(LeftGhostCollisionWithFlappy);
-        level1.addEvent(GhostCollidesWithFlappy);
-        level1.addEvent(platformKnocked);
-        level1.addEvent(flappyOnPlatform);
-        level1.addEvent(Ghost1OnPlatform);
-        level1.addEvent(bbOnPlatform);
-        level1.addEvent(flappyJump);
-        level1.addEvent(SpawnMushroomEvent);
-        level1.addEvent(SpawnBasketball);
-        level1.addEvent(music);
-        level1.addEvent(RightGhostCollisionWithGhost);
-        level1.addEvent(BottomGhostCollisionWithGhost);
-        level1.addEvent(broo);
-        level1.addEvent(BottomBBCollisionWithBB);
-        level1.addEvent(RightGhostCollisionWithBB);
-        level1.addEvent(BottomGhostCollisionWithBB);
-        level1.addEvent(RightBBCollisionWithGhost);
-        level1.addEvent(BottomBBcollisionWithGhost);
-        level1.addEvent(flappyFallsEvent);
-        level1.addEvent(lifeKeyInputEvent);
+//        level1.addEvent(flappyMoveRightEvent);
+//        level1.addEvent(flappySpeedUpEvent);
+//        level1.addEvent(timeEvent);
+//        level1.addEvent(levelOver);
+//        level1.addEvent(flappyMoveLeft);
+//        level1.addEvent(Ghost1Jump);
+//        level1.addEvent(RightFlappyCollisionWithGhost);
+//        level1.addEvent(LeftGhostCollisionWithFlappy);
+//        level1.addEvent(GhostCollidesWithFlappy);
+//        level1.addEvent(platformKnocked);
+//        level1.addEvent(flappyOnPlatform);
+//        level1.addEvent(Ghost1OnPlatform);
+//        level1.addEvent(bbOnPlatform);
+//        level1.addEvent(flappyJump);
+//        level1.addEvent(SpawnMushroomEvent);
+//        level1.addEvent(SpawnBasketball);
+//        level1.addEvent(music);
+//        level1.addEvent(RightGhostCollisionWithGhost);
+//        level1.addEvent(BottomGhostCollisionWithGhost);
+//        level1.addEvent(broo);
+//        level1.addEvent(BottomBBCollisionWithBB);
+//        level1.addEvent(RightGhostCollisionWithBB);
+//        level1.addEvent(BottomGhostCollisionWithBB);
+//        level1.addEvent(RightBBCollisionWithGhost);
+//        level1.addEvent(BottomBBcollisionWithGhost);
+//        level1.addEvent(flappyFallsEvent);
+//        level1.addEvent(lifeKeyInputEvent);
 
+        List<Event> spawnEvents = getSpawnEvents(new ArrayList<>(Arrays.asList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0,
+                70.0, 80.0, 90.0)));
+        spawnEvents.forEach(e -> level1.addEvent(e));
+
+
+    }
+
+    private List<Event> getSpawnEvents(List<Double> times) {
+        var r = new Random();
+        List<Event> eventlist = new ArrayList<>();
+        for (double time: times) {
+            Entity dummy = new Entity();
+            dummy.addComponent(new SpriteComponent("basketball"));
+            double xpos = (r.nextInt(5) + 1) * 100.0;
+            dummy.addComponent(new XPositionComponent(xpos));
+            dummy.addComponent(new YPositionComponent(0.0));
+            dummy.addComponent(new ZPositionComponent(0.0));
+            dummy.addComponent(new WidthComponent(100.0));
+            dummy.addComponent(new HeightComponent(100.0));
+            dummy.addComponent(new NameComponent("dummy"));
+            dummy.addComponent(new XVelocityComponent(0.0));
+            dummy.addComponent(new YVelocityComponent(0.0));
+            dummy.addComponent(new XAccelerationComponent(0.0));
+            dummy.addComponent(new YAccelerationComponent(0.2));
+
+
+            Event spawn = new Event();
+            spawn.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
+            spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
+            spawn.addActions(new AddEntityAction(dummy));
+
+            eventlist.add(spawn);
+        }
+        return eventlist;
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -442,6 +481,7 @@ public class DummyGameObjectMaker {
         gameObject.addComponent(new ScoreComponent(0.0));
         gameObject.addComponent(new LivesComponent(3.0));
         gameObject.addComponent(new NameComponent("game"));
+        gameObject.addComponent(new TimerComponent(100.0));
 
         //Create the entities in the level
         Entity Flappy = new Entity();
@@ -450,6 +490,9 @@ public class DummyGameObjectMaker {
         Entity MarioBlock1 = new Entity();
         Entity MarioBlock2 = new Entity();
         Entity MarioBlock3 = new Entity();
+        Entity MarioBlock4 = new Entity();
+        Entity MarioBlock5 = new Entity();
+
         Entity Ghost2 = new Entity();
 
         /**
@@ -500,7 +543,7 @@ public class DummyGameObjectMaker {
         BasketBall.addComponent(new HeightComponent(80.0));
         BasketBall.addComponent(new SpriteComponent("basketball"));
         BasketBall.addComponent(new NameComponent("Basketball"));
-        BasketBall.addComponent(new TimerComponent(100.0));
+        //BasketBall.addComponent(new TimerComponent(100.0));
         //basketball has a timer component so that we can define an Event that will make mushrooms respawn everytime basketball's timer hits 0.
 
         //Give Ghost2 the needed components
@@ -518,44 +561,64 @@ public class DummyGameObjectMaker {
         Ghost2.addComponent(new CollisionComponent(true));
 
         //Give the blocks their needed components
-        MarioBlock1.addComponent(new XPositionComponent(170.0));
+        MarioBlock1.addComponent(new XPositionComponent(100.0));
         MarioBlock1.addComponent(new YPositionComponent(400.0));
         MarioBlock1.addComponent(new ZPositionComponent(0.0));
-        MarioBlock1.addComponent(new WidthComponent(800.0));
-        MarioBlock1.addComponent(new HeightComponent(80.0));
+        MarioBlock1.addComponent(new WidthComponent(100.0));
+        MarioBlock1.addComponent(new HeightComponent(100.0));
         MarioBlock1.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock1.addComponent(new CollisionComponent(true));
         MarioBlock1.addComponent(new HealthComponent(100.0));
-        MarioBlock1.addComponent(new NameComponent("Block"));
-        MarioBlock1.addComponent(new WidthComponent(500.0));
+        MarioBlock1.addComponent(new NameComponent("Block1"));
+        //MarioBlock1.addComponent(new WidthComponent(500.0));
 
-        MarioBlock2.addComponent(new XPositionComponent(700.0));
+        MarioBlock2.addComponent(new XPositionComponent(210.0));
         MarioBlock2.addComponent(new YPositionComponent(400.0));
         MarioBlock2.addComponent(new ZPositionComponent(0.0));
-        MarioBlock2.addComponent(new WidthComponent(80.0));
-        MarioBlock2.addComponent(new HeightComponent(80.0));
+        MarioBlock2.addComponent(new WidthComponent(100.0));
+        MarioBlock2.addComponent(new HeightComponent(100.0));
         MarioBlock2.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock2.addComponent(new CollisionComponent(true));
-        MarioBlock2.addComponent(new NameComponent("Block"));
+        MarioBlock2.addComponent(new NameComponent("Block2"));
 
-        MarioBlock3.addComponent(new XPositionComponent(1300.0));
+        MarioBlock3.addComponent(new XPositionComponent(320.0));
         MarioBlock3.addComponent(new YPositionComponent(400.0));
         MarioBlock3.addComponent(new ZPositionComponent(0.0));
-        MarioBlock3.addComponent(new WidthComponent(160.0));
-        MarioBlock3.addComponent(new HeightComponent(80.0));
+        MarioBlock3.addComponent(new WidthComponent(100.0));
+        MarioBlock3.addComponent(new HeightComponent(100.0));
         MarioBlock3.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock3.addComponent(new CollisionComponent(true));
-        MarioBlock3.addComponent(new NameComponent("Block"));
+        MarioBlock3.addComponent(new NameComponent("Block3"));
+
+        MarioBlock4.addComponent(new XPositionComponent(430.0));
+        MarioBlock4.addComponent(new YPositionComponent(400.0));
+        MarioBlock4.addComponent(new ZPositionComponent(0.0));
+        MarioBlock4.addComponent(new WidthComponent(100.0));
+        MarioBlock4.addComponent(new HeightComponent(100.0));
+        MarioBlock4.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock4.addComponent(new CollisionComponent(true));
+        MarioBlock4.addComponent(new NameComponent("Block4"));
+
+        MarioBlock5.addComponent(new XPositionComponent(540.0));
+        MarioBlock5.addComponent(new YPositionComponent(400.0));
+        MarioBlock5.addComponent(new ZPositionComponent(0.0));
+        MarioBlock5.addComponent(new WidthComponent(100.0));
+        MarioBlock5.addComponent(new HeightComponent(100.0));
+        MarioBlock5.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock5.addComponent(new CollisionComponent(true));
+        MarioBlock5.addComponent(new NameComponent("Block5"));
 
         //Add the entities to the level
         level.addEntity(gameObject);
-        level.addEntity(Flappy);
-        level.addEntity(Ghost1);
-        level.addEntity(Ghost2);
-        level.addEntity(BasketBall);
+//        level.addEntity(Flappy);
+//        level.addEntity(Ghost1);
+//        level.addEntity(Ghost2);
+//        level.addEntity(BasketBall);
         level.addEntity(MarioBlock1);
         level.addEntity(MarioBlock2);
         level.addEntity(MarioBlock3);
+        level.addEntity(MarioBlock4);
+        level.addEntity(MarioBlock5);
 
     }
 

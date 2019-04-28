@@ -3,6 +3,8 @@ package runner.internal.runnerSystems;
 import engine.external.Entity;
 import engine.external.component.Component;
 import engine.external.component.ImageViewComponent;
+import engine.external.component.NameComponent;
+import engine.external.component.TimerComponent;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import runner.internal.LevelRunner;

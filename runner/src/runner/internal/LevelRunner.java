@@ -3,6 +3,8 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.component.NameComponent;
+import engine.external.component.TimerComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -122,6 +124,12 @@ public class LevelRunner {
 
     private void step (double elapsedTime) {
         myEntities = myEngine.updateState(myCurrentKeys);
+        for (Entity entity : myEntities) {
+            if (entity.hasComponents(TimerComponent.class)) {
+                System.out.println("name: " + entity.getComponent(NameComponent.class).getValue() + " time: " + entity.getComponent(TimerComponent.class).getValue());
+            }
+        }
+
         updateGUI();
     }
 

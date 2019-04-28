@@ -25,7 +25,7 @@ public abstract class Action<T> {
 
     public void checkComponents(Entity entity) {
         if (!entity.hasComponents(myComponentClass)) {
-            System.out.println("Action adding missing component");
+            System.out.println("Action adding missing component: " + myComponentClass);
             try {
                 entity.addComponent(myComponentClass.getConstructor().newInstance());
             } catch (Exception e) {
