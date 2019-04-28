@@ -93,6 +93,8 @@ public class SystemManager {
         mySystems.add(new ProgressionSystem(components, myLevelRunner,
                 myGroup, myStage, myAnimation, mySceneWidth,
                 mySceneHeight, myLevelChanger, myLevelCount));
+
+        mySystems.add(new PizzaSystem(new ArrayList<>(){{add(PizzaComponent.class);}}, myLevelRunner));
     }
 
     /**

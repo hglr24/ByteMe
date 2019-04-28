@@ -6,6 +6,7 @@ import engine.external.Level;
 import engine.external.actions.*;
 import engine.external.component.*;
 import engine.external.conditions.EqualToCondition;
+import engine.external.conditions.GreaterThanCondition;
 import engine.external.conditions.LessThanCondition;
 import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.*;
@@ -272,6 +273,12 @@ public class DummyGameObjectMaker {
         timeEvent.addActions(new AddEntityAction(dummy7));
         timeEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
+        Event pizzaEvent = new Event();
+        pizzaEvent.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
+        pizzaEvent.addConditions(new GreaterThanCondition(XPositionComponent.class, 700.0));
+        pizzaEvent.addActions(new PizzaAction(true));
+
+        level1.addEvent(pizzaEvent);
         level1.addEvent(event);
         level1.addEvent(event2);
 
@@ -427,6 +434,16 @@ public class DummyGameObjectMaker {
 
         dummy3.addComponent(new TimerComponent(100.0));
 
+        Entity dummy9 = new Entity();
+        dummy9.addComponent(new XPositionComponent(700.0));
+        dummy9.addComponent(new YPositionComponent(300.0));
+        dummy9.addComponent(new ZPositionComponent(0.0));
+        dummy9.addComponent(new WidthComponent(160.0));
+        dummy9.addComponent(new HeightComponent(80.0));
+        dummy9.addComponent(new SpriteComponent("pizza.png"));
+        dummy9.addComponent(new NameComponent("pizza"));
+
+        level.addEntity(dummy9);
         level.addEntity(dummy1);
         level.addEntity(dummy2);
         level.addEntity(dummy3);

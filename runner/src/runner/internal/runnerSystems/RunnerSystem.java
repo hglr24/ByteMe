@@ -1,6 +1,7 @@
 package runner.internal.runnerSystems;
 
 import engine.external.Entity;
+import engine.external.Level;
 import engine.external.component.Component;
 import runner.internal.LevelRunner;
 import java.util.ArrayList;
@@ -74,6 +75,10 @@ public abstract class RunnerSystem {
      */
     public Object getComponentValue(Class<? extends Component> componentClazz,Entity entity){
         return entity.getComponent(componentClazz).getValue();
+    }
+
+    protected LevelRunner getLevelRunner() {
+        return myLevelRunner;
     }
 
 }

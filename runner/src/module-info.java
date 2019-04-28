@@ -7,6 +7,8 @@ module runner {
     requires org.junit.jupiter.api;
     exports runner.external;
     requires xstream;
+    requires java.desktop;
+    requires javafx.web;
     exports runner.internal to javafx.graphics;
     opens runner.external to xstream;
 }

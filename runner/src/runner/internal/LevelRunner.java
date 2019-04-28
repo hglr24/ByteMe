@@ -155,4 +155,10 @@ public class LevelRunner {
     public Engine getEngine(){
         return myEngine;
     }
+
+    public void pauseGame() {
+        if (canPause) {
+            myPauseButton.pauseGame();
+        }
+    }
 }

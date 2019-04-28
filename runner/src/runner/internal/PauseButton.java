@@ -58,7 +58,7 @@ public class PauseButton extends ImageView {
         myPlayingStatus = !myPlayingStatus;
     }
 
-    private void pauseGame() {
+    public void pauseGame() {
         myAnimation.pause();
         myGroup.getChildren().add(new PauseScreen(myLevelRunner, myToggle, myStage, myGroup.getTranslateX()).getPauseMenu());
         myAudioManager.pauseAllSound();
