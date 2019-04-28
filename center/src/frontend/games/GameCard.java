@@ -9,21 +9,15 @@
 package frontend.games;
 
 import data.external.DataManager;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import data.external.GameCenterData;
 import frontend.Utilities;
-import runner.external.GameRunner;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 public class GameCard {
@@ -31,31 +25,30 @@ public class GameCard {
     private static final int WRAP_OFFSET = 25;
 
     public static final double DISPLAY_WIDTH = 300;
-    public static final double DISPLAY_HEIGHT = 300;
-    private static final String DEFAULT_IMAGE_LOCATION = "center/data/game_information/images/default_game.png";
+    public static final double DISPLAY_HEIGHT = 350;
     private static final String DEFAULT_LANGUAGE_LOCATION = "languages/English";
     private static final String BACKGROUND_SELECTOR = "rectangle";
     private static final String TEXT_SELECTOR = "cardtext";
     private static final String TITLE_SELECTOR = "cardtitle";
     private static final String BODY_SELECTOR = "cardbody";
-    private static final String BUTTONS_SELECTOR = "buttons";
     private static final String FOREGROUND_SELECTOR = "cardpadding";
-    private static final String INDIVIDUAL_BUTTON_SELECTOR = "button";
     private static final String CONTENT_SELECTOR = "contentpadding";
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
     private Pane myDisplay;
+    private DataManager myManager;
 
     /**
      * @purpose constructor that sets up parameters of the game and initializes the resource bundle used for text.
      * @param game the GameCenterData object that represents the contents of the GameCard
      * @param index the index that the game card is in a list. This is used for styling purposes
      */
-    public GameCard(GameCenterData game, int index) {
+    public GameCard(GameCenterData game, int index, DataManager manager) {
         myGame = game;
         myIndex = index % 2 + 1;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE_LOCATION);
+        myManager = manager;
         initializeDisplay();
     }
 
@@ -68,11 +61,19 @@ public class GameCard {
         return myDisplay;
     }
 
+    public void readMoreButton(GameCenterData data) {
+        new GamePage(data, myManager);
+    }
+
+    public void playGameButton(GameCenterData data) {
+        Utilities.launchGameRunner(data.getFolderName());
+    }
+
     private void initializeDisplay() {
-        BorderPane tempDisplay = new BorderPane();
+        BorderPane cardDisplay = new BorderPane();
         StackPane cardContents = fillCardContents();
-        tempDisplay.setCenter(cardContents);
-        myDisplay = tempDisplay;
+        cardDisplay.setCenter(cardContents);
+        myDisplay = cardDisplay;
     }
 
     private StackPane fillCardContents() {
@@ -94,40 +95,25 @@ public class GameCard {
         BorderPane foreground = new BorderPane();
         foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
+        addAuthor(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
         pane.getChildren().add(foreground);
     }
 
-    private void addButtons(BorderPane foreground) {
-        Button readMore = new Button(Utilities.getValue(myLanguageBundle, "readMoreButton"));
-        readMore.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
-        Button play = new Button(Utilities.getValue(myLanguageBundle, "playGameButton"));
-        play.getStyleClass().add(INDIVIDUAL_BUTTON_SELECTOR);
-        play.setOnAction(e -> handleButton(myGame.getFolderName()));
-        HBox buttons = new HBox(readMore, play);
-        buttons.getStyleClass().add(BUTTONS_SELECTOR);
-        BorderPane buttonPane = new BorderPane();
-        buttonPane.setCenter(buttons);
-        foreground.setBottom(buttonPane);
+    private void addAuthor(BorderPane foreground) {
+
     }
 
-    private void handleButton(String folderName) {
-        try {
-            new GameRunner(folderName);
-        } catch (FileNotFoundException e) {
-            // todo: print error message
-        }
+    private void addButtons(BorderPane foreground) {
+        BorderPane buttonPane = new BorderPane();
+        buttonPane.setCenter(Utilities.makeButtons(this, myGame));
+        foreground.setBottom(buttonPane);
     }
 
     private void addImageAndContent(BorderPane foreground) {
         BorderPane contentPane = new BorderPane();
-        try {
-            addImage(contentPane);
-        } catch (FileNotFoundException e) { // this means that even the default image could not be found
-            // do nothing, because in this case there would just be no image on the card which is fine
-            // todo: possibly create a type of card with no image & turn this into a factory type class
-        }
+        addImage(contentPane);
         Text imageDescription = new Text(myGame.getDescription());
         imageDescription.getStyleClass().add(BODY_SELECTOR);
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
@@ -137,19 +123,8 @@ public class GameCard {
         foreground.setCenter(contentPane);
     }
 
-    private void addImage(BorderPane contentPane) throws FileNotFoundException {
-        ImageView gameImage;
-        try {
-            DataManager dataManager = new DataManager();
-            gameImage = new ImageView(new Image(dataManager.loadImage(myGame.getImageLocation())));
-        } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
-            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
-        }
-        gameImage.setPreserveRatio(true);
-        gameImage.setFitWidth(GAME_IMAGE_SIZE);
-        BorderPane imagePane = new BorderPane();
-        imagePane.setCenter(gameImage);
-        contentPane.setTop(imagePane);
+    private void addImage(BorderPane contentPane) {
+        contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
     }
 
     private void addTitleContent(BorderPane foreground) {
@@ -158,6 +133,11 @@ public class GameCard {
         title.getStyleClass().add(TEXT_SELECTOR + myIndex);
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
+        Text author = new Text(myGame.getAuthorName());
+        author.getStyleClass().add(BODY_SELECTOR);
+        author.getStyleClass().add(TEXT_SELECTOR + myIndex);
+        BorderPane.setAlignment(author, Pos.CENTER);
+        titlePane.setBottom(author);
         foreground.setTop(titlePane);
     }
 

@@ -5,6 +5,7 @@ module center {
     requires javafx.base;
     requires javafx.controls;
     requires xstream;
+    requires voogasalad_util;
 
     exports center.external;
 }
