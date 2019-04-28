@@ -9,6 +9,7 @@
 package frontend.games;
 
 import data.external.DataManager;
+import frontend.popups.GamePage;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;

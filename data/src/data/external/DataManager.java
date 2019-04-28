@@ -3,6 +3,7 @@ package data.external;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
+import data.internal.XMLHandler;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -26,12 +27,10 @@ public class DataManager implements ExternalData {
     private static final String CANT_LOAD_GAME_INFORMATION_XMLS = "Couldn't load game information xmls: ";
     private static final String CANT_UPDATE_GAME_ENTRY_INFO = "Couldn't update game entry information: ";
     private static final String CREATED_GAMES_DIR = "created_games/";
-    private static final String CANNOT_READ_XML_FILE = "Cannot read XML file";
-    private static final String COULD_NOT_CLOSE_FILES = "Could not close files";
-    private static final String WRITE_FAILED = "Write Failed";
     private static final String COULD_NOT_CREATE_USER = "Could not create user: ";
 
     private XStream mySerializer;
+    private XMLHandler myXMLHandler;
     private DatabaseEngine myDatabaseEngine;
 
     /**
@@ -39,6 +38,7 @@ public class DataManager implements ExternalData {
      */
     public DataManager() {
         mySerializer = new XStream(new DomDriver());
+        myXMLHandler = new XMLHandler();
         myDatabaseEngine = DatabaseEngine.getInstance();
     }
 
@@ -62,7 +62,7 @@ public class DataManager implements ExternalData {
     @Override
     public void saveObjectToXML(String path, Object objectToBeSaved) {
         String myRawXML = mySerializer.toXML(objectToBeSaved);
-        writeToXML(path, myRawXML);
+        myXMLHandler.writeToXML(path, myRawXML);
     }
 
     /**
@@ -74,7 +74,7 @@ public class DataManager implements ExternalData {
      */
     @Override
     public Object loadObjectFromXML(String path) throws FileNotFoundException {
-        String rawXML = readFromXML(path);
+        String rawXML = myXMLHandler.readFromXML(path);
         return mySerializer.fromXML(rawXML);
     }
 
@@ -188,41 +188,13 @@ public class DataManager implements ExternalData {
     public void saveGameDataFromFolder(String gameName) {
         try {
             myDatabaseEngine.updateGameEntryInfo(gameName,
-                    DEFAULT_AUTHOR, readFromXML(CREATED_GAMES_DIR + gameName + File.separator + GAME_INFO + XML_EXTENSION));
+                    DEFAULT_AUTHOR,
+                    myXMLHandler.readFromXML(CREATED_GAMES_DIR + gameName + File.separator + GAME_INFO + XML_EXTENSION));
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());
         } catch (SQLException e) {
             System.out.println(CANT_UPDATE_GAME_ENTRY_INFO + e.getMessage());
         }
-    }
-
-    private String readFromXML(String path) throws FileNotFoundException {
-        BufferedReader bufferedReader = null;
-        FileReader fileReader = null;
-        StringBuilder rawXML = new StringBuilder();
-        try {
-            fileReader = new FileReader(path);
-            bufferedReader = new BufferedReader(fileReader);
-            String currentLine;
-            while ((currentLine = bufferedReader.readLine()) != null) {
-                rawXML.append(currentLine);
-            }
-        } catch (IOException e) {
-            System.out.println(CANNOT_READ_XML_FILE);
-            throw new FileNotFoundException();
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-                if (fileReader != null) {
-                    fileReader.close();
-                }
-            } catch (IOException ex) {
-                System.out.println(COULD_NOT_CLOSE_FILES);
-            }
-        }
-        return rawXML.toString();
     }
 
     /**
@@ -282,24 +254,6 @@ public class DataManager implements ExternalData {
 //    private String transformGameNameToPath(String gameName, String filename) {
 //        return CREATED_GAMES_DIRECTORY + File.separator + gameName + File.separator + filename + XML_EXTENSION;
 //    }
-
-    private void writeToXML(String path, String rawXML) {
-        FileWriter fileWriter = null;
-        try {
-            fileWriter = new FileWriter(new File(path));
-            fileWriter.write(rawXML);
-        } catch (IOException exception) {
-            System.out.println(WRITE_FAILED); //Debugging information, method only used internally
-        } finally {
-            try {
-                if (fileWriter != null) {
-                    fileWriter.close();
-                }
-            } catch (IOException e) {
-                System.out.println(COULD_NOT_CLOSE_FILES);
-            }
-        }
-    }
 
     /**
      * Creates a user in the data base
@@ -455,6 +409,26 @@ public class DataManager implements ExternalData {
     @Override
     public void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException {
         myDatabaseEngine.saveCheckpoint(userName, gameName, authorName, mySerializer.toXML(checkpoint));
+    }
+
+    @Override
+    public void setProfilePic(String userName, File profilePic) throws SQLException {
+        myDatabaseEngine.setProfilePic(userName, profilePic);
+    }
+
+    @Override
+    public void setBio(String userName, String bio) throws SQLException {
+        myDatabaseEngine.setBio(userName, bio);
+    }
+
+    @Override
+    public InputStream getProfilePic(String userName) throws SQLException {
+        return myDatabaseEngine.getProfilePic(userName);
+    }
+
+    @Override
+    public String getBio(String userName) throws SQLException {
+        return myDatabaseEngine.getBio(userName);
     }
 
     public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {

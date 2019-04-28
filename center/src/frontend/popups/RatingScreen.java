@@ -1,9 +1,10 @@
-package frontend.ratings;
+package frontend.popups;
 
 import data.external.DataManager;
 import data.external.GameCenterData;
 import data.external.GameRating;
 import frontend.Utilities;
+import frontend.ratings.StarBox;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
@@ -11,29 +12,19 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-public class RatingScreen {
+public class RatingScreen extends Popup {
     private static final double RATING_WIDTH = 350;
     private static final double RATING_HEIGHT = 450;
-    private static final String DEFAULT_LANGUAGE = "languages/English";
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String TEXT_FIELD_SELECTOR = "commentbox";
     private static final String PADDING_SELECTOR = "ratingpadding";
 
-    private BorderPane myDisplay;
-    private ResourceBundle myLanguageBundle;
-    private GameCenterData myData;
-    private DataManager myManager;
     private TextArea myText;
     private StarBox myStars;
 
     public RatingScreen(GameCenterData data, DataManager manager) {
-        myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE);
-        myData = data;
-        myManager = manager;
-        initializeDisplay();
-        display();
+        super(data, manager);
     }
 
     public void addRatingButton(GameCenterData data) {
@@ -50,14 +41,18 @@ public class RatingScreen {
         ((Stage) myDisplay.getScene().getWindow()).close();
     }
 
-    private void initializeDisplay() {
-        myDisplay = new BorderPane();
-        addTitle();
-        addRatingInput();
-        addButtons();
+    @Override
+    protected void addButtons() {
+        myDisplay.setBottom(Utilities.makeButtons(this, myData));
     }
 
-    private void addRatingInput() {
+    @Override
+    protected void addHeader() {
+        addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle());
+    }
+
+    @Override
+    protected void addBody() {
         BorderPane ratingOptions = new BorderPane();
         addStars(ratingOptions);
         addCommentBox(ratingOptions);
@@ -66,8 +61,9 @@ public class RatingScreen {
         myDisplay.getStyleClass().add(PADDING_SELECTOR);
     }
 
-    private void addButtons() {
-        myDisplay.setBottom(Utilities.makeButtons(this, myData));
+    @Override
+    protected void display() {
+        showScene(myDisplay, RATING_WIDTH, RATING_HEIGHT);
     }
 
     private void addStars(BorderPane pane) {
@@ -94,13 +90,4 @@ public class RatingScreen {
         comment.setCenter(myText);
         pane.setCenter(comment);
     }
-
-    private void addTitle() {
-        Utilities.addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle());
-    }
-
-    private void display() {
-        Utilities.showScene(myDisplay, RATING_WIDTH, RATING_HEIGHT);
-    }
-
 }
