@@ -32,11 +32,11 @@ public class LauncherSymbol extends ImageView {
         this.setOnMouseClicked(mouseEvent -> switchPage.switchPage());
     }
 
-    public LauncherSymbol(String action, SwitchToUserPage switchPage, String userName){
+    public LauncherSymbol(String action, SwitchToUserPage switchPage){
         basicSetUp(action);
         this.setOnMousePressed(mouseEvent -> switchImage(myPressedImage));
         this.setOnMouseReleased(mouseEvent -> switchImage(myDefaultImage));
-        this.setOnMouseClicked(mouseEvent -> switchPage.switchUserPage(userName));
+        //this.setOnMouseClicked(mouseEvent -> switchPage.switchUserPage());
     }
 
     private void basicSetUp(String action){

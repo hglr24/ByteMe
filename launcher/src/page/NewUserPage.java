@@ -2,6 +2,7 @@ package page;
 
 
 import controls.InformativeField;
+import controls.TitleLabel;
 import data.external.DataManager;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,7 +12,8 @@ import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;
 
 public class NewUserPage extends VBox {
-    private static final String MY_STYLE = "default_launcher.css";
+    private static final String MY_STYLE = "new-user-vbox";
+    private static final String NEW_USER_KEY = "new_user";
     private static final String USERNAME = "Enter New UserName";
     private static final String PASSWORD = "Enter Password";
     private static final String REENTER_PASSWORD = "Re-enter Password";
@@ -27,12 +29,14 @@ public class NewUserPage extends VBox {
      */
     public NewUserPage(SwitchToUserPage enterGame){
         this.getStyleClass().add(MY_STYLE);
+        this.getChildren().add(new TitleLabel(NEW_USER_KEY));
         this.getChildren().add(userName);
         this.getChildren().add(passWord);
         this.getChildren().add(reenter);
         this.getChildren().add(createAccount);
         createAccount.setOnMouseClicked(mouseEvent -> {
             if (validCredentials()){
+                System.out.println("USER CREATED ACCOUNT SUCCESSFULLY");
                 enterGame.switchUserPage(userName.getTextEntered());
             }
             else{

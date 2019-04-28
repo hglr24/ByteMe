@@ -2,6 +2,7 @@ package pane;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import manager.SwitchToUserOptions;
+import manager.SwitchToUserPage;
 
 public class UserOptionsDisplay extends HBox {
     private static final String CREATE_LAUNCHER = "create";
@@ -13,19 +14,19 @@ public class UserOptionsDisplay extends HBox {
      * into the game center
      * @author Anna Darwish
      */
-    public UserOptionsDisplay(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher, String userName){
+    public UserOptionsDisplay(SwitchToUserOptions switchToPageBeforeAuthoring, SwitchToUserPage switchToLauncher, String userName){
         this.getStyleClass().add(CSS_STYLE_NAME);
         this.setTranslateY(OFFSET_VALUE);
-        setUpImages(switchDisplay,switchToLauncher);
+        setUpImages(switchToPageBeforeAuthoring,switchToLauncher, userName);
         this.setAlignment(Pos.CENTER);
         this.setSpacing(OFFSET_VALUE);
 
     }
-    private void setUpImages(SwitchToUserOptions switchDisplay, SwitchToUserOptions switchToLauncher){
+    private void setUpImages(SwitchToUserOptions switchDisplay, SwitchToUserPage switchToLauncher, String userName){
         LauncherControlDisplay myCreator = new LauncherControlDisplay(CREATE_LAUNCHER);
         myCreator.setOnMouseClicked(mouseEvent -> switchDisplay.switchPage());
         LauncherControlDisplay myPlayer = new LauncherControlDisplay(PLAY_LAUNCHER);
-        myPlayer.setOnMouseClicked(mouseEvent -> switchToLauncher.switchPage());
+        myPlayer.setOnMouseClicked(mouseEvent -> switchToLauncher.switchUserPage(userName));
         this.getChildren().add(0,myCreator);
         this.getChildren().add(1, myPlayer);
     }

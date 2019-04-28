@@ -7,6 +7,7 @@ import controls.PaneLabel;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import manager.SwitchToUserOptions;
+import manager.SwitchToUserPage;
 
 import java.util.ResourceBundle;
 /**
@@ -14,7 +15,7 @@ import java.util.ResourceBundle;
  * here
  * @author Anna Darwish
  */
-class UserLoginDisplay extends VBox {
+public class UserLoginDisplay extends VBox {
     private static final String LOGIN_RESOURCE = "launcher_display";
     private static final ResourceBundle myResources = ResourceBundle.getBundle(LOGIN_RESOURCE);
 
@@ -28,15 +29,15 @@ class UserLoginDisplay extends VBox {
     private static final String STYLE = "default_launcher.css";
     private static final String DELIMITER = ",";
 
-    UserLoginDisplay(SwitchToUserOptions mySwitch){
-        this.getStylesheets().add(STYLE);
+    public UserLoginDisplay(SwitchToUserPage mySwitch){
         String[] loginTextFields = myResources.getString(LOGIN_KEY).split(DELIMITER);
         this.setSpacing(40);
         InformativeField myUserNameField = new InformativeField(loginTextFields[0]);
         HiddenField myPasswordField = new HiddenField(loginTextFields[1]);
         setUpChildren(myUserNameField,myPasswordField, mySwitch);
+
     }
-    private void setUpChildren(InformativeField userName, HiddenField passWord, SwitchToUserOptions mySwitch){
+    private void setUpChildren(InformativeField userName, HiddenField passWord, SwitchToUserPage mySwitch){
         this.setAlignment(Pos.CENTER);
         this.getChildren().add(new PaneLabel(LOGIN_LABEL));
         this.getChildren().add(userName);
