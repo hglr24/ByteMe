@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import manager.SwitchToUserOptions;
+import manager.SwitchToUserPage;
 
 public class NewUserPage extends VBox {
     private static final String MY_STYLE = "default_launcher.css";
@@ -24,20 +25,20 @@ public class NewUserPage extends VBox {
      * they can play games
      * @author Anna Darwish
      */
-    public NewUserPage(SwitchToUserOptions enterGame){
+    public NewUserPage(SwitchToUserPage enterGame, String userNameText){
         createAccount.setOnMouseClicked(mouseEvent -> {
             if (validCredentials()){
-                enterGame.switchPage();
+                enterGame.switchUserPage(userNameText);
             }
             else{
                 displayUserNameInUseError();
             }
         });
         this.getStyleClass().add(MY_STYLE);
-        this.getChildren().add(0,userName);
-        this.getChildren().add(1,passWord);
-        this.getChildren().add(2,reenter);
-        this.getChildren().add(3, createAccount);
+        this.getChildren().add(userName);
+        this.getChildren().add(passWord);
+        this.getChildren().add(reenter);
+        this.getChildren().add(createAccount);
 
 
     }

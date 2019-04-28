@@ -13,7 +13,6 @@ import engine.external.events.LeftCollisionEvent;
 import engine.external.events.RightCollisionEvent;
 import javafx.application.Application;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import ui.manager.EventManager;
 import ui.manager.LabelManager;
@@ -25,7 +24,7 @@ import java.util.List;
 /**
  * @author Harry Ross
  */
-public class EventManagerTester extends Application {
+public class  EventManagerTester extends Application {
 
     @Override
     public void start(Stage testStage) {

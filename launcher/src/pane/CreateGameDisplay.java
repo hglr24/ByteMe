@@ -1,7 +1,6 @@
 package pane;
 
 import controls.InformativeField;
-import data.external.DataManager;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -59,8 +58,8 @@ public class CreateGameDisplay extends VBox {
         this.getChildren().add(gameDescription);
         HBox playerAndCenter = new HBox();
         playerAndCenter.getStylesheets().add("default_launcher.css");
-        playerAndCenter.setAlignment(Pos.CENTER);
-        playerAndCenter.setSpacing(100);
+//        playerAndCenter.setAlignment(Pos.CENTER);
+//        playerAndCenter.setSpacing(100);
         playerAndCenter.getChildren().add(myPlayer);
         playerAndCenter.getChildren().add(myCenter);
         this.getChildren().add(playerAndCenter);
