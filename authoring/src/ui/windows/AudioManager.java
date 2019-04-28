@@ -1,12 +1,15 @@
 package ui.windows;
 
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import ui.LevelField;
 import ui.Propertable;
 
 import java.io.File;
@@ -48,6 +51,12 @@ public class AudioManager extends AssetManager {
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     mediaPlayer.play();
                 }
+            }
+        });
+        vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                mySelectedAssetName = file.getName();
             }
         });
         if(listView.getItems().contains(vBox)){
@@ -101,6 +110,9 @@ public class AudioManager extends AssetManager {
     @Override
     protected void handleApply() {
         if(!mySelectedAssetName.equals("")){
+            if(myPropertable != null){
+                myPropertable.getPropertyMap().put(LevelField.MUSIC, mySelectedAssetName);
+            }
             this.close();
         }
         else{
