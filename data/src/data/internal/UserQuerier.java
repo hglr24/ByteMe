@@ -41,7 +41,7 @@ public class UserQuerier extends Querier {
 
     private static final String COULD_NOT_VALIDATE_USER = "Could not validate user: ";
     private static final String COULD_NOT_GENERATE_HASH = "Could not generate hash: ";
-    public static final String COULD_NOT_LOAD_IMAGE = "COULD NOT LOAD IMAGE ";
+    private static final String COULD_NOT_LOAD_IMAGE = "COULD NOT LOAD IMAGE ";
 
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
@@ -167,9 +167,9 @@ public class UserQuerier extends Querier {
     }
 
     public void setBio(String userName, String bio) throws SQLException {
-        mySetUserProfilePicStatement.setString(1, bio);
-        mySetUserProfilePicStatement.setString(2, userName);
-        mySetUserProfilePicStatement.execute();
+        mySetUserBioStatement.setString(1, bio);
+        mySetUserBioStatement.setString(2, userName);
+        mySetUserBioStatement.execute();
     }
 
     public InputStream getProfilePic(String userName) throws SQLException {
@@ -183,8 +183,8 @@ public class UserQuerier extends Querier {
     }
 
     public String getBio(String userName) throws SQLException {
-        myGetUserProfilePicStatement.setString(1, userName);
-        ResultSet resultSet = myGetUserProfilePicStatement.executeQuery();
+        myGetUserBioStatement.setString(1, userName);
+        ResultSet resultSet = myGetUserBioStatement.executeQuery();
         if (resultSet.next()){
             return resultSet.getString(BIO_COLUMN);
         } else {

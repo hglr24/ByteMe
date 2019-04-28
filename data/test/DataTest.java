@@ -256,4 +256,17 @@ public class DataTest {
         }
     }
 
+    @Test
+    public void testUserBios() {
+        myDataManager.createUser(myUserName1, myCorrectPassword);
+        try {
+            myDataManager.setBio(myUserName1, "Expected");
+            assertEquals("Expected", myDataManager.getBio(myUserName1));
+        } catch (SQLException e) {
+            e.printStackTrace(); // Just for testing/debugging purposes
+            assertEquals(0, 1);
+        }
+
+    }
+
 }
