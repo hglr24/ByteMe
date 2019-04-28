@@ -22,14 +22,16 @@ public class RatingScreen extends Popup {
 
     private TextArea myText;
     private StarBox myStars;
+    private String myCurrentUser;
 
-    public RatingScreen(GameCenterData data, DataManager manager) {
+    public RatingScreen(GameCenterData data, DataManager manager, String user) {
         super(data, manager);
+        myCurrentUser = user;
     }
 
     public void addRatingButton(GameCenterData data) {
         try {
-            myManager.addRating(new GameRating("DEFAULT", data.getTitle(), data.getAuthorName(), myStars.getCurrentNumberOfStars(), myText.getText()));
+            myManager.addRating(new GameRating(myCurrentUser, data.getTitle(), data.getAuthorName(), myStars.getCurrentNumberOfStars(), myText.getText()));
         } catch (SQLException e) {
             // todo: handle this
             System.out.println("Adding rating was unsuccessful");

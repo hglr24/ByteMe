@@ -18,8 +18,11 @@ public class GamePage extends Popup {
     private static final double WRAP_OFFSET = 20;
     private static final double SCROLL_OFFSET = 20;
 
-    public GamePage(GameCenterData data, DataManager manager) {
+    private String myCurrentUser;
+
+    public GamePage(GameCenterData data, DataManager manager, String user) {
         super(data, manager);
+        myCurrentUser = user;
     }
 
     public void playGameButton(GameCenterData data) {
@@ -27,7 +30,7 @@ public class GamePage extends Popup {
     }
 
     public void rateGameButton(GameCenterData data) {
-        new RatingScreen(data, myManager);
+        new RatingScreen(data, myManager, myCurrentUser);
     }
 
     @Override

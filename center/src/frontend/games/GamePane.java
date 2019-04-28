@@ -24,12 +24,14 @@ public class GamePane {
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
     private Pane myDisplay;
     private ResourceBundle myResources;
+    private String myCurrentUser;
 
     /**
      * @purpose initialize the languages resource bundle and set up the game display.
      */
-    public GamePane() {
+    public GamePane(String username) {
         myResources = ResourceBundle.getBundle("languages/English");
+        myCurrentUser = username;
         initializeDisplay();
     }
 
@@ -48,7 +50,7 @@ public class GamePane {
         subtitle.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(subtitle, Pos.CENTER);
         gamePane.setTop(subtitle);
-        gamePane.setCenter((new GameList()).getDisplay());
+        gamePane.setCenter((new GameList(myCurrentUser)).getDisplay());
         myDisplay = gamePane;
     }
 }

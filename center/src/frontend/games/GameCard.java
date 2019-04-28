@@ -39,17 +39,19 @@ public class GameCard {
     private GameCenterData myGame;
     private Pane myDisplay;
     private DataManager myManager;
+    private String myCurrentUser;
 
     /**
      * @purpose constructor that sets up parameters of the game and initializes the resource bundle used for text.
      * @param game the GameCenterData object that represents the contents of the GameCard
      * @param index the index that the game card is in a list. This is used for styling purposes
      */
-    public GameCard(GameCenterData game, int index, DataManager manager) {
+    public GameCard(GameCenterData game, int index, DataManager manager, String user) {
         myGame = game;
         myIndex = index % 2 + 1;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE_LOCATION);
         myManager = manager;
+        myCurrentUser = user;
         initializeDisplay();
     }
 
@@ -63,7 +65,7 @@ public class GameCard {
     }
 
     public void readMoreButton(GameCenterData data) {
-        new GamePage(data, myManager);
+        new GamePage(data, myManager, myCurrentUser);
     }
 
     public void playGameButton(GameCenterData data) {

@@ -27,13 +27,15 @@ public class GameList {
     private static final String SCROLLER_SELECTOR = "scroller";
     private List<GameCenterData> myGames;
     private DataManager myManager;
+    private String myCurrentUser;
 
     /**
      * @purpose constructor, reads in the list of original GameData objects and saves it, then sets up the display of cards.
      */
-    public GameList() {
+    public GameList(String user) {
         myManager = new DataManager();
         myGames = myManager.loadAllGameInfoObjects();
+        myCurrentUser = user;
         initializeDisplay();
     }
 
@@ -52,7 +54,7 @@ public class GameList {
         gameList.setPrefWrapLength((GameCard.DISPLAY_WIDTH + CARD_H_OFFSET) * NUM_CARDS_DISPLAYED);
         int index = 0;
         for(GameCenterData game : myGames) {
-            GameCard c = new GameCard(game, index, myManager);
+            GameCard c = new GameCard(game, index, myManager, myCurrentUser);
             gameList.getChildren().add(c.getDisplay());
             index++;
         }

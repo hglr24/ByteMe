@@ -9,6 +9,7 @@
 
 package frontend.header;
 
+import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -20,14 +21,19 @@ import java.util.ResourceBundle;
 public class HeaderBar {
     private Pane myHeaderLayout;
     private ResourceBundle myLanguageBundle;
+    private String myUsername;
+
     private static final String TITLE_SELECTOR = "titlefont";
+    private static final String SUBTITLE_SELECTOR = "subtitlefont";
+
 
     /**
      * @purpose constructor that initializes the resource bundle and sets the layout of the pane.
      */
-    public HeaderBar() {
+    public HeaderBar(String username) {
         myLanguageBundle = ResourceBundle.getBundle("languages/English");
         myHeaderLayout = new BorderPane();
+        myUsername = username;
         initializeLayouts();
     }
 
@@ -45,6 +51,10 @@ public class HeaderBar {
         StackPane headerLayout = new StackPane();
         BorderPane titleLayout = new BorderPane();
         titleLayout.setCenter(title);
+        Text welcome = new Text(Utilities.getValue(myLanguageBundle, "welcomeSubtitle") + myUsername);
+        welcome.getStyleClass().add(SUBTITLE_SELECTOR);
+        BorderPane.setAlignment(welcome, Pos.CENTER);
+        titleLayout.setBottom(welcome);
         headerLayout.getChildren().add(titleLayout);
         myHeaderLayout = headerLayout;
     }

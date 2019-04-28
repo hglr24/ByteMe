@@ -21,6 +21,7 @@ import frontend.header.HeaderBar;
 
 public class CenterView extends Application {
     private Scene myScene;
+    private String myCurrentUser;
 
     private static final double STAGE_WIDTH = 1250;
     private static final double STAGE_HEIGHT = 750;
@@ -33,7 +34,7 @@ public class CenterView extends Application {
      * @param stage the stage given to start that holds the display
      */
     public void start (Stage stage) {
-        CenterView view = new CenterView();
+        CenterView view = new CenterView("megan");
         stage.setScene(view.getScene());
         stage.setResizable(false);
         stage.show();
@@ -50,7 +51,13 @@ public class CenterView extends Application {
     /**
      * @purpose constructor for the CenterView class. This calls on a helper method that sets up the main scene.
      */
+    @Deprecated
     public CenterView() {
+        //initializeScene();
+    }
+
+    public CenterView(String username) {
+        myCurrentUser = username;
         initializeScene();
     }
 
@@ -64,14 +71,16 @@ public class CenterView extends Application {
 
     private void initializeScene() {
         BorderPane root = new BorderPane();
-        HeaderBar myHeader = new HeaderBar();
+        HeaderBar myHeader = new HeaderBar(myCurrentUser);
         Pane layout = myHeader.getHeaderLayout();
         BorderPane.setAlignment(layout, Pos.TOP_CENTER);
         root.getStylesheets().add(CSS_LOCATION);
         root.setTop(layout);
-        root.setCenter((new GamePane()).getDisplay());
+        root.setCenter((new GamePane(myCurrentUser)).getDisplay());
         myScene = new Scene(root, STAGE_WIDTH, STAGE_HEIGHT, BACKGROUND_COLOR);
     }
+
+
 
     @Override
     public void stop() throws Exception {
