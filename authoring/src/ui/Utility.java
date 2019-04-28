@@ -20,6 +20,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -189,7 +190,7 @@ public class Utility {
         ResourceBundle generalResources = ResourceBundle.getBundle("authoring_general");
 
         String imageName = entity.getPropertyMap().get(EntityField.IMAGE);
-        ImageWithEntity imageWithEntity = new ImageWithEntity(makeImageAssetInputStream(imageName), entity);
+        ImageWithEntity imageWithEntity = new ImageWithEntity(makeImageAssetInputStream(imageName), entity); //closed
         return imageWithEntity;
 
     }
@@ -199,14 +200,14 @@ public class Utility {
      * @param imageName String of the path to the desired fileinputstream file
      * @return FileInputStream
      */
-    public static FileInputStream makeImageAssetInputStream(String imageName){
+    public static FileInputStream makeImageAssetInputStream(String imageName){  //closed
         ResourceBundle pathResources = ResourceBundle.getBundle(GENERAL_RESOURCES);
         File imageAssetFolder = new File(pathResources.getString("images_filepath"));
-        FileInputStream result = null;
+        FileInputStream result = null;  //closed
         for(File file : getAllFiles(imageAssetFolder)){
             if(file.getName().equals(imageName)){
                 try {
-                    result = new FileInputStream(file.getPath());
+                    result = new FileInputStream(file.getPath());   //closed
                     return result;
                 } catch (FileNotFoundException e) {
                     System.out.println("File not found in trying to create an image with entity in Utility");
@@ -220,6 +221,19 @@ public class Utility {
             }
         }
         return result;
+    }
+
+    public static void closeInputStream(FileInputStream fileInputStream){   //closed
+        try {
+            fileInputStream.close();    //closed
+        } catch (IOException e) {
+            e.printStackTrace();
+            ResourceBundle resourceBundle = ResourceBundle.getBundle(UTILITY_RESOURCES);
+            String header = resourceBundle.getString("CloseInputStreamError");
+            String content = resourceBundle.getString("CloseInputStreamErrorContent");
+            ErrorBox errorBox = new ErrorBox(header, content);
+            errorBox.display();
+        }
     }
 
     public static void setupDragAndDropImage(ImageWithEntity imageWithEntity){

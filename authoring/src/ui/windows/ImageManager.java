@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
+import ui.Utility;
 import ui.panes.AssetImageSubPane;
 
 import java.io.File;
@@ -150,8 +151,10 @@ public class ImageManager extends AssetManager {
     private ImageView createImageView(File temp) {
         ImageView imageView = new ImageView();
         try {
-            Image image = new Image( new FileInputStream(temp.getPath()));
+            FileInputStream fileInputStream = new FileInputStream(temp.getPath());  //closed
+            Image image = new Image( fileInputStream);  //closed
             imageView.setImage(image);
+            Utility.closeInputStream(fileInputStream);  //closed
         } catch (FileNotFoundException e) {
             //The program is iterating through files found in the Assets folder
             //If a file is not found, it shouldn't be included so returning a blank ImageView is ok

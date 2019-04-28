@@ -6,8 +6,8 @@ import engine.external.component.GroupComponent;
 import engine.external.component.HealthComponent;
 import engine.external.component.HeightComponent;
 import engine.external.component.NameComponent;
+import engine.external.component.OpacityComponent;
 import engine.external.component.SpriteComponent;
-import engine.external.component.VisibilityComponent;
 import engine.external.component.WidthComponent;
 import engine.external.component.XAccelerationComponent;
 import engine.external.component.XPositionComponent;
@@ -38,7 +38,7 @@ public enum EntityField {
     YSCALE (HeightComponent.class, Double.class, "YScale" , "0.0", true, true, true),
 
     FOCUS (CameraComponent.class, Boolean.class, "Focus", "false", false, true, false),
-    VISIBLE (VisibilityComponent.class, Boolean.class, "Visible", "true", false, true, false),
+    VISIBLE (OpacityComponent.class, Double.class, "Visible", "true", false, true, false),
 
     XSPEED (XVelocityComponent.class, Double.class, "XSpeed", "0.0", true, false, true),
     YSPEED (YVelocityComponent.class, Double.class, "YSpeed", "0.0", true, false, true),

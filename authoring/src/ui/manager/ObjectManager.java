@@ -1,5 +1,6 @@
 package ui.manager;
 
+import data.external.GameCenterData;
 import engine.external.events.Event;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -29,6 +30,7 @@ public class ObjectManager {
     private ObservableList<AuthoringLevel> myLevels;
     private ObjectProperty<Propertable> myCurrentLevel;
     private ObservableMap<AuthoringEntity, String> myEntityTypeMap;
+    private GameCenterData myGameCenterData;
 
     /**
      * Class that keeps track of every single instance of an Entity, across Levels, for the purposes of authoring environment
@@ -42,6 +44,7 @@ public class ObjectManager {
         myLabelManager.getLabels(EntityField.GROUP).addListener((ListChangeListener<? super String>) change -> groupRemoveAction(change));
         myCurrentLevel = levelProperty;
         myEntityTypeMap = FXCollections.observableHashMap();
+        myGameCenterData = new GameCenterData();
     }
 
     /**
@@ -65,6 +68,10 @@ public class ObjectManager {
                 return;
             }
         }
+    }
+
+    public void removeAllLevels() {
+        myLevels = FXCollections.observableArrayList(new ArrayList<>());
     }
 
     /**
@@ -153,6 +160,14 @@ public class ObjectManager {
     public void updateLevelLabel(String oldValue, String newValue) {
         myLabelManager.getLabels(LevelField.LABEL).add(myLabelManager.getLabels(LevelField.LABEL).indexOf(oldValue), newValue);
         myLabelManager.getLabels(LevelField.LABEL).remove(oldValue);
+    }
+
+    public void setGameCenterData(GameCenterData data) {
+        myGameCenterData = data;
+    }
+
+    public GameCenterData getGameCenterData() {
+        return myGameCenterData;
     }
 
     public LabelManager getLabelManager() {

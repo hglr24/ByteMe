@@ -40,4 +40,8 @@ public class Game {
     public void addUserCreatedTypes(Map<Entity, String> userCreatedTypes){
         myUserCreatedTypes = userCreatedTypes;
     }
+
+    public Map<Entity, String> getUserCreatedTypes() {
+        return myUserCreatedTypes;
+    }
 }

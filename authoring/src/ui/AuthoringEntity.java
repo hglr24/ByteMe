@@ -19,7 +19,6 @@ public class AuthoringEntity implements Propertable {
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
     private List<String> myInteractionListing = new ArrayList<>();
-    private String myBackingString;
 
     private AuthoringEntity() { // Initialize default property map
         myPropertyMap = FXCollections.observableHashMap();
@@ -36,29 +35,23 @@ public class AuthoringEntity implements Propertable {
         myObjectManager.addEntityType(this, "");
     }
 
-    public AuthoringEntity(Entity basis, String backingString, ObjectManager manager) { // Create new AuthoringEntity type from Entity
+    public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
         this();
         myObjectManager = manager;
-        myBackingString = backingString;
-
         for (EntityField field : EntityField.values())
-            if (basis.hasComponents(field.getComponentClass()))
+            if (!field.equals(EntityField.EVENTS) && basis.hasComponents(field.getComponentClass()))
                 myPropertyMap.put(field, String.valueOf(basis.getComponent(field.getComponentClass()).getValue()));
-
         addPropertyListeners();
-        myObjectManager.addEntityType(this, backingString);
     }
 
     public AuthoringEntity(AuthoringEntity copyBasis) { // Create new AuthoringEntity instance from pre-existing type
         this();
-        myBackingString = copyBasis.myBackingString;
         myObjectManager = copyBasis.myObjectManager;
         for (EntityField commonField : EntityField.getCommonFields()) {
             if (copyBasis.myPropertyMap.containsKey(commonField))
                 myPropertyMap.put(commonField, copyBasis.myPropertyMap.get(commonField));
         }
         addPropertyListeners();
-        myObjectManager.addEntityInstance(this);
     }
 
     private void addPropertyListeners() {
@@ -91,7 +84,7 @@ public class AuthoringEntity implements Propertable {
         return myObjectManager.getEvents(this.myPropertyMap.get(EntityField.LABEL));
     }
 
-    public List<String> getInteractionListing(){ return myInteractionListing;}
+    public List<String> getInteractionListing(){ return myInteractionListing;} //TODO remove
 
     public ObjectManager getObjectManager() {
         return myObjectManager;

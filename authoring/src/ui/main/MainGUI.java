@@ -22,7 +22,6 @@ import ui.ErrorBox;
 import ui.Propertable;
 import ui.PropertableType;
 import ui.UIException;
-import ui.Utility;
 import ui.manager.GroupManager;
 import ui.manager.InfoEditor;
 import ui.manager.ObjectManager;
@@ -31,7 +30,6 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
-import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,6 +38,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -51,6 +50,7 @@ public class MainGUI {
     private Game myLoadedGame;
     private GameCenterData myGameData;
     private Stage myStage;
+    private DataManager myDataManager;
     private HBox myViewerBox;
     private UserCreatedTypesPane myCreatedTypesPane;
     private ObjectManager myObjectManager;
@@ -72,6 +72,7 @@ public class MainGUI {
         myLoadedGame = new Game();
         myGameData = new GameCenterData();
         myStage = new Stage();
+        myDataManager = new DataManager();
         myViewers = new HashMap<>();
         defaultGameData();
         myCurrentLevel = new SimpleObjectProperty<>();
@@ -85,23 +86,25 @@ public class MainGUI {
         myCurrentStyle = new SimpleStringProperty(DEFAULT_STYLESHEET);
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
+        myObjectManager.setGameCenterData(myGameData);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
         this();
         myLoadedGame = game;
         myGameData = gameData;
+        myObjectManager.setGameCenterData(myGameData);
     }
 
     public void launch() {
         myStage.setTitle(STAGE_TITLE);
-        myStage.setScene(createMainGUI());
+        myStage.setScene(createMainGUI(false));
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
         myStage.show();
         myStage.setMinWidth(myStage.getWidth());
     }
 
-    private Scene createMainGUI() { //TODO clean up
+    private Scene createMainGUI(boolean load) { //TODO clean up
         BorderPane mainBorderPane = new BorderPane();
         Scene mainScene = new Scene(mainBorderPane);
         HBox propPaneBox = new HBox();
@@ -109,7 +112,7 @@ public class MainGUI {
         HBox entityPaneBox = new HBox();
         entityPaneBox.getStyleClass().add("entity-pane-box");
 
-        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene);
+        myCreatedTypesPane = createTypePanes(entityPaneBox, mainScene, load);
         createViewersForExistingLevels();
 
         createPropertiesPanes(propPaneBox, mainScene);
@@ -133,8 +136,12 @@ public class MainGUI {
         }
     }
 
-    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene) {
-        UserCreatedTypesPane userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
+    private UserCreatedTypesPane createTypePanes(HBox entityPaneBox, Scene mainScene, boolean load) {
+        UserCreatedTypesPane userCreatedTypesPane;
+        if (load)
+            userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager, myLoadedGame.getUserCreatedTypes());
+        else
+            userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
         DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
@@ -171,7 +178,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Info", "Groups", "Preferences"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -204,9 +211,35 @@ public class MainGUI {
 
     @SuppressWarnings("unused")
     private void openGame() {
-        System.out.println("Open"); //TODO
+        String authorName = "";
         DataManager dataManager = new DataManager();
+        try {
+            List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
+            myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
+            //myGameData = null; //TODO
+        } catch (SQLException e) {
+            ErrorBox error = new ErrorBox("Load", "Error loading from database");
+        }
         loadAllAssets(dataManager);
+        loadDatabaseGame();
+    }
+
+    private void loadDatabaseGame() {
+        // Populate ObjectManager (Translate Entities/Levels)
+        // Create labels for Entities, Groups, Levels in LabelManager
+        // Populate EventsMap
+        GameTranslator translator = new GameTranslator(myObjectManager);
+        myObjectManager.removeAllLevels();
+
+        translator.populateObjectManager(myLoadedGame);
+
+        // Set selectedLevel to first level
+        myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
+        // Assign selectedEntity to something in the level, triggers Properties Panes
+        mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
+        // Populate Levels Pane
+        // Create UI panes (Viewers, UserCreatedTypePane)
+        myStage.setScene(createMainGUI(true));
     }
 
     @SuppressWarnings("unused")
@@ -214,12 +247,13 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         try {
             Game exportableGame = translator.translate();
-            DataManager dm = new DataManager();
-            dm.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
-            dm.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
-            saveAndClearFolder(dm, "authoring/assets/images/");
-            saveAndClearFolder(dm, "authoring/assets/audio");
+            myDataManager = new DataManager();
+            myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
+            myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+            saveAndClearFolder(myDataManager, "authoring/assets/images");
+            saveAndClearFolder(myDataManager, "authoring/assets/audio");
         } catch (UIException e) {
+            e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
             errorBox.showAndWait();
         }
@@ -235,11 +269,6 @@ public class MainGUI {
     private void openGameInfo() {
         InfoEditor infoEditor = new InfoEditor(myGameData);
         infoEditor.showAndWait();
-    }
-
-    @SuppressWarnings("unused")
-    private void openPreferences() {
-        System.out.println("Preferences"); //TODO
     }
 
     @SuppressWarnings("unused")
@@ -267,41 +296,52 @@ public class MainGUI {
         myGameData.setDescription("A fun new game");
     }
 
-    //TODO make this work for audio too - need to differentiate which dataManager method using
     //outerDirectory - folder that needs sub-folders "defaults" and "user-uploaded"
     private void saveAndClearFolder(DataManager dataManager, String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
         for(File file : outerDirectory.listFiles()){
+            System.out.println("Saving and deleting: " + file.getName());
             dataManager.saveImage(file.getName(), file);
-            //TODO uncomment file.delete();
+
+            file.deleteOnExit();
         }
     }
 
     private void loadAllAssets(DataManager dataManager){
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
-        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        try {
+            Map<String, InputStream> defaultImages = dataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedImages = dataManager.loadAllImages(prefix);
+            Map<String, InputStream> defaultAudio = dataManager.loadAllSounds(SAVING_ASSETS_RESOURCES.getString("defaults"));
+            Map<String, InputStream> userUploadedAudio = dataManager.loadAllSounds(prefix);
+            loadAssets(GENERAL_RESOURCES.getString("images_filepath"), defaultImages);
+            loadAssets(GENERAL_RESOURCES.getString("images_filepath"), userUploadedImages);
+            loadAssets(GENERAL_RESOURCES.getString("audio_filepath"), defaultAudio);
+            loadAssets((GENERAL_RESOURCES.getString("audio_filepath")), userUploadedAudio);
+        } catch (SQLException e) {
+            //TODO deal with this
+            e.printStackTrace();
+        }
+
         //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), prefix);
-        loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
+        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
     }
 
+    private void loadAssets(String folderFilePath, Map<String, InputStream> databaseInfo){
+       System.out.println("Made it to loadAssets");
+        try {
+            for(Map.Entry<String, InputStream> entry : databaseInfo.entrySet()){
+                InputStream inputStream = entry.getValue();
+                File destination = new File(folderFilePath + entry.getKey());
+                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                inputStream.close();
+            }
+        } catch (IOException e) {
+            //TODO: handle error
+            e.printStackTrace();
+        }
 
-    //TODO: differentiate between images and audio
-    //TODO: test the file copying
-    private void loadAssets(DataManager dataManager, String folderFilePath, String prefix){
-//        System.out.println("Made it to loadAssets");
-//        String key = folderFilePath.split("/")[folderFilePath.split("/").length-1];
-//        try {
-//            System.out.println("Key: " + key);
-//            Map<String, InputStream> imagesMap = (Map<String, InputStream>) Reflection.callMethod(dataManager, GENERAL_RESOURCES.getString(key), prefix);
-//            for(Map.Entry<String, InputStream> entry : imagesMap.entrySet()){
-//                InputStream inputStream = entry.getValue();
-//                File destination = new File(folderFilePath + entry.getKey());
-//                Files.copy(inputStream, destination.toPath(), StandardCopyOption.REPLACE_EXISTING);
-//            }
-//        } catch (IOException e) {
-//            //TODO: handle error
-//            e.printStackTrace();
-//        }
+
     }
 }

@@ -1,6 +1,7 @@
 package factory;
 
 import engine.external.Entity;
+import engine.external.IEventEngine;
 import engine.external.Level;
 import engine.external.actions.Action;
 import engine.external.actions.SoundAction;
@@ -8,6 +9,7 @@ import engine.external.actions.ValueAction;
 import engine.external.component.CameraComponent;
 import engine.external.component.CollisionComponent;
 import engine.external.component.Component;
+import engine.external.component.OpacityComponent;
 import engine.external.component.SoundComponent;
 import engine.external.component.ValueComponent;
 import engine.external.events.BottomCollisionEvent;
@@ -89,13 +91,19 @@ public class GameTranslator {
         Entity basisEntity = new Entity();
 
         for (EntityField field : EntityField.values()) {
-            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS) && !field.equals(EntityField.IMAGE)) {
+            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS) && !field.equals(EntityField.IMAGE)) {
                     addComponent(field, basisEntity, authEntity);
                 }
             else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // main character found
                 basisEntity.addComponent(new CameraComponent(true));
                 //basisEntity.addComponent(new LivesComponent(3.0)); //TODO
                 //basisEntity.addComponent(new ScoreComponent(0.0));
+            }
+            else if (field.equals(EntityField.VISIBLE)) {
+                if (Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.VISIBLE)))
+                    basisEntity.addComponent(new OpacityComponent(1.0));
+                else
+                    basisEntity.addComponent(new OpacityComponent(0.0));
             }
         }
 
@@ -147,6 +155,33 @@ public class GameTranslator {
                     System.out.println("Error translating components");
                 }
             }
+        }
+    }
+
+    public void populateObjectManager(Game game) {
+        for (Entity type : game.getUserCreatedTypes().keySet()) {
+            AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
+            myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));
+        }
+        for (Level level : game.getLevels()) {
+            AuthoringLevel newLevel = new AuthoringLevel(level.getLabel(), myObjectManager);
+            newLevel.getPropertyMap().put(LevelField.HEIGHT, String.valueOf(level.getHeight()));
+            newLevel.getPropertyMap().put(LevelField.WIDTH, String.valueOf(level.getWidth()));
+            newLevel.getPropertyMap().put(LevelField.BACKGROUND, level.getBackground());
+            newLevel.getPropertyMap().put(LevelField.MUSIC, level.getMusic());
+
+            for (Entity entity : level.getEntities()) {
+                AuthoringEntity newAuthEntity = new AuthoringEntity(entity, myObjectManager);
+                myObjectManager.addEntityInstance(newAuthEntity);
+                if (newAuthEntity.getPropertyMap().get(EntityField.GROUP) != null) {
+                    myObjectManager.getLabelManager().addLabel(EntityField.GROUP,
+                            newAuthEntity.getPropertyMap().get(EntityField.GROUP));
+                }
+            }
+            for (IEventEngine event : level.getEvents()) {
+                //TODO beeeeeg todo
+            }
+            myObjectManager.addLevel(newLevel);
         }
     }
 

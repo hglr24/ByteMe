@@ -87,8 +87,9 @@ public class Viewer extends ScrollPane {
 
         for(AuthoringEntity authoringEntity : authoringEntityList){
             String imagePath = GENERAL_RESOURCES.getString("images_filepath/") + authoringEntity.getPropertyMap().get(EntityField.IMAGE);
-            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath);
-            ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity);
+            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath); //closed
+            ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity); //closed
+            Utility.closeInputStream(fileInputStream); //closed
             myStackPane.getChildren().add(imageWithEntity);
         }
     }
@@ -144,11 +145,12 @@ public class Viewer extends ScrollPane {
 
     private void updateBackground(String filename){
         if(filename != null){
-            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(filename);
-            Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false);
+            FileInputStream fileInputStream = Utility.makeImageAssetInputStream(filename);  //closed
+            Image image = new Image(fileInputStream, myRoomWidth, myRoomHeight, false, false); //closed
             BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
             myStackPane.setBackground(new Background(backgroundImage));
             myBackgroundFileName = filename;
+            Utility.closeInputStream(fileInputStream); //closed
         }
     }
 
@@ -167,6 +169,7 @@ public class Viewer extends ScrollPane {
                 authoringEntity = myUserCreatedPane.getDraggedAuthoringEntity();
                 String imageName = authoringEntity.getPropertyMap().get(EntityField.IMAGE);
                 authoringEntity = new AuthoringEntity(authoringEntity);
+                myObjectManager.addEntityInstance(authoringEntity);
                 authoringEntity.getPropertyMap().put(EntityField.IMAGE, imageName);
                 addImage(Utility.createImageWithEntity(authoringEntity));
             }

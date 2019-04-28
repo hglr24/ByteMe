@@ -23,6 +23,7 @@ import ui.ErrorBox;
 import ui.Utility;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -122,8 +123,14 @@ public class CreateNewTypeWindow extends Stage {
         Button button = Utility.makeButton(this, buttonResources[1], buttonResources[0]);
         myGridPane.add(button, 0, myGridPane.getRowCount());
 
-        FileInputStream fileInputStream = Utility.makeImageAssetInputStream("no_image.png");
-        ImageView imageView = new ImageView(new Image(fileInputStream, 50, 50, false, false));
+        FileInputStream fileInputStream = null; //closed
+        try {
+            fileInputStream = new FileInputStream("authoring/resources/no_image.png");  //closed
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        ImageView imageView = new ImageView(new Image(fileInputStream, 50, 50, false, false));  //closed
+        Utility.closeInputStream(fileInputStream);  //closed
         mySelectedImagePane.getChildren().add(imageView);
         myGridPane.add(mySelectedImagePane, 1, myGridPane.getRowCount()-1);
 
