@@ -1,5 +1,10 @@
 package data.internal;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -36,6 +41,7 @@ public class UserQuerier extends Querier {
 
     private static final String COULD_NOT_VALIDATE_USER = "Could not validate user: ";
     private static final String COULD_NOT_GENERATE_HASH = "Could not generate hash: ";
+    public static final String COULD_NOT_LOAD_IMAGE = "COULD NOT LOAD IMAGE ";
 
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
@@ -150,10 +156,14 @@ public class UserQuerier extends Querier {
         return affectedRows > 0;
     }
 
-    public void setProfilePic(String userName, InputStream profilePic) throws SQLException {
-        mySetUserProfilePicStatement.setBinaryStream(1, profilePic);
-        mySetUserProfilePicStatement.setString(2, userName);
-        mySetUserProfilePicStatement.execute();
+    public void setProfilePic(String userName, File profilePic) throws SQLException {
+        try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(profilePic))) {
+            mySetUserProfilePicStatement.setBinaryStream(1, bufferedInputStream);
+            mySetUserProfilePicStatement.setString(2, userName);
+            mySetUserProfilePicStatement.execute();
+        } catch (IOException e) {
+            System.out.println(COULD_NOT_LOAD_IMAGE + e.getMessage());
+        }
     }
 
     public void setBio(String userName, String bio) throws SQLException {

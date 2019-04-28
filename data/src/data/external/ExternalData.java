@@ -243,4 +243,36 @@ public interface ExternalData {
      * @throws SQLException
      */
     void saveCheckpoint(String userName, String gameName, String authorName, Object checkpoint) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @param profilePic
+     * @throws SQLException
+     */
+    void setProfilePic(String userName, File profilePic) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @throws SQLException
+     */
+    void setBio(String userName, String bio) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @return
+     * @throws SQLException
+     */
+    InputStream getProfilePic(String userName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @return
+     * @throws SQLException
+     */
+    String getBio(String userName) throws SQLException;
+    
 }

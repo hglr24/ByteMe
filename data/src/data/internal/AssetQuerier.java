@@ -147,35 +147,53 @@ public class AssetQuerier extends Querier {
         return null;
     }
 
+//    private void saveAsset(String assetName, File assetToSave, PreparedStatement statement) {
+//        try {
+//            FileInputStream fileInputStream = new FileInputStream(assetToSave);
+//            BufferedInputStream assetData = new BufferedInputStream(fileInputStream);
+//
+//            FileInputStream fileInputStream1 = new FileInputStream(assetToSave);
+//            FileInputStream fileInputStream2 = new FileInputStream(assetToSave);
+//
+//            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream1);
+//            BufferedInputStream bufferedInputStream1 = new BufferedInputStream(fileInputStream2);
+//            System.out.println(assetData);
+//            statement.setString(1, assetName);
+//            statement.setBinaryStream(2, bufferedInputStream);
+//            statement.setBinaryStream(3, bufferedInputStream1);
+//            statement.executeUpdate();
+//
+//
+//            fileInputStream.close();
+//            fileInputStream1.close();
+//            fileInputStream2.close();
+//            assetData.close();
+//            bufferedInputStream.close();
+//            bufferedInputStream1.close();
+//        } catch (SQLException e) {
+//            System.out.println(COULD_NOT_SAVE_THE_ASSET + e.getMessage());
+//        } catch (FileNotFoundException e) {
+//            System.out.println(COULD_NOT_FIND_THE_FILE + assetToSave.toString());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+
     private void saveAsset(String assetName, File assetToSave, PreparedStatement statement) {
-        try {
-            FileInputStream fileInputStream = new FileInputStream(assetToSave);
-            BufferedInputStream assetData = new BufferedInputStream(fileInputStream);
-
-            FileInputStream fileInputStream1 = new FileInputStream(assetToSave);
-            FileInputStream fileInputStream2 = new FileInputStream(assetToSave);
-
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream1);
-            BufferedInputStream bufferedInputStream1 = new BufferedInputStream(fileInputStream2);
+        try (BufferedInputStream assetData = new BufferedInputStream(new FileInputStream(assetToSave));
+             BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(assetToSave));
+             BufferedInputStream bufferedInputStream1 = new BufferedInputStream(new FileInputStream(assetToSave))){
             System.out.println(assetData);
             statement.setString(1, assetName);
             statement.setBinaryStream(2, bufferedInputStream);
             statement.setBinaryStream(3, bufferedInputStream1);
             statement.executeUpdate();
-
-
-            fileInputStream.close();
-            fileInputStream1.close();
-            fileInputStream2.close();
-            assetData.close();
-            bufferedInputStream.close();
-            bufferedInputStream1.close();
         } catch (SQLException e) {
             System.out.println(COULD_NOT_SAVE_THE_ASSET + e.getMessage());
         } catch (FileNotFoundException e) {
             System.out.println(COULD_NOT_FIND_THE_FILE + assetToSave.toString());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 

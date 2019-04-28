@@ -203,4 +203,20 @@ public class DatabaseEngine {
     void deleteCheckpoint(String userName, String gameName, String authorName) throws SQLException {
         myCheckpointQuerier.deleteCheckpoints(userName, gameName, authorName);
     }
+
+    void setProfilePic(String userName, File profilePic) throws SQLException {
+        myUserQuerier.setProfilePic(userName, profilePic);
+    }
+
+    void setBio(String userName, String bio) throws SQLException {
+        myUserQuerier.setBio(userName, bio);
+    }
+
+    InputStream getProfilePic(String userName) throws SQLException {
+        return myUserQuerier.getProfilePic(userName);
+    }
+
+    String getBio(String userName) throws SQLException {
+        return myUserQuerier.getBio(userName);
+    }
 }
