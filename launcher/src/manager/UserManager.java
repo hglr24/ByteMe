@@ -45,7 +45,7 @@ import ui.main.MainGUI;
     }
 
     private void goToGameCenter(String userName){
-        CenterView myCenter = new CenterView();
+        CenterView myCenter = new CenterView(userName);
         Stage gameCenterStage = new Stage();
         gameCenterStage.setScene(myCenter.getScene());
         gameCenterStage.show();
