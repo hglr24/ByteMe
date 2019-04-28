@@ -1,9 +1,5 @@
 package pane;
-
-import controls.LauncherSymbol;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;

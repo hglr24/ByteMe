@@ -25,22 +25,20 @@ public class NewUserPage extends VBox {
      * they can play games
      * @author Anna Darwish
      */
-    public NewUserPage(SwitchToUserPage enterGame, String userNameText){
-        createAccount.setOnMouseClicked(mouseEvent -> {
-            if (validCredentials()){
-                enterGame.switchUserPage(userNameText);
-            }
-            else{
-                displayUserNameInUseError();
-            }
-        });
+    public NewUserPage(SwitchToUserPage enterGame){
         this.getStyleClass().add(MY_STYLE);
         this.getChildren().add(userName);
         this.getChildren().add(passWord);
         this.getChildren().add(reenter);
         this.getChildren().add(createAccount);
-
-
+        createAccount.setOnMouseClicked(mouseEvent -> {
+            if (validCredentials()){
+                enterGame.switchUserPage(userName.getTextEntered());
+            }
+            else{
+                displayUserNameInUseError();
+            }
+        });
     }
 
     private boolean validCredentials() {
