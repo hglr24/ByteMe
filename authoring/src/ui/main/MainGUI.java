@@ -1,6 +1,7 @@
 package ui.main;
 
 import data.external.DataManager;
+import data.external.DatabaseEngine;
 import data.external.GameCenterData;
 import factory.GameTranslator;
 import javafx.beans.property.ObjectProperty;
@@ -30,6 +31,7 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +39,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -254,6 +257,8 @@ public class MainGUI {
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
+
+            DatabaseEngine.getInstance().open();
         } catch (UIException e) {
             e.printStackTrace();
             ErrorBox errorBox = new ErrorBox("Save Error", e.getMessage());
@@ -302,16 +307,34 @@ public class MainGUI {
 
     private void saveFolderToDataBase(String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
-        System.out.println("Directory: " + outerDirectory.getName());
+        String methodName = SAVING_ASSETS_RESOURCES.getString(outerDirectory.getName());
+        System.out.println("Saving Directory: " + outerDirectory.getName() + " using " + methodName);
         for(File file : outerDirectory.listFiles()){
-            System.out.println("Saving: " + file.getName());
-            myDataManager.saveImage(file.getName(), file);
+            System.out.println("\tSaving: " + file.getName());
+            Reflection.callMethod(myDataManager, methodName, file.getName(), file);
         }
+    }
+
+    private void clearFolder(String outerDirectoryPath){
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Directory: " + outerDirectory.getName());
+        List<File> didntDelete = new ArrayList<>();
+        for(File file : outerDirectory.listFiles()){
+            System.out.println("\t trying to delete " + file.getName());
+            file.deleteOnExit();
+        }
+//        if(didntDelete.size() > 0){
+//            StringBuilder stringBuilder = new StringBuilder();
+//            for(File f : didntDelete){
+//                stringBuilder.append(f.getName() + "\n");
+//            }
+//            ErrorBox errorBox = new ErrorBox("Didn't delete", stringBuilder.toString());
+//            errorBox.display();
+//        }
     }
 
     private void loadAllAssets(){
         String prefix = myGameData.getTitle() + myGameData.getAuthorName();
-        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("images_filepath"), prefix);
         try {
             Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
             Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);

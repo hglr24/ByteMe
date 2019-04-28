@@ -3,8 +3,11 @@ package ui.main;
 import data.external.DatabaseEngine;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import ui.ErrorBox;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainTester extends Application {
@@ -32,9 +35,17 @@ public class MainTester extends Application {
     private void clearFolder(String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
         System.out.println("Directory: " + outerDirectory.getName());
+        List<File> didntDelete = new ArrayList<>();
         for(File file : outerDirectory.listFiles()){
-            System.out.println("Deleting: " + file.getName());
-            System.out.println(file.getName() + "is deleted " + file.delete());
+            file.delete();
         }
+//        if(didntDelete.size() > 0){
+//            StringBuilder stringBuilder = new StringBuilder();
+//            for(File f : didntDelete){
+//                stringBuilder.append(f.getName() + "\n");
+//            }
+//            ErrorBox errorBox = new ErrorBox("Didn't delete", stringBuilder.toString());
+//            errorBox.display();
+//        }
     }
 }

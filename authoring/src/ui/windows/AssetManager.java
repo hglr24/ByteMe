@@ -109,17 +109,9 @@ abstract public class AssetManager extends Stage {
     }
 
     private void populateTabs() {
+        myTabPane.getTabs().clear();
         File assetFolder = new File(myAssetFolderPath);     //going to images directory
         List<File> fileList = Utility.getFilesFromFolder(assetFolder);
-
-        Tab userUploaded = new Tab();
-        userUploaded.setText("User Uploaded");
-        VBox userVBox = new VBox();
-        ScrollPane userScrollPane = new ScrollPane();
-        userScrollPane.setFitToWidth(true);
-        userScrollPane.setContent(userVBox);
-        userUploaded.setContent(userScrollPane);
-        myTabPane.getTabs().add(userUploaded);
 
         Tab defaultTab = new Tab();
         defaultTab.setText("Default");
@@ -130,6 +122,17 @@ abstract public class AssetManager extends Stage {
         defaultScrollPane.setContent(vBox);
         defaultTab.setContent(defaultScrollPane);
         TreeNode root = new TreeNode("root");
+
+        Tab userUploaded = new Tab();
+        userUploaded.setText("User Uploaded");
+        VBox userVBox = new VBox();
+        ScrollPane userScrollPane = new ScrollPane();
+        userScrollPane.setFitToWidth(true);
+        userScrollPane.setContent(userVBox);
+        userUploaded.setContent(userScrollPane);
+        myTabPane.getTabs().add(userUploaded);
+
+
 
         for(File file : fileList){
             //TODO check extensions here
@@ -186,69 +189,6 @@ abstract public class AssetManager extends Stage {
         }
     }
 
-//    private void populateTabs() {
-//        System.out.println("***********************");
-//        File assetFolder = new File(myAssetFolderPath);     //going to images directory
-//        Map<File, List<File>> rootDirectoryMap = Utility.getSubFoldersToFiles(assetFolder);
-//        List<File> directoriesToGetAssetsFrom = new ArrayList<>();
-//        VBox titledPaneVBox = new VBox();
-//        ScrollPane scrollPane = new ScrollPane();
-//        scrollPane.setFitToWidth(true);
-//        scrollPane.setContent(titledPaneVBox);
-//        for(Map.Entry<File, List<File>> entry : rootDirectoryMap.entrySet()){       //going to defaults/user_uploaded
-//            directoriesToGetAssetsFrom.add(entry.getKey());
-//            System.out.println("Root directory: " + entry.getKey().getName());
-//
-//            Tab tab = new Tab();
-//            tab.setText(entry.getKey().getName());
-//            tab.setContent(scrollPane);
-//
-//
-//
-//
-//            for(File file : entry.getValue()){
-//
-//                if(file.isDirectory()){
-//                    directoriesToGetAssetsFrom.add(file);
-//                    System.out.println("\tDirectory: " + file.getName());
-//                    Map<File, List<File>> subDirectoryMap = Utility.getSubFoldersToFiles(file);
-//                    TitledPane titledPane = new TitledPane();
-//                    titledPaneVBox.getChildren().add(titledPane);
-//                    titledPane.setText(file.getName());
-//                    Pane pane = new Pane();
-//                    titledPane.setContent(pane);
-//                    for(Map.Entry<File, List<File>> entry1 : subDirectoryMap.entrySet()){
-//                        System.out.println("\t\t" + entry1.getKey().getName());
-//                        for(File subFile : entry1.getValue()){
-//                            System.out.println("\t\t\t" + subFile.getName());
-//                            String lowerCaseExtension = subFile.getName().split("\\.")[1].toLowerCase();
-//                            if(myExtensions.contains(lowerCaseExtension)){
-//                                addAsset(subFile, pane);
-//                            }
-//                        }
-//                    }
-//                    for(File file1 : Utility.getFilesFromFolder(file)){
-//                        System.out.println("\t\t" + file1.getName());
-//                        addAsset(file1, pane);
-//                    }
-//                }
-//            }
-//
-//            myTabPane.getTabs().add(tab);
-//        }
-//        for(File file : directoriesToGetAssetsFrom){
-//            for(File assetFile : Utility.getFilesFromFolder(file)){
-//                System.out.println("\t" + assetFile.getName());
-//                String lowerCaseExtension = assetFile.getName().split("\\.")[1].toLowerCase();
-//                if(myExtensions.contains(lowerCaseExtension)){
-//                    Pane pane = new Pane();
-//                    titledPaneVBox.getChildren().add(pane);
-//                    addAsset(assetFile, pane);
-//                }
-//            }
-//        }
-//    }
-
     /**
      * Method that adds a file to the manager
      * @param file File to be added
@@ -261,20 +201,6 @@ abstract public class AssetManager extends Stage {
      * creating everything
      */
     abstract protected void initializeSubClassVariables();
-
-    private void saveAsset(File selectedFile){
-        try {
-            File dest = new File(myAssetFolderPath + selectedFile.getName()); //any location
-            File outsideDest = new File("Images" + File.separator + selectedFile.getName());
-            Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            Files.copy(selectedFile.toPath(), outsideDest.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (Exception e) {
-            String[] text = RESOURCES.getString(IO_ERROR).split(",");
-            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
-            errorBox.display();
-        }
-    }
 
     private void initializeVariables(){
         myExtensions = new HashSet<>();
@@ -314,6 +240,18 @@ abstract public class AssetManager extends Stage {
         if(selectedFile != null){
             saveAsset(selectedFile);
             populateTabs();
+        }
+    }
+
+    private void saveAsset(File selectedFile){
+        try {
+            File dest = new File(myAssetFolderPath + selectedFile.getName()); //any location
+            Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Asset saved");
+        } catch (Exception e) {
+            String[] text = RESOURCES.getString(IO_ERROR).split(",");
+            ErrorBox errorBox = new ErrorBox(text[0], text[1]);
+            errorBox.display();
         }
     }
 
