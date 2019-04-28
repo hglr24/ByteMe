@@ -2,7 +2,7 @@
     <Category>Obstacle</Category>
     <Components>
         <NameComponent>Block</NameComponent>
-        <VisibilityComponent>true</VisibilityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
         <WidthComponent>50.0</WidthComponent>
         <HeightComponent>50.0</HeightComponent>
     </Components>
