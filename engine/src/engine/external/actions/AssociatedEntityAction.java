@@ -7,6 +7,10 @@ import engine.external.component.Component;
 import java.io.Serializable;
 import java.util.function.Consumer;
 
+/**
+ * This action allows two entities to have an interaction and then affect another entity
+ * @author Feroze
+ */
 public class AssociatedEntityAction extends NumericAction {
     /**
      * This method scales the current value of a component of an associated entity by a scaleFactor

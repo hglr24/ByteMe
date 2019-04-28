@@ -10,6 +10,8 @@ import java.io.Serializable;
 public abstract class Component<T> implements Serializable {
     protected T myValue;
     protected T myOriginalValue;
+    public final static boolean DEFAULT = false;
+
 
     public Component(T value) {
         myValue = value;
