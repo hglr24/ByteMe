@@ -3,10 +3,8 @@ package page;
 
 import controls.InformativeField;
 import data.external.DataManager;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import manager.SwitchToUserOptions;
@@ -64,10 +62,10 @@ public class NewUserPage extends VBox {
     }
 
     private boolean validUserName(){
-        //return myDataManager.createUser(userName,passWord);
-        //myDataManager.validateUser(userName,passWord);
-        //myDataManager.updatePassword(userName, passWord);, return true if successful, false otherwise
-        return true;
+        return myDataManager.createUser(userName.getTextEntered(),passWord.getTextEntered());
+//        myDataManager.validateUser(userName,passWord);
+//        myDataManager.updatePassword(userName, passWord);//, return true if successful, false otherwise
+       // return true;
     }
     private boolean displayInvalidPasswordError(String message){
         Popup myUserNameError = new Popup();

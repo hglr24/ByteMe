@@ -45,8 +45,6 @@ public class CreateGameDisplay extends VBox {
             });
         LauncherControlDisplay myPlayer = new LauncherControlDisplay(CREATE_LAUNCHER);
         myPlayer.setOnMouseClicked(mouseEvent -> {
-                DataManager dm = new DataManager();
-                dm.createGameFolder("GameOne");
                 GameCenterData myDataCenter = new GameCenterData(gameName.getTextEntered(),
                         gameDescription.getTextEntered(), "GameOne", myFile.toURI().toString(),"DummyUserName");
             sceneSwitch.switchScene(myDataCenter);

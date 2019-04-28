@@ -92,6 +92,6 @@ public class EventFactory {
         myLabel.getStylesheets().add("default.css");
         return myLabel;
     }
-    
+
 
 }

@@ -1,13 +1,10 @@
 package controls;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import manager.SwitchToUserOptions;
 
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 
 public class EnterGameButton extends SceneSwitchButton {
     private static final String LOGIN_RESOURCE = "user_credentials";
@@ -36,9 +33,6 @@ public class EnterGameButton extends SceneSwitchButton {
         String currentPassWord = passWordAccessor.currentFieldValue();
         return myResources.containsKey(currentUserName) &&
                 myResources.getString(currentUserName).equals(currentPassWord);
-    }
-    private void changeColor(){
-        this.setTextFill(Color.AQUAMARINE);
     }
 
 }

@@ -17,7 +17,7 @@ public class CreateNewGamePage extends VBox {
      */
     public CreateNewGamePage(SwitchToAuthoring mySwitchScene, SwitchToUserOptions switcher){
         this.getStyleClass().add(MY_STYLE);
-        this.getChildren().add(0,new WelcomeDisplay(CREATE_KEY));
-        this.getChildren().add(1, new CreateGameDisplay(mySwitchScene,switcher));
+        this.getChildren().add(new WelcomeDisplay(CREATE_KEY));
+        this.getChildren().add(new CreateGameDisplay(mySwitchScene,switcher));
     }
 }
