@@ -16,12 +16,19 @@ public class UserQuerier extends Querier{
     private static final String USERS_TABLE_NAME= "Users";
     private static final String USERNAME_COLUMN = "UserName";
     private static final String PASSWORD_COLUMN = "Password";
+    private static final String PROFILE_PIC_COLUMN = "ProfilePicture";
+    private static final String BIO_COLUMN = "Bio";
 
-    private static final String GET_HASHED_PASSWORD = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, PASSWORD_COLUMN, USERS_TABLE_NAME,
-            USERNAME_COLUMN);
-    private static final String CREATE_USER =
-            String.format(INSERT_TWO_VALUES, USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
+    private static final String UPDATE_USERS_TABLE = "UPDATE %s SET %s = ? WHERE %s = ?";
+    private static final String SELECT_ONE_COLUMN = "SELECT %s FROM %s WHERE %s = ?";
+
+    private static final String GET_HASHED_PASSWORD = String.format(SELECT_ONE_COLUMN_ONE_CONDITION, PASSWORD_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
+    private static final String CREATE_USER = String.format(INSERT_TWO_VALUES, USERS_TABLE_NAME, USERNAME_COLUMN, PASSWORD_COLUMN);
     private static final String DELETE_USER = String.format(DELETE_ONE_CONDITION, USERS_TABLE_NAME, USERNAME_COLUMN);
+    private static final String SET_PROFILE_PIC = String.format(UPDATE_USERS_TABLE, USERS_TABLE_NAME, PROFILE_PIC_COLUMN, USERNAME_COLUMN);
+    private static final String SET_BIO = String.format(UPDATE_USERS_TABLE, USERS_TABLE_NAME, BIO_COLUMN, USERNAME_COLUMN);
+    private static final String GET_PROFILE_PIC = String.format(SELECT_ONE_COLUMN, PROFILE_PIC_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
+    private static final String GET_BIO = String.format(SELECT_ONE_COLUMN, BIO_COLUMN, USERS_TABLE_NAME, USERNAME_COLUMN);
 
     private static final String HASH_ALGORITHM = "SHA-256";
 
@@ -31,6 +38,10 @@ public class UserQuerier extends Querier{
     private PreparedStatement myGetPasswordStatement;
     private PreparedStatement myCreateUserStatement;
     private PreparedStatement myDeleteUserStatement;
+    private PreparedStatement mySetUserBioStatement;
+    private PreparedStatement myGetUserBioStatement;
+    private PreparedStatement mySetUserProfilePicStatement;
+    private PreparedStatement myGetUserProfilePicStatement;
 
     /**
      * UserQuerier constructor
@@ -46,6 +57,10 @@ public class UserQuerier extends Querier{
         myGetPasswordStatement = myConnection.prepareStatement(GET_HASHED_PASSWORD);
         myCreateUserStatement = myConnection.prepareStatement(CREATE_USER);
         myDeleteUserStatement = myConnection.prepareStatement(DELETE_USER);
+        mySetUserBioStatement = myConnection.prepareStatement(SET_BIO);
+        myGetUserBioStatement = myConnection.prepareStatement(GET_BIO);
+        mySetUserProfilePicStatement = myConnection.prepareStatement(SET_PROFILE_PIC);
+        myGetUserProfilePicStatement = myConnection.prepareStatement(GET_PROFILE_PIC);
         myPreparedStatements = List.of(myGetPasswordStatement, myCreateUserStatement, myDeleteUserStatement);
     }
 
@@ -126,4 +141,5 @@ public class UserQuerier extends Querier{
         int affectedRows = myDeleteUserStatement.executeUpdate();
         return affectedRows > 0;
     }
+
 }
