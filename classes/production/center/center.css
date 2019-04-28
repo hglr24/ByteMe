@@ -64,12 +64,21 @@
     -fx-fill: white;
     -fx-font-size: 48;
     -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .subtitlefont {
     -fx-fill: white;
-    -fx-font-size: 32;
+    -fx-font-size: 24;
     -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+.bodyfont {
+    -fx-fill: white;
+    -fx-font-size: 18;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
 }
 
 .cardpadding {
@@ -88,7 +97,31 @@
 
 .scroller {
     -fx-background-color: transparent;
+    -fx-background: transparent;
     -fx-fit-to-width: true;
+    -fx-fit-to-height: true;
     -fx-hbar-policy: never;
     -fx-vbar-policy: never;
+}
+
+.gamepage {
+    -fx-padding: 0 0 20 0;
+}
+
+.pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.commentbox {
+    -fx-pref-width: 100;
+    -fx-pref-height: 100;
+    -fx-padding: 5 5 5 5;
+    -fx-background-color: #524b5d;
+    -fx-control-inner-background: #696176;
+    -fx-text-fill: white;
+}
+
+.ratingpadding {
+    -fx-padding: 20;
 }

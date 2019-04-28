@@ -1,15 +1,8 @@
 package manager;
-
-import center.external.CenterView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import page.CreateNewGamePage;
 import page.NewUserPage;
 import page.SplashPage;
-import page.WelcomeUserPage;
-import runner.external.Game;
-import data.external.GameCenterData;
-import ui.main.MainGUI;
 
 public class SceneManager {
     private static final String MY_STYLE = "default_launcher.css";
