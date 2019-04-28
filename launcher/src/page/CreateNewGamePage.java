@@ -3,6 +3,7 @@ package page;
 import javafx.scene.layout.VBox;
 import manager.SwitchToAuthoring;
 import manager.SwitchToUserOptions;
+import manager.SwitchToUserPage;
 import pane.CreateGameDisplay;
 import pane.WelcomeDisplay;
 
@@ -15,9 +16,9 @@ public class CreateNewGamePage extends VBox {
      * go there instead
      * @author Anna Darwish
      */
-    public CreateNewGamePage(SwitchToAuthoring mySwitchScene, SwitchToUserOptions switcher){
+    public CreateNewGamePage(String userName){
         this.getStyleClass().add(MY_STYLE);
         this.getChildren().add(new WelcomeDisplay(CREATE_KEY));
-        this.getChildren().add(new CreateGameDisplay(mySwitchScene,switcher));
+        //this.getChildren().add(new CreateGameDisplay(mySwitchScene,switcher));
     }
 }

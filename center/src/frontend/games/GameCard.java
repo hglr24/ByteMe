@@ -9,6 +9,8 @@
 package frontend.games;
 
 import data.external.DataManager;
+import frontend.popups.GamePage;
+import frontend.popups.UserProfileDisplay;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -38,17 +40,19 @@ public class GameCard {
     private GameCenterData myGame;
     private Pane myDisplay;
     private DataManager myManager;
+    private String myCurrentUser;
 
     /**
      * @purpose constructor that sets up parameters of the game and initializes the resource bundle used for text.
      * @param game the GameCenterData object that represents the contents of the GameCard
      * @param index the index that the game card is in a list. This is used for styling purposes
      */
-    public GameCard(GameCenterData game, int index, DataManager manager) {
+    public GameCard(GameCenterData game, int index, DataManager manager, String user) {
         myGame = game;
         myIndex = index % 2 + 1;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE_LOCATION);
         myManager = manager;
+        myCurrentUser = user;
         initializeDisplay();
     }
 
@@ -62,7 +66,7 @@ public class GameCard {
     }
 
     public void readMoreButton(GameCenterData data) {
-        new GamePage(data, myManager);
+        new GamePage(data, myManager, myCurrentUser);
     }
 
     public void playGameButton(GameCenterData data) {
@@ -95,14 +99,9 @@ public class GameCard {
         BorderPane foreground = new BorderPane();
         foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
-        addAuthor(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
         pane.getChildren().add(foreground);
-    }
-
-    private void addAuthor(BorderPane foreground) {
-
     }
 
     private void addButtons(BorderPane foreground) {
@@ -134,11 +133,16 @@ public class GameCard {
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
         Text author = new Text(myGame.getAuthorName());
+        author.setOnMouseClicked(e -> openUserPage(author.getText()));
         author.getStyleClass().add(BODY_SELECTOR);
         author.getStyleClass().add(TEXT_SELECTOR + myIndex);
         BorderPane.setAlignment(author, Pos.CENTER);
         titlePane.setBottom(author);
         foreground.setTop(titlePane);
+    }
+
+    private void openUserPage(String author) {
+        new UserProfileDisplay(myGame, myManager, myCurrentUser, author);
     }
 
 }

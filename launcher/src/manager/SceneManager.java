@@ -15,8 +15,8 @@ public class SceneManager {
     private NewUserPage myNewUserPage;
 
     private SwitchToUserPage switchToWelcomeUserPage = this::goToWelcomeUserPage;
-
     private SwitchToUserOptions switchToNewUserPage = this::goToNewUserPage;
+
     private Stage myStage;
     /**
      * The SceneManager class distributes lambdas among the different scenes, depending upon which scene they need
@@ -40,9 +40,12 @@ public class SceneManager {
     }
 
     private void goToNewUserPage(){ myScene.setRoot(myNewUserPage);}
+
     private void goToWelcomeUserPage(String userName){
         UserManager myLoggedInManager = new UserManager(userName);
-        myLoggedInManager.render(myStage);
+        myLoggedInManager.render(myScene);
     }
+
+
 
 }

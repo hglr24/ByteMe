@@ -88,6 +88,7 @@
 .text-field {
     -fx-background-color: #606060;
     -fx-text-fill: white;
+    -fx-max-width: 150;
 }
 
 .button {
@@ -189,4 +190,9 @@
 .center-pane {
     -fx-padding: 10;
     -fx-alignment: center;
+}
+
+.new-user-vbox {
+    -fx-alignment: center;
+    -fx-spacing: 40;
 }

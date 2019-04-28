@@ -26,12 +26,15 @@ public class TitleLabel extends Label {
         //setUpDisplay();
         this.setText(myWelcomeLabel);
         this.getStylesheets().add(STYLE);
-
+    }
+    public TitleLabel(String resourceKey, String modifyText){
+        this(resourceKey);
+        addToLabel(modifyText);
     }
     /**
      * This allows for toggling the display, as it may dependent upon the user who is currently logged in
      */
-    public void addToLabel(String addition){
+    private void addToLabel(String addition){
         this.setText(this.getText() + " " + addition);
     }
 

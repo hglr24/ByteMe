@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.function.Consumer;
 
 public abstract class AddComponentAction<T> extends Action<T>{
-    private static final double timerValue = 9.0;
+    private static final double timerValue = 10.0;
 
     protected void setAbsoluteAction(Component component) {
         setAction((Consumer<Entity> & Serializable) (entity) -> {

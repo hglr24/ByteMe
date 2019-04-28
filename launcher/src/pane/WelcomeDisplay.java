@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
+import java.util.ResourceBundle;
+
 public class WelcomeDisplay extends HBox {
     private static final String MY_STYLE = "default_launcher.css";
     /**
@@ -15,6 +17,12 @@ public class WelcomeDisplay extends HBox {
     public WelcomeDisplay(String welcomeLabel){
         this.getStylesheets().add(MY_STYLE);
         Label myLabel = new TitleLabel(welcomeLabel);
+        this.getChildren().add(myLabel);
+        this.setAlignment(Pos.CENTER);
+    }
+    public WelcomeDisplay(String welcomeLabel,String modifyLabel){
+        this.getStylesheets().add(MY_STYLE);
+        Label myLabel = new TitleLabel(welcomeLabel,modifyLabel);
         this.getChildren().add(myLabel);
         this.setAlignment(Pos.CENTER);
     }

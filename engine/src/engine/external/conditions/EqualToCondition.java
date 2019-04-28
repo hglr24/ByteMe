@@ -18,7 +18,7 @@ public class EqualToCondition extends Condition {
     private static final String DISPLAY = " Equals ";
     private static final String COMPONENT = "Component";
     public EqualToCondition(Class<? extends Component> component, Double value) {
-        setPredicate((Predicate<Entity> & Serializable) entity -> (Double) entity.getComponent(component).getValue() == value);
+        setPredicate((Predicate<Entity> & Serializable) entity -> ((Double) entity.getComponent(component).getValue()).equals(value));
         myComponentName = component.getSimpleName();
         myValue = value;
     }

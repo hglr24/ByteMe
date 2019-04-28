@@ -156,7 +156,6 @@ public class DatabaseEngine {
         return myGameInformationQuerier.loadGameData(gameName, authorName);
     }
 
-
     String loadGameInfo(String gameName, String authorName) throws SQLException {
         return myGameInformationQuerier.loadGameInformation(gameName, authorName);
     }
@@ -233,7 +232,7 @@ public class DatabaseEngine {
         return myStatisticsQuerier.loadScores(gameName, authorName);
     }
 
-    public void removeScores(String userName, String gameName, String authorName) throws SQLException {
+    void removeScores(String userName, String gameName, String authorName) throws SQLException {
         myStatisticsQuerier.removeScores(userName, gameName, authorName);
     }
 }
