@@ -10,6 +10,7 @@ package frontend.games;
 
 import data.external.DataManager;
 import frontend.popups.GamePage;
+import frontend.popups.UserProfileDisplay;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -98,14 +99,9 @@ public class GameCard {
         BorderPane foreground = new BorderPane();
         foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
-        addAuthor(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
         pane.getChildren().add(foreground);
-    }
-
-    private void addAuthor(BorderPane foreground) {
-
     }
 
     private void addButtons(BorderPane foreground) {
@@ -137,11 +133,16 @@ public class GameCard {
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
         Text author = new Text(myGame.getAuthorName());
+        author.setOnMouseClicked(e -> openUserPage(author.getText()));
         author.getStyleClass().add(BODY_SELECTOR);
         author.getStyleClass().add(TEXT_SELECTOR + myIndex);
         BorderPane.setAlignment(author, Pos.CENTER);
         titlePane.setBottom(author);
         foreground.setTop(titlePane);
+    }
+
+    private void openUserPage(String author) {
+        new UserProfileDisplay(myGame, myManager, myCurrentUser, author);
     }
 
 }

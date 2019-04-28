@@ -17,11 +17,13 @@ import engine.external.events.Event;
 import engine.external.events.LeftCollisionEvent;
 import engine.external.events.RightCollisionEvent;
 import engine.external.events.TopCollisionEvent;
+import javafx.beans.property.ObjectProperty;
 import runner.external.Game;
 import ui.AuthoringEntity;
 import ui.AuthoringLevel;
 import ui.EntityField;
 import ui.LevelField;
+import ui.Propertable;
 import ui.UIException;
 import ui.manager.ObjectManager;
 
@@ -91,9 +93,9 @@ public class GameTranslator {
         Entity basisEntity = new Entity();
 
         for (EntityField field : EntityField.values()) {
-            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS) && !field.equals(EntityField.IMAGE)) {
-                    addComponent(field, basisEntity, authEntity);
-                }
+            if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS)) {
+                addComponent(field, basisEntity, authEntity);
+            }
             else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // main character found
                 basisEntity.addComponent(new CameraComponent(true));
                 //basisEntity.addComponent(new LivesComponent(3.0)); //TODO
@@ -112,10 +114,10 @@ public class GameTranslator {
             for (AuthoringEntity entity : authLevel.getEntities()) {
                 for (Event event : myObjectManager.getEvents(entity.getPropertyMap().get(EntityField.LABEL))) {
                     if (event.getClass().equals(BottomCollisionEvent.class) || event.getClass().equals(LeftCollisionEvent.class) ||
-                    event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
+                            event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
                         basisEntity.addComponent(new CollisionComponent(true));
 
-                    // TODO add collisioncomponent to other actor
+                        // TODO add collisioncomponent to other actor
                     }
                     for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
                         if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
@@ -158,7 +160,7 @@ public class GameTranslator {
         }
     }
 
-    public void populateObjectManager(Game game) {
+    public void populateObjectManager(Game game, ObjectProperty<Propertable> currentLevel) {
         for (Entity type : game.getUserCreatedTypes().keySet()) {
             AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
             myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));
@@ -169,11 +171,13 @@ public class GameTranslator {
             newLevel.getPropertyMap().put(LevelField.WIDTH, String.valueOf(level.getWidth()));
             newLevel.getPropertyMap().put(LevelField.BACKGROUND, level.getBackground());
             newLevel.getPropertyMap().put(LevelField.MUSIC, level.getMusic());
+            myObjectManager.addLevel(newLevel);
+            currentLevel.setValue(newLevel);
 
             for (Entity entity : level.getEntities()) {
                 AuthoringEntity newAuthEntity = new AuthoringEntity(entity, myObjectManager);
                 myObjectManager.addEntityInstance(newAuthEntity);
-                if (newAuthEntity.getPropertyMap().get(EntityField.GROUP) != null) {
+                if (newAuthEntity.getPropertyMap().get(EntityField.GROUP) != null) { // Add Group label as found in Entities
                     myObjectManager.getLabelManager().addLabel(EntityField.GROUP,
                             newAuthEntity.getPropertyMap().get(EntityField.GROUP));
                 }
@@ -181,7 +185,6 @@ public class GameTranslator {
             for (IEventEngine event : level.getEvents()) {
                 //TODO beeeeeg todo
             }
-            myObjectManager.addLevel(newLevel);
         }
     }
 

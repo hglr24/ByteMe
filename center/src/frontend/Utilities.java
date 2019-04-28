@@ -84,6 +84,7 @@ public class Utilities {
             button.setOnAction(e -> Reflection.callMethod(object, buttonName, data));
             buttonList.getChildren().add(button);
         }
+        BorderPane.setAlignment(buttonList, Pos.CENTER);
         return buttonList;
     }
 

@@ -1,5 +1,7 @@
 package ui.windows;
 
+import data.external.GameCenterData;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,9 +16,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import ui.ErrorBox;
+import ui.Propertable;
 import ui.Utility;
 import ui.TreeNode;
+import ui.manager.ObjectManager;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -40,26 +45,32 @@ import java.util.Set;
 abstract public class AssetManager extends Stage {
     private static final ResourceBundle RESOURCES = ResourceBundle.getBundle("asset_manager");
     protected static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
+    private static final ResourceBundle SEPARATOR_RESOURCES = ResourceBundle.getBundle("mainGUI_assets");
     private Set<String> myExtensions;
     private HBox myButtonHBox;
     protected String mySelectedAssetName;
     private TabPane myTabPane;
     private VBox myOuterVBox;
     private ScrollPane myScrollPane;
-    private static final String BUTTON_INFO = "Buttons";
+    protected ObjectManager myObjectManager;
+    protected Propertable myPropertable;
+    private static final String SELECT_BUTTONS = "SelectButtons";
+    private static final String UPLOAD_BUTTONS = "UploadButtons";
 
     private static final String IO_ERROR = "IOError";
     private static final String ERROR_HEADER = "ErrorHeader";
     private static final String EXTENSION_PREFIX = "*.";
     private static final String DEFAULT_STYLE_SHEET = "default.css";
     private static final String ASSET_SPECIFIC_SHEET = "asset-manager";
+    private static final String BUTTON_PANE_SHEET = "asset-manager-hbox";
     protected String myAssetFolderPath;
     protected String myTitleKey;
     protected String myExtensionKey;
     protected static final double SPACING = 10;
     protected static final int STAGE_WIDTH = 400;
-    private static final int STAGE_HEIGHT = 300;
+    private static final int STAGE_HEIGHT = 400;
     private static final int BUTTON_SPACING = 20;
+    private String mySavingPrefix;
     protected static final Insets INSETS = new Insets(SPACING, SPACING, SPACING, SPACING);
 
     /**
@@ -73,13 +84,32 @@ abstract public class AssetManager extends Stage {
         myTitleKey = titleKey;
         myExtensionKey = extensionKey;
         mySelectedAssetName = "";
+        mySavingPrefix = "";
         initializeVariables();
         initializeSubClassVariables();
         initializeStage();
-        fillExtensionSet();
-        populateTabs();
-        createButtonPane();
-        setUpOuterPanes();
+        this.setOnShown(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                fillExtensionSet();
+                populateTabs();
+                createButtonPane();
+                setUpOuterPanes();
+            }
+        });
+    }
+
+
+    public AssetManager(String assetFolderPath, String titleKey, String extensionKey, ObjectManager objectManager){
+        this(assetFolderPath, titleKey, extensionKey);
+        myObjectManager = objectManager;
+        GameCenterData gameCenterData = myObjectManager.getGameCenterData();
+        mySavingPrefix = gameCenterData.getTitle() + gameCenterData.getAuthorName();
+    }
+
+    public AssetManager(String assetFolderPath, String titleKey, String extensionKey,Propertable propertable){
+        this(assetFolderPath, titleKey, extensionKey);
+        myPropertable = propertable;
     }
 
 
@@ -91,7 +121,15 @@ abstract public class AssetManager extends Stage {
 
 
     private void createButtonPane() {
-        String buttonString = RESOURCES.getString(BUTTON_INFO);
+        String buttonString;
+        if(myObjectManager == null){
+            System.out.println("object manager null");
+            buttonString = RESOURCES.getString(SELECT_BUTTONS);
+        }
+        else{
+            System.out.println("object manager not null");
+            buttonString = RESOURCES.getString(UPLOAD_BUTTONS);
+        }
         String[] buttonInfo = buttonString.split(",");
         formatButtonHBox();
         for(String s : buttonInfo){
@@ -115,6 +153,7 @@ abstract public class AssetManager extends Stage {
 
         Tab defaultTab = new Tab();
         defaultTab.setText("Default");
+        defaultTab.setClosable(false);
         VBox vBox = new VBox();
         myTabPane.getTabs().add(defaultTab);
         ScrollPane defaultScrollPane = new ScrollPane();
@@ -124,7 +163,8 @@ abstract public class AssetManager extends Stage {
         TreeNode root = new TreeNode("root");
 
         Tab userUploaded = new Tab();
-        userUploaded.setText("User Uploaded");
+        userUploaded.setText("Uploaded");
+        userUploaded.setClosable(false);
         VBox userVBox = new VBox();
         ScrollPane userScrollPane = new ScrollPane();
         userScrollPane.setFitToWidth(true);
@@ -207,6 +247,7 @@ abstract public class AssetManager extends Stage {
         myOuterVBox = new VBox();
         myOuterVBox.setPrefHeight(STAGE_HEIGHT);
         myButtonHBox = new HBox();
+        myButtonHBox.setMinHeight(50);
         myTabPane = new TabPane();
         myScrollPane = new ScrollPane();
     }
@@ -217,7 +258,8 @@ abstract public class AssetManager extends Stage {
         this.setHeight(STAGE_HEIGHT);
         Scene scene = new Scene(myOuterVBox);
         scene.getStylesheets().add(DEFAULT_STYLE_SHEET);
-        myTabPane.getStyleClass().add(ASSET_SPECIFIC_SHEET);
+        myOuterVBox.getStyleClass().add(ASSET_SPECIFIC_SHEET);
+        myButtonHBox.getStyleClass().add(BUTTON_PANE_SHEET);
         this.setScene(scene);
     }
 
@@ -245,10 +287,12 @@ abstract public class AssetManager extends Stage {
 
     private void saveAsset(File selectedFile){
         try {
-            File dest = new File(myAssetFolderPath + selectedFile.getName()); //any location
+
+            File dest = new File(myAssetFolderPath + mySavingPrefix + selectedFile.getName()); //any location
             Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Asset saved");
         } catch (Exception e) {
+            e.printStackTrace();
             String[] text = RESOURCES.getString(IO_ERROR).split(",");
             ErrorBox errorBox = new ErrorBox(text[0], text[1]);
             errorBox.display();
@@ -304,5 +348,23 @@ abstract public class AssetManager extends Stage {
      */
     public String getAssetName(){
         return mySelectedAssetName;
+    }
+
+    /**
+     * Used by subclasses (Audio/Image manager) to take in a filename that may have the file separator
+     * and find the original name of the image purely for display purposes
+     * @param fileName name of the file to extract the name from
+     * @return String of the image name to be displayed
+     */
+    protected String extractDisplayName(String fileName){
+        String result = fileName;
+        if(fileName.contains(SEPARATOR_RESOURCES.getString("defaults"))){
+            String[] splitText = fileName.split(SEPARATOR_RESOURCES.getString("defaults"));
+            result = splitText[splitText.length-1];
+        }
+        else if(fileName.contains(mySavingPrefix)){
+            result = fileName.replaceAll(mySavingPrefix, "");
+        }
+        return result;
     }
 }

@@ -1,5 +1,6 @@
 package ui.panes;
 
+import data.external.GameCenterData;
 import engine.external.Entity;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -21,6 +22,7 @@ public class DefaultTypesPane extends VBox{
     private ResourceBundle myResources;
     private UserCreatedTypesPane myUserCreatedTypesPane;
     private DefaultTypeXMLReaderFactory myDefaultTypesFactory;
+    private GameCenterData myGameCenterData;
 
     private static final String RESOURCE = "default_entity_type";
     private static final String TITLE_KEY = "DefaultTitle";
@@ -28,11 +30,12 @@ public class DefaultTypesPane extends VBox{
     /**
      * Creates a new page to display the default types
      */
-    public DefaultTypesPane(UserCreatedTypesPane userCreatedTypesPane)     {
+    public DefaultTypesPane(UserCreatedTypesPane userCreatedTypesPane, GameCenterData gameCenterData)     {
         myResources = ResourceBundle.getBundle(RESOURCE);
         myEntityMenu = new EntityMenu(myResources.getString(TITLE_KEY));
         myUserCreatedTypesPane = userCreatedTypesPane;
         myDefaultTypesFactory = new DefaultTypeXMLReaderFactory();
+        myGameCenterData = gameCenterData;
         populateEntityMenu();
         this.getChildren().add(myEntityMenu);
     }
@@ -50,7 +53,6 @@ public class DefaultTypesPane extends VBox{
             myEntityMenu.addDropDown(category);
             myEntityMenu.setDropDown(category, labelsList);
         }
-
     }
 
 
@@ -58,7 +60,7 @@ public class DefaultTypesPane extends VBox{
         VBox pane = new VBox(label);
         pane.setFillWidth(true);
         pane.setOnMouseClicked(mouseEvent -> {
-            CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName);
+            CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName, myGameCenterData);
             createNewTypeWindow.showAndWait();
             Entity entity = createNewTypeWindow.getUserCreatedEntity();
             if(entity != null){

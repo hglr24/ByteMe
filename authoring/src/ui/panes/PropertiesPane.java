@@ -119,6 +119,7 @@ public class PropertiesPane extends TitledPane {
                     myProp.getValue().getPropertyMap().get(Enum.valueOf(enumClass, name.toUpperCase())), myObjectManager.getLabelManager());
             instance.setAction(myObjectManager, myProp.getValue(), Enum.valueOf(enumClass, name.toUpperCase()), sep[2]);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new UIException("Error creating properties controls");
         }
         return newProp;

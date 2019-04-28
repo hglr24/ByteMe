@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import ui.DefaultTypeXMLReaderFactory;
 import ui.ErrorBox;
 import ui.Utility;
+import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -56,14 +58,16 @@ public class CreateNewTypeWindow extends Stage {
     private static final int INPUT_WIDTH = 100;
     private static final int PICTURE_SIZE = 50;
     private static final String STYLE_SHEET = "default.css";
+    private GameCenterData myGameCenterData;
 
     /**
      * Creates a window for the user to create a new type
      * @param defaultName Name of the defaultEntity the user is basing their
      *                    object off of
      */
-    public CreateNewTypeWindow(String defaultName){
+    public CreateNewTypeWindow(String defaultName, GameCenterData gameCenterData){
         mySelectedImageName = null;
+        myGameCenterData = gameCenterData;
         initializeGridPane();
         initializeVariables();
         createContent(myDefaultTypesFactory.getCategory(defaultName), defaultName);

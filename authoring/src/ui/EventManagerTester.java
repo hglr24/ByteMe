@@ -36,7 +36,7 @@ public class  EventManagerTester extends Application {
         testEntity.getEvents().add(new Event());
         testEntity.getEvents().add(new Event());
         makeTestEvents(testEntity);
-        EventManager testEventManager = new EventManager(testEntity);
+        EventManager testEventManager = new EventManager(testEntity, manager);
 
         testEventManager.show();
     }

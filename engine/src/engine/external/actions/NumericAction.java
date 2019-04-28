@@ -4,6 +4,7 @@ import engine.external.Entity;
 import engine.external.component.Component;
 
 import java.io.Serializable;
+import java.util.Random;
 import java.util.function.Consumer;
 
 /**
@@ -21,6 +22,7 @@ public abstract class NumericAction extends Action<Double> {
 
     private Class<? extends Component<Double>> myComponentClass;
     private static final String COMPONENT = "Component";
+
     /**
      * This method is used when subclass objects are constructed in order to specify what kind of
      * operation is being done to the existing value
@@ -39,6 +41,9 @@ public abstract class NumericAction extends Action<Double> {
                 break;
             case RELATIVE:
                 setRelativeAction(newValue, componentClass);
+                break;
+            case RANDOM:
+                setRandomAction(newValue, componentClass);
                 break;
         }
         myModifier = type;
@@ -77,16 +82,32 @@ public abstract class NumericAction extends Action<Double> {
     }
 
     /**
+     * This method adds a random amount to the current value of a component
+     *
+     * @param maxRandom
+     * @param componentClass
+     */
+    protected void setRandomAction(Number maxRandom, Class<? extends Component<Double>> componentClass) {
+        setAction((Consumer<Entity> & Serializable) (entity) -> {
+            Component component = entity.getComponent(componentClass);
+            Random r = new Random();
+            component.setValue((double) component.getValue() + (r.nextDouble() * 2 * maxRandom.doubleValue())-maxRandom.doubleValue());
+        });
+    }
+
+    /**
      * This enum is used in subclass construction to specify what kind of operation should be done to the component
      * value
      */
     public enum ModifyType {
-        ABSOLUTE("Set","to"),
-        RELATIVE("Change","by"),
-        SCALE("Scale","by");
+        ABSOLUTE("Set", "to"),
+        RELATIVE("Change", "by"),
+        SCALE("Scale", "by"),
+        RANDOM("Random", "by");
 
         private final String displayName;
         private final String modifierName;
+
         ModifyType(String displayName, String modifierName) {
 
             this.displayName = displayName;
@@ -96,12 +117,15 @@ public abstract class NumericAction extends Action<Double> {
         public String getDisplayName() {
             return this.displayName;
         }
-        public String getModifierName(){ return this.modifierName; }
+
+        public String getModifierName() {
+            return this.modifierName;
+        }
     }
 
     public String toString() {
         return myModifier.getDisplayName() +
-                " " + myComponentClass.getSimpleName().replaceAll(COMPONENT,"") + " " + myModifier.modifierName + " " + myArgument.toString();
+                " " + myComponentClass.getSimpleName().replaceAll(COMPONENT, "") + " " + myModifier.modifierName + " " + myArgument.toString();
 
 
     }
