@@ -11,10 +11,16 @@ import engine.external.events.*;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
 
-
+/**
+ * Makes a game object for use in Runner Test
+ * @author Louis Jensen, Feroze Mohideen
+ */
 public class DummyGameObjectMaker {
     private Game myGame;
 
+    /**
+     * Constructor that creates a dummy Game
+     */
     public DummyGameObjectMaker(){
         myGame = new Game();
         initializeGame(myGame);
@@ -44,6 +50,10 @@ public class DummyGameObjectMaker {
     }
 
     private void addDummyEvents(Level level1, Double next) {
+        Event life = new Event();
+        life.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
+        life.addInputs(KeyCode.L);
+        life.addActions(new ChangeLivesAction(NumericAction.ModifyType.RELATIVE, -1.0));
 
 
         Event event = new Event();
@@ -123,8 +133,10 @@ public class DummyGameObjectMaker {
 //        mushroomOnPlatform.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.0));
 
 
-
-
+        Event levelOver = new Event();
+        levelOver.addInputs(KeyCode.SPACE);
+        levelOver.addActions(new ProgressionAction(true));
+        levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
         RightCollisionEvent rce = new RightCollisionEvent("three", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "one"));
@@ -155,7 +167,7 @@ public class DummyGameObjectMaker {
 
         level1.addEvent(event);
         level1.addEvent(event2);
-
+        level1.addEvent(levelOver);
         level1.addEvent(flappyMoveLeft);
         //level1.addEvent(flappyMoveUp);
         level1.addEvent(mushroomJump);
@@ -166,6 +178,8 @@ public class DummyGameObjectMaker {
         level1.addEvent(mushroomOnPlatform);
         level1.addEvent(flappyJump);
         level1.addEvent(AddEntity);
+        level1.addEvent(life);
+
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -176,10 +190,7 @@ public class DummyGameObjectMaker {
 //            put("Lives", 3.0);
 //        }}));
         gameObject.addComponent(new ScoreComponent(0.0));
-
-
-
-
+        gameObject.addComponent(new LivesComponent(3.0));
 
         Entity dummy1 = new Entity();
         Entity dummy2 = new Entity();
@@ -226,11 +237,12 @@ public class DummyGameObjectMaker {
 
         dummy1.addComponent(new CameraComponent(true));
 
+
         dummy1.addComponent(new NameComponent("one"));
         dummy2.addComponent(new NameComponent("two"));
         dummy3.addComponent(new NameComponent("three"));
         dummy8.addComponent(new NameComponent("five"));
-
+        gameObject.addComponent(new NameComponent("game"));
         dummy1.addComponent(new XVelocityComponent(2.0));
         dummy1.addComponent(new YVelocityComponent(0.0));
         dummy1.addComponent(new XAccelerationComponent(0.0));
@@ -302,10 +314,18 @@ public class DummyGameObjectMaker {
 
     }
 
+    /**
+     * Gets dummy game
+     * @param dummyString symbolizes game name in actual call
+     * @return dummy Game object
+     */
     public Game getGame(String dummyString){
         return myGame;
     }
 
+    /**
+     * Saves dummy game to data base
+     */
     public void serializeObject(){
         DataManager dm = new DataManager();
         dm.saveGameData("game1", myGame);
