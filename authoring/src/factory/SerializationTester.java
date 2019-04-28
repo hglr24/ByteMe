@@ -107,7 +107,7 @@ public class SerializationTester {
 
     public void loadImagesToDatabase() {
         DataManager dm = new DataManager();
-        List<String> images = List.of("Images/cat.jpg", "Images/ghost.png", "Images/mario_block.png", "Images" +
+        List<String> images = List.of("Images/cat.jpg", "Images/GH OST.png", "Images/mario_block.png", "Images" +
                 "/spaceship.png", "Images/wide_spaceship.png", "runner/resources/mushroom.png");
         for (String image: images){
             String[] split = image.split("/");

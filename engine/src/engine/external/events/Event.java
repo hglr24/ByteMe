@@ -23,21 +23,13 @@ import java.util.function.Predicate;
 public class Event implements IEventEngine, IEventAuthoring {
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
-    private String myType;
     private Set<KeyCode> myInputs = new HashSet<>();
 
     /**
      * An Event is created using the name of the type of entity that this event will apply to
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
-     *
-     * @param name
      */
-    public Event(String name) {
-        myType = name;
-        init();
-    }
-
-    private void init() {
+    public Event() {
 
     }
 
@@ -47,23 +39,14 @@ public class Event implements IEventEngine, IEventAuthoring {
         if (!inputs.containsAll(myInputs)) {
             return;
         }
-        List<Entity> filtered_entities = filter(entities);
-        for (Entity e : filtered_entities) {
+
+        for (Entity e : entities) {
             if (conditionsMet(e)) {
                 executeActions(e);
             }
         }
     }
 
-    private List<Entity> filter(List<Entity> entities) {
-        List<Entity> filtered_entities = new ArrayList<>();
-        for (Entity entity : entities) {
-            if (entity.getComponent(NameComponent.class).getValue().equals(myType)) {
-                filtered_entities.add(entity);
-            }
-        }
-        return filtered_entities;
-    }
 
     private boolean conditionsMet(Entity entity) {
         try {
@@ -75,7 +58,16 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     private void executeActions(Entity entity) {
-        actions.forEach((Consumer<Action> & Serializable) action -> action.getAction().accept(entity));
+        try {
+            actions.forEach((Consumer<Action> & Serializable) action -> {
+                action.checkComponents(entity);
+                action.getAction().accept(entity);
+            });
+
+        } catch (NullPointerException e) {
+            System.out.println("Entity missing component for action");
+            return;
+        }
     }
 
     public void addActions(List<Action> actionsToAdd) {
@@ -102,7 +94,9 @@ public class Event implements IEventEngine, IEventAuthoring {
         conditions.removeAll(conditionsToRemove);
     }
 
-    public void removeConditions(Condition conditionToRemove){conditions.remove(conditionToRemove);}
+    public void removeConditions(Condition conditionToRemove) {
+        conditions.remove(conditionToRemove);
+    }
 
     public void setActions(List<Action> newSetOfActions) {
         actions = newSetOfActions;
@@ -112,7 +106,10 @@ public class Event implements IEventEngine, IEventAuthoring {
         actions.removeAll(actionsToRemove);
     }
 
-    public void removeActions(Action actionToRemove){ actions.remove(actionToRemove);}
+    public void removeActions(Action actionToRemove) {
+        actions.remove(actionToRemove);
+    }
+
     @Override
     public void setInputs(Set<KeyCode> inputs) {
         myInputs = inputs;
@@ -133,12 +130,14 @@ public class Event implements IEventEngine, IEventAuthoring {
         myInputs.remove(inputsToRemove);
     }
 
-    public void clearInputs(){myInputs.clear();}
+    public void clearInputs() {
+        myInputs.clear();
+    }
 
-    public Map<Class<?>,List<?>> getEventInformation(){
-        Map<Class<?>,List<?>> myEventInformation = new HashMap<>();
-        myEventInformation.put(Condition.class,conditions);
-        myEventInformation.put(Action.class,actions);
+    public Map<Class<?>, List<?>> getEventInformation() {
+        Map<Class<?>, List<?>> myEventInformation = new HashMap<>();
+        myEventInformation.put(Condition.class, conditions);
+        myEventInformation.put(Action.class, actions);
         return myEventInformation;
     }
 

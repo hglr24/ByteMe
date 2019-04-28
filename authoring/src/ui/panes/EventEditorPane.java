@@ -5,33 +5,23 @@ import engine.external.conditions.Condition;
 import engine.external.events.Event;
 import events.EventBuilder;
 import events.EventFactory;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
-
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ResourceBundle;
 
-    class EventEditorPane extends Stage {
-    private static final String ADD = "Add";
-    private static final String REMOVE= "Remove";
+class EventEditorPane extends Stage {
+
     private static final String SAVE = "Save";
-    private static final String REMOVE_CONDITIONS_METHOD_NAME = "removeConditions";
-    private static final String REMOVE_ACTIONS_METHOD_NAME = "removeActions";
-    private static final String ADD_CONDITIONS_METHOD_NAME = "createGeneralCondition";
-    private static final String ADD_ACTIONS_METHOD_NAME = "createGeneralAction";
-
-    private static final String EVENT_MODIFIER = "event_modifier";
 
     private static final String ACTION = "Action";
     private static final String CONDITION = "Condition";
@@ -41,14 +31,25 @@ import java.util.Map;
     private static final String VBOX_STYE = "event-component-vbox";
     private Stage myPopUpStage;
 
-    EventEditorPane(Event unfinishedEvent,Refresher eventDisplayRefresher){
+    private static final ResourceBundle eventComponentResource = ResourceBundle.getBundle("event_editor");
+    private static final String ADD = "Add";
+    private static final String REMOVE= "Remove";
+    private static final String BUILD = "Build";
+    private static final String PROMPT= "Prompt";
+    private static final String RESOURCE = "Resource";
+
+    private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
+    private StringProperty conditionOperator = new SimpleStringProperty(); //type of condition, such as a LessThanCondition
+    private StringProperty triggerValue = new SimpleStringProperty();  //value bound to trigger the actions associated with this event
+
+    EventEditorPane(Event unfinishedEvent, Refresher eventDisplayRefresher){
         HBox splitEditorPane = new HBox();
 
         List<?> myEventConditions = unfinishedEvent.getEventInformation().get(Condition.class);
         List<?> myEventActions = unfinishedEvent.getEventInformation().get(Action.class);
 
-        TitledPane myConditionScroll = eventComponentPane(myEventConditions,unfinishedEvent, REMOVE_CONDITIONS_METHOD_NAME,CONDITION,ADD_CONDITIONS_METHOD_NAME,CONDITION);
-        TitledPane myActionScroll = eventComponentPane(myEventActions,unfinishedEvent,REMOVE_ACTIONS_METHOD_NAME,ACTION,ADD_ACTIONS_METHOD_NAME,ACTION);
+        TitledPane myConditionScroll = eventComponentPane(myEventConditions,unfinishedEvent, CONDITION);
+        TitledPane myActionScroll = eventComponentPane(myEventActions,unfinishedEvent,ACTION);
         splitEditorPane.getChildren().add(myConditionScroll);
         splitEditorPane.getChildren().add(myActionScroll);
 
@@ -59,48 +60,54 @@ import java.util.Map;
         this.setScene(myScene);
     }
 
-    private TitledPane eventComponentPane(List<?> myConditions, Event event, String removeMethodName, String addFactoryResources, String addMethodName, String title){
-        ScrollPane eventComponentList = eventComponentScrollPane(myConditions,event,removeMethodName,addFactoryResources,addMethodName);
-        return new TitledPane(title,eventComponentList);
+    private TitledPane eventComponentPane(List<?> myConditions, Event event, String eventComponent){
+        ScrollPane eventComponentList = eventComponentScrollPane(myConditions,event,eventComponent);
+        return new TitledPane(eventComponent,eventComponentList);
     }
 
 
-    private ScrollPane eventComponentScrollPane(List<?> myConditions, Event event, String removeMethodName, String addFactoryResources, String addMethodName){
+    private ScrollPane eventComponentScrollPane(List<?> myConditions, Event event, String eventComponentName){
         ScrollPane myPane = new ScrollPane();
-        VBox myListing = new VBox();
+        VBox myParent = new VBox();
+        int index = 0;
         for (Object eventElement: myConditions){
-            VBox eventSubInformation = new VBox();
-            eventSubInformation.getStyleClass().add(VBOX_STYE);
-            Button removeButton = new Button(REMOVE);
-            eventSubInformation.getChildren().add(EventFactory.createLabel(eventElement.toString()));
-            eventSubInformation.getChildren().add(removeButton);
-
-            myListing.getChildren().add(eventSubInformation);
-            setUpRemoveButton(removeButton,eventElement,event,removeMethodName,myListing,eventSubInformation);
+            addEventComponent(eventElement, eventComponentName, myParent, event, index);
+            index++;
         }
         Button addButton = new Button(ADD);
 
-        myListing.getChildren().add(addButton);
-        setUpAddButton(addButton,event,myListing,addFactoryResources,addMethodName);
-        myPane.setContent(myListing);
+        myParent.getChildren().add(addButton);
+        setUpAddButton(addButton,event,myParent,eventComponentName);
+        myPane.setContent(myParent);
         return myPane;
+    }
+
+    private void addEventComponent(Object eventComponent, String eventComponentName, VBox myParent, Event event, int childIndex){
+        VBox eventSubInformation = new VBox();
+        eventSubInformation.getStyleClass().add(VBOX_STYE);
+        Button removeButton = new Button(REMOVE);
+        eventSubInformation.getChildren().add(EventFactory.createLabel(eventComponent.toString()));
+        eventSubInformation.getChildren().add(removeButton);
+        myParent.getChildren().add(childIndex,eventSubInformation);
+        setUpRemoveButton(removeButton,eventComponent,event,eventComponentName,myParent,eventSubInformation);
     }
 
 
 
     private void setUpRemoveButton(Button myButton, Object eventElement, Event event, String eventMethod,VBox parent,VBox child){
+        String removeMethodName = eventComponentResource.getString(eventMethod + REMOVE);
         myButton.setOnMouseClicked(mouseEvent -> {
-            Reflection.callMethod(event,eventMethod,eventElement);
+            Reflection.callMethod(event,removeMethodName,eventElement);
             parent.getChildren().remove(child);
         });
     }
 
-    private void setUpAddButton(Button myButton, Event event,VBox parent,String factoryResources, String addMethod){
-        myButton.setOnMouseClicked(mouseEvent -> displayEventComponentMaker(event,parent,factoryResources,addMethod));
+    private void setUpAddButton(Button myButton, Event event,VBox parent,String eventComponentName){
+        myButton.setOnMouseClicked(mouseEvent -> displayEventComponentMaker(event,parent,eventComponentName));
     }
 
-    private void displayEventComponentMaker(Event event,VBox parent, String factoryResources, String addMethod){
-        VBox myDisplay = getEventControls(event,parent,factoryResources,addMethod);
+    private void displayEventComponentMaker(Event event,VBox parent, String eventComponentName){
+        VBox myDisplay = getEventControls(event,parent,eventComponentName);
         myDisplay.getStylesheets().add(STYLE);
         myPopUpStage = new Stage();
         myPopUpStage.setScene(new Scene(myDisplay));
@@ -108,26 +115,27 @@ import java.util.Map;
 
     }
 
-    private VBox getEventControls(Event myEvent,VBox parent, String factoryResources, String addMethod){
+    private VBox getEventControls(Event myEvent,VBox parent, String eventComponentName){
         VBox myDisplay = new VBox();
-        HBox controls = new HBox();
+        String promptText = eventComponentResource.getString(eventComponentName + PROMPT);
+        String resourceName = eventComponentResource.getString(eventComponentName + RESOURCE);
 
-        Map<String, StringProperty> myStorer = new HashMap<>();
-        EventFactory myFactory = new EventFactory();
-        myFactory.factoryDelegator(EVENT_MODIFIER, factoryResources, controls, myStorer);
-
-
+        HBox controls = EventFactory.createEventComponentOptions(promptText,resourceName,componentName,conditionOperator,triggerValue);
         myDisplay.getChildren().add(controls);
-        myDisplay.getChildren().add(saveButton(myStorer, myEvent, parent,addMethod));
+        myDisplay.getChildren().add(saveButton(myEvent, parent, eventComponentName));
         return myDisplay;
     }
 
-    private Button saveButton(Map<String,StringProperty> myConditionStorer,Event myEvent, VBox parent,String methodName){
+    private Button saveButton(Event myEvent, VBox myParent,String eventComponentName){
         Button mySaveButton = new Button(SAVE);
         EventBuilder myBuilder = new EventBuilder();
+        String buildComponentMethodName = eventComponentResource.getString(eventComponentName + BUILD);
+        String addComponentMethodName = eventComponentResource.getString(eventComponentName + ADD);
         mySaveButton.setOnMouseClicked(mouseEvent -> {
-            Object myEventComponent = Reflection.callMethod(myBuilder,methodName,myConditionStorer,myEvent);
-            parent.getChildren().add(parent.getChildren().size()-1,EventFactory.createLabel(myEventComponent.toString()));
+            Object myEventComponent = Reflection.callMethod(myBuilder,buildComponentMethodName,componentName.getValue(),
+                    conditionOperator.getValue(),triggerValue.getValue());
+            Reflection.callMethod(myEvent,addComponentMethodName,myEventComponent);
+            addEventComponent(myEventComponent,eventComponentName,myParent,myEvent,myParent.getChildren().size()-1);
             myPopUpStage.close();
         });
         return mySaveButton;

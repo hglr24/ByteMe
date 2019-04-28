@@ -2,27 +2,7 @@ package engine.internal.systems;
 
 import engine.external.Entity;
 import engine.external.Engine;
-import engine.external.component.Component;
-import engine.external.component.XPositionComponent;
-import engine.external.component.XVelocityComponent;
-import engine.external.component.YPositionComponent;
-import engine.external.component.YVelocityComponent;
-import engine.external.component.XAccelerationComponent;
-import engine.external.component.YAccelerationComponent;
-import engine.external.component.BottomCollidedComponent;
-import engine.external.component.TopCollidedComponent;
-import engine.external.component.RightCollidedComponent;
-import engine.external.component.LeftCollidedComponent;
-import engine.external.component.AnyCollidedComponent;
-import engine.external.component.CollisionComponent;
-import engine.external.component.DestroyComponent;
-import engine.external.component.HealthComponent;
-import engine.external.component.ImageViewComponent;
-import engine.external.component.NameComponent;
-import engine.external.component.WidthComponent;
-import engine.external.component.HeightComponent;
-import engine.external.component.SoundComponent;
-import engine.external.component.SpriteComponent;
+import engine.external.component.*;
 
 
 import javafx.scene.input.KeyCode;
@@ -56,8 +36,13 @@ public abstract class VoogaSystem {
     protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
     protected final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
     protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
+    protected final Class<? extends Component> AUDIO_COMPONENT_CLASS = AudioComponent.class;
     protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
     protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
+    protected final Class<? extends Component> SPAWN_ENTITY_COMPONENT_CLASS = SpawnEntityComponent.class;
+    protected final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
+    protected final Class<? extends Component> PLAY_AUDIO_COMPONENT_CLASS = PlayAudioComponent.class;
+
     protected final String GET_OLD_VALUE = "getOldValue";
 
 

@@ -8,23 +8,20 @@ import engine.external.conditions.Condition;
 /**
  * @author Dima Fayyad
  */
-public class LeftCollisionEvent extends Event {
+public class LeftCollisionEvent extends CollisionEvent {
 
-    private String myCollisionWithEntity;
-
-    public LeftCollisionEvent(String name, String collideWithEntity) {
-        super(name);
-        myCollisionWithEntity = collideWithEntity;
-
-        makeLeftCollisionCondition();
+    public LeftCollisionEvent(String collideWithEntity, boolean grouped) {
+        super(collideWithEntity, grouped);
+        makeLeftCollisionCondition(grouped);
     }
 
     /**
      * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
      * Adds a condition to the Event that verifies the collision is on the left of entity
      */
-    private void makeLeftCollisionCondition() {
-        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(LeftCollidedComponent.class, myCollisionWithEntity);
+    private void makeLeftCollisionCondition(boolean grouped) {
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(LeftCollidedComponent.class,
+                getCollisionWithEntity(), grouped);
         super.addConditions(containsCollidedComponentCondition);
     }
 

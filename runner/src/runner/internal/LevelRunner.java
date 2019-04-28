@@ -9,7 +9,6 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -38,6 +37,8 @@ public class LevelRunner {
     private boolean canPause = false;
     private Consumer<Double> myLevelChanger;
 
+    private AudioManager myAudioManager;
+
     public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext){
         myLevel = level;
         mySceneWidth = width;
@@ -45,6 +46,7 @@ public class LevelRunner {
         myCurrentKeys = new HashSet<>();
         myEngine = new Engine(level);
         myEntities = myEngine.updateState(myCurrentKeys);
+        myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         buildStage(stage);
         startAnimation();
@@ -122,11 +124,17 @@ public class LevelRunner {
         myGroup.getChildren().retainAll(myPause);
         //myGroup.getChildren().clear();
         for(Entity entity : myEntities){
+            if (entity.hasComponents(PlayAudioComponent.class)) {
+                myAudioManager.playSound(entity);
+            }
             try {
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
                 System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
             } catch (Exception e){
                 //do nothing
+            }
+            if (entity.hasComponents(ScoreComponent.class)) {
+                System.out.println("Score: " + entity.getComponent(ScoreComponent.class).getValue());
             }
             if(entity.hasComponents(ProgressionComponent.class) && (Boolean) entity.getComponent(ProgressionComponent.class).getValue()){
                 System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
@@ -146,8 +154,14 @@ public class LevelRunner {
                 scrollOnMainCharacter(entity);
             }
             ImageViewComponent imageViewComponent = (ImageViewComponent) entity.getComponent(ImageViewComponent.class);
-            ImageView image = imageViewComponent.getValue();
-            myGroup.getChildren().add(image);
+            try {
+                ImageView image = imageViewComponent.getValue();
+                myGroup.getChildren().add(image);
+            }
+            catch (NullPointerException e) {
+                 //TODO fix this
+            }
+
         }
         if (canPause) {
             movePauseButton();

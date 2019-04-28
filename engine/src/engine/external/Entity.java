@@ -1,8 +1,14 @@
 package engine.external;
 
 import engine.external.component.Component;
+import engine.external.component.ImageViewComponent;
+import engine.external.component.SpriteComponent;
+import engine.external.component.WidthComponent;
+import javafx.scene.image.Image;
 
-import java.io.Serializable;
+import java.io.*;
+import java.lang.reflect.Constructor;
+import java.sql.SQLOutput;
 import java.util.*;
 
 /**
@@ -24,6 +30,27 @@ public class Entity implements Serializable {
     public Entity() {
         myComponents = new HashMap<>();
     }
+
+    @Override
+    public Entity clone() {
+        Entity newEntity = new Entity();
+        for (Component c: this.myComponents.values()) {
+            try {
+                if(!c.getClass().equals(WidthComponent.class)){
+                    Component newComponent = (Component) c.getClass().getConstructor(c.getValue().getClass()).newInstance(c.getValue());
+                    newEntity.myComponents.put((Class) c.getClass() ,newComponent);
+                }else{
+                    newEntity.myComponents.put(WidthComponent.class, new WidthComponent((Double)c.getValue()+1));
+                }
+            }
+            catch (Exception e) {
+                //TODO
+                System.out.println("Unable to clone this entity");
+            }
+        }
+        return newEntity;
+    }
+
 
     public void addComponent(Collection<Component<?>> components) {
         for (Component<?> component: components) {

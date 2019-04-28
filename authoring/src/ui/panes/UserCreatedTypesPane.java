@@ -57,11 +57,11 @@ public class UserCreatedTypesPane extends VBox {
      * @param previouslyDefinedTypesMap the key is the String name of the default type it is associates with
      *                                  and the value is the original entity it is associated with
      */
-    public UserCreatedTypesPane(ObjectManager objectManager, Map<String, Entity> previouslyDefinedTypesMap){
+    public UserCreatedTypesPane(ObjectManager objectManager, Map<Entity, String> previouslyDefinedTypesMap){
         this(objectManager);
         System.out.println("Map Size: " + previouslyDefinedTypesMap.size());
-        for(Map.Entry<String, Entity> entry : previouslyDefinedTypesMap.entrySet()){
-            addUserDefinedType(entry.getValue(), entry.getKey());
+        for(Map.Entry<Entity, String> entry : previouslyDefinedTypesMap.entrySet()){
+            addUserDefinedType(entry.getKey(), entry.getValue());
         }
     }
 
@@ -83,23 +83,19 @@ public class UserCreatedTypesPane extends VBox {
         String category = myDefaultTypesFactory.getCategory(defaultName);
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
         String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
-        try {
-            AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, defaultName, myObjectManager);
-            originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
-            String assetImagesFilePath = myGeneralResources.getString("images_filepath");
-            ImageWithEntity imageWithEntity = new ImageWithEntity(new FileInputStream(assetImagesFilePath + "/" + imageName), originalAuthoringEntity);
-            UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
-            myCategoryToList.get(category).add(subPane);
-            myEntityMenu.setDropDown(category, myCategoryToList.get(category));
-            subPane.setOnDragDetected(mouseEvent -> {
-                myDraggedAuthoringEntity = originalAuthoringEntity;
-                Utility.setupDragAndDropImage(imageWithEntity);
-            });
-            subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
-        } catch (FileNotFoundException e) {
-            //TODO: deal with this
-            e.printStackTrace();
-        }
+        AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, myObjectManager);
+        myObjectManager.addEntityType(originalAuthoringEntity, defaultName);
+        originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
+        ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity); //closed
+        UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
+        myCategoryToList.get(category).add(subPane);
+        myEntityMenu.setDropDown(category, myCategoryToList.get(category));
+        subPane.setOnDragDetected(mouseEvent -> {
+            myDraggedAuthoringEntity = originalAuthoringEntity;
+            Utility.setupDragAndDropImage(imageWithEntity);
+        });
+        subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
+
     }
 
     private void handleRightClick(ContextMenuEvent contextMenuEvent, UserDefinedTypeSubPane userDefinedTypeSubPane, String category){

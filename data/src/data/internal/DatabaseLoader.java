@@ -14,8 +14,6 @@ public class DatabaseLoader {
 //        createUser("Person2", "passwordTwo");
 //        validateUsers();
 //        System.out.println();
-//        loadGameCenterDataFromCreatedGames();
-        loadImage();
         DatabaseEngine.getInstance().close();
     }
 

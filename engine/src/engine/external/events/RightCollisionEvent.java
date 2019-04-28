@@ -9,23 +9,22 @@ import engine.external.conditions.Condition;
  * @author Dima Fayyad
  */
 
-public class RightCollisionEvent extends Event {
+public class RightCollisionEvent extends CollisionEvent {
 
-    private String myCollisionWithEntity;
 
-    public RightCollisionEvent(String name, String collideWithEntity) {
-        super(name);
-        myCollisionWithEntity = collideWithEntity;
+    public RightCollisionEvent(String collideWithEntity, boolean grouped) {
 
-        makeRightCollisionCondition();
+        super(collideWithEntity, grouped);
+        makeRightCollisionCondition(grouped);
     }
 
     /**
      * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
      * Adds a condition to the Event that verifies the collision is on the right of entity
      */
-    private void makeRightCollisionCondition() {
-        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(RightCollidedComponent.class, myCollisionWithEntity);
+    private void makeRightCollisionCondition(boolean grouped) {
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(RightCollidedComponent.class,
+                getCollisionWithEntity(), grouped);
         super.addConditions(containsCollidedComponentCondition);
     }
 
@@ -50,6 +49,7 @@ public class RightCollisionEvent extends Event {
         }
         super.removeConditions(removeCondition);
     }
+
 
 
 }

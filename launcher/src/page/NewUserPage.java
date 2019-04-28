@@ -3,13 +3,12 @@ package page;
 
 import controls.InformativeField;
 import data.external.DataManager;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import manager.SwitchToUserOptions;
+import manager.SwitchToUserPage;
 
 public class NewUserPage extends VBox {
     private static final String MY_STYLE = "default_launcher.css";
@@ -26,22 +25,20 @@ public class NewUserPage extends VBox {
      * they can play games
      * @author Anna Darwish
      */
-    public NewUserPage(SwitchToUserOptions enterGame){
+    public NewUserPage(SwitchToUserPage enterGame){
+        this.getStyleClass().add(MY_STYLE);
+        this.getChildren().add(userName);
+        this.getChildren().add(passWord);
+        this.getChildren().add(reenter);
+        this.getChildren().add(createAccount);
         createAccount.setOnMouseClicked(mouseEvent -> {
             if (validCredentials()){
-                enterGame.switchPage();
+                enterGame.switchUserPage(userName.getTextEntered());
             }
             else{
                 displayUserNameInUseError();
             }
         });
-        this.getStyleClass().add(MY_STYLE);
-        this.getChildren().add(0,userName);
-        this.getChildren().add(1,passWord);
-        this.getChildren().add(2,reenter);
-        this.getChildren().add(3, createAccount);
-
-
     }
 
     private boolean validCredentials() {
@@ -64,10 +61,10 @@ public class NewUserPage extends VBox {
     }
 
     private boolean validUserName(){
-        //return myDataManager.createUser(userName,passWord);
-        //myDataManager.validateUser(userName,passWord);
-        //myDataManager.updatePassword(userName, passWord);, return true if successful, false otherwise
-        return true;
+        return myDataManager.createUser(userName.getTextEntered(),passWord.getTextEntered());
+//        myDataManager.validateUser(userName,passWord);
+//        myDataManager.updatePassword(userName, passWord);//, return true if successful, false otherwise
+       // return true;
     }
     private boolean displayInvalidPasswordError(String message){
         Popup myUserNameError = new Popup();

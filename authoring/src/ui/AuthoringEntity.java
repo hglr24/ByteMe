@@ -1,7 +1,6 @@
 package ui;
 
 import engine.external.Entity;
-import engine.external.component.*;
 import engine.external.events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,7 +19,6 @@ public class AuthoringEntity implements Propertable {
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
     private List<String> myInteractionListing = new ArrayList<>();
-    private String myBackingString;
 
     private AuthoringEntity() { // Initialize default property map
         myPropertyMap = FXCollections.observableHashMap();
@@ -38,29 +35,23 @@ public class AuthoringEntity implements Propertable {
         myObjectManager.addEntityType(this, "");
     }
 
-    public AuthoringEntity(Entity basis, String backingString, ObjectManager manager) { // Create new AuthoringEntity type from Entity
+    public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
         this();
         myObjectManager = manager;
-        myBackingString = backingString;
-
         for (EntityField field : EntityField.values())
-            if (basis.hasComponents(field.getComponentClass()))
+            if (!field.equals(EntityField.EVENTS) && basis.hasComponents(field.getComponentClass()))
                 myPropertyMap.put(field, String.valueOf(basis.getComponent(field.getComponentClass()).getValue()));
-
         addPropertyListeners();
-        myObjectManager.addEntityType(this, backingString);
     }
 
     public AuthoringEntity(AuthoringEntity copyBasis) { // Create new AuthoringEntity instance from pre-existing type
         this();
-        myBackingString = copyBasis.myBackingString;
         myObjectManager = copyBasis.myObjectManager;
         for (EntityField commonField : EntityField.getCommonFields()) {
             if (copyBasis.myPropertyMap.containsKey(commonField))
                 myPropertyMap.put(commonField, copyBasis.myPropertyMap.get(commonField));
         }
         addPropertyListeners();
-        myObjectManager.addEntityInstance(this);
     }
 
     private void addPropertyListeners() {
@@ -73,8 +64,8 @@ public class AuthoringEntity implements Propertable {
             myObjectManager.propagate(oldVal, key, newVal);
         else if (key.equals(EntityField.IMAGE) || key.equals(EntityField.GROUP)) // If we're changing the Image or Group, just do it
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
-        else if (key.equals(EntityField.CAMERA))
-            myObjectManager.flushCameraAssignment(this);
+        else if (key.equals(EntityField.FOCUS))
+            myObjectManager.flushFocusAssignment(this);
         else if (!((EntityField) key).isDefault()) {
             myObjectManager.propagate(myPropertyMap.get(EntityField.LABEL), key, newVal);
         }
@@ -93,7 +84,10 @@ public class AuthoringEntity implements Propertable {
         return myObjectManager.getEvents(this.myPropertyMap.get(EntityField.LABEL));
     }
 
-    public List<String> getInteractionListing(){ return myInteractionListing;}
+    public List<String> getInteractionListing(){ return myInteractionListing;} //TODO remove
 
+    public ObjectManager getObjectManager() {
+        return myObjectManager;
+    }
 
 }

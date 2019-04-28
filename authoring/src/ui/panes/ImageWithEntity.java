@@ -1,7 +1,5 @@
 package ui.panes;
 
-import engine.external.component.HeightComponent;
-import engine.external.component.WidthComponent;
 import javafx.collections.MapChangeListener;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,11 +21,12 @@ public class ImageWithEntity extends ImageView {
     private static final ResourceBundle myResources = ResourceBundle.getBundle("image_with_entity");
     private static final ResourceBundle myGeneralResources = ResourceBundle.getBundle("authoring_general");
 
-    public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {
+    public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {    //closed 2
         super(new Image(s, Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.XSCALE)), Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.YSCALE)), false, false));
         myAuthoringEntity = authoringEntity;
         myAuthoringEntity.getPropertyMap().addListener((MapChangeListener<Enum, String>) change -> {handleChange(change);
             System.out.println("Change observed");});
+        Utility.closeInputStream(s);  //closed 2
     }
 
     //takes in a change and determines which method to call
@@ -53,10 +52,11 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateImage(String imageName){
-        FileInputStream inputStream = Utility.makeFileInputStream(myGeneralResources.getString("images_filepath") + imageName);
+        FileInputStream inputStream = Utility.makeImageAssetInputStream(imageName); //closed 2
         Double width = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         Double height = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         Image image = new Image(inputStream, width, height, false, false);
+        Utility.closeInputStream(inputStream);  //closed 2
         this.setImage(image);
         this.setFitHeight(height);
         this.setFitWidth(width);

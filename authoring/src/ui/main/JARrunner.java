@@ -1,11 +1,12 @@
 package ui.main;
 
+
 import data.external.DatabaseEngine;
 
 public class JARrunner {
 
     public static void main(String[] args){
-        DatabaseEngine.getInstance().open();
+        System.out.println(DatabaseEngine.getInstance().open());
         MainTester.main(args);
     }
 

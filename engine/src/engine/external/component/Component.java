@@ -24,7 +24,7 @@ public abstract class Component<T> implements Serializable {
         return myValue;
     }
 
-    public void resetToOriginal(){
+    public void resetToOriginal() {
         myValue = myOriginalValue;
     }
 }

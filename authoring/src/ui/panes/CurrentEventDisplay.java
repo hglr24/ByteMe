@@ -11,6 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.UIException;
+import ui.manager.LabelManager;
 
 import java.util.*;
 

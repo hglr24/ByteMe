@@ -2,6 +2,7 @@ package engine.external.conditions;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.GroupComponent;
 import engine.external.component.NameComponent;
 
 import java.io.Serializable;
@@ -27,17 +28,19 @@ public class CollisionCondition extends Condition {
      * @param directionalCollidedComponent
      * @param entityType
      */
-    public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType) {
+    public CollisionCondition(Class<? extends Component> directionalCollidedComponent, String entityType,
+                              boolean grouped) {
+        Class<? extends Component> clazz = grouped ? GroupComponent.class : NameComponent.class;
         setPredicate((Predicate<Entity> & Serializable) (entity ->
                 ((Collection<Entity>) entity.getComponent(directionalCollidedComponent).getValue()).stream().anyMatch((Predicate<Entity> & Serializable) entity2 ->
-                        matchNames(entityType, entity2)
+                        matchNames(entityType, entity2, clazz)
                 )));
         myEntity = entityType;
         myDirection = directionalCollidedComponent.getSimpleName();
     }
 
-    private boolean matchNames(String entityType, Entity entity) {
-        return new StringEqualToCondition(NameComponent.class, entityType).getPredicate().test(entity);
+    private boolean matchNames(String entityType, Entity entity, Class<? extends Component> clazz) {
+        return new StringEqualToCondition(clazz, entityType).getPredicate().test(entity);
     }
 
     @Override

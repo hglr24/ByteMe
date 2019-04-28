@@ -20,6 +20,19 @@ import java.util.function.Consumer;
 public abstract class Action<T> {
 
     private Consumer<Entity> myAction;
+    private Class<? extends Component<T>> myComponentClass;
+
+
+    public void checkComponents(Entity entity) {
+        if (!entity.hasComponents(myComponentClass)) {
+            System.out.println("Action adding missing component");
+            try {
+                entity.addComponent(myComponentClass.getConstructor().newInstance());
+            } catch (Exception e) {
+                System.out.println("Could not instantiate new constructor");
+            }
+        }
+    }
 
     /**
      * Sets the value of a component to a new value.
@@ -28,6 +41,7 @@ public abstract class Action<T> {
      * @param componentClass class that specifies the component type
      */
     protected void setAbsoluteAction(T newValue, Class<? extends Component<T>> componentClass) {
+        myComponentClass = componentClass;
         setAction((Consumer<Entity> & Serializable) (entity) -> {
             Component component = entity.getComponent(componentClass);
             component.setValue(newValue);
@@ -50,6 +64,18 @@ public abstract class Action<T> {
      */
     public Consumer<Entity> getAction() {
         return myAction;
+    }
+
+    /**
+     * Set the required class
+     * @param clazz
+     */
+    protected void setMyComponentClass(Class<? extends Component<T>> clazz) {
+        myComponentClass = clazz;
+    }
+
+    protected Class<? extends Component<T>> getMyComponentClass(){
+        return myComponentClass;
     }
 
 }

@@ -8,23 +8,21 @@ import engine.external.conditions.Condition;
 /**
  * @author Dima Fayyad
  */
-public class TopCollisionEvent extends Event {
+public class TopCollisionEvent extends CollisionEvent {
 
-    private String myCollisionWithEntity;
 
-    public TopCollisionEvent(String name, String collideWithEntity) {
-        super(name);
-        myCollisionWithEntity = collideWithEntity;
-
-        makeTopCollisionCondition();
+    public TopCollisionEvent(String collideWithEntity, boolean grouped) {
+        super(collideWithEntity, grouped);
+        makeTopCollisionCondition(grouped);
     }
 
     /**
      * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
      * Adds a condition to the Event that verifies the collision is on top of entity
      */
-    private void makeTopCollisionCondition() {
-        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class, myCollisionWithEntity);
+    private void makeTopCollisionCondition(boolean grouped) {
+        CollisionCondition containsCollidedComponentCondition = new CollisionCondition(TopCollidedComponent.class,
+                getCollisionWithEntity(), grouped);
         super.addConditions(containsCollidedComponentCondition);
     }
 
@@ -49,6 +47,7 @@ public class TopCollisionEvent extends Event {
         }
         super.removeConditions(removeCondition);
     }
+
 
 
 }

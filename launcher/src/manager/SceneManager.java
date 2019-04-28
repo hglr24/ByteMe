@@ -1,34 +1,21 @@
 package manager;
-
-import center.external.CenterView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import page.CreateNewGamePage;
 import page.NewUserPage;
 import page.SplashPage;
-import page.WelcomeUserPage;
-import runner.external.Game;
-import data.external.GameCenterData;
-import ui.main.MainGUI;
 
 public class SceneManager {
     private static final String MY_STYLE = "default_launcher.css";
     private static final double STAGE_WIDTH = 700;
     private static final double STAGE_HEIGHT = 600;
+
     private Scene myScene;
+
     private SplashPage myInitialPage;
-    private WelcomeUserPage myWelcomeUserPage;
-    private CreateNewGamePage myNewGamePage;
     private NewUserPage myNewUserPage;
-    private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomeUserPage;
-    private SwitchToUserOptions switchToNewGamePage = this::goToUserOptions;
-    private SwitchToAuthoring switchToAuthoring = new SwitchToAuthoring() {
-        @Override
-        public void switchScene(GameCenterData myGameData) {
-            goToAuthoring(myGameData);
-        }
-    };
-    private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
+
+    private SwitchToUserPage switchToWelcomeUserPage = this::goToWelcomeUserPage;
+
     private SwitchToUserOptions switchToNewUserPage = this::goToNewUserPage;
     private Stage myStage;
     /**
@@ -46,26 +33,16 @@ public class SceneManager {
         myStage.setScene(myScene);
         myStage.show();
     }
+
     private void makePages(){
-        myWelcomeUserPage = new WelcomeUserPage(switchToNewGamePage,switchToGameCenter);
-        myInitialPage = new SplashPage(switchToWelcomeUserPage,switchToNewUserPage);
-        myNewGamePage = new CreateNewGamePage(switchToAuthoring,switchToGameCenter);
+        myInitialPage = new SplashPage(switchToNewUserPage,switchToWelcomeUserPage);
         myNewUserPage = new NewUserPage(switchToWelcomeUserPage);
     }
+
     private void goToNewUserPage(){ myScene.setRoot(myNewUserPage);}
-    private void goToWelcomeUserPage(){
-        myScene.setRoot(myWelcomeUserPage);
-    }
-    private void goToUserOptions(){
-        myScene.setRoot(myNewGamePage);
-    }
-    private void goToAuthoring(GameCenterData myData){
-        MainGUI myGUI = new MainGUI(new Game(), myData);
-        myGUI.launch();
+    private void goToWelcomeUserPage(String userName){
+        UserManager myLoggedInManager = new UserManager(userName);
+        myLoggedInManager.render(myStage);
     }
 
-    private void goToGameCenter(){
-        CenterView myCenter = new CenterView();
-        myStage.setScene(myCenter.getScene());
-    }
 }

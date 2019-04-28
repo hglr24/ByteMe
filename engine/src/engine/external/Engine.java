@@ -57,6 +57,7 @@ public class Engine {
     public synchronized Collection<Entity> updateState(Collection<KeyCode> inputs){
         for(int i = 0; i<SYSTEM_ORDER_RESOURCES.keySet().size(); i++){
             if(mySystems.get(i)!=null){
+
                 mySystems.get(i).update(myEntities,inputs);
             }
         }
@@ -77,6 +78,14 @@ public class Engine {
      */
     public void removeEntity(Entity e){
         myEntities.remove(e);
+    }
+
+    /**
+     * Expected to be called by AddEntitySystem for adding an Entity to the running game
+     * @param e Entity to be added
+     */
+    public void addEntity(Entity e){
+        myEntities.add(e);
     }
 
     /**
