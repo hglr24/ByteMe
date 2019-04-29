@@ -2,6 +2,8 @@ package ui.panes;
 import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import engine.external.events.Event;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +13,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.UIException;
+import ui.manager.AddKeyCode;
 import ui.manager.LabelManager;
 
 import java.util.*;
@@ -19,17 +22,22 @@ import java.util.*;
     private Event myEvent;
     private Editor myEventRemover;
     private Editor myEventModifier;
+    private AddKeyCode myKeyCodeAdder;
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
     private ResourceBundle myErrorMessage = ResourceBundle.getBundle("error_messages");
+    private ResourceBundle myKeyCodesDisplay = ResourceBundle.getBundle("concrete_keycode");
     private static final String EDIT = "Edit";
     private static final String REMOVE = "Remove";
     private static final String DELIMITER = ".";
     private static final String CSS = "current-events-display";
 
-    CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
+
+
+    CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier, AddKeyCode addKeyCode){
         this.myEvent = myEvent;
         this.myEventRemover = eventRemover;
         this.myEventModifier = eventModifier;
+        this.myKeyCodeAdder = addKeyCode;
         if (invalidEvent(myMap)){
             return;
         }
@@ -92,11 +100,11 @@ import java.util.*;
             removedIndex.add(key.substring(key.indexOf(DELIMITER) + 1));
         }
         myKeyCodesListing.setItems(FXCollections.observableList(removedIndex));
-        myKeyCodesListing.setOnAction(actionEvent -> {
-                myKeyCodesListing.setAccessibleText(myKeyCodesListing.getValue());
-                myEvent.clearInputs();
-                myEvent.addInputs(KeyCode.getKeyCode(myKeyCodesListing.getValue()));
+        myKeyCodesListing.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newValue) -> {
+            myKeyCodesListing.setAccessibleText(newValue);
+            myKeyCodeAdder.refresh(myEvent,KeyCode.getKeyCode(myKeyCodesDisplay.getString(newValue)));
         });
+
 
     }
 }

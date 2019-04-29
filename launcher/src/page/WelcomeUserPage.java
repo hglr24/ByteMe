@@ -22,7 +22,7 @@ public class WelcomeUserPage extends VBox {
         internal.getStyleClass().add(MY_STYLE);
         WelcomeDisplay myDisplay = new WelcomeDisplay(WELCOME_LABEL_KEY,userName);
         internal.getChildren().add(myDisplay);
-        internal.getChildren().add(new UserOptionsDisplay(switchToPageBeforeAuthoring, logout));
+        internal.getChildren().add(new UserOptionsDisplay(switchToPageBeforeAuthoring, switchToLauncher, logout));
         this.getChildren().add(internal);
         LogOutButton logOutButton = new LogOutButton(logout);
         this.getChildren().add(logOutButton);

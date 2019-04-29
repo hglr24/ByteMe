@@ -213,7 +213,7 @@ public class AssetQuerier extends Querier {
     }
 
     public Map<String, InputStream> loadAllSounds(String prefix) throws SQLException {
-        return loadAllAssets(prefix, myLoadAllSoundsStatement, SOUND_NAME_COLUMN, IMAGE_NAME_COLUMN);
+        return loadAllAssets(prefix, myLoadAllSoundsStatement, SOUND_NAME_COLUMN, SOUND_NAME_COLUMN);
     }
 
     public Map<String, InputStream> loadAllImages(String prefix) throws SQLException {
