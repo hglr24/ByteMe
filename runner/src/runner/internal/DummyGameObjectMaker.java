@@ -351,7 +351,7 @@ public class DummyGameObjectMaker {
         Mushroom.addComponent(new XAccelerationComponent(0.0));
         Mushroom.addComponent(new YAccelerationComponent(0.2));
         Mushroom.addComponent(new CollisionComponent(true));
-        SpawnMushroomEvent.addActions(new AddEntityAction(Mushroom));
+        SpawnMushroomEvent.addActions(new AddEntityInstantAction(Mushroom));
         SpawnMushroomEvent.addActions(new SoundAction("mario_theme"));
 
         /**
@@ -374,7 +374,7 @@ public class DummyGameObjectMaker {
         SpawnableBasketball.addComponent(new XAccelerationComponent(0.0));
         SpawnableBasketball.addComponent(new YAccelerationComponent(0.2));
         SpawnableBasketball.addComponent(new CollisionComponent(true));
-        SpawnBasketball.addActions(new AddEntityAction(SpawnableBasketball));
+        SpawnBasketball.addActions(new AddEntityInstantAction(SpawnableBasketball));
 
         /**
          * Event: when the Basketball's timer reaches 0:
@@ -384,7 +384,7 @@ public class DummyGameObjectMaker {
         Event timeEvent = new Event();
         timeEvent.addConditions(new StringEqualToCondition(NameComponent.class, "Basketball"));
         timeEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
-        timeEvent.addActions(new AddEntityAction(Mushroom));
+        timeEvent.addActions(new AddEntityInstantAction(Mushroom));
         timeEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
         /**
@@ -473,7 +473,7 @@ public class DummyGameObjectMaker {
             spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
             spawn.addInputConditions(new InputCondition(KeyCode.Q));
             //spawn.addInputs(KeyCode.Q);
-            spawn.addActions(new AddEntityAction(dummy));
+            spawn.addActions(new AddEntityInstantAction(dummy));
             //spawn.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
             eventlist.add(spawn);
