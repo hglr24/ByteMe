@@ -29,6 +29,7 @@ public abstract class Condition {
             }
         }
     }
+
     protected void setPredicate(Predicate predicate) {
         myPredicate = predicate;
     }
