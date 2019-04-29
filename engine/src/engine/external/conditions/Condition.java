@@ -20,12 +20,12 @@ public abstract class Condition {
 
     public void checkComponents(Entity entity) {
         if (!entity.hasComponents(myComponentClass)) {
-            System.out.println("Condition adding missing component: " + myComponentClass);
+            //System.out.println("Condition adding missing component: " + myComponentClass);
             try {
                 entity.addComponent(myComponentClass.getConstructor().newInstance());
             } catch (Exception e) {
                 //Do nothing
-                System.out.println("Could not instantiate new constructor");
+                //System.out.println("Could not instantiate new constructor");
             }
         }
     }
