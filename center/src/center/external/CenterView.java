@@ -34,7 +34,7 @@ public class CenterView extends Application {
      * @param stage the stage given to start that holds the display
      */
     public void start (Stage stage) {
-        CenterView view = new CenterView("megan");
+        CenterView view = new CenterView("Megan");
         stage.setScene(view.getScene());
         stage.setResizable(false);
         stage.show();
