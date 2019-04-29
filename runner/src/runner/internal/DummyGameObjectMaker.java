@@ -1,6 +1,7 @@
 package runner.internal;
 
 import data.external.DataManager;
+import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
@@ -26,6 +27,7 @@ public class DummyGameObjectMaker {
         public DummyGameObjectMaker(){
                 myGame = new Game();
                 initializeGame(myGame);
+                serializeObject();
         }
 
         private void initializeGame(Game dummyGame) {
@@ -317,8 +319,8 @@ public class DummyGameObjectMaker {
                  */
                 Event levelOver = new Event();
                 levelOver.addInputs(KeyCode.SPACE);
-                levelOver.addActions(new ProgressionAction(true));
-                levelOver.addActions(new NextLevelAction(next));
+                //levelOver.addActions(new ProgressionAction(true));
+                //levelOver.addActions(new NextLevelAction(next));
 
                 /**
                  * Event: When flappy collides with Basketball on the RIGHT:
@@ -326,8 +328,8 @@ public class DummyGameObjectMaker {
                  */
                 RightCollisionEvent rce = new RightCollisionEvent("Basketball", false);
                 rce.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-                rce.addActions(new ProgressionAction(true));
-                rce.addActions(new NextLevelAction(next));
+//                rce.addActions(new ProgressionAction(true));
+//                rce.addActions(new NextLevelAction(next));
 
                 /**
                  * Event: Spawn a new Mushroom when you press I:
@@ -584,6 +586,7 @@ public class DummyGameObjectMaker {
          */
         public void serializeObject(){
                 DataManager dm = new DataManager();
-                dm.saveGameData("game1", myGame);
+                dm.saveGameInfo("game1", "DimaFayyad", new GameCenterData("game1", "FUN with RYAN", "ryan.png", "DimaFayyad"));
+                dm.saveGameData("game1", "DimaFayyad", myGame);
         }
 }

@@ -1,7 +1,5 @@
 package engine.external.conditions;
 
-import engine.external.Entity;
-
 import java.util.function.Predicate;
 
 /**
@@ -13,13 +11,13 @@ import java.util.function.Predicate;
  * @author Feroze Mohideen
  */
 public abstract class Condition {
-    private Predicate<Entity> myPredicate;
+    private Predicate myPredicate;
 
-    protected void setPredicate(Predicate<Entity> predicate) {
+    protected void setPredicate(Predicate predicate) {
         myPredicate = predicate;
     }
 
-    public Predicate<Entity> getPredicate() {
+    public Predicate getPredicate() {
         return myPredicate;
     }
 

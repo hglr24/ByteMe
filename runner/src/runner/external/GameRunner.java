@@ -2,6 +2,7 @@ package runner.external;
 
 import data.external.DataManager;
 import engine.external.Level;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import runner.internal.DummyGameObjectMaker;
 import runner.internal.LevelRunner;
@@ -23,6 +24,7 @@ public class GameRunner {
     private Stage myGameStage;
     private String myGameName;
     private String myAuthorName;
+    private DataManager myDataManager;
 
     /**
      * Constructor for GameRunner
@@ -44,11 +46,12 @@ public class GameRunner {
     private Game loadGameObject(String gameName, String authorName){
 //        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
 //        Game gameMade = dm2.getGame(gameName);
-        DataManager dm = new DataManager();
+        myDataManager = new DataManager();
 //        dm.saveGameData(gameName, authorName,gameMade);
 //        System.out.println("Serialization complete");
+
         try {
-            return (Game) dm.loadGameData(gameName, authorName);
+            return (Game) myDataManager.loadGameData(gameName, authorName);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -70,8 +73,16 @@ public class GameRunner {
         Consumer<Double> goToNext = (level) -> {
             nextLevel(level);
         };
+        Image background;
+        try {
+           background = new Image(myDataManager.loadImage(currentLevel.getBackground()), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+        } catch (Exception e){
+            background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+           // background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+        }
+
         new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage,
-                goToNext, gameToPlay.getLevels().size());
+                goToNext, gameToPlay.getLevels().size(), background);
     }
 
     private void nextLevel(Double level) {
