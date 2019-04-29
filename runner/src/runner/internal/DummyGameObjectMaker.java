@@ -36,34 +36,47 @@ public class DummyGameObjectMaker {
                 Level level1 = new Level();
                 level1.setHeight(myGame.getHeight());
                 level1.setWidth(myGame.getWidth());
-                addDummyEntities(level1, 1.0);
-                addDummyEvents(level1, 2.0);
+                List<Entity> gameObjects = addDummyEntities(level1, 1.0);
+                addDummyEvents(level1, 2.0, gameObjects);
                 dummyGame.addLevel(level1);
 
                 Level level2 = new Level();
                 level2.setHeight(myGame.getHeight());
                 level2.setWidth(myGame.getWidth());
                 addDummyEntities(level2, 2.0);
-                addDummyEvents(level2, 3.0);
+                addDummyEvents(level2, 3.0, gameObjects);
                 dummyGame.addLevel(level2);
 
                 Level level3 = new Level();
                 level3.setHeight(myGame.getHeight());
                 level3.setWidth(myGame.getWidth());
                 addDummyEntities(level3, 3.0);
-                addDummyEvents(level3, 4.0);
+                addDummyEvents(level3, 4.0, gameObjects);
                 dummyGame.addLevel(level3);
 
                 Level level4 = new Level();
                 level4.setHeight(myGame.getHeight());
                 level4.setWidth(myGame.getWidth());
                 addDummyEntities(level4, 4.0);
-                addDummyEvents(level4, 5.0);
+                addDummyEvents(level4, 5.0, gameObjects);
                 dummyGame.addLevel(level4);
 
         }
 
-        private void addDummyEvents(Level level1, Double next) {
+        private void addDummyEvents(Level level1, Double next, List<Entity> gameObjects) {
+
+            for (Entity e: gameObjects) {
+                Event temp = new Event();
+                temp.addConditions(new StringEqualToCondition(NameComponent.class,
+                        (String)e.getComponent(NameComponent.class).getValue()));
+                temp.addConditions(new GreaterThanCondition(ValueComponent.class, 0.0));
+                AssociatedEntityAction updateGlobalScore = new AssociatedEntityAction();
+                updateGlobalScore.setAction(NumericAction.ModifyType.RELATIVE,
+                        100.0, ScoreComponent.class);
+                temp.addActions(updateGlobalScore);
+                temp.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+                level1.addEvent(temp);
+            }
 
                 /**
                  * Event: Press L to decrement flappy's lives by 1
@@ -434,58 +447,121 @@ public class DummyGameObjectMaker {
 //        level1.addEvent(flappyFallsEvent);
 //        level1.addEvent(lifeKeyInputEvent);
 
-        List<Event> spawnEvents = getSpawnEvents(new ArrayList<>(Arrays.asList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0,
-                70.0, 80.0, 90.0)));
+        List<Event> spawnEvents = getSpawnEvents(new ArrayList<>(Arrays.asList(100.0, 200.0, 300.0, 400.0, 500.0, 600.0,
+                700.0, 800.0, 900.0)), gameObjects);
         spawnEvents.forEach(e -> level1.addEvent(e));
 
 
     }
 
-    private List<Event> getSpawnEvents(List<Double> times) {
+    private List<Event> getSpawnEvents(List<Double> times, List<Entity> gameObjects) {
         var r = new Random();
+        var locs = new ArrayList<>(Arrays.asList(100.0, 210.0, 320.0, 430.0, 540.0));
         List<Event> eventlist = new ArrayList<>();
         for (double time: times) {
             Entity dummy = new Entity();
             dummy.addComponent(new SpriteComponent("basketball"));
-            double xpos = (r.nextInt(5) + 1) * 100.0;
+            int index = r.nextInt(5);
+            double xpos = locs.get(index);
             dummy.addComponent(new XPositionComponent(xpos));
             dummy.addComponent(new YPositionComponent(0.0));
             dummy.addComponent(new ZPositionComponent(1.0));
             dummy.addComponent(new WidthComponent(100.0));
             dummy.addComponent(new HeightComponent(100.0));
-            dummy.addComponent(new NameComponent("dummy"+time));
+            String name = getSaltString();
+            dummy.addComponent(new NameComponent(name));
             dummy.addComponent(new XVelocityComponent(0.0));
-            dummy.addComponent(new YVelocityComponent(0.0));
+            dummy.addComponent(new YVelocityComponent(6.0));
             dummy.addComponent(new XAccelerationComponent(0.0));
-            dummy.addComponent(new YAccelerationComponent(0.2));
+            dummy.addComponent(new YAccelerationComponent(0.0));
             //dummy.addComponent(new CollisionComponent(false));
-
-//            BottomCollisionEvent bbOnPlatform = new BottomCollisionEvent("Block", true);
-//            bbOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "dummy"+time));
-//            bbOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,-10.0));
-//            bbOnPlatform.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE,-3.0));
-
 
             Event spawn = new Event();
             spawn.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
             spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
-            spawn.addInputConditions(new InputCondition(KeyCode.Q));
+            //spawn.addInputConditions(new InputCondition(KeyCode.Q));
             //spawn.addInputs(KeyCode.Q);
             spawn.addActions(new AddEntityInstantAction(dummy));
-            //spawn.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
+
+            KeyCode key = null;
+
+            switch (index) {
+                case 0: key = KeyCode.Q;break;
+                case 1: key = KeyCode.W;break;
+                case 2: key = KeyCode.E; break;
+                case 3: key = KeyCode.R;break;
+                case 4: key = KeyCode.T;break;
+            }
+
+            dummy.addComponent(new AssociatedEntityComponent(gameObjects.get(index)));
+            dummy.addComponent(new DestroyComponent(false));
+            dummy.addComponent(new SoundComponent("coin"));
+
+            Event scoreEvent = new Event();
+            scoreEvent.addConditions(new StringEqualToCondition(NameComponent.class,name));
+            scoreEvent.addConditions(new GreaterThanCondition(YPositionComponent.class, 370.0));
+            scoreEvent.addConditions(new LessThanCondition(YPositionComponent.class, 440.0));
+            scoreEvent.addInputConditions(new InputCondition(key));
+            AssociatedEntityAction updateScore = new AssociatedEntityAction();
+            updateScore.setAction(NumericAction.ModifyType.RELATIVE, 100.0, ValueComponent.class);
+            scoreEvent.addActions(updateScore);
+            AssociatedEntityStringAction changeSpriteBack = new AssociatedEntityStringAction();
+            changeSpriteBack.setAction("red_circle.png", SpriteComponent.class);
+            scoreEvent.addActions(new DestroyAction(true));
+            scoreEvent.addActions(changeSpriteBack);
+            scoreEvent.addActions(changeSpriteBack);
+            //scoreEvent.addActions(new SoundAction("coin"));
+
+            Event reallyBackToRed = new Event();
+            reallyBackToRed.addConditions(new StringEqualToCondition(NameComponent.class,
+                    (String)gameObjects.get(index).getComponent(NameComponent.class).getValue()));
+            reallyBackToRed.addInputConditions(new InputCondition(key));
+            reallyBackToRed.addActions(new SpriteAction("red_circle.png"));
+
+            Event changeColorEvent = new Event();
+            changeColorEvent.addConditions(new StringEqualToCondition(NameComponent.class,name));
+            changeColorEvent.addConditions(new GreaterThanCondition(YPositionComponent.class, 370.0));
+            changeColorEvent.addConditions(new LessThanCondition(YPositionComponent.class, 440.0));
+            AssociatedEntityStringAction changeSprite = new AssociatedEntityStringAction();
+            changeSprite.setAction("green_circle.png", SpriteComponent.class);
+            changeColorEvent.addActions(changeSprite);
+
+            Event missedItEvent = new Event();
+            missedItEvent.addConditions(new StringEqualToCondition(NameComponent.class,name));
+            missedItEvent.addConditions(new GreaterThanCondition(YPositionComponent.class, 440.0));
+            AssociatedEntityStringAction changeSpriteBackRed = new AssociatedEntityStringAction();
+            changeSpriteBackRed.setAction("red_circle.png", SpriteComponent.class);
+            missedItEvent.addActions(changeSpriteBackRed);
 
             eventlist.add(spawn);
+            eventlist.add(scoreEvent);
+            eventlist.add(changeColorEvent);
+            eventlist.add(missedItEvent);
+            eventlist.add(reallyBackToRed);
             //eventlist.add(bbOnPlatform);
         }
         Event lastEvent = new Event();
         lastEvent.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
         lastEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
-        lastEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
+        lastEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 1000.0));
         eventlist.add(lastEvent);
         return eventlist;
     }
 
-    private void addDummyEntities(Level level, Double current) {
+    private String getSaltString() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) { // length of the random string.
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+
+    }
+
+    private List<Entity> addDummyEntities(Level level, Double current) {
         /**
          * Define the Entities
          * Note: There needs to be a gameObject for each game
@@ -496,7 +572,7 @@ public class DummyGameObjectMaker {
         gameObject.addComponent(new ScoreComponent(0.0));
         gameObject.addComponent(new LivesComponent(3.0));
         gameObject.addComponent(new NameComponent("game"));
-        gameObject.addComponent(new TimerComponent(100.0));
+        gameObject.addComponent(new TimerComponent(1000.0));
 
         //Create the entities in the level
         Entity Flappy = new Entity();
@@ -580,11 +656,12 @@ public class DummyGameObjectMaker {
         MarioBlock1.addComponent(new ZPositionComponent(0.0));
         MarioBlock1.addComponent(new WidthComponent(100.0));
         MarioBlock1.addComponent(new HeightComponent(100.0));
-        MarioBlock1.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock1.addComponent(new SpriteComponent("red_circle.png"));
         MarioBlock1.addComponent(new CollisionComponent(false));
         MarioBlock1.addComponent(new HealthComponent(100.0));
         MarioBlock1.addComponent(new NameComponent("Block1"));
         MarioBlock1.addComponent(new GroupComponent("Block"));
+        MarioBlock1.addComponent(new ValueComponent(0.0));
 
         //MarioBlock1.addComponent(new WidthComponent(500.0));
 
@@ -593,10 +670,12 @@ public class DummyGameObjectMaker {
         MarioBlock2.addComponent(new ZPositionComponent(0.0));
         MarioBlock2.addComponent(new WidthComponent(100.0));
         MarioBlock2.addComponent(new HeightComponent(100.0));
-        MarioBlock2.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock2.addComponent(new SpriteComponent("red_circle.png"));
         MarioBlock2.addComponent(new CollisionComponent(false));
         MarioBlock2.addComponent(new NameComponent("Block2"));
         MarioBlock2.addComponent(new GroupComponent("Block"));
+        MarioBlock2.addComponent(new ValueComponent(0.0));
+
 
 
         MarioBlock3.addComponent(new XPositionComponent(320.0));
@@ -604,10 +683,12 @@ public class DummyGameObjectMaker {
         MarioBlock3.addComponent(new ZPositionComponent(0.0));
         MarioBlock3.addComponent(new WidthComponent(100.0));
         MarioBlock3.addComponent(new HeightComponent(100.0));
-        MarioBlock3.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock3.addComponent(new SpriteComponent("red_circle.png"));
         MarioBlock3.addComponent(new CollisionComponent(false));
         MarioBlock3.addComponent(new NameComponent("Block3"));
         MarioBlock3.addComponent(new GroupComponent("Block"));
+        MarioBlock3.addComponent(new ValueComponent(0.0));
+
 
 
         MarioBlock4.addComponent(new XPositionComponent(430.0));
@@ -615,10 +696,12 @@ public class DummyGameObjectMaker {
         MarioBlock4.addComponent(new ZPositionComponent(0.0));
         MarioBlock4.addComponent(new WidthComponent(100.0));
         MarioBlock4.addComponent(new HeightComponent(100.0));
-        MarioBlock4.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock4.addComponent(new SpriteComponent("red_circle.png"));
         MarioBlock4.addComponent(new CollisionComponent(false));
         MarioBlock4.addComponent(new NameComponent("Block4"));
         MarioBlock4.addComponent(new GroupComponent("Block"));
+        MarioBlock4.addComponent(new ValueComponent(0.0));
+
 
 
         MarioBlock5.addComponent(new XPositionComponent(540.0));
@@ -626,10 +709,19 @@ public class DummyGameObjectMaker {
         MarioBlock5.addComponent(new ZPositionComponent(0.0));
         MarioBlock5.addComponent(new WidthComponent(100.0));
         MarioBlock5.addComponent(new HeightComponent(100.0));
-        MarioBlock5.addComponent(new SpriteComponent("mario_block.png"));
+        MarioBlock5.addComponent(new SpriteComponent("red_circle.png"));
         MarioBlock5.addComponent(new CollisionComponent(false));
         MarioBlock5.addComponent(new NameComponent("Block5"));
         MarioBlock5.addComponent(new GroupComponent("Block"));
+        MarioBlock5.addComponent(new ValueComponent(0.0));
+
+
+
+        MarioBlock1.addComponent(new AssociatedEntityComponent(gameObject));
+        MarioBlock2.addComponent(new AssociatedEntityComponent(gameObject));
+        MarioBlock3.addComponent(new AssociatedEntityComponent(gameObject));
+        MarioBlock4.addComponent(new AssociatedEntityComponent(gameObject));
+        MarioBlock5.addComponent(new AssociatedEntityComponent(gameObject));
 
 
         //Add the entities to the level
@@ -643,6 +735,8 @@ public class DummyGameObjectMaker {
         level.addEntity(MarioBlock3);
         level.addEntity(MarioBlock4);
         level.addEntity(MarioBlock5);
+
+        return Arrays.asList(MarioBlock1,MarioBlock2,MarioBlock3,MarioBlock4,MarioBlock5);
 
     }
 
@@ -661,10 +755,10 @@ public class DummyGameObjectMaker {
 
     public void serializeObject(){
             DataManager dm = new DataManager();
-            dm.saveGameInfo("holdQlol", "fzero", new GameCenterData("holdQlol", "i swear to god if this doesn't work",
-                    "dima" +
-                    ".png",
+            dm.saveGameInfo("shoot those hoops", "fzero", new GameCenterData("shoot those hoops",
+                    "Press Q W E R and T when the balls go through the rings to score",
+                    "basketball",
                     "fzero"));
-            dm.saveGameData("holdQlol", "fzero", myGame);
+            dm.saveGameData("shoot those hoops", "fzero", myGame);
     }
 }
