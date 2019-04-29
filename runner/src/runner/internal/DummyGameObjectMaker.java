@@ -5,10 +5,7 @@ import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
 import engine.external.component.*;
-import engine.external.conditions.EqualToCondition;
-import engine.external.conditions.GreaterThanCondition;
-import engine.external.conditions.LessThanCondition;
-import engine.external.conditions.StringEqualToCondition;
+import engine.external.conditions.*;
 import engine.external.events.*;
 import javafx.scene.input.KeyCode;
 import runner.external.Game;
@@ -320,7 +317,7 @@ public class DummyGameObjectMaker {
         Event levelOver = new Event();
         levelOver.addInputs(KeyCode.SPACE);
         levelOver.addActions(new ProgressionAction(true));
-        levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+        //levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
         /**
          * Event: When flappy collides with Basketball on the RIGHT:
@@ -329,7 +326,7 @@ public class DummyGameObjectMaker {
         RightCollisionEvent rce = new RightCollisionEvent("Basketball", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         rce.addActions(new ProgressionAction(true));
-        rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
+        //rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
         /**
          * Event: Spawn a new Mushroom when you press I:
@@ -472,6 +469,7 @@ public class DummyGameObjectMaker {
             Event spawn = new Event();
             spawn.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
             spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
+            spawn.addInputConditions(new InputCondition(KeyCode.Q));
             //spawn.addInputs(KeyCode.Q);
             spawn.addActions(new AddEntityAction(dummy));
             //spawn.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
