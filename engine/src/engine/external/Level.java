@@ -40,6 +40,10 @@ public class Level implements Serializable {
         myEntities.add(entity);
     }
 
+    public void clearEntities(){
+        myEntities.clear();
+    }
+
     /**
      * Attaches a new Event object to this Game Level
      * @param event new Event to be added

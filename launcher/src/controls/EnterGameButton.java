@@ -1,10 +1,7 @@
 package controls;
-
-
 import data.external.DataManager;
 import manager.SwitchToUserPage;
 import popup.ErrorPopUp;
-import popup.LoginErrorPopUp;
 public class EnterGameButton extends SceneSwitchButton {
     private static final String STYLE = "default_launcher.css";
     private CredentialValidator userNameAccessor;
@@ -40,7 +37,7 @@ public class EnterGameButton extends SceneSwitchButton {
     }
 
     private void displayInvalidLogin(){
-        ErrorPopUp invalidLogin = new LoginErrorPopUp(ERROR);
+        ErrorPopUp invalidLogin = new ErrorPopUp(ERROR);
         invalidLogin.display();
     }
 

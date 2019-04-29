@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;
 import popup.ErrorPopUp;
-import popup.LoginErrorPopUp;
 
 public class NewUserPage extends VBox {
     private static final String MY_STYLE = "new-user-vbox";
@@ -88,14 +87,14 @@ public class NewUserPage extends VBox {
     private void displayNewUserError(){
         ErrorPopUp differentPasswords;
         if (!equalPassWord()){
-            differentPasswords = new LoginErrorPopUp(DIFFERENT_PASSWORD);
+            differentPasswords = new ErrorPopUp(DIFFERENT_PASSWORD);
         }
         else if (!adequatePassword()){
             System.out.println(passWord.getTextEntered());
-            differentPasswords = new LoginErrorPopUp(INADEQUATE_PASSWORD);
+            differentPasswords = new ErrorPopUp(INADEQUATE_PASSWORD);
         }
         else {
-            differentPasswords = new LoginErrorPopUp(USERNAME_IN_USE);
+            differentPasswords = new ErrorPopUp(USERNAME_IN_USE);
         }
         differentPasswords.display();
     }

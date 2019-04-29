@@ -22,6 +22,7 @@ import frontend.Utilities;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ResourceBundle;
 
 public class GameCard {
@@ -126,7 +127,10 @@ public class GameCard {
             if(myManager.getAverageRating(myGame.getTitle()) == 0) {
                 ratingText = new Text (Utilities.getValue(myLanguageBundle, "ratingDefaultText"));
             } else {
-                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+                double rating = myManager.getAverageRating(myGame.getTitle());
+                DecimalFormat df2 = new DecimalFormat("###.##");
+                rating = Double.valueOf(df2.format(rating));
+                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + rating + Utilities.getValue(myLanguageBundle, "ratingEndText"));
             }
             ratingText.getStyleClass().add(BODY_SELECTOR);
             ratingText.getStyleClass().add(TEXT_SELECTOR + myIndex);

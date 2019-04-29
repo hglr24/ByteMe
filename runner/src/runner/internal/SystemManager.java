@@ -1,10 +1,13 @@
 package runner.internal;
 
+import engine.external.Engine;
+import engine.external.Level;
 import engine.external.component.*;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import runner.external.Game;
 import runner.internal.runnerSystems.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +31,12 @@ public class SystemManager {
     private HeadsUpDisplay myHUD;
     private AudioManager myAudioManger;
     private int myLevelCount;
+    private Engine myEngine;
+    private Level myLevel;
+    private String myUsername;
+    private String myAuthorName;
+    private String myGameName;
+    private Game myGame;
 
     /**
      * Constructor for SystemManager
@@ -46,7 +55,8 @@ public class SystemManager {
      */
     public SystemManager(LevelRunner levelRunner, Group group, Stage stage, Timeline animation,
                          int width, int height, Consumer changer, Scene scene, HeadsUpDisplay hud,
-                         AudioManager audioManager, int numLevels){
+                         AudioManager audioManager, int numLevels, String authorName, String gameName,
+                         String username, Engine engine, Level level, Game game){
         myLevelRunner = levelRunner;
         myGroup = group;
         myStage = stage;
@@ -58,6 +68,12 @@ public class SystemManager {
         myHUD = hud;
         myAudioManger = audioManager;
         myLevelCount = numLevels;
+        myEngine = engine;
+        myLevel = level;
+        myUsername = username;
+        myAuthorName = authorName;
+        myGameName = gameName;
+        myGame = game;
         mySystems = new ArrayList<>();
         addSystems();
     }
@@ -92,6 +108,10 @@ public class SystemManager {
         mySystems.add(new GameOverSystem(components, myLevelRunner,
                 myGroup, myStage, myAnimation, mySceneWidth,
                 mySceneHeight, myLevelChanger, myLevelCount));
+
+        Collection<Class<? extends Component>> components9 = new ArrayList<>();
+        components9.add(SaveComponent.class);
+        mySystems.add(new SavingSystem(components9, myLevelRunner, myEngine, myLevel, myGame, myUsername, myGameName, myAuthorName));
 
         Collection<Class<? extends Component>> components8 = new ArrayList<>();
         components8.add(NextLevelComponent.class);

@@ -11,6 +11,8 @@ public class LogOutButton extends ImageView {
     public LogOutButton(SwitchToUserOptions logOut){
         this.setImage(new Image(IMAGE));
         this.getStyleClass().add(STYLE);
+        this.setLayoutX(0);
+        this.setTranslateY(150);
         this.setOnMouseClicked(mouseEvent -> logOut.switchPage());
     }
 
