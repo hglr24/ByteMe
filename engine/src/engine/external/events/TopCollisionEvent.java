@@ -21,9 +21,9 @@ public class TopCollisionEvent extends CollisionEvent {
     public static CollisionEvent makeTopBounceEvent(String entityName1, String entityName2, Boolean grouped){
         CollisionEvent collisionEvent = new TopCollisionEvent(entityName2, grouped);
         collisionEvent.addConditions(new StringEqualToCondition(NameComponent.class, entityName1));
-        collisionEvent.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
-        collisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,5.0));
-        collisionEvent.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,-10.0));
+        collisionEvent.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, BounceVelocityValue));
+        collisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,XBouncePositionValue));
+        collisionEvent.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,-YBouncePositionValue));
         return collisionEvent;
 }
     /**
