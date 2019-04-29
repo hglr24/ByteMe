@@ -1,6 +1,7 @@
 package runner.internal;
 
 import data.external.DataManager;
+import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.Level;
 import engine.external.actions.*;
@@ -28,6 +29,7 @@ public class DummyGameObjectMaker {
         public DummyGameObjectMaker(){
                 myGame = new Game();
                 initializeGame(myGame);
+                serializeObject();
         }
 
         private void initializeGame(Game dummyGame) {
@@ -513,6 +515,7 @@ public class DummyGameObjectMaker {
         /**
          * Give the Entities their needed Components
          */
+
         //Give Flappy the needed components
         Flappy.addComponent(new NameComponent("flappy"));
         Flappy.addComponent(new SpriteComponent("flappy_bird"));
@@ -659,8 +662,11 @@ public class DummyGameObjectMaker {
     /**
      * Saves dummy game to data base
      */
+
     public void serializeObject(){
-        DataManager dm = new DataManager();
-        dm.saveGameData("game1", myGame);
+            DataManager dm = new DataManager();
+            dm.saveGameInfo("holdQlol", "fzero", new GameCenterData("holdQlol", "hold Q lol", "dima.png",
+                    "fzero"));
+            dm.saveGameData("holdQlol", "fzero", myGame);
     }
 }
