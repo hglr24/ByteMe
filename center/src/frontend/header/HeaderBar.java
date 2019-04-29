@@ -9,16 +9,22 @@
 
 package frontend.header;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import frontend.Utilities;
 import javafx.scene.text.Text;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ResourceBundle;
 
 public class HeaderBar {
+    private static final String SETTINGS_IMAGE_LOCATION = "center/data/settings.png";
     private Pane myHeaderLayout;
     private ResourceBundle myLanguageBundle;
     private String myUsername;
@@ -32,7 +38,7 @@ public class HeaderBar {
      */
     public HeaderBar(String username) {
         myLanguageBundle = ResourceBundle.getBundle("languages/English");
-        myHeaderLayout = new BorderPane();
+        myHeaderLayout = new StackPane();
         myUsername = username;
         initializeLayouts();
     }
@@ -55,8 +61,23 @@ public class HeaderBar {
         welcome.getStyleClass().add(SUBTITLE_SELECTOR);
         BorderPane.setAlignment(welcome, Pos.CENTER);
         titleLayout.setBottom(welcome);
-        headerLayout.getChildren().add(titleLayout);
+        BorderPane settingsPane = new BorderPane();
+        settingsPane.setPadding(new Insets(20));
+        try {
+            ImageView settings = new ImageView(new Image(new FileInputStream(SETTINGS_IMAGE_LOCATION)));
+            settings.setOnMouseClicked(e -> openSettings());
+            settings.setPreserveRatio(true);
+            settings.setFitWidth(50);
+            settingsPane.setRight(settings);
+        } catch (FileNotFoundException e) {
+            // do nothing
+        }
+        headerLayout.getChildren().addAll(titleLayout, settingsPane);
         myHeaderLayout = headerLayout;
+    }
+
+    private void openSettings() {
+
     }
 
 }
