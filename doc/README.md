@@ -24,7 +24,7 @@ Hsingchih Tang
     * Hsingchih Tang: ~100 hours
     * Anna Darwish: 110 hours
     * Harry Ross: 125 hours
-    * Louis Jensen: 
+    * Louis Jensen: 100 hours
     * Megan Phibbons: ~100 hours
     * Ryan Culhane: ~120 hours
     * Carrie: 144 hours
