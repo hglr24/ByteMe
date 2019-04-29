@@ -37,6 +37,7 @@ public class CollisionCondition extends Condition {
                 )));
         myEntity = entityType;
         myDirection = directionalCollidedComponent.getSimpleName();
+        myComponentClass = directionalCollidedComponent;
     }
 
     private boolean matchNames(String entityType, Entity entity, Class<? extends Component> clazz) {

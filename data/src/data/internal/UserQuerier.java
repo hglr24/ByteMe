@@ -157,10 +157,12 @@ public class UserQuerier extends Querier {
     }
 
     public void setProfilePic(String userName, File profilePic) throws SQLException {
+        System.out.println("Called set profile pic");
         try (BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(profilePic))) {
             mySetUserProfilePicStatement.setBinaryStream(1, bufferedInputStream);
             mySetUserProfilePicStatement.setString(2, userName);
             mySetUserProfilePicStatement.execute();
+            System.out.println("Statement executed");
         } catch (IOException e) {
             System.out.println(COULD_NOT_LOAD_IMAGE + e.getMessage());
         }

@@ -14,7 +14,6 @@ import java.util.function.Predicate;
  */
 public class StringEqualToCondition extends Condition {
     private String myComponentName;
-    private Class<? extends Component> myComponentClass;
     private String myValue;
     private static final String DISPLAY = " Is ";
     private static final String COMPONENT = "Component";

@@ -1,5 +1,7 @@
 package engine.external.conditions;
 
+import java.util.Arrays;
+
 /**
  * @author Anna Darwish
  */
@@ -19,12 +21,12 @@ public enum ConditionType {
         ConditionType(String className, Class<?>[] constructorTypes) {
 
         this.className = className;
-        this.classConstructorTypes = constructorTypes;
+        this.classConstructorTypes = constructorTypes.clone();
     }
 
 
     public Class<?>[] getConstructorTypes() {
-        return this.classConstructorTypes;
+        return this.classConstructorTypes.clone();
     }
 
         public String getClassName(){

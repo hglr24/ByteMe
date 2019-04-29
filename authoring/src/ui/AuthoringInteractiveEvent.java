@@ -76,7 +76,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
 
     private void saveConditionalEvent(){
         boolean isGrouped = interactionType.getValue().equals(GROUP);
-        Event interactiveEvent = (Event)Reflection.createInstance(EventType.valueOf(myEventName).getClassName(),interacteeName,isGrouped);
+        Event interactiveEvent = (Event)Reflection.createInstance(EventType.valueOf(myEventName).getClassName(),interacteeName.getValue(),isGrouped);
         //saveInteractee(interactiveEvent);
         interactiveEvent.addConditions(new StringEqualToCondition(NameComponent.class,myEntityName));
         super.saveAction(interactiveEvent);

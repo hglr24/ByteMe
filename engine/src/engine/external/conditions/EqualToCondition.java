@@ -21,6 +21,7 @@ public class EqualToCondition extends Condition {
         setPredicate((Predicate<Entity> & Serializable) entity -> ((Double) entity.getComponent(component).getValue()).equals(value));
         myComponentName = component.getSimpleName();
         myValue = value;
+        myComponentClass = component;
     }
 
     @Override

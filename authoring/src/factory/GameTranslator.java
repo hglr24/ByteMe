@@ -3,9 +3,6 @@ package factory;
 import engine.external.Entity;
 import engine.external.IEventEngine;
 import engine.external.Level;
-import engine.external.actions.Action;
-import engine.external.actions.SoundAction;
-import engine.external.actions.ValueAction;
 import engine.external.component.CameraComponent;
 import engine.external.component.CollisionComponent;
 import engine.external.component.Component;
@@ -13,8 +10,6 @@ import engine.external.component.LivesComponent;
 import engine.external.component.NameComponent;
 import engine.external.component.OpacityComponent;
 import engine.external.component.ScoreComponent;
-import engine.external.component.SoundComponent;
-import engine.external.component.ValueComponent;
 import engine.external.conditions.Condition;
 import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.CollisionEvent;
@@ -124,12 +119,12 @@ public class GameTranslator {
                         entity.addComponent(new CollisionComponent(true));
                 }
             }
-            for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
+            /*for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) { //TODO see if this can stay commented
                 if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
                     basisEntity.addComponent(new SoundComponent(""));
                 if (action.getClass().equals(ValueAction.class) && !basisEntity.hasComponents(ValueComponent.class))
                     basisEntity.addComponent(new ValueComponent(0.0));
-            }
+            }*/
         }
     }
 

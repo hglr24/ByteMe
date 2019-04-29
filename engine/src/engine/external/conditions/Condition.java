@@ -1,5 +1,8 @@
 package engine.external.conditions;
 
+import engine.external.Entity;
+import engine.external.component.Component;
+
 import java.util.function.Predicate;
 
 /**
@@ -12,7 +15,20 @@ import java.util.function.Predicate;
  */
 public abstract class Condition {
     private Predicate myPredicate;
+    protected Class<? extends Component> myComponentClass;
 
+
+    public void checkComponents(Entity entity) {
+        if (!entity.hasComponents(myComponentClass)) {
+            System.out.println("Condition adding missing component: " + myComponentClass);
+            try {
+                entity.addComponent(myComponentClass.getConstructor().newInstance());
+            } catch (Exception e) {
+                //Do nothing
+                System.out.println("Could not instantiate new constructor");
+            }
+        }
+    }
     protected void setPredicate(Predicate predicate) {
         myPredicate = predicate;
     }

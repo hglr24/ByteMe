@@ -25,7 +25,7 @@ public class CurrentEventsPane extends ScrollPane {
         Editor myEditor = this::editCurrentEvent;
         Editor myRemover = this::removeCurrentEvent;
 
-        for (Event event: myEvents) {
+        for (Event event: myEvents) { //TODO workaround: check if null?
             CurrentEventDisplay currEventDisplay = new CurrentEventDisplay(event.getEventInformation(),event,myRemover,
                     myEditor);
             if (currEventDisplay.getChildren().size() != 0) {

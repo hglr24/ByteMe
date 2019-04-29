@@ -1,6 +1,5 @@
 package ui.windows;
 
-import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
@@ -29,11 +28,9 @@ import ui.manager.ObjectManager;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
  * @author Carrie Hunner
@@ -137,11 +134,11 @@ public class CreateNewTypeWindow extends Stage {
 
         FileInputStream fileInputStream = null; //closed
         try {
-            fileInputStream = new FileInputStream("authoring/resources/no_image.png");  //closed
+            fileInputStream = new FileInputStream(GENERAL_RESOURCES.getString("no_image"));  //closed
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        ImageView imageView = new ImageView(new Image(fileInputStream, 50, 50, false, false));  //closed
+        ImageView imageView = new ImageView(new Image(fileInputStream, PICTURE_SIZE, PICTURE_SIZE, false, false));  //closed
         Utility.closeInputStream(fileInputStream);  //closed
         mySelectedImagePane.getChildren().add(imageView);
         myGridPane.add(mySelectedImagePane, 1, myGridPane.getRowCount()-1);
@@ -187,10 +184,18 @@ public class CreateNewTypeWindow extends Stage {
     }
 
     private boolean checkValidInputs() {
-        if(!hasNameInput()) return false;
-        if(!hasNoSpecialCharacters()) return false;
-        if(!isUniqueTypeName()) return false;
-        if(!hasAssetSelected()) return false;
+        if(!hasNameInput()) {
+            return false;
+        }
+        if(!hasNoSpecialCharacters()) {
+            return false;
+        }
+        if(!isUniqueTypeName()) {
+            return false;
+        }
+        if(!hasAssetSelected()) {
+            return false;
+        }
         return true;
     }
 
@@ -284,7 +289,7 @@ public class CreateNewTypeWindow extends Stage {
         titledPane.setText(WINDOW_RESOURCES.getString("Title"));
         VBox contents = new VBox();
         contents.getChildren().addAll(myGridPane, myButtonNode);
-        contents.setSpacing(10.0);
+        contents.setSpacing(GRIDPANE_GAP);
         titledPane.setContent(contents);
         titledPane.setCollapsible(false);
         return titledPane;
