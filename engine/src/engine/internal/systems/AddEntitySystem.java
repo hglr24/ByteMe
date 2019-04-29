@@ -33,7 +33,7 @@ public class AddEntitySystem extends VoogaSystem {
     protected void run() {
         for(Entity entity:this.getEntities()){
             if(entity.hasComponents(SPAWN_ENTITY_COMPONENT_CLASS)){
-                Entity newEntity = ((Entity)entity.getComponent(SpawnEntityComponent.class).getValue()).clone();
+                Entity newEntity = ((Entity)entity.getComponent(SpawnEntityComponent.class).getValue()).copyEntity();
                 myEngine.addEntity(newEntity);
                 entity.removeComponent(SPAWN_ENTITY_COMPONENT_CLASS);
             }
