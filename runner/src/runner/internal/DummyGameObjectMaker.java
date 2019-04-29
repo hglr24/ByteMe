@@ -238,7 +238,7 @@ public class DummyGameObjectMaker {
                 Ghost1Jump.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
                 Ghost1Jump.addInputs(KeyCode.J);
                 Ghost1Jump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-                Ghost1Jump.addActions(new SoundAction("jump"));
+                Ghost1Jump.addActions(new SoundAction("yeet"));
                 Ghost1Jump.addActions((new SpriteAction("ghost.png")));
 
 
@@ -259,7 +259,7 @@ public class DummyGameObjectMaker {
                 //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
                 flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
                 flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
-                flappyJump.addActions(new SoundAction("jump"));
+                flappyJump.addActions(new SoundAction("yeet"));
 
                 /**
                  * Event: Press M to:
@@ -370,7 +370,7 @@ public class DummyGameObjectMaker {
                 SpawnableBasketball.addComponent(new ZPositionComponent(0.0));
                 SpawnableBasketball.addComponent(new WidthComponent(40.0));
                 SpawnableBasketball.addComponent(new HeightComponent(40.0));
-                SpawnableBasketball.addComponent(new SpriteComponent("basketball"));
+                SpawnableBasketball.addComponent(new SpriteComponent("cat.jpg"));
                 SpawnableBasketball.addComponent(new NameComponent("bb"));
                 SpawnableBasketball.addComponent(new XVelocityComponent(-2.0));
                 SpawnableBasketball.addComponent(new YVelocityComponent(0.0));
@@ -511,7 +511,7 @@ public class DummyGameObjectMaker {
                 BasketBall.addComponent(new ZPositionComponent(0.0));
                 BasketBall.addComponent(new WidthComponent(200.0));
                 BasketBall.addComponent(new HeightComponent(80.0));
-                BasketBall.addComponent(new SpriteComponent("basketball"));
+                BasketBall.addComponent(new SpriteComponent("cat.jpg"));
                 BasketBall.addComponent(new NameComponent("Basketball"));
                 BasketBall.addComponent(new TimerComponent(100.0));
                 //basketball has a timer component so that we can define an Event that will make mushrooms respawn everytime basketball's timer hits 0.
@@ -586,7 +586,7 @@ public class DummyGameObjectMaker {
          */
         public void serializeObject(){
                 DataManager dm = new DataManager();
-                dm.saveGameInfo("game1", "DimaFayyad", new GameCenterData("game1", "FUN with RYAN", "ryan.png", "DimaFayyad"));
-                dm.saveGameData("game1", "DimaFayyad", myGame);
+                dm.saveGameInfo("CatRyan", "hsing", new GameCenterData("CatRyan", "FUN with RYAN 3", "cat.jpg", "hsing"));
+                dm.saveGameData("CatRyan", "hsing", myGame);
         }
 }
