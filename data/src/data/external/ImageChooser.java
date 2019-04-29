@@ -32,7 +32,7 @@ public class ImageChooser {
             myDataManager.saveImage(myPrefix + selectedFile.getName(), selectedFile);
             return savedName;
         }
-        return myPrefix;
+        return null;
     }
 
     private void addExtensionsFilter(FileChooser chooser) {
@@ -41,5 +41,4 @@ public class ImageChooser {
             chooser.getExtensionFilters().add(extensionFilter);
         }
     }
-
 }
