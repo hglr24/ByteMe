@@ -1,10 +1,7 @@
 package runner.internal.runnerSystems;
 
 import engine.external.Entity;
-import engine.external.component.Component;
-import engine.external.component.ImageViewComponent;
-import engine.external.component.NameComponent;
-import engine.external.component.TimerComponent;
+import engine.external.component.*;
 import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import runner.internal.LevelRunner;
@@ -42,6 +39,14 @@ public class ImageDisplaySystem extends RunnerSystem {
 
     private void displayImage(Entity entity) {
         ImageView image = (ImageView) entity.getComponent(ImageViewComponent.class).getValue();
+        if (entity.hasComponents(ZPositionComponent.class)) {
+            if (entity.getComponent(ZPositionComponent.class).getValue().equals(1.0)) {
+                image.toFront();
+            }
+            else {
+                image.toBack();
+            }
+        }
         myGroup.getChildren().add(image);
     }
 }

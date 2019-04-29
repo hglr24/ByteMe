@@ -450,7 +450,7 @@ public class DummyGameObjectMaker {
             double xpos = (r.nextInt(5) + 1) * 100.0;
             dummy.addComponent(new XPositionComponent(xpos));
             dummy.addComponent(new YPositionComponent(0.0));
-            dummy.addComponent(new ZPositionComponent(0.0));
+            dummy.addComponent(new ZPositionComponent(1.0));
             dummy.addComponent(new WidthComponent(100.0));
             dummy.addComponent(new HeightComponent(100.0));
             dummy.addComponent(new NameComponent("dummy"+time));
