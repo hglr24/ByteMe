@@ -1,0 +1,11 @@
+<DefaultEntity>
+    <Category>Miscellaneous</Category>
+    <Components>
+        <NameComponent>Moving_Left</NameComponent>
+        <XVelocityComponent>-10.0</XVelocityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
+        <WidthComponent>100.0</WidthComponent>
+        <HeightComponent>50.0</HeightComponent>
+        <YAccelerationComponent>0.0</YAccelerationComponent>
+    </Components>
+</DefaultEntity>

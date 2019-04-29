@@ -9,5 +9,4 @@ public class AddEntityAction extends AddComponentAction {
         setActionWithTimer(entityComponent);
         myComponentClass = SpawnEntityComponent.class;
     }
-
 }

@@ -81,13 +81,16 @@ public class UserCreatedTypesPane extends VBox {
         }
     }
 
-    public void addUserDefinedType(Entity originalEntity,String defaultName){
+    public void addUserDefinedType(Entity originalEntity, String defaultName){
         String label = (String) originalEntity.getComponent(NameComponent.class).getValue();
         String category = myDefaultTypesFactory.getCategory(defaultName);
         myCategoryToList.putIfAbsent(category, new ArrayList<>());
         String imageName = (String) originalEntity.getComponent(SpriteComponent.class).getValue();
         AuthoringEntity originalAuthoringEntity = new AuthoringEntity(originalEntity, myObjectManager);
-        myObjectManager.addEntityType(originalAuthoringEntity, defaultName);
+        if(shouldAddEntity(originalAuthoringEntity)){
+            myObjectManager.addEntityType(originalAuthoringEntity, defaultName);
+            System.out.println("Should add entity? " + shouldAddEntity(originalAuthoringEntity));
+        }
         originalAuthoringEntity.getPropertyMap().put(EntityField.LABEL, label);
         ImageWithEntity imageWithEntity = new ImageWithEntity(Utility.makeImageAssetInputStream(imageName), originalAuthoringEntity); //closed
         UserDefinedTypeSubPane subPane = new UserDefinedTypeSubPane(imageWithEntity, label, originalAuthoringEntity);
@@ -99,6 +102,16 @@ public class UserCreatedTypesPane extends VBox {
         });
         subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
     }
+
+    private boolean shouldAddEntity(AuthoringEntity authoringEntity){
+        for(Map.Entry<AuthoringEntity, String> entry : myObjectManager.getTypeMap().entrySet()){
+            if(authoringEntity.getPropertyMap().get(EntityField.LABEL).equals(entry.getKey().getPropertyMap().get(EntityField.LABEL))){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     private void handleRightClick(ContextMenuEvent contextMenuEvent, UserDefinedTypeSubPane userDefinedTypeSubPane, String category){
         ContextMenu contextMenu = new ContextMenu();

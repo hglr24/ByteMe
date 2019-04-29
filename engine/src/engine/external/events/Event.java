@@ -52,6 +52,9 @@ public class Event implements IEventEngine, IEventAuthoring {
 
 
     private boolean conditionsMet(Entity entity, Collection<KeyCode> inputs) {
+        for(Condition c: conditions){
+            c.checkComponents(entity);
+        }
         try {
             boolean conditiontest =
                     conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));

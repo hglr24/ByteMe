@@ -31,7 +31,7 @@ public class StarBox {
     public void setStars(int index) {
         HBox newStars = new HBox();
         for(Star star : myStars) {
-            if(star.getIndex() <= index) {
+            if(star.getIndex() < index) {
                 star.setSelected(true);
             } else {
                 star.setSelected(false);
@@ -56,7 +56,7 @@ public class StarBox {
     }
 
     private void setUpStar(Star currentStar, HBox stars) {
-        currentStar.getImageDisplay().setOnMouseClicked(e-> setStars(currentStar.getIndex()));
+        currentStar.getImageDisplay().setOnMouseClicked(e-> setStars(currentStar.getIndex() + 1));
         stars.getChildren().add(currentStar.getImageDisplay());
     }
 

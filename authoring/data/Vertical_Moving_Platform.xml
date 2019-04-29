@@ -1,7 +1,7 @@
 <DefaultEntity>
     <Category>Obstacle</Category>
     <Components>
-        <NameComponent>V Moving Platform</NameComponent>
+        <NameComponent>V_Moving_Platform</NameComponent>
         <YAccelerationComponent>0.0</YAccelerationComponent>
         <XAccelerationComponent>0.0</XAccelerationComponent>
         <OpacityComponent>1.0</OpacityComponent>

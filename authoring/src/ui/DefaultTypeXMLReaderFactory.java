@@ -91,6 +91,7 @@ public class DefaultTypeXMLReaderFactory {
      * @return Entity for the desired default name passed in
      */
     public Entity createEntity(String name){
+        System.out.println("Creating: " + name);
         Entity resultEntity = new Entity();
         if(myNameToComponents.containsKey(name)){
             Map<String, String> componentMap = myNameToComponents.get(name);

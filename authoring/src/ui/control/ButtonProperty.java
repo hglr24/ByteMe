@@ -19,7 +19,9 @@ public class ButtonProperty extends Button implements ControlProperty {
     }
 
     @Override
-    public void populateValue(Propertable prop, Enum type, String newVal, LabelManager labels) {}
+    public void populateValue(Propertable prop, Enum type, String newVal, LabelManager labels) {
+        // Do nothing
+    }
 
     /**
      * ButtonProperty action will always open another window of a certain type, passing the propertable object along with it

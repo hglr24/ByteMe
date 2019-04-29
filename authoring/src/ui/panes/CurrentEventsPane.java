@@ -32,7 +32,7 @@ public class CurrentEventsPane extends ScrollPane {
         myRemover = this::removeCurrentEvent;
         myKeyCodeEditor = (eventToModify, keycode) -> addKeyCode(eventToModify,keycode);
 
-        for (Event event: myEvents) {
+        for (Event event: myEvents) { //TODO workaround: check if null?
             CurrentEventDisplay currEventDisplay = new CurrentEventDisplay(event.getEventInformation(),event,myRemover,
                     myEditor, myKeyCodeEditor);
             if (currEventDisplay.getChildren().size() != 0) {

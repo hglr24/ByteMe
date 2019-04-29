@@ -22,16 +22,14 @@ public class InfoEditor extends Stage {
     private GameCenterData myData;
     private TextField myNameField;
     private TextField myDescField;
-    private TextField myFolderField;
     private ImageView myImage;
     private String myNewImage;
 
     private static final int ICON_SIZE = 60;
     private static final String TITLE_FIELD = "Title";
-    private static final String FOLDER_FIELD = "Folder";
     private static final String GAME_DATA_SYNTAX = "game_info_syntax";
     private static final String NO_IMAGE_ICON = "no_image.png";
-    private static final List<String> INFO_LABELS = Arrays.asList("Game Title", "Description", "Output Directory", "Image");
+    private static final List<String> INFO_LABELS = Arrays.asList("Game Title", "Description", "Image");
 
     public InfoEditor(GameCenterData data) {
         this.setResizable(false);
@@ -67,10 +65,6 @@ public class InfoEditor extends Stage {
         myDescField = new TextField();
         myDescField.textProperty().setValue(myData.getDescription());
         contentBox.add(myDescField, 1, 1);
-
-        myFolderField = new TextField();
-        myFolderField.textProperty().setValue(myData.getFolderName());
-        contentBox.add(myFolderField, 1, 2);
     }
 
     private void createImageView(GridPane contentBox) {
@@ -82,7 +76,7 @@ public class InfoEditor extends Stage {
         myImage.setFitWidth(ICON_SIZE);
         myImage.setFitHeight(ICON_SIZE);
         myImage.setOnMouseClicked(event -> openAssetManager());
-        contentBox.add(myImage, 1, 3);
+        contentBox.add(myImage, 1, 2);
     }
 
     private void makeLabels(GridPane gridPane) {
@@ -105,10 +99,6 @@ public class InfoEditor extends Stage {
         ResourceBundle bundle = ResourceBundle.getBundle(GAME_DATA_SYNTAX);
         if (myNameField.getText().matches(bundle.getString(TITLE_FIELD)))
             myData.setTitle(myNameField.getText());
-        else
-            invalid = true;
-        if (myFolderField.getText().matches(bundle.getString(FOLDER_FIELD)))
-            myData.setFolderName(myFolderField.getText());
         else
             invalid = true;
         if (invalid) {
