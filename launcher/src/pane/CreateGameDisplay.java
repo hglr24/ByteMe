@@ -97,8 +97,9 @@ public class CreateGameDisplay extends AnchorPane {
         myGameInfo.getChildren().add(gameName);
         myGameInfo.getChildren().add(gameDescription);
         newGamePreferences.getChildren().add(myGameInfo);
-        AnchorPane.setLeftAnchor(newGamePreferences,100.0 - myGameInfo.getWidth()/2.0);
         newGamePreferences.getChildren().add(mySymbol);
+        newGamePreferences.getStyleClass().add(INNER_BOX_STYLE);
+        AnchorPane.setLeftAnchor(newGamePreferences,100.0 - myGameInfo.getWidth()/2.0);
 
     }
     //game name, game description, image,
@@ -106,7 +107,7 @@ public class CreateGameDisplay extends AnchorPane {
         DataManager dataManager = new DataManager();
         String imageFileName = IMAGE_PREFIX + "_" + gameName.getTextEntered() + "_" + myUserName +"_"+ myFile.getName();
         dataManager.saveImage(imageFileName,myFile);
-        //GameCenterData myData = new GameCenterData(gameName.getTextEntered(),gameDescription.getTextEntered(),imageFileName,myUserName);
+        GameCenterData myData = new GameCenterData(gameName.getTextEntered(),gameDescription.getTextEntered(),imageFileName,myUserName);
 
     }
 

@@ -4,7 +4,6 @@ import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import javafx.scene.input.KeyCode;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 

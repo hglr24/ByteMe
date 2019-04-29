@@ -5,7 +5,6 @@ import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import engine.external.Entity;
 import engine.external.IEventEngine;
-import engine.external.component.NameComponent;
 import javafx.scene.input.KeyCode;
 
 import java.io.Serializable;
@@ -30,7 +29,7 @@ public class Event implements IEventEngine, IEventAuthoring {
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
      */
     public Event() {
-
+        //This is an intentionally empty constructor
     }
 
     //need to make this method take in keycode inputs as well
@@ -86,9 +85,7 @@ public class Event implements IEventEngine, IEventAuthoring {
         addConditions(Arrays.asList(condition));
     }
 
-    public void setConditions(List<Condition> newSetOfConditions) {
-        conditions = newSetOfConditions;
-    }
+    public void setConditions(List<Condition> newSetOfConditions) { conditions = new ArrayList<>(newSetOfConditions); }
 
     public void removeConditions(List<Condition> conditionsToRemove) {
         conditions.removeAll(conditionsToRemove);
@@ -111,9 +108,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     @Override
-    public void setInputs(Set<KeyCode> inputs) {
-        myInputs = inputs;
-    }
+    public void setInputs(Set<KeyCode> inputs) { myInputs = new HashSet<>(inputs); }
 
     @Override
     public void addInputs(Set<KeyCode> inputsToAdd) {

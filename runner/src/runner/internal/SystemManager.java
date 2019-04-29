@@ -79,9 +79,9 @@ public class SystemManager {
         components5.add(ScoreComponent.class);
         mySystems.add(new LivesSystem(components5, myLevelRunner, myHUD));
 
-        Collection<Class<? extends Component>> components6 = new ArrayList<>();
-        components6.add(NextLevelComponent.class);
-        mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD, myLevelCount));
+//        Collection<Class<? extends Component>> components6 = new ArrayList<>();
+//        components6.add(NextLevelComponent.class);
+//        mySystems.add(new LevelSystem(components6, myLevelRunner, myHUD, myLevelCount));
 
         Collection<Class<? extends Component>> components7 = new ArrayList<>();
         components7.add(PlayAudioComponent.class);
@@ -89,10 +89,15 @@ public class SystemManager {
 
         Collection<Class<? extends Component>> components = new ArrayList<>();
         components.add(ProgressionComponent.class);
-        components.add(NextLevelComponent.class);
-        mySystems.add(new ProgressionSystem(components, myLevelRunner,
+        mySystems.add(new GameOverSystem(components, myLevelRunner,
                 myGroup, myStage, myAnimation, mySceneWidth,
                 mySceneHeight, myLevelChanger, myLevelCount));
+
+        Collection<Class<? extends Component>> components8 = new ArrayList<>();
+        components8.add(NextLevelComponent.class);
+        mySystems.add(new NextLevelSystem(components8, myLevelRunner,
+                myGroup, myStage, myAnimation, mySceneWidth,
+                mySceneHeight, myLevelChanger, myLevelCount, myHUD));
     }
 
     /**

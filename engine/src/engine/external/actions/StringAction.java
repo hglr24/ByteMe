@@ -10,7 +10,6 @@ import engine.external.component.Component;
  */
 public abstract class StringAction extends Action<String> {
     private String myNewValue;
-    private Class<? extends Component<String>>  myComponentClass;
     private static final String CHANGE = "Switch ";
     private static final String TO = " to ";
     private static final String COMPONENT = "Component";

@@ -50,13 +50,13 @@ public interface ExternalData {
      * @param authorName     name of the author of the game
      * @param gameInfoObject the game center data object to be serialized and saved
      */
-    void saveGameInfo(String gameName, String authorName, Object gameInfoObject);
+    void saveGameInfo(String gameName, String authorName, GameCenterData gameInfoObject);
 
     /**
-     *
-     * @param gameName
-     * @param authorName
-     * @return
+     * Loads the GameCenterData object associated with the specific gameName and authorName of the game
+     * @param gameName name of the game of the GameCenterData object to load
+     * @param authorName author name that wrote the game
+     * @return a deserialized Game Center Data object for the game specified by gameName and authorName
      */
     GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException;
 
@@ -274,5 +274,22 @@ public interface ExternalData {
      * @throws SQLException
      */
     String getBio(String userName) throws SQLException;
+
+    /**
+     *
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @param score
+     */
+    void saveScore(String userName, String gameName, String authorName, Double score);
+
+    /**
+     *
+     * @param gameName
+     * @param authorName
+     * @return
+     */
+    List<UserScore> loadScores(String gameName, String authorName) throws SQLException;
 
 }

@@ -9,7 +9,6 @@
 
 package frontend.games;
 
-import center.external.CenterView;
 import data.external.DataManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;

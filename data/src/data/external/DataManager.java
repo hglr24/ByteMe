@@ -143,7 +143,7 @@ public class DataManager implements ExternalData {
      * @param gameInfoObject the game center data object to be serialized and saved
      */
     @Override
-    public void saveGameInfo(String gameName, String authorName, Object gameInfoObject) {
+    public void saveGameInfo(String gameName, String authorName, GameCenterData gameInfoObject) {
         String myRawXML = mySerializer.toXML(gameInfoObject);
         try {
             myDatabaseEngine.updateGameEntryInfo(gameName, authorName, myRawXML);
@@ -155,17 +155,6 @@ public class DataManager implements ExternalData {
     @Override
     public GameCenterData loadGameInfo(String gameName, String authorName) throws SQLException {
         return (GameCenterData) mySerializer.fromXML(myDatabaseEngine.loadGameInfo(gameName, authorName));
-    }
-
-    /**
-     * Save the game information (game center data) object using a default author name
-     *
-     * @param gameName       name of the game to be saved
-     * @param gameInfoObject the game center data object to be serialized
-     */
-    @Deprecated
-    public void saveGameInfo(String gameName, Object gameInfoObject) {
-        saveGameInfo(gameName, DEFAULT_AUTHOR, gameInfoObject);
     }
 
     /**
@@ -433,6 +422,37 @@ public class DataManager implements ExternalData {
 
     public void deleteCheckpoints(String userName, String gameName, String authorName) throws SQLException {
         myDatabaseEngine.deleteCheckpoint(userName, gameName, authorName);
+    }
+
+    /**
+     *
+     * @param userName
+     * @param gameName
+     * @param authorName
+     * @param score
+     */
+    @Override
+    public void saveScore(String userName, String gameName, String authorName, Double score) {
+        try {
+            myDatabaseEngine.saveScore(userName, gameName, authorName, score);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // do nothing, sometimes scores get lost
+        }
+    }
+
+    @Override
+    public List<UserScore> loadScores(String gameName, String authorName) throws SQLException {
+        return myDatabaseEngine.loadScores(gameName, authorName);
+    }
+
+    public void removeScores(String userName, String gameName, String authorName) throws SQLException {
+        myDatabaseEngine.removeScores(userName, gameName, authorName);
+    }
+
+    @Deprecated
+    public void saveGameInfo(String gameName, Object gameInfo){
+        // do nothing, just included so it will compile just in case
     }
 
 }

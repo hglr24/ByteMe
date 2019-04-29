@@ -16,13 +16,13 @@ public class WelcomeUserPage extends VBox {
      * @author Anna Darwish
      */
 
-    public WelcomeUserPage(SwitchToUserOptions switchToPageBeforeAuthoring, SwitchToUserOptions switchToLauncher,
-                           String userName, SwitchToUserOptions logout){
+
+    public WelcomeUserPage(SwitchToUserOptions switchToPageBeforeAuthoring, SwitchToUserOptions switchToLauncher, String userName, SwitchToUserOptions logout){
         VBox internal = new VBox();
         internal.getStyleClass().add(MY_STYLE);
         WelcomeDisplay myDisplay = new WelcomeDisplay(WELCOME_LABEL_KEY,userName);
         internal.getChildren().add(myDisplay);
-        internal.getChildren().add(new UserOptionsDisplay(switchToPageBeforeAuthoring, switchToLauncher));
+        internal.getChildren().add(new UserOptionsDisplay(switchToPageBeforeAuthoring, logout));
         this.getChildren().add(internal);
         LogOutButton logOutButton = new LogOutButton(logout);
         this.getChildren().add(logOutButton);

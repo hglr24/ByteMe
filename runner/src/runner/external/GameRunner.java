@@ -30,9 +30,9 @@ public class GameRunner {
      * @param authorName - name of the game's author
      * @throws FileNotFoundException if game is not found
      */
-    public GameRunner(String gameName) throws FileNotFoundException {
+    public GameRunner(String gameName, String authorName, String username) throws FileNotFoundException {
         //TODO Change defualt author to actual author
-        String authorName = "DefaultAuthor";
+        //String authorName = "DefaultAuthor";
         myGame = loadGameObject(gameName, authorName);
         myGameName = gameName;
         myAuthorName = authorName;
@@ -42,21 +42,22 @@ public class GameRunner {
     }
 
     private Game loadGameObject(String gameName, String authorName){
-        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        Game gameMade = dm2.getGame(gameName);
+//        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
+//        Game gameMade = dm2.getGame(gameName);
         DataManager dm = new DataManager();
-        dm.saveGameData(gameName, authorName,gameMade);
-        System.out.println("Serialization complete");
+//        dm.saveGameData(gameName, authorName,gameMade);
+//        System.out.println("Serialization complete");
         try {
             return (Game) dm.loadGameData(gameName, authorName);
         } catch (SQLException e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     private void runLevel(int currentLevelNumber){
         DataManager dm = new DataManager();
-        dm.saveGameData(myGameName, myAuthorName, myGame);
+        //dm.saveGameData(myGameName, myAuthorName, myGame);
         Game gameToPlay;
         try {
             gameToPlay = (Game) dm.loadGameData(myGameName, myAuthorName);

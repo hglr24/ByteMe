@@ -36,6 +36,7 @@ import ui.main.MainGUI;
     private void makePages(){
         myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName,myLogOut);
         myNewGamePage = new CreateNewGamePage(switchToWelcomeUserPage,switchToAuthoring,myUserName,myLogOut);
+
     }
 
     private void goToWelcomePage(){ myScene.setRoot(myWelcomeUserPage);}

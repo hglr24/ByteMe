@@ -17,9 +17,11 @@ public class AssociatedEntityAction extends NumericAction {
     @SuppressWarnings("unchecked")
     @Override
     protected void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
-        super.setAction((Consumer<Entity> & Serializable) (entity) -> {
+        myComponentClass = componentClass;
+
+        super.setAction((Consumer<Entity> & Serializable) entity -> {
             double oldValue =
-                    ((Number)((Entity) entity.getComponent(AssociatedEntityComponent.class)
+                    ((Number) ((Entity) entity.getComponent(AssociatedEntityComponent.class)
                             .getValue())
                             .getComponent(componentClass)
                             .getValue())
@@ -37,7 +39,9 @@ public class AssociatedEntityAction extends NumericAction {
      * @param componentClass
      */
     protected void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        myComponentClass = componentClass;
+
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = ((Entity) entity.getComponent(AssociatedEntityComponent.class)
                     .getValue())
                     .getComponent(componentClass);

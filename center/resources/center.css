@@ -126,3 +126,16 @@
 .ratingpadding {
     -fx-padding: 0 0 20 0;
 }
+
+.borderpadding {
+    -fx-padding: 20;
+}
+
+.gamepageratingbody {
+    -fx-fill: white;
+    -fx-font-size: 18;
+}
+
+.refreshspacing {
+    -fx-padding: 590 15 0 0;
+}

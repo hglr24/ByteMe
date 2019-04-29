@@ -1,7 +1,6 @@
 package popup;
 
 import javafx.scene.control.Alert;
-
 import java.util.ResourceBundle;
 
 public class ErrorPopUp extends Alert {

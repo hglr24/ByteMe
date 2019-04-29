@@ -9,14 +9,16 @@ import engine.external.actions.ValueAction;
 import engine.external.component.CameraComponent;
 import engine.external.component.CollisionComponent;
 import engine.external.component.Component;
+import engine.external.component.LivesComponent;
+import engine.external.component.NameComponent;
 import engine.external.component.OpacityComponent;
+import engine.external.component.ScoreComponent;
 import engine.external.component.SoundComponent;
 import engine.external.component.ValueComponent;
-import engine.external.events.BottomCollisionEvent;
+import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
+import engine.external.events.CollisionEvent;
 import engine.external.events.Event;
-import engine.external.events.LeftCollisionEvent;
-import engine.external.events.RightCollisionEvent;
-import engine.external.events.TopCollisionEvent;
 import javafx.beans.property.ObjectProperty;
 import runner.external.Game;
 import ui.AuthoringEntity;
@@ -60,11 +62,9 @@ public class GameTranslator {
     private Level translateLevel(AuthoringLevel authLevel) throws UIException {
         Level newLevel = new Level();
         boolean mainCharExists = false;
-
         if (authLevel.getEntities().isEmpty()) {
             throw new UIException("All levels must have at least one Entity");
         }
-
         newLevel.setBackground(authLevel.getPropertyMap().get(LevelField.BACKGROUND)); // Level properties!!!
         newLevel.setLabel(authLevel.getPropertyMap().get(LevelField.LABEL));
         newLevel.setMusic(authLevel.getPropertyMap().get(LevelField.MUSIC));
@@ -76,7 +76,10 @@ public class GameTranslator {
             for (Event event : myObjectManager.getEvents(authEntity.getPropertyMap().get(EntityField.LABEL))) // Events!!!
                 newLevel.addEvent(event);
         }
-        for (Entity entity : newLevel.getEntities()) {
+        for (Entity entity : newLevel.getEntities()) { // Additional Components based on Events!!!
+            addAdditionalComponents(entity, newLevel);
+        }
+        for (Entity entity : newLevel.getEntities()) { // Make sure a main character exists in translated level's Entity set
             if (entity.hasComponents(CameraComponent.class)) {
                 mainCharExists = true;
                 break;
@@ -85,7 +88,6 @@ public class GameTranslator {
         if (!mainCharExists) {
             throw new UIException("One Entity per Level must be selected as Focus");
         }
-
         return newLevel;
     }
 
@@ -96,10 +98,10 @@ public class GameTranslator {
             if (authEntity.getPropertyMap().containsKey(field) && !field.equals(EntityField.VISIBLE) && !field.equals(EntityField.FOCUS) && !field.equals(EntityField.EVENTS)) {
                 addComponent(field, basisEntity, authEntity);
             }
-            else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // main character found
+            else if (field.equals(EntityField.FOCUS) && Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.FOCUS))) { // Main character found
                 basisEntity.addComponent(new CameraComponent(true));
-                //basisEntity.addComponent(new LivesComponent(3.0)); //TODO
-                //basisEntity.addComponent(new ScoreComponent(0.0));
+                basisEntity.addComponent(new LivesComponent(3.0));
+                basisEntity.addComponent(new ScoreComponent(0.0));
             }
             else if (field.equals(EntityField.VISIBLE)) {
                 if (Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.VISIBLE)))
@@ -108,27 +110,27 @@ public class GameTranslator {
                     basisEntity.addComponent(new OpacityComponent(0.0));
             }
         }
+        return basisEntity;
+    }
 
+    private void addAdditionalComponents(Entity basisEntity, Level newLevel) {
         //TODO group events, group collision events?
-        for (AuthoringLevel authLevel : myObjectManager.getLevels()) {
-            for (AuthoringEntity entity : authLevel.getEntities()) {
-                for (Event event : myObjectManager.getEvents(entity.getPropertyMap().get(EntityField.LABEL))) {
-                    if (event.getClass().equals(BottomCollisionEvent.class) || event.getClass().equals(LeftCollisionEvent.class) ||
-                            event.getClass().equals(RightCollisionEvent.class) || event.getClass().equals(TopCollisionEvent.class)) {
-                        basisEntity.addComponent(new CollisionComponent(true));
-
-                        // TODO add collisioncomponent to other actor
-                    }
-                    for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
-                        if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
-                            basisEntity.addComponent(new SoundComponent(""));
-                        if (action.getClass().equals(ValueAction.class) && !basisEntity.hasComponents(ValueComponent.class))
-                            basisEntity.addComponent(new ValueComponent(0.0));
-                    }
+        for (Event event : myObjectManager.getEvents((String) basisEntity.getComponent(NameComponent.class).getValue())) { // Cycle through each Entity for its Events in OM
+            if (CollisionEvent.class.isAssignableFrom(event.getClass())) {
+                basisEntity.addComponent(new CollisionComponent(true)); // Add CollisionComponent to the Entities that need it
+                String otherEntityLabel = ((CollisionEvent) event).getCollisionWithEntity();
+                for (Entity entity : newLevel.getEntities()) {                  // Add CollisionComponent to other actor
+                    if (entity.getComponent(NameComponent.class).getValue().equals(otherEntityLabel) && !entity.hasComponents(CollisionComponent.class))
+                        entity.addComponent(new CollisionComponent(true));
                 }
             }
+            for (Action action : (List<Action>) event.getEventInformation().get(Action.class)) {
+                if (action.getClass().equals(SoundAction.class) && !basisEntity.hasComponents(SoundComponent.class))
+                    basisEntity.addComponent(new SoundComponent(""));
+                if (action.getClass().equals(ValueAction.class) && !basisEntity.hasComponents(ValueComponent.class))
+                    basisEntity.addComponent(new ValueComponent(0.0));
+            }
         }
-        return basisEntity;
     }
 
     private void addComponent(EntityField field, Entity basisEntity, AuthoringEntity authEntity) {
@@ -160,7 +162,7 @@ public class GameTranslator {
         }
     }
 
-    public void populateObjectManager(Game game, ObjectProperty<Propertable> currentLevel) {
+    public void populateObjectManager(Game game, ObjectProperty<Propertable> currentLevel) throws UIException {
         for (Entity type : game.getUserCreatedTypes().keySet()) {
             AuthoringEntity newType = new AuthoringEntity(type, myObjectManager);
             myObjectManager.addEntityType(newType, game.getUserCreatedTypes().get(type));
@@ -174,16 +176,36 @@ public class GameTranslator {
             myObjectManager.addLevel(newLevel);
             currentLevel.setValue(newLevel);
 
-            for (Entity entity : level.getEntities()) {
-                AuthoringEntity newAuthEntity = new AuthoringEntity(entity, myObjectManager);
-                myObjectManager.addEntityInstance(newAuthEntity);
-                if (newAuthEntity.getPropertyMap().get(EntityField.GROUP) != null) { // Add Group label as found in Entities
-                    myObjectManager.getLabelManager().addLabel(EntityField.GROUP,
-                            newAuthEntity.getPropertyMap().get(EntityField.GROUP));
+            loadEntities(level);
+            loadEvents(level);
+        }
+    }
+
+    private void loadEntities(Level level) {
+        for (Entity entity : level.getEntities()) {
+            AuthoringEntity newAuthEntity = new AuthoringEntity(entity, myObjectManager);
+            myObjectManager.addEntityInstance(newAuthEntity);
+            if (newAuthEntity.getPropertyMap().get(EntityField.GROUP) != null) { // Add Group label as found in Entities
+                myObjectManager.getLabelManager().addLabel(EntityField.GROUP,
+                        newAuthEntity.getPropertyMap().get(EntityField.GROUP));
+            }
+        }
+    }
+
+    private void loadEvents(Level level) throws UIException {
+        for (IEventEngine event : level.getEvents()) {
+            boolean noName = true;
+            for(Condition c : (List<Condition>) ((Event) event).getEventInformation().get(Condition.class)) {
+                if (c.getClass().equals(StringEqualToCondition.class) && ((StringEqualToCondition) c).getComponentClass().equals(NameComponent.class)) {
+                    String entityType = ((StringEqualToCondition) c).getValue(); // Guaranteed to be associated with NameComponent
+                    if (!myObjectManager.getEvents(entityType).contains(event))
+                        myObjectManager.getEvents(entityType).add((Event) event);
+                    noName = false;
+                    break;
                 }
             }
-            for (IEventEngine event : level.getEvents()) {
-                //TODO beeeeeg todo
+            if (noName) {
+                throw new UIException("No Entity type associated with one or more Event(s)");
             }
         }
     }

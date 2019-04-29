@@ -1,7 +1,6 @@
 package ui.windows;
 
 import data.external.GameCenterData;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,11 +15,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import ui.ErrorBox;
 import ui.Propertable;
-import ui.Utility;
 import ui.TreeNode;
+import ui.Utility;
 import ui.manager.ObjectManager;
 
 import java.io.File;
@@ -51,7 +49,6 @@ abstract public class AssetManager extends Stage {
     protected String mySelectedAssetName;
     private TabPane myTabPane;
     private VBox myOuterVBox;
-    private ScrollPane myScrollPane;
     protected ObjectManager myObjectManager;
     protected Propertable myPropertable;
     private static final String SELECT_BUTTONS = "SelectButtons";
@@ -88,31 +85,17 @@ abstract public class AssetManager extends Stage {
         initializeVariables();
         initializeSubClassVariables();
         initializeStage();
-        this.setOnShown(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent windowEvent) {
-                fillExtensionSet();
-                populateTabs();
-                createButtonPane();
-                setUpOuterPanes();
-            }
+        this.setOnShown(windowEvent -> {
+            handleOnShown();
         });
     }
 
-
-    public AssetManager(String assetFolderPath, String titleKey, String extensionKey, ObjectManager objectManager){
-        this(assetFolderPath, titleKey, extensionKey);
-        myObjectManager = objectManager;
-        GameCenterData gameCenterData = myObjectManager.getGameCenterData();
-        mySavingPrefix = gameCenterData.getTitle() + gameCenterData.getAuthorName();
+    private void handleOnShown() {
+        fillExtensionSet();
+        populateTabs();
+        createButtonPane();
+        setUpOuterPanes();
     }
-
-    public AssetManager(String assetFolderPath, String titleKey, String extensionKey,Propertable propertable){
-        this(assetFolderPath, titleKey, extensionKey);
-        myPropertable = propertable;
-    }
-
-
 
     private void setUpOuterPanes() {
         myOuterVBox.getChildren().add(myTabPane);
@@ -249,7 +232,6 @@ abstract public class AssetManager extends Stage {
         myButtonHBox = new HBox();
         myButtonHBox.setMinHeight(50);
         myTabPane = new TabPane();
-        myScrollPane = new ScrollPane();
     }
 
     private void initializeStage(){
@@ -287,8 +269,11 @@ abstract public class AssetManager extends Stage {
 
     private void saveAsset(File selectedFile){
         try {
-
-            File dest = new File(myAssetFolderPath + mySavingPrefix + selectedFile.getName()); //any location
+            GameCenterData gameCenterData = myObjectManager.getGameCenterData();
+            String gameName = gameCenterData.getTitle();
+            String authorName = gameCenterData.getAuthorName();
+            String prefix = SEPARATOR_RESOURCES.getString("userUploaded") + gameName + authorName;
+            File dest = new File(myAssetFolderPath + prefix + selectedFile.getName()); //any location
             Files.copy(selectedFile.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING);
             System.out.println("Asset saved");
         } catch (Exception e) {

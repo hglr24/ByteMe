@@ -1,6 +1,7 @@
 package runner.internal.runnerSystems;
 
 import engine.external.Entity;
+import engine.external.component.AudioComponent;
 import engine.external.component.Component;
 import engine.external.component.PlayAudioComponent;
 import runner.internal.AudioManager;
@@ -31,7 +32,7 @@ public class SoundSystem extends RunnerSystem {
     @Override
     public void run() {
         for (Entity entity : this.getEntities()) {
-            if (entity.hasComponents(PlayAudioComponent.class) && (Boolean) getComponentValue(PlayAudioComponent.class, entity)) {
+            if (entity.hasComponents(PlayAudioComponent.class) && (Boolean) getComponentValue(PlayAudioComponent.class, entity) && entity.hasComponents(AudioComponent.class)) {
                 playSound(entity);
             }
         }

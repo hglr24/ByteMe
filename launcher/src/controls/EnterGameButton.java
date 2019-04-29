@@ -1,10 +1,7 @@
 package controls;
-
-
 import data.external.DataManager;
 import manager.SwitchToUserPage;
 import popup.ErrorPopUp;
-
 public class EnterGameButton extends SceneSwitchButton {
     private static final String STYLE = "default_launcher.css";
     private CredentialValidator userNameAccessor;

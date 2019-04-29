@@ -1,5 +1,7 @@
 package data.external;
 
+import java.util.Arrays;
+
 public class GameRating {
     private String myUsername;
     private String myGameName;
@@ -39,11 +41,8 @@ public class GameRating {
     public boolean equals(Object obj) {
         if (obj instanceof GameRating) {
             GameRating other = (GameRating) obj;
-            return myUsername.equals(other.myUsername) &&
-                    myAuthorName.equals(other.myAuthorName) &&
-                    myComment.equals(other.myComment) &&
-                    myGameName.equals(other.myGameName) &&
-                    myNumberOfStars == other.myNumberOfStars;
+            Boolean[] conditions = {myUsername.equals(other.myUsername), myAuthorName.equals(other.myAuthorName), myComment.equals(other.myComment), myGameName.equals(other.myGameName), myNumberOfStars == other.myNumberOfStars};
+            return Arrays.stream(conditions).allMatch(val -> Boolean.TRUE.equals(val));
         }
         return false;
     }

@@ -1,15 +1,13 @@
 package engine.external;
 
 import engine.external.component.Component;
-import engine.external.component.ImageViewComponent;
-import engine.external.component.SpriteComponent;
 import engine.external.component.WidthComponent;
-import javafx.scene.image.Image;
 
-import java.io.*;
-import java.lang.reflect.Constructor;
-import java.sql.SQLOutput;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Lucas Liu
@@ -31,8 +29,7 @@ public class Entity implements Serializable {
         myComponents = new HashMap<>();
     }
 
-    @Override
-    public Entity clone() {
+    public Entity copyEntity() {
         Entity newEntity = new Entity();
         for (Component c: this.myComponents.values()) {
             try {
@@ -44,8 +41,8 @@ public class Entity implements Serializable {
                 }
             }
             catch (Exception e) {
-                //TODO
-                System.out.println("Unable to clone this entity");
+                //Do nothing
+                System.out.println("Unable to copyEntity this entity");
             }
         }
         return newEntity;
@@ -78,8 +75,9 @@ public class Entity implements Serializable {
      * @author Anna
      */
     public void printMyComponents(){
-        for (Component<?> c: myComponents.values())
+        for (Component<?> c: myComponents.values()) {
             System.out.println(c.getValue());
+        }
     }
 
     /**

@@ -41,14 +41,13 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
  * @author Harry Ross
+ * @author Carrie Hunner
  */
 public class MainGUI {
 
@@ -152,7 +151,7 @@ public class MainGUI {
         else {
             userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
         }
-        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myGameData);
+        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myObjectManager);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
         userCreatedTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
@@ -223,13 +222,13 @@ public class MainGUI {
     private void openGame() {
         String authorName = "";
         DataManager dataManager = new DataManager();
-        try {
+        /*try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
             myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
             //myGameData = null; //TODO
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
-        }
+        }*/
 
         GameTranslator translator = new GameTranslator(myObjectManager);
         try {
@@ -237,7 +236,7 @@ public class MainGUI {
             MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
             newWorkspace.launch();
         } catch (Exception e) {
-
+            //TODO
         }
     }
 
@@ -248,7 +247,12 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
 
-        translator.populateObjectManager(myLoadedGame, myCurrentLevel);
+        try {
+            translator.populateObjectManager(myLoadedGame, myCurrentLevel);
+        } catch (UIException e) {
+            ErrorBox error = new ErrorBox("Load Error", e.getMessage());
+            error.display();
+        }
 
         // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
@@ -343,7 +347,7 @@ public class MainGUI {
     }
 
     private void loadAllAssets(){
-        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        String prefix = SAVING_ASSETS_RESOURCES.getString("userUploaded") + myGameData.getTitle() + myGameData.getAuthorName();
         try {
             Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
             Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);

@@ -7,6 +7,7 @@ public class AddEntityAction extends AddComponentAction {
     public AddEntityAction(Entity entity){
         SpawnEntityComponent entityComponent = new SpawnEntityComponent(entity);
         setActionWithTimer(entityComponent);
+        myComponentClass = SpawnEntityComponent.class;
     }
 
 }
