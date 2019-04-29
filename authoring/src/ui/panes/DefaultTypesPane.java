@@ -1,10 +1,12 @@
 package ui.panes;
 
+import data.external.GameCenterData;
 import engine.external.Entity;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import ui.DefaultTypeXMLReaderFactory;
+import ui.manager.ObjectManager;
 import ui.windows.CreateNewTypeWindow;
 
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class DefaultTypesPane extends VBox{
     private ResourceBundle myResources;
     private UserCreatedTypesPane myUserCreatedTypesPane;
     private DefaultTypeXMLReaderFactory myDefaultTypesFactory;
+    private ObjectManager myObjectManager;
 
     private static final String RESOURCE = "default_entity_type";
     private static final String TITLE_KEY = "DefaultTitle";
@@ -28,11 +31,12 @@ public class DefaultTypesPane extends VBox{
     /**
      * Creates a new page to display the default types
      */
-    public DefaultTypesPane(UserCreatedTypesPane userCreatedTypesPane)     {
+    public DefaultTypesPane(UserCreatedTypesPane userCreatedTypesPane, ObjectManager objectManager)     {
         myResources = ResourceBundle.getBundle(RESOURCE);
         myEntityMenu = new EntityMenu(myResources.getString(TITLE_KEY));
         myUserCreatedTypesPane = userCreatedTypesPane;
         myDefaultTypesFactory = new DefaultTypeXMLReaderFactory();
+        myObjectManager = objectManager;
         populateEntityMenu();
         this.getChildren().add(myEntityMenu);
     }
@@ -50,7 +54,6 @@ public class DefaultTypesPane extends VBox{
             myEntityMenu.addDropDown(category);
             myEntityMenu.setDropDown(category, labelsList);
         }
-
     }
 
 
@@ -58,7 +61,7 @@ public class DefaultTypesPane extends VBox{
         VBox pane = new VBox(label);
         pane.setFillWidth(true);
         pane.setOnMouseClicked(mouseEvent -> {
-            CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName);
+            CreateNewTypeWindow createNewTypeWindow = new CreateNewTypeWindow(defaultName, myObjectManager);
             createNewTypeWindow.showAndWait();
             Entity entity = createNewTypeWindow.getUserCreatedEntity();
             if(entity != null){

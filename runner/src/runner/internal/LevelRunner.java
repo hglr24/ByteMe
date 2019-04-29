@@ -8,6 +8,7 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
@@ -46,6 +47,8 @@ public class LevelRunner {
     private Rectangle myHudBackground;
     private int myLevelCount;
     private AudioManager myAudioManager;
+    private Image myBackground;
+    private ImageView myImageViewBackgroud;
 
     /**
      * Constructor for level runner
@@ -56,7 +59,7 @@ public class LevelRunner {
      * @param playNext - consumer to change levels
      * @param numLevels - total number of levels in the current game
      */
-    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels){
+    public LevelRunner(Level level, int width, int height, Stage stage, Consumer playNext, int numLevels, Image image){
         myLevelCount = numLevels;
         mySceneWidth = width;
         mySceneHeight = height;
@@ -67,6 +70,7 @@ public class LevelRunner {
         myAudioManager = new AudioManager(5);
         myLevelChanger = playNext;
         myAnimation = new Timeline();
+        myBackground = image;
         buildStage(stage);
         startAnimation();
         addButtonsAndHUD();
@@ -95,7 +99,9 @@ public class LevelRunner {
         myStage.setResizable(false);
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
-        myScene.setFill(Color.BEIGE);
+        myImageViewBackgroud = new ImageView(myBackground);
+        myGroup.getChildren().addAll(myImageViewBackgroud);
+        //myScene.setFill(Color.BEIGE);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
         myScene.getStylesheets().add("runnerStyle.css");
@@ -126,7 +132,7 @@ public class LevelRunner {
     }
 
     private void updateGUI(){
-        myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground);
+        myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground, myImageViewBackgroud);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
         }

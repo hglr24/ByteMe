@@ -194,5 +194,77 @@
 
 .new-user-vbox {
     -fx-alignment: center;
+    -fx-spacing: 20;
+}
+
+.dialog-pane {
+    -fx-border-color: #303030;
+    -fx-background-color: #404040;
+}
+
+.dialog-pane .content {
+    -fx-padding: 10;
+    -fx-background-color: #404040;
+    -fx-font-size: 12;
+    -fx-font-weight: normal;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #404040;
+}
+
+.login-hbox {
+    -fx-translate-y: 80;
+    -fx-spacing: 100;
+    -fx-alignment: center
+ }
+
+.login-vbox {
+    -fx-spacing: 20;
+}
+.tight-vbox {
+    -fx-spacing: 5;
+}
+
+.back-button {
+    -fx-alignment: left;
+}
+
+.log-out {
+
+}
+
+.authoring-page {
+    -fx-alignment: center
+}
+
+.authoring-page .inner-hbox {
+    -fx-alignment: center;
     -fx-spacing: 40;
+}
+
+.authoring-page .inner-vbox {
+    -fx-alignment: center;
+    -fx-spacing: 40;
+}
+
+
+.authoring-page .label{
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
+}
+
+.bigger-title {
+    -fx-spacing: 50;
+}
+
+.bigger-title .label{
+    -fx-font-family: Verdana;
+    -fx-font-weight: bold;
+    -fx-font-size: 40;
+    -fx-text-alignment: center;
+    -fx-text-fill: white;
 }

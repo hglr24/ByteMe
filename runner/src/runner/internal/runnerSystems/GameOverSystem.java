@@ -8,16 +8,16 @@ import javafx.animation.Animation;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import runner.GameBeatenScreen;
+import runner.internal.GameBeatenScreen;
 import runner.internal.LevelRunner;
 import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
- * System that checks if the level is over and updates accordingly
+ * System that checks if the game is over and updates accordingly
  * @author Louis Jensen
  */
-public class ProgressionSystem extends RunnerSystem {
+public class GameOverSystem extends RunnerSystem {
     private Group myGroup;
     private Stage myStage;
     private Animation myAnimation;
@@ -38,9 +38,9 @@ public class ProgressionSystem extends RunnerSystem {
      * @param consumer - allows the system to change level
      * @param numLevels - total number of levels in the game
      */
-    public ProgressionSystem (Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
-                              Group group, Stage stage, Animation animation, int width, int height,
-                              Consumer consumer, int numLevels) {
+    public GameOverSystem(Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
+                          Group group, Stage stage, Animation animation, int width, int height,
+                          Consumer consumer, int numLevels) {
         super(requiredComponents, levelRunner);
         myGroup = group;
         myStage = stage;
@@ -57,7 +57,8 @@ public class ProgressionSystem extends RunnerSystem {
     @Override
     public void run() {
         for(Entity entity:this.getEntities()){
-            if(entity.hasComponents(ProgressionComponent.class)&&(Boolean) getComponentValue(ProgressionComponent.class,entity)){
+            System.out.println("RunningGAMEOVERsystem");
+            if(entity.hasComponents(ProgressionComponent.class)){
                 progressIfNecessary(entity);
                 break;
             }
@@ -65,21 +66,21 @@ public class ProgressionSystem extends RunnerSystem {
     }
 
     private void progressIfNecessary(Entity entity){
-        System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
-        System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
-        Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
-        if(nextLevel.intValue() > myLevelCount){
+//        System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
+//        System.out.println(entity.getComponent(ProgressionComponent.class).getValue());
+//        Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
+//        if(nextLevel.intValue() > myLevelCount){
             myAnimation.stop();
-            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX()).getNode());
-        } else {
-            endLevel(nextLevel);
-        }
+            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX(), (Boolean) entity.getComponent(ProgressionComponent.class).getValue()).getNode());
+//        } else {
+//            endLevel(nextLevel);
+//        }
     }
-
-    private void endLevel(Double levelToProgressTo) {
-        myGroup.getChildren().clear();
-        myAnimation.stop();
-        myStage.setScene(new Scene(new Group(), myWidth, myHeight));
-        myLevelChanger.accept(levelToProgressTo);
-    }
+//
+//    private void endLevel(Double levelToProgressTo) {
+//        myGroup.getChildren().clear();
+//        myAnimation.stop();
+//        myStage.setScene(new Scene(new Group(), myWidth, myHeight));
+//        myLevelChanger.accept(levelToProgressTo);
+//    }
 }

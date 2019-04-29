@@ -8,10 +8,10 @@ package engine.external.component;
  */
 public class PlayAudioComponent extends Component<Boolean> {
     private final static boolean DEFAULT = false;
-    public PlayAudioComponent(){
-        super(DEFAULT);
-    }
     public PlayAudioComponent(Boolean play){
         super(play);
+    }
+    public PlayAudioComponent(){
+        super(DEFAULT);
     }
 }

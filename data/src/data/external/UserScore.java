@@ -20,7 +20,7 @@ public class UserScore implements Comparable<UserScore> {
 
     @Override
     public int compareTo(UserScore o) {
-        return myScore.compareTo(o.myScore);
+        return -myScore.compareTo(o.myScore);
     }
 
     @Override

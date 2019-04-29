@@ -1,10 +1,9 @@
 package engine.external.events;
 
-import engine.external.actions.Action;
-import engine.external.conditions.CollisionCondition;
-import engine.external.conditions.Condition;
-
 public abstract class CollisionEvent extends Event{
+    public static final double BounceVelocityValue = 2.0;
+    public static final double XBouncePositionValue = 5.0;
+    public static final double YBouncePositionValue = 10.0;
     private String myCollisionWithEntity;
     private boolean myGrouped;
 

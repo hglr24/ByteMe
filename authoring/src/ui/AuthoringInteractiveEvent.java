@@ -77,22 +77,22 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     private void saveConditionalEvent(){
         boolean isGrouped = interactionType.getValue().equals(GROUP);
         Event interactiveEvent = (Event)Reflection.createInstance(EventType.valueOf(myEventName).getClassName(),interacteeName,isGrouped);
-        saveInteractee(interactiveEvent);
+        //saveInteractee(interactiveEvent);
         interactiveEvent.addConditions(new StringEqualToCondition(NameComponent.class,myEntityName));
         super.saveAction(interactiveEvent);
         super.saveEvent(interactiveEvent,myRefresher,myEntityEvents);
     }
 
     private void saveInteractee(Event event){
-        try {
-            String className = INTERACTEE_PREFIX + interactionType.getValue() + COMPONENT_KEY;
-            Class<? extends Component> componentClass = (Class<? extends Component>)Class.forName(className);
-            Condition interacteeCondition = new StringEqualToCondition(componentClass, interacteeName.getValue());
-            event.addConditions(interacteeCondition);
-        }
-        catch(Exception e){
-            UIException invalidInteractee = new UIException(myErrors.getString(this.getClass().getSimpleName()));
-            invalidInteractee.displayUIException();
-        }
+//        try {
+//            String className = INTERACTEE_PREFIX + interactionType.getValue() + COMPONENT_KEY;
+//            Class<? extends Component> componentClass = (Class<? extends Component>)Class.forName(className);
+//            Condition interacteeCondition = new StringEqualToCondition(componentClass, interacteeName.getValue());
+//            event.addConditions(interacteeCondition);
+//        }
+//        catch(Exception e){
+//            UIException invalidInteractee = new UIException(myErrors.getString(this.getClass().getSimpleName()));
+//            invalidInteractee.displayUIException();
+//        }
     }
 }

@@ -3,11 +3,13 @@ package ui.panes;
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import ui.AuthoringEntity;
 import ui.DefaultTypeXMLReaderFactory;
 import ui.EntityField;
@@ -16,6 +18,7 @@ import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +62,6 @@ public class UserCreatedTypesPane extends VBox {
      */
     public UserCreatedTypesPane(ObjectManager objectManager, Map<Entity, String> previouslyDefinedTypesMap){
         this(objectManager);
-        System.out.println("Map Size: " + previouslyDefinedTypesMap.size());
         for(Map.Entry<Entity, String> entry : previouslyDefinedTypesMap.entrySet()){
             addUserDefinedType(entry.getKey(), entry.getValue());
         }
@@ -72,6 +74,7 @@ public class UserCreatedTypesPane extends VBox {
     public AuthoringEntity getDraggedAuthoringEntity(){
         return  myDraggedAuthoringEntity;
     }
+
     private void populateCategories() {
         for(String s : myDefaultTypesFactory.getCategories()){
             myEntityMenu.addDropDown(s);
@@ -95,7 +98,6 @@ public class UserCreatedTypesPane extends VBox {
             Utility.setupDragAndDropImage(imageWithEntity);
         });
         subPane.setOnContextMenuRequested(contextMenuEvent -> handleRightClick(contextMenuEvent, subPane, category));
-
     }
 
     private void handleRightClick(ContextMenuEvent contextMenuEvent, UserDefinedTypeSubPane userDefinedTypeSubPane, String category){

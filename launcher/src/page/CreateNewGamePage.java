@@ -1,5 +1,8 @@
 package page;
 
+import controls.BackButton;
+import controls.LogOutButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import manager.SwitchToAuthoring;
 import manager.SwitchToUserOptions;
@@ -7,7 +10,7 @@ import manager.SwitchToUserPage;
 import pane.CreateGameDisplay;
 import pane.WelcomeDisplay;
 
-public class CreateNewGamePage extends VBox {
+public class CreateNewGamePage extends BorderPane {
     private static final String MY_STYLE = "default_launcher.css";
     private static final String CREATE_KEY = "create_game";
     /**
@@ -16,9 +19,9 @@ public class CreateNewGamePage extends VBox {
      * go there instead
      * @author Anna Darwish
      */
-    public CreateNewGamePage(String userName){
-        this.getStyleClass().add(MY_STYLE);
-        this.getChildren().add(new WelcomeDisplay(CREATE_KEY));
-        //this.getChildren().add(new CreateGameDisplay(mySwitchScene,switcher));
+    public CreateNewGamePage(SwitchToUserOptions backToPlayOrCreate,SwitchToAuthoring goToAuthoring, String userName, SwitchToUserOptions logout){
+        this.setTop(new BackButton(backToPlayOrCreate));
+        this.setCenter(new CreateGameDisplay(goToAuthoring, userName));
+        this.setBottom(new LogOutButton(logout));
     }
 }

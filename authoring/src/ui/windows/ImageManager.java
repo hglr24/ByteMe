@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -11,6 +12,7 @@ import ui.EntityField;
 import ui.LevelField;
 import ui.Propertable;
 import ui.Utility;
+import ui.manager.ObjectManager;
 import ui.panes.AssetImageSubPane;
 
 import java.io.File;
@@ -27,20 +29,27 @@ import java.util.Map;
  */
 public class ImageManager extends AssetManager {
     private ImageView mySelectedImageView;
-    private Propertable myProp;
     private static final String EXTENSION_KEY = "AcceptableImageExtensions";
     private static final String TITLE_KEY = "ImagesTitle";
     private static final String ASSET_IMAGE_FOLDER_PATH = GENERAL_RESOURCES.getString("images_filepath");
     private Map<Pane, FlowPane> myMap;
 
-    /**
-     * This default Constructor is needed when the user is choosing an image for
-     * a new type before the entity actually needs to be made and kept track of
-     */
+
     public ImageManager(){
         super(ASSET_IMAGE_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
         mySelectedImageView = null;
-        myProp = null;
+        myPropertable = null;
+        myObjectManager = null;
+    }
+
+    /**
+     * This default Constructor is needed when the user is choosing an image
+     * The object manager provides the gamename and authorname
+     * @param objectManager has all of the game info/objects
+     */
+    public ImageManager(ObjectManager objectManager){
+        this();
+        myObjectManager = objectManager;
     }
 
     /**
@@ -50,8 +59,10 @@ public class ImageManager extends AssetManager {
      */
     public ImageManager(Propertable prop){
         this();
-        myProp = prop;
+        myPropertable = prop;
     }
+
+
 
     /**
      * Gets the ImageView associated with the selected image
@@ -76,7 +87,8 @@ public class ImageManager extends AssetManager {
 
     private AssetImageSubPane createSubPane(File temp) {
         ImageView imageView = createImageView(temp);
-        AssetImageSubPane subPane = new AssetImageSubPane(temp.getName().split("\\.")[0], imageView);
+        String name = extractDisplayName(temp.getName());
+        AssetImageSubPane subPane = new AssetImageSubPane(name, imageView);
         subPane.setOnMouseClicked(mouseEvent -> {
             mySelectedAssetName = temp.getName();
             mySelectedImageView = imageView;
@@ -126,11 +138,11 @@ public class ImageManager extends AssetManager {
     @Override
     protected void handleApply() {
         if(!mySelectedAssetName.equals("")){
-            if(myProp != null && myProp.getPropertyMap().containsKey(EntityField.IMAGE)){
-                myProp.getPropertyMap().put(EntityField.IMAGE, mySelectedAssetName);
+            if(myPropertable != null && myPropertable.getPropertyMap().containsKey(EntityField.IMAGE)){
+                myPropertable.getPropertyMap().put(EntityField.IMAGE, mySelectedAssetName);
             }
-            else if(myProp != null && myProp.getPropertyMap().containsKey(LevelField.BACKGROUND)){
-                myProp.getPropertyMap().put(LevelField.BACKGROUND, mySelectedAssetName);
+            else if(myPropertable != null && myPropertable.getPropertyMap().containsKey(LevelField.BACKGROUND)){
+                myPropertable.getPropertyMap().put(LevelField.BACKGROUND, mySelectedAssetName);
             }
             this.close();
         }

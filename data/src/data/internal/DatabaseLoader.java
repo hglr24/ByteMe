@@ -32,26 +32,20 @@ public class DatabaseLoader {
 //        System.out.println();
 //        createUsers();
 //        setProfPic("Megan", "Images/megan_prof_pic.png");
-//        setBio("ICouldAlwaysEat", "You can just press control+alt+any random letter and IntelliJ will make something " +
-//                "good happen to your code");
-//        setBio("gamez_n_gainz", "Mind yo modules");
-//        setBio("DimaFayyad", "Relatable content");
-//        setBio("MeganPHibbones", "Hey! My name is Megan, follow me on LinkedIn!");
-//        setBio("fzero", "I'm just trying to be a Prime Citizen");
-//        setBio("carrie", "Hey Megan *dramatic pause* want to play smash?");
-//        setBio("harry", "If you need help with CSS, my office hours are 4-6...am");
-//        setBio("hsing", "If you want to get an A take 270 but if you are actually trying to learn something take a different class");
-//        setBio("louis", "Hey! My name is Megan, follow me on LinkedIn!");
-//        setBio("michaelzhang", "It's time");
-//        setBio("ryryculhane", "Hey! My name is Megan, follow me on LinkedIn!");
-//        setBio("Megan", "Hey! My name is Megan, follow me on LinkedIn!");
-//        loadImage();
-//        loadScores();
-        try {
-            loadRatings();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        setBio("ICouldAlwaysEat", "You can just press control+alt+any random letter and IntelliJ will make something " +
+                "good happen to your code");
+        setBio("gamez_n_gainz", "Mind yo modules");
+        setBio("DimaFayyad", "Relatable content");
+        setBio("MeganPHibbones", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("fzero", "I'm just trying to be a Prime Citizen");
+        setBio("carrie", "Hey Megan *dramatic pause* want to play smash?");
+        setBio("harry", "If you need help with CSS, my office hours are 4-6...am");
+        setBio("hsing", "If you want to get an A take 270 but if you are actually trying to learn something take a different class");
+        setBio("louis", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("michaelzhang", "It's time");
+        setBio("ryryculhane", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("Megan", "Hey! My name is Megan, follow me on LinkedIn!");
+
         DatabaseEngine.getInstance().close();
     }
 
@@ -78,7 +72,7 @@ public class DatabaseLoader {
         }
     }
 
-    private static void createUsers() {
+    private static void createUsers(){
         createUser("ICouldAlwaysEat", "OrNotEat");
         createUser("gamez_n_gainz", "bruh");
         createUser("DimaFayyad", "cs725)@5wt3");
@@ -93,7 +87,7 @@ public class DatabaseLoader {
         createUser("Megan", "password");
     }
 
-    private static void validateUsers() {
+    private static void validateUsers(){
         DataManager dm = new DataManager();
         System.out.println(dm.validateUser("Ryan", "testPassword"));
         System.out.println(dm.validateUser("Ryan", "wrongPassword"));

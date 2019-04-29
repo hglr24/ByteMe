@@ -13,14 +13,17 @@ import ui.main.MainGUI;
     private CreateNewGamePage myNewGamePage;
     private WelcomeUserPage myWelcomeUserPage;
 
+    private SwitchToUserOptions myLogOut;
+    private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomePage;
     private SwitchToUserOptions switchToCreatePage = this::goToCreatePage;
-    private SwitchToUserPage switchToGameCenter = this::goToGameCenter;
+    private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
     private SwitchToAuthoring switchToAuthoring = this::goToAuthoring;
 
     private String myUserName;
     private Scene myScene;
 
-    UserManager(String userName){
+    UserManager(SwitchToUserOptions logOut, String userName){
+        myLogOut = logOut;
         myUserName = userName;
 
     }
@@ -31,9 +34,12 @@ import ui.main.MainGUI;
     }
 
     private void makePages(){
-        myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName);
-        myNewGamePage = new CreateNewGamePage(myUserName);
+        myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName,myLogOut);
+        myNewGamePage = new CreateNewGamePage(switchToWelcomeUserPage,switchToAuthoring,myUserName,myLogOut);
+
     }
+
+    private void goToWelcomePage(){ myScene.setRoot(myWelcomeUserPage);}
 
     private void goToCreatePage(){
         myScene.setRoot(myNewGamePage);
@@ -44,8 +50,8 @@ import ui.main.MainGUI;
         myGUI.launch();
     }
 
-    private void goToGameCenter(String userName){
-        CenterView myCenter = new CenterView(userName);
+    private void goToGameCenter(){
+        CenterView myCenter = new CenterView(myUserName);
         Stage gameCenterStage = new Stage();
         gameCenterStage.setScene(myCenter.getScene());
         gameCenterStage.show();

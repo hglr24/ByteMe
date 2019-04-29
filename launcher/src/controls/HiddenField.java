@@ -25,7 +25,7 @@ public class HiddenField extends PasswordField {
             this.setText(DEFAULT);
         }
     }
-    private String getTextEntered(){
+    public String getTextEntered(){
         return (this.getText());
     }
 

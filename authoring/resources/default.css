@@ -166,6 +166,28 @@
 .context-menu .label {
     -fx-font-weight: normal;
     -fx-font-size: 12;
+    -fx-alignment: center;
+}
+
+.tab    {
+    -fx-background-color: #303030;
+    -fx-pref-width: 100;
+    -fx-border-radius: 50;
+    -fx-collapsible: false;
+}
+
+
+
+.tab-label {
+    -fx-font-family: Verdana;
+    -fx-font-weight: normal;
+    -fx-font-size: 12;
+    -fx-text-fill: white;
+    -fx-alignment: center;
+}
+
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: #505050;
 }
 
 
@@ -181,10 +203,11 @@
 }
 
 .asset-manager {
-    -fx-pref-height: 225;
+    -fx-pref-height: 350;
     -fx-pref-width: 400;
-    -fx-max-height: 225;
+    -fx-max-height: 350;
     -fx-max-width: 400;
+    -fx-background-color: #505050;
 }
 
 .asset-manager-labels  {
@@ -193,6 +216,10 @@
     -fx-font-size: 10;
     -fx-text-alignment: center;
     -fx-text-fill: white;
+}
+
+.asset-manager-hbox {
+    -fx-background-color: #303030
 }
 
 .dialog-window {
@@ -258,10 +285,6 @@
     -fx-font-weight: normal;
     -fx-font-size: 14;
     -fx-text-fill: #aaaaaa;
-}
-
-.entity-menu {
-
 }
 
 .entity-menu .titled-pane {

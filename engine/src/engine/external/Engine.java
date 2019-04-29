@@ -35,6 +35,8 @@ public class Engine {
     private SaveGameSystem mySaveGameSystem;
     private Collection<Entity> myEntities;
     private Collection<IEventEngine> myEvents;
+    private Double myLevelHeight;
+    private Double myLevelWidth;
 
     /**
      * An Engine is expected be initialized by a GameRunner and accepts a Level object containing all data (Entities and
@@ -45,6 +47,8 @@ public class Engine {
     public Engine(Level level){
         myEntities = level.getEntities();
         myEvents = level.getEvents();
+        myLevelHeight = level.getHeight();
+        myLevelWidth = level.getWidth();
         initSystemMap();
     }
 
@@ -98,6 +102,19 @@ public class Engine {
         return mySaveGameSystem.getSavedEntities(entityCopy,componentsToRemove);
     }
 
+    /**
+     * @return room height of the current game level
+     */
+    public double getRoomHeight(){
+        return myLevelHeight;
+    }
+
+    /**
+     * @return room width of the current game level
+     */
+    public double getRoomWidth(){
+        return myLevelWidth;
+    }
 
     private void initSystemMap() {
         mySystems = new HashMap<>();
@@ -124,20 +141,22 @@ public class Engine {
                 }
             }
         }catch(ReflectionException e){
+            e.printStackTrace();
             throw new ReflectionException(e,"Cannot create System "+systemName+" for Engine");
         }
     }
 
-    public Collection<Class<? extends Component>> retrieveComponentClazz(ResourceBundle resource, String systemName) throws ReflectionException {
+    private Collection<Class<? extends Component>> retrieveComponentClazz(ResourceBundle resource, String systemName) throws ReflectionException {
         String[] componentArr = resource.getString(systemName).split(",");
         ArrayList<Class<? extends Component>> componentList = new ArrayList<>();
         for(String component:componentArr){
             try {
                 componentList.add((Class) Class.forName(COMPONENTS_PACKAGE_PATH + component));
             }catch (ClassNotFoundException e){
-                throw new ReflectionException("Required Component "+COMPONENTS_PACKAGE_PATH+component+" nor found");
+                throw new ReflectionException(e,"Required Component "+COMPONENTS_PACKAGE_PATH+component+" nor found");
             }
         }
         return componentList;
     }
+
 }

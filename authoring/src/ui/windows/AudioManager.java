@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -11,10 +12,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import ui.LevelField;
 import ui.Propertable;
+import ui.manager.ObjectManager;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class AudioManager extends AssetManager {
 
@@ -22,17 +25,24 @@ public class AudioManager extends AssetManager {
     private static final String TITLE_KEY = "AudioTitle";
     private static final String ASSET_AUDIO_FOLDER_PATH = GENERAL_RESOURCES.getString("audio_filepath");
     private Map<Pane, ListView> myMap;
-    private Propertable myPropertable;
 
     public AudioManager(){
         super(ASSET_AUDIO_FOLDER_PATH, TITLE_KEY, EXTENSION_KEY);
+        myObjectManager = null;
+        myPropertable = null;
     }
 
     public AudioManager(Propertable propertable){
         this();
-        System.out.println("Made it to constructor");
         myPropertable = propertable;
     }
+
+    public AudioManager(ObjectManager objectManager){
+        this();
+        myObjectManager = objectManager;
+    }
+
+
 
     /**
      * Method that adds a file to the manager
@@ -42,7 +52,7 @@ public class AudioManager extends AssetManager {
     protected void addAsset(File file, Pane pane) {
         myMap.putIfAbsent(pane, createAndFormatNewListView());
         ListView listView = myMap.get(pane);
-        Label text = new Label(file.getName());
+        Label text = new Label(extractDisplayName(file.getName()));
         VBox vBox = new VBox(text);
         vBox.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){

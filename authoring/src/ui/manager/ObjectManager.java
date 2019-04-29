@@ -72,6 +72,9 @@ public class ObjectManager {
 
     public void removeAllLevels() {
         myLevels = FXCollections.observableArrayList(new ArrayList<>());
+        for (int i = 0; i < myLabelManager.getLabels(LevelField.LABEL).size(); i++) {
+            myLabelManager.removeLabel(LevelField.LABEL, myLabelManager.getLabels(LevelField.LABEL).get(i));
+        }
     }
 
     /**
@@ -81,7 +84,7 @@ public class ObjectManager {
     public void addEntityType(AuthoringEntity entity, String backingString) {
         myEntities.add(entity);
         myLabelManager.addLabel(EntityField.LABEL, entity.getPropertyMap().get(EntityField.LABEL));
-        myEventMap.put(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
+        myEventMap.putIfAbsent(entity.getPropertyMap().get(EntityField.LABEL), FXCollections.observableArrayList(new ArrayList<>()));
         myEntityTypeMap.put(entity, backingString);
     }
 

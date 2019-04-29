@@ -64,6 +64,15 @@ public class AudioManager {
     }
 
     /**
+     * Stop all MediaPlayers, whether they are playing or not
+     */
+    public void stopAllSound(){
+        for(MediaPlayer mp: myMediaPlayers){
+            mp.stop();
+        }
+    }
+
+    /**
      * Assigns a MediaPlayer to one thread to play the sound
      * @param mp the MediaPlayer to play
      */
@@ -78,6 +87,7 @@ public class AudioManager {
      * Stop all threads and media players.
      */
     public void shutdown() {
+        stopAllSound();
         soundPool.shutdown();
     }
 

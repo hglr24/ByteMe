@@ -12,6 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 
 public class UserProfileDisplay extends Popup {
@@ -27,6 +29,7 @@ public class UserProfileDisplay extends Popup {
     private static final String BODY_SELECTOR = "bodyfont";
     private static final String TITLE_SELECTOR = "titlefont";
     private static final String SUBTITLE_SELECTOR = "subtitlefont";
+    private static final String DEFAULT_IMAGE_LOCATION = "center/data/profile_information/images/default.png";
 
     public UserProfileDisplay(GameCenterData data, DataManager manager, String currentUser, String username) {
         super(manager);
@@ -54,7 +57,17 @@ public class UserProfileDisplay extends Popup {
             bio.getStyleClass().add(BODY_SELECTOR);
             titleAndSubtitle.setTop(username);
             titleAndSubtitle.setCenter(bio);
-            ImageView userImage = new ImageView(new Image(myManager.getProfilePic(myUsername)));
+            ImageView userImage;
+            try {
+                userImage = new ImageView(new Image(myManager.getProfilePic(myUsername)));
+            } catch(Exception e) {
+                try {
+                    userImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
+                } catch (FileNotFoundException e1) {
+                    myDisplay.setTop(titleAndSubtitle);
+                    return;
+                }
+            }
             userImage.setPreserveRatio(true);
             userImage.setFitWidth(IMAGE_WIDTH);
             BorderPane imagePane = new BorderPane();

@@ -15,16 +15,19 @@ public class WelcomeDisplay extends HBox {
      * @author Anna Darwish
      */
     public WelcomeDisplay(String welcomeLabel){
-        this.getStylesheets().add(MY_STYLE);
         Label myLabel = new TitleLabel(welcomeLabel);
         this.getChildren().add(myLabel);
-        this.setAlignment(Pos.CENTER);
+        setStyle();
     }
     public WelcomeDisplay(String welcomeLabel,String modifyLabel){
-        this.getStylesheets().add(MY_STYLE);
         Label myLabel = new TitleLabel(welcomeLabel,modifyLabel);
         this.getChildren().add(myLabel);
+        setStyle();
+    }
+    private void setStyle(){
+        this.getStylesheets().add(MY_STYLE);
         this.setAlignment(Pos.CENTER);
     }
+
 
 }

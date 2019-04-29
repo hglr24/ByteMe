@@ -72,6 +72,8 @@ public class Viewer extends ScrollPane {
         setupDragDropped();
         setRoomSize();
         updateGridLines();
+        if (authoringLevel.getPropertyMap().get(LevelField.BACKGROUND) != null)
+            updateBackground(authoringLevel.getPropertyMap().get(LevelField.BACKGROUND));
     }
 
     private void addAllExistingEntities(AuthoringLevel authoringLevel) {
@@ -79,18 +81,18 @@ public class Viewer extends ScrollPane {
         authoringEntityList.sort(new Comparator<AuthoringEntity>() {
             @Override
             public int compare(AuthoringEntity o1, AuthoringEntity o2) {
-                int firstZ = Integer.parseInt(o1.getPropertyMap().get(EntityField.Z));
-                int secondZ = Integer.parseInt(o2.getPropertyMap().get(EntityField.Z));
+                int firstZ = (int) Double.parseDouble(o1.getPropertyMap().get(EntityField.Z));
+                int secondZ = (int) Double.parseDouble(o2.getPropertyMap().get(EntityField.Z));
                 return firstZ - secondZ;
             }
         });
 
         for(AuthoringEntity authoringEntity : authoringEntityList){
-            String imagePath = GENERAL_RESOURCES.getString("images_filepath/") + authoringEntity.getPropertyMap().get(EntityField.IMAGE);
+            String imagePath = authoringEntity.getPropertyMap().get(EntityField.IMAGE);
             FileInputStream fileInputStream = Utility.makeImageAssetInputStream(imagePath); //closed
             ImageWithEntity imageWithEntity = new ImageWithEntity(fileInputStream, authoringEntity); //closed
             Utility.closeInputStream(fileInputStream); //closed
-            myStackPane.getChildren().add(imageWithEntity);
+            addImage(imageWithEntity);
         }
     }
 
@@ -100,7 +102,6 @@ public class Viewer extends ScrollPane {
         myBackgroundFileName = null;
         myStackPane.getChildren().addListener((ListChangeListener<Node>) change -> updateZField());
         myStackPane.getChildren().add(myLinesPane);
-        System.out.println("List size with just lines: " + myStackPane.getChildren().size());
         myStackPane.setAlignment(Pos.TOP_LEFT);
         this.setContent(myStackPane);
         this.getStyleClass().add(SHEET);
@@ -110,11 +111,8 @@ public class Viewer extends ScrollPane {
         int objectCount = 0;
         for(Node node : myStackPane.getChildren()){
             if(node instanceof ImageWithEntity){
-                System.out.println("*************");
                 AuthoringEntity authoringEntity = ((ImageWithEntity) node).getAuthoringEntity();
                 authoringEntity.getPropertyMap().put(EntityField.Z, Integer.toString(objectCount));
-                System.out.println("Label: " + authoringEntity.getPropertyMap().get(EntityField.LABEL) + "\t Index: " + authoringEntity.getPropertyMap().get(EntityField.Z));
-                System.out.println("****************");
                 objectCount++;
             }
         }
@@ -275,8 +273,8 @@ public class Viewer extends ScrollPane {
     private void setRoomSize(){
         myRoomHeight = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.HEIGHT));
         myRoomWidth = Double.parseDouble(myAuthoringLevel.getPropertyMap().get(LevelField.WIDTH));
-        this.setPrefHeight(myRoomHeight);
-        this.setPrefWidth(myRoomWidth);
+        this.setPrefHeight(Integer.MAX_VALUE);
+        this.setPrefWidth(Integer.MAX_VALUE);
         myStackPane.setMinWidth(myRoomWidth);
         myStackPane.setMinHeight(myRoomHeight);
     }

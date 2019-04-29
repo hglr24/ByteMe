@@ -4,12 +4,12 @@ import engine.external.Entity;
 import engine.external.Engine;
 import engine.external.component.*;
 
-
 import javafx.scene.input.KeyCode;
 import voogasalad.util.reflection.Reflection;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * @author Hsingchih Tang
@@ -18,38 +18,41 @@ import java.util.Collection;
  * such that its relevant Component values could be managed by the System
  */
 public abstract class VoogaSystem {
-    protected final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
-    protected final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
-    protected final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
-    protected final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
-    protected final Class<? extends Component> X_ACCELERATION_COMPONENT_CLASS = XAccelerationComponent.class;
-    protected final Class<? extends Component> Y_ACCELERATION_COMPONENT_CLASS = YAccelerationComponent.class;
-    protected final Class<? extends Component> BOTTOM_COLLIDED_COMPONENT_CLASS = BottomCollidedComponent.class;
-    protected final Class<? extends Component> TOP_COLLIDED_COMPONENT_CLASS = TopCollidedComponent.class;
-    protected final Class<? extends Component> RIGHT_COLLIDED_COMPONENT_CLASS = RightCollidedComponent.class;
-    protected final Class<? extends Component> LEFT_COLLIDED_COMPONENT_CLASS = LeftCollidedComponent.class;
-    protected final Class<? extends Component> ANY_COLLIDED_COMPONENT_CLASS = AnyCollidedComponent.class;
-    protected final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
-    protected final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
-    protected final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
-    protected final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
-    protected final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
-    protected final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
-    protected final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
-    protected final Class<? extends Component> AUDIO_COMPONENT_CLASS = AudioComponent.class;
-    protected final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
-    protected final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
-    protected final Class<? extends Component> SPAWN_ENTITY_COMPONENT_CLASS = SpawnEntityComponent.class;
-    protected final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
-    protected final Class<? extends Component> PLAY_AUDIO_COMPONENT_CLASS = PlayAudioComponent.class;
+    static final Class<? extends Component> X_POSITION_COMPONENT_CLASS = XPositionComponent.class;
+    static final Class<? extends Component> Y_POSITION_COMPONENT_CLASS = YPositionComponent.class;
+    static final Class<? extends Component> X_VELOCITY_COMPONENT_CLASS = XVelocityComponent.class;
+    static final Class<? extends Component> Y_VELOCITY_COMPONENT_CLASS = YVelocityComponent.class;
+    static final Class<? extends Component> X_ACCELERATION_COMPONENT_CLASS = XAccelerationComponent.class;
+    static final Class<? extends Component> Y_ACCELERATION_COMPONENT_CLASS = YAccelerationComponent.class;
+    static final Class<? extends Component> BOTTOM_COLLIDED_COMPONENT_CLASS = BottomCollidedComponent.class;
+    static final Class<? extends Component> TOP_COLLIDED_COMPONENT_CLASS = TopCollidedComponent.class;
+    static final Class<? extends Component> RIGHT_COLLIDED_COMPONENT_CLASS = RightCollidedComponent.class;
+    static final Class<? extends Component> LEFT_COLLIDED_COMPONENT_CLASS = LeftCollidedComponent.class;
+    static final Class<? extends Component> ANY_COLLIDED_COMPONENT_CLASS = AnyCollidedComponent.class;
+    static final Class<? extends Component> COLLISION_COMPONENT_CLASS = CollisionComponent.class;
+    static final Class<? extends Component> DESTROY_COMPONENT_CLASS = DestroyComponent.class;
+    static final Class<? extends Component> HEALTH_COMPONENT_CLASS = HealthComponent.class;
+    static final Class<? extends Component> IMAGEVIEW_COMPONENT_CLASS = ImageViewComponent.class;
+    static final Class<? extends Component> OPACITY_COMPONENT_CLASS = OpacityComponent.class;
+    static final Class<? extends Component> NAME_COMPONENT_CLASS = NameComponent.class;
+    static final Class<? extends Component> WIDTH_COMPONENT_CLASS = WidthComponent.class;
+    static final Class<? extends Component> HEIGHT_COMPONENT_CLASS = HeightComponent.class;
+    static final Class<? extends Component> AUDIO_COMPONENT_CLASS = AudioComponent.class;
+    static final Class<? extends Component> SOUND_COMPONENT_CLASS = SoundComponent.class;
+    static final Class<? extends Component> SPRITE_COMPONENT_CLASS = SpriteComponent.class;
+    static final Class<? extends Component> SPAWN_ENTITY_COMPONENT_CLASS = SpawnEntityComponent.class;
+    static final Class<? extends Component> TIMER_COMPONENT_CLASS = TimerComponent.class;
+    static final Class<? extends Component> PLAY_AUDIO_COMPONENT_CLASS = PlayAudioComponent.class;
+    static final Class<? extends Component> LIVES_COMPONENT_CLASS = LivesComponent.class;
+    static final Class<? extends Component> SCORE_COMPONENT_CLASS = ScoreComponent.class;
 
-    protected final String GET_OLD_VALUE = "getOldValue";
+    static final String GET_OLD_VALUE = "getOldValue";
 
 
     private Collection<Class<? extends Component>> myRequiredComponents;
     private Collection<Entity> myEntities;
     private Collection<KeyCode> myInputs;
-    protected Engine myEngine;
+    Engine myEngine;
 
 
     /**
@@ -75,7 +78,7 @@ public abstract class VoogaSystem {
      */
     public void update(Collection<Entity> entities, Collection<KeyCode> inputs) {
         myEntities = new ArrayList<>();
-        myInputs = inputs;
+        myInputs = new ArrayList<>(inputs);
 
         for (Entity e: entities) {
             if (filter(e)) {
@@ -111,8 +114,8 @@ public abstract class VoogaSystem {
      * Allow concrete Systems to retrieve the private Collection of KeyCodes (user inputs) stored in the super System
      * @return Collection of Keycodes held in the System
      */
-    protected Collection<KeyCode> getKeyCodes(){
-        return myInputs;
+    Collection<KeyCode> getKeyCodes(){
+        return Collections.unmodifiableCollection(myInputs);
     }
 
     protected Object getComponentValue(Class<? extends Component> componentClazz,Entity entity){

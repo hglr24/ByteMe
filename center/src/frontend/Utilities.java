@@ -11,6 +11,7 @@ package frontend;
 
 import data.external.DataManager;
 import data.external.GameCenterData;
+import frontend.games.GameCard;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -26,13 +27,15 @@ import javafx.stage.Stage;
 import runner.external.GameRunner;
 import voogasalad.util.reflection.Reflection;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Utilities {
     private static final String ERROR_MESSAGE = "error";
-    private static final String DEFAULT_IMAGE_LOCATION = "default_game";
+    private static final String DEFAULT_IMAGE_LOCATION = "center/data/game_information/images/default_game.png";
     private static final String INDIVIDUAL_BUTTON_SELECTOR = "button";
     private static final String BUTTON_LIST_SELECTOR = "buttons";
 
@@ -52,23 +55,28 @@ public class Utilities {
         }
     }
 
-    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize) {
+    public static Pane getImagePane(DataManager manager, String imageLocation, double gameSize, double maxHeight) throws FileNotFoundException {
         ImageView gameImage;
         try {
             gameImage = new ImageView(new Image(manager.loadImage(imageLocation)));
         } catch (Exception e) { // if any exceptions come from this, it should just become a default image.
-            gameImage = new ImageView(new Image(manager.loadImage(DEFAULT_IMAGE_LOCATION)));
+            gameImage = new ImageView(new Image(new FileInputStream(DEFAULT_IMAGE_LOCATION)));
         }
+        double originalWidth = gameImage.getFitWidth();
         gameImage.setPreserveRatio(true);
         gameImage.setFitWidth(gameSize);
+        if(gameImage.getFitWidth() > maxHeight) {
+            gameImage.setFitWidth(originalWidth);
+            gameImage.setFitHeight(maxHeight);
+        }
         BorderPane imagePane = new BorderPane();
         imagePane.setCenter(gameImage);
         return imagePane;
     }
 
-    public static void launchGameRunner(String folderName) {
+    public static void launchGameRunner(String gameName, String authorName, String username) {
         try {
-            new GameRunner(folderName);
+            new GameRunner(gameName, authorName, username);
         } catch (FileNotFoundException e) {
             // todo: print error message
         }
