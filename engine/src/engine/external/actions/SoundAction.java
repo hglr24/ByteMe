@@ -14,10 +14,9 @@ public class SoundAction extends StringAction {
         myComponentClass = SoundComponent.class;
     }
     protected void setAbsoluteAction(String newValue, Class<? extends Component<String>> componentClass) {
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component soundComponent = entity.getComponent(SoundComponent.class);
             soundComponent.setValue(newValue);
-
             entity.addComponent(new PlayAudioComponent(true));
         });
     }

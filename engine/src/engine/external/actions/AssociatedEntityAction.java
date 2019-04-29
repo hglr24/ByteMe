@@ -19,7 +19,7 @@ public class AssociatedEntityAction extends NumericAction {
     protected void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
         myComponentClass = componentClass;
 
-        super.setAction((Consumer<Entity> & Serializable) (entity) -> {
+        super.setAction((Consumer<Entity> & Serializable) entity -> {
             double oldValue =
                     ((Number) ((Entity) entity.getComponent(AssociatedEntityComponent.class)
                             .getValue())
@@ -41,7 +41,7 @@ public class AssociatedEntityAction extends NumericAction {
     protected void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
         myComponentClass = componentClass;
 
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = ((Entity) entity.getComponent(AssociatedEntityComponent.class)
                     .getValue())
                     .getComponent(componentClass);

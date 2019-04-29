@@ -59,7 +59,7 @@ public abstract class NumericAction extends Action<Double> {
      */
     @SuppressWarnings("unchecked")
     protected void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
-        super.setAction((Consumer<Entity> & Serializable) (entity) -> {
+        super.setAction((Consumer<Entity> & Serializable) entity -> {
             double oldValue = ((Number) entity.getComponent(componentClass).getValue()).doubleValue();
             Component component = entity.getComponent(componentClass);
             component.setValue(oldValue * scaleFactor.doubleValue());
@@ -73,7 +73,7 @@ public abstract class NumericAction extends Action<Double> {
      * @param componentClass
      */
     protected void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = entity.getComponent(componentClass);
             component.setValue((double) component.getValue() + displacementFactor.doubleValue());
         });
@@ -86,7 +86,7 @@ public abstract class NumericAction extends Action<Double> {
      * @param componentClass
      */
     protected void setRandomAction(Number maxRandom, Class<? extends Component<Double>> componentClass) {
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = entity.getComponent(componentClass);
             Random r = new Random();
             component.setValue((double) component.getValue() + (r.nextDouble() * 2 * maxRandom.doubleValue())-maxRandom.doubleValue());
