@@ -10,6 +10,7 @@ public class TitleLabel extends Label {
     private static final String WELCOME_RESOURCE = "launcher_display";
     private static final String FADE_DURATION_KEY = "fade_duration";
     private static final String STYLE = "welcome.css";
+    private static final String SMALL_STYLE = "small-label";
 
     private final String myWelcomeLabel;
     private final FadeTransition myFadeAnimation;
@@ -29,6 +30,7 @@ public class TitleLabel extends Label {
     }
     public TitleLabel(String resourceKey, String modifyText){
         this(resourceKey);
+        this.getStyleClass().add(SMALL_STYLE);
         addToLabel(modifyText);
     }
     /**

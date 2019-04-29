@@ -117,11 +117,21 @@
     -fx-pref-width: 100;
     -fx-pref-height: 100;
     -fx-padding: 5 5 5 5;
-    -fx-background-color: #524b5d;
+    -fx-background-color: #27242d;
     -fx-control-inner-background: #696176;
     -fx-text-fill: white;
+    -fx-alignment: center;
 }
 
 .ratingpadding {
+    -fx-padding: 0 0 20 0;
+}
+
+.borderpadding {
     -fx-padding: 20;
+}
+
+.gamepageratingbody {
+    -fx-fill: white;
+    -fx-font-size: 18;
 }

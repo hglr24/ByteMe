@@ -1,6 +1,5 @@
 package engine.external;
 
-import javafx.beans.property.StringProperty;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -29,8 +28,8 @@ public class Level implements Serializable {
      * No duplicate Entity objects or Event objects allowed in the same Level
      */
     public Level() {
-        myEntities = new HashSet<Entity>();
-        myEvents = new HashSet<IEventEngine>();
+        myEntities = new HashSet<>();
+        myEvents = new HashSet<>();
     }
 
     /**
@@ -47,6 +46,14 @@ public class Level implements Serializable {
      */
     public void addEvent(IEventEngine event){
         myEvents.add(event);
+    }
+
+    /**
+     * Attaches a Collection of Event object to this Game Level
+     * @param events new Events to be added
+     */
+    public void addEvent(Collection<IEventEngine> events){
+        myEvents.addAll(events);
     }
 
     /**

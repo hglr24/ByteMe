@@ -23,15 +23,19 @@ public class RatingScreen extends Popup {
     private TextArea myText;
     private StarBox myStars;
     private String myCurrentUser;
+    private GameCenterData myData;
 
     public RatingScreen(GameCenterData data, DataManager manager, String user) {
-        super(data, manager);
+        super(manager);
+        myData = data;
         myCurrentUser = user;
+        initializeDisplay();
+        display();
     }
 
     public void addRatingButton(GameCenterData data) {
         try {
-            myManager.addRating(new GameRating(myCurrentUser, data.getTitle(), data.getAuthorName(), myStars.getCurrentNumberOfStars(), myText.getText()));
+            myManager.addRating(new GameRating(myCurrentUser, data.getTitle(), data.getAuthorName(), myStars.getCurrentNumberOfStars() + 1, myText.getText()));
         } catch (SQLException e) {
             // todo: handle this
             System.out.println("Adding rating was unsuccessful");
@@ -50,7 +54,7 @@ public class RatingScreen extends Popup {
 
     @Override
     protected void addHeader() {
-        addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle());
+        addTitleAndSubtitle(myDisplay, Utilities.getValue(myLanguageBundle, "ratingTitle"), myData.getTitle(), RATING_WIDTH);
     }
 
     @Override
@@ -89,6 +93,7 @@ public class RatingScreen extends Popup {
         comment.setTop(commentTitle);
         myText = new TextArea();
         myText.getStyleClass().add(TEXT_FIELD_SELECTOR);
+        BorderPane.setAlignment(myText, Pos.CENTER);
         comment.setCenter(myText);
         pane.setCenter(comment);
     }

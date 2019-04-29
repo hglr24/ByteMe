@@ -24,6 +24,9 @@ public class ImageWithEntity extends ImageView {
     public ImageWithEntity(FileInputStream s, AuthoringEntity authoringEntity) {    //closed 2
         super(new Image(s, Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.XSCALE)), Double.parseDouble(authoringEntity.getPropertyMap().get(EntityField.YSCALE)), false, false));
         myAuthoringEntity = authoringEntity;
+        updateX(authoringEntity.getPropertyMap().get(EntityField.X));
+        updateY(authoringEntity.getPropertyMap().get(EntityField.Y));
+        updateVisibility(authoringEntity.getPropertyMap().get(EntityField.VISIBLE));
         myAuthoringEntity.getPropertyMap().addListener((MapChangeListener<Enum, String>) change -> {handleChange(change);
             System.out.println("Change observed");});
         Utility.closeInputStream(s);  //closed 2
@@ -45,6 +48,7 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateWidth(String width){
+        updateImage(myAuthoringEntity.getPropertyMap().get(EntityField.IMAGE));
         Double widthDouble = Double.parseDouble(width);
         Double heightDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.YSCALE));
         this.setFitWidth(widthDouble);
@@ -63,6 +67,7 @@ public class ImageWithEntity extends ImageView {
     }
 
     private void updateHeight(String height){
+        updateImage(myAuthoringEntity.getPropertyMap().get(EntityField.IMAGE));
         Double heightDouble = Double.parseDouble(height);
         Double widthDouble = Double.parseDouble(myAuthoringEntity.getPropertyMap().get(EntityField.XSCALE));
         this.setFitHeight(heightDouble);

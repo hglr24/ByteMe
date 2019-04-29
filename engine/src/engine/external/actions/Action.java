@@ -2,6 +2,7 @@ package engine.external.actions;
 
 import engine.external.Entity;
 import engine.external.component.Component;
+import engine.external.component.NameComponent;
 
 import java.io.Serializable;
 import java.util.function.Consumer;
@@ -20,7 +21,7 @@ import java.util.function.Consumer;
 public abstract class Action<T> {
 
     private Consumer<Entity> myAction;
-    private Class<? extends Component<T>> myComponentClass;
+    protected Class<? extends Component<T>> myComponentClass;
 
 
     public void checkComponents(Entity entity) {
@@ -29,6 +30,7 @@ public abstract class Action<T> {
             try {
                 entity.addComponent(myComponentClass.getConstructor().newInstance());
             } catch (Exception e) {
+                //Do nothing
                 System.out.println("Could not instantiate new constructor");
             }
         }
@@ -42,7 +44,7 @@ public abstract class Action<T> {
      */
     protected void setAbsoluteAction(T newValue, Class<? extends Component<T>> componentClass) {
         myComponentClass = componentClass;
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = entity.getComponent(componentClass);
             component.setValue(newValue);
         });

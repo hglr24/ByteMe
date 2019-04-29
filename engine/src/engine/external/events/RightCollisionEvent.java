@@ -1,9 +1,12 @@
 package engine.external.events;
 
-import engine.external.actions.Action;
+
+import engine.external.actions.*;
+import engine.external.component.NameComponent;
 import engine.external.conditions.CollisionCondition;
 import engine.external.component.RightCollidedComponent;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 
 /**
  * @author Dima Fayyad
@@ -16,6 +19,14 @@ public class RightCollisionEvent extends CollisionEvent {
 
         super(collideWithEntity, grouped);
         makeRightCollisionCondition(grouped);
+    }
+    public static CollisionEvent makeRightBounceEvent(String entityName1, String entityName2, Boolean grouped){
+        CollisionEvent collisionEvent = new RightCollisionEvent(entityName2, grouped);
+        collisionEvent.addConditions(new StringEqualToCondition(NameComponent.class, entityName1));
+        collisionEvent.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -BounceVelocityValue));
+        collisionEvent.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -XBouncePositionValue));
+        collisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RANDOM, YBouncePositionValue));
+        return collisionEvent;
     }
 
     /**

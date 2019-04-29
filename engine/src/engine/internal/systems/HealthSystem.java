@@ -26,7 +26,7 @@ public class HealthSystem extends VoogaSystem {
 
     /**
      * Loops through all Entities equipped with a HealthComponent, checks the value stored in the Component, and sets
-     * its DestroyComponent value to true or add a new DestroyComponent to the Entity if health value <0
+     * its DestroyComponent value to true or add a new DestroyComponent to the Entity if health value is less than 0
      */
     @Override
     protected void run() {

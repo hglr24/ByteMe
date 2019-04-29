@@ -11,13 +11,13 @@ public abstract class AddComponentAction<T> extends Action<T>{
     private static final double timerValue = 10.0;
 
     protected void setAbsoluteAction(Component component) {
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             entity.addComponent(component);
         });
     }
 
     protected void setActionWithTimer(Component component){
-        setAction((Consumer<Entity> & Serializable) (entity) -> {
+        setAction((Consumer<Entity> & Serializable) entity -> {
             if(!entity.hasComponents(TimerComponent.class)){
                 entity.addComponent(new TimerComponent(timerValue));
                 entity.addComponent(component);

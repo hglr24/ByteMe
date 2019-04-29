@@ -5,7 +5,9 @@ import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import engine.external.Entity;
 import engine.external.IEventEngine;
-import engine.external.component.NameComponent;
+
+import engine.external.conditions.InputCondition;
+
 import javafx.scene.input.KeyCode;
 
 import java.io.Serializable;
@@ -23,6 +25,7 @@ import java.util.function.Predicate;
 public class Event implements IEventEngine, IEventAuthoring {
     private List<Action> actions = new ArrayList<>();
     private List<Condition> conditions = new ArrayList<>();
+    private List<InputCondition> inputConditions = new ArrayList<>();
     private Set<KeyCode> myInputs = new HashSet<>();
 
     /**
@@ -30,7 +33,7 @@ public class Event implements IEventEngine, IEventAuthoring {
      * e.g. Event e = new Event("Mario") if a user has created an entity/group called "Mario"
      */
     public Event() {
-
+        //This is an intentionally empty constructor
     }
 
     //need to make this method take in keycode inputs as well
@@ -41,16 +44,20 @@ public class Event implements IEventEngine, IEventAuthoring {
         }
 
         for (Entity e : entities) {
-            if (conditionsMet(e)) {
+            if (conditionsMet(e, inputs)) {
                 executeActions(e);
             }
         }
     }
 
 
-    private boolean conditionsMet(Entity entity) {
+    private boolean conditionsMet(Entity entity, Collection<KeyCode> inputs) {
         try {
-            return conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));
+            boolean conditiontest =
+                    conditions.stream().allMatch((Predicate<Condition> & Serializable) condition -> (condition.getPredicate()).test(entity));
+            boolean inputtest =
+                    inputConditions.stream().allMatch((Predicate<InputCondition> & Serializable) inputCondition -> inputCondition.getPredicate().test(inputs));
+            return conditiontest && inputtest;
         } catch (NullPointerException e) {
             //System.out.println("Condition not met, did not have required component");
             return false;
@@ -86,9 +93,9 @@ public class Event implements IEventEngine, IEventAuthoring {
         addConditions(Arrays.asList(condition));
     }
 
-    public void setConditions(List<Condition> newSetOfConditions) {
-        conditions = newSetOfConditions;
-    }
+
+    public void setConditions(List<Condition> newSetOfConditions) { conditions = new ArrayList<>(newSetOfConditions); }
+
 
     public void removeConditions(List<Condition> conditionsToRemove) {
         conditions.removeAll(conditionsToRemove);
@@ -111,9 +118,7 @@ public class Event implements IEventEngine, IEventAuthoring {
     }
 
     @Override
-    public void setInputs(Set<KeyCode> inputs) {
-        myInputs = inputs;
-    }
+    public void setInputs(Set<KeyCode> inputs) { myInputs = new HashSet<>(inputs); }
 
     @Override
     public void addInputs(Set<KeyCode> inputsToAdd) {
@@ -139,6 +144,14 @@ public class Event implements IEventEngine, IEventAuthoring {
         myEventInformation.put(Condition.class, conditions);
         myEventInformation.put(Action.class, actions);
         return myEventInformation;
+    }
+
+    public void addInputConditions(List<InputCondition> inputConditionsToAdd) {
+        inputConditions.addAll(inputConditionsToAdd);
+    }
+
+    public void addInputConditions(InputCondition inputCondition) {
+        addInputConditions(Arrays.asList(inputCondition));
     }
 
 }

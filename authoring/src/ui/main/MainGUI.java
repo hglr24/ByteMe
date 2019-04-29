@@ -31,6 +31,8 @@ import ui.panes.LevelsPane;
 import ui.panes.PropertiesPane;
 import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
+import ui.windows.AudioManager;
+import ui.windows.ImageManager;
 import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
@@ -39,14 +41,13 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
  * @author Harry Ross
+ * @author Carrie Hunner
  */
 public class MainGUI {
 
@@ -61,6 +62,7 @@ public class MainGUI {
     private ObservableStringValue myCurrentStyle;
     private ObjectProperty<Propertable> mySelectedEntity;
     private ObjectProperty<Propertable> myCurrentLevel;
+    private Scene myScene;
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
@@ -74,14 +76,15 @@ public class MainGUI {
     public MainGUI() { // Default constructor for creating a new game from scratch
         myLoadedGame = new Game();
         myGameData = new GameCenterData();
+        defaultGameData();
         myStage = new Stage();
         myDataManager = new DataManager();
         myViewers = new HashMap<>();
-        defaultGameData();
+
         myCurrentLevel = new SimpleObjectProperty<>();
         mySelectedEntity = new SimpleObjectProperty<>();
         myObjectManager = new ObjectManager(myCurrentLevel);
-
+        loadAllAssets();
         AuthoringLevel blankLevel = new AuthoringLevel(DEFAULT_FIRST_LEVEL, myObjectManager);
         myObjectManager.addLevel(blankLevel);
         myCurrentLevel.setValue(blankLevel);
@@ -90,7 +93,7 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
-        loadAllAssets();
+        createMainGUI(false);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -98,17 +101,18 @@ public class MainGUI {
         myLoadedGame = game;
         myGameData = gameData;
         myObjectManager.setGameCenterData(myGameData);
+        loadDatabaseGame();
     }
 
     public void launch() {
         myStage.setTitle(STAGE_TITLE);
-        myStage.setScene(createMainGUI(false));
+        myStage.setScene(myScene);
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
         myStage.show();
         myStage.setMinWidth(myStage.getWidth());
     }
 
-    private Scene createMainGUI(boolean load) { //TODO clean up
+    private void createMainGUI(boolean load) { //TODO clean up
         BorderPane mainBorderPane = new BorderPane();
         Scene mainScene = new Scene(mainBorderPane);
         HBox propPaneBox = new HBox();
@@ -131,7 +135,7 @@ public class MainGUI {
 
         mainScene.getStylesheets().add(myCurrentStyle.getValue());
         mainBorderPane.getCenter().getStyleClass().add("main-center-pane");
-        return mainScene;
+        myScene = mainScene;
     }
 
     private void createViewersForExistingLevels() {
@@ -144,9 +148,10 @@ public class MainGUI {
         UserCreatedTypesPane userCreatedTypesPane;
         if (load)
             userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager, myLoadedGame.getUserCreatedTypes());
-        else
+        else {
             userCreatedTypesPane = new UserCreatedTypesPane(myObjectManager);
-        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane);
+        }
+        DefaultTypesPane defaultTypesPane = new DefaultTypesPane(userCreatedTypesPane, myObjectManager);
         entityPaneBox.getChildren().addAll(defaultTypesPane, userCreatedTypesPane);
         entityPaneBox.prefHeightProperty().bind(mainScene.heightProperty().subtract(PROP_PANE_HEIGHT));
         userCreatedTypesPane.prefHeightProperty().bind(entityPaneBox.heightProperty());
@@ -182,7 +187,7 @@ public class MainGUI {
     private MenuBar addMenu() {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(createMenu("File", "New", "Open", "Save"), //TODO make this better
-                createMenu("Edit", "Info", "Groups"), createMenu("View", "Fullscreen"));
+                createMenu("Edit", "Info", "Groups", "Images", "Audio"), createMenu("View", "Fullscreen"));
         return menuBar;
     }
 
@@ -217,15 +222,22 @@ public class MainGUI {
     private void openGame() {
         String authorName = "";
         DataManager dataManager = new DataManager();
-        try {
+        /*try {
             List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
             myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
             //myGameData = null; //TODO
         } catch (SQLException e) {
             ErrorBox error = new ErrorBox("Load", "Error loading from database");
+        }*/
+
+        GameTranslator translator = new GameTranslator(myObjectManager);
+        try {
+            Game exportableGame = translator.translate();
+            MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
+            newWorkspace.launch();
+        } catch (Exception e) {
+            //TODO
         }
-        loadAllAssets();
-        loadDatabaseGame();
     }
 
     private void loadDatabaseGame() {
@@ -235,7 +247,12 @@ public class MainGUI {
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
 
-        translator.populateObjectManager(myLoadedGame);
+        try {
+            translator.populateObjectManager(myLoadedGame, myCurrentLevel);
+        } catch (UIException e) {
+            ErrorBox error = new ErrorBox("Load Error", e.getMessage());
+            error.display();
+        }
 
         // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
@@ -243,7 +260,7 @@ public class MainGUI {
         mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
         // Populate Levels Pane
         // Create UI panes (Viewers, UserCreatedTypePane)
-        myStage.setScene(createMainGUI(true));
+        createMainGUI(true);
     }
 
     @SuppressWarnings("unused")
@@ -279,16 +296,31 @@ public class MainGUI {
     }
 
     @SuppressWarnings("unused")
+    private void openImageAssets() {
+        ImageManager manager = new ImageManager(myObjectManager);
+        System.out.println("object manager is null: " + myObjectManager == null);
+        manager.show();
+    }
+
+    @SuppressWarnings("unused")
+    private void openAudioAssets() {
+        AudioManager manager = new AudioManager(myObjectManager);
+        manager.show();
+    }
+
+    @SuppressWarnings("unused")
     private void toggleFullscreen() {
         myStage.setFullScreen(!myStage.isFullScreen());
     }
 
     private void swapViewer(Propertable oldLevel, Propertable newLevel) {
-        myViewerBox.getChildren().remove(myViewers.get(oldLevel));
-        if (!myViewers.containsKey(newLevel))
-            myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
+        if (!myViewers.isEmpty()) {
+            myViewerBox.getChildren().remove(myViewers.get(oldLevel));
+            if (!myViewers.containsKey(newLevel))
+                myViewers.put(newLevel, createViewer((AuthoringLevel) newLevel));
 
-        myViewerBox.getChildren().add(myViewers.get(newLevel));
+            myViewerBox.getChildren().add(myViewers.get(newLevel));
+        }
     }
 
     private void swapStylesheet(String oldVal, String newVal) {
@@ -301,6 +333,7 @@ public class MainGUI {
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
+        myGameData.setAuthorName("Carrie");
     }
 
 
@@ -308,33 +341,13 @@ public class MainGUI {
     private void saveFolderToDataBase(String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
         String methodName = SAVING_ASSETS_RESOURCES.getString(outerDirectory.getName());
-        System.out.println("Saving Directory: " + outerDirectory.getName() + " using " + methodName);
         for(File file : outerDirectory.listFiles()){
-            System.out.println("\tSaving: " + file.getName());
             Reflection.callMethod(myDataManager, methodName, file.getName(), file);
         }
     }
 
-    private void clearFolder(String outerDirectoryPath){
-        File outerDirectory = new File(outerDirectoryPath);
-        System.out.println("Directory: " + outerDirectory.getName());
-        List<File> didntDelete = new ArrayList<>();
-        for(File file : outerDirectory.listFiles()){
-            System.out.println("\t trying to delete " + file.getName());
-            file.deleteOnExit();
-        }
-//        if(didntDelete.size() > 0){
-//            StringBuilder stringBuilder = new StringBuilder();
-//            for(File f : didntDelete){
-//                stringBuilder.append(f.getName() + "\n");
-//            }
-//            ErrorBox errorBox = new ErrorBox("Didn't delete", stringBuilder.toString());
-//            errorBox.display();
-//        }
-    }
-
     private void loadAllAssets(){
-        String prefix = myGameData.getTitle() + myGameData.getAuthorName();
+        String prefix = SAVING_ASSETS_RESOURCES.getString("userUploaded") + myGameData.getTitle() + myGameData.getAuthorName();
         try {
             Map<String, InputStream> defaultImages = myDataManager.loadAllImages(SAVING_ASSETS_RESOURCES.getString("defaults"));
             Map<String, InputStream> userUploadedImages = myDataManager.loadAllImages(prefix);
@@ -348,13 +361,9 @@ public class MainGUI {
             //TODO deal with this
             e.printStackTrace();
         }
-
-        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), prefix);
-        //loadAssets(dataManager, SAVING_ASSETS_RESOURCES.getString("audio_filepath"), GENERAL_RESOURCES.getString("defaults"));
     }
 
     private void loadAssets(String folderFilePath, Map<String, InputStream> databaseInfo){
-       System.out.println("Made it to loadAssets");
         try {
             for(Map.Entry<String, InputStream> entry : databaseInfo.entrySet()){
                 InputStream inputStream = entry.getValue();
@@ -366,7 +375,5 @@ public class MainGUI {
             //TODO: handle error
             e.printStackTrace();
         }
-
-
     }
 }

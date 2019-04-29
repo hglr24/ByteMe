@@ -1,6 +1,7 @@
 package ui;
 
 import engine.external.Entity;
+import engine.external.component.OpacityComponent;
 import engine.external.events.Event;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
@@ -38,9 +39,16 @@ public class AuthoringEntity implements Propertable {
     public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
         this();
         myObjectManager = manager;
-        for (EntityField field : EntityField.values())
-            if (!field.equals(EntityField.EVENTS) && basis.hasComponents(field.getComponentClass()))
+        for (EntityField field : EntityField.values()) {
+            if (!field.equals(EntityField.EVENTS) && !field.equals(EntityField.VISIBLE) && basis.hasComponents(field.getComponentClass()))
                 myPropertyMap.put(field, String.valueOf(basis.getComponent(field.getComponentClass()).getValue()));
+        }
+        if (basis.hasComponents(OpacityComponent.class)) {
+            if (((OpacityComponent) basis.getComponent(OpacityComponent.class)).getValue() == 1.0)
+                myPropertyMap.put(EntityField.VISIBLE, String.valueOf(true));
+            else
+                myPropertyMap.put(EntityField.VISIBLE, String.valueOf(false));
+        }
         addPropertyListeners();
     }
 
@@ -56,7 +64,7 @@ public class AuthoringEntity implements Propertable {
 
     private void addPropertyListeners() {
         myPropertyMap.addListener((MapChangeListener<Enum, String>) change ->
-           propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
+                propagateChanges(change.getKey(),  change.getValueRemoved(), change.getValueAdded()));
     }
 
     private void propagateChanges(Enum key, String oldVal, String newVal) { // At this point value is assumed valid or untaken label
@@ -86,7 +94,7 @@ public class AuthoringEntity implements Propertable {
 
     public List<String> getInteractionListing(){ return myInteractionListing;} //TODO remove
 
-    public ObjectManager getObjectManager() {
+    public ObjectManager getObjectManager() { //TODO remove
         return myObjectManager;
     }
 

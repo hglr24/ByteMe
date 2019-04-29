@@ -10,6 +10,7 @@ package frontend.games;
 
 import data.external.DataManager;
 import frontend.popups.GamePage;
+import frontend.popups.UserProfileDisplay;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -19,6 +20,8 @@ import javafx.scene.text.Text;
 import data.external.GameCenterData;
 import frontend.Utilities;
 
+import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class GameCard {
@@ -34,6 +37,7 @@ public class GameCard {
     private static final String BODY_SELECTOR = "cardbody";
     private static final String FOREGROUND_SELECTOR = "cardpadding";
     private static final String CONTENT_SELECTOR = "contentpadding";
+    private static final double MAX_HEIGHT = 100;
     private int myIndex;
     private ResourceBundle myLanguageBundle;
     private GameCenterData myGame;
@@ -69,7 +73,7 @@ public class GameCard {
     }
 
     public void playGameButton(GameCenterData data) {
-        Utilities.launchGameRunner(data.getFolderName());
+        Utilities.launchGameRunner(data.getTitle(), data.getAuthorName(), myCurrentUser);
     }
 
     private void initializeDisplay() {
@@ -98,14 +102,9 @@ public class GameCard {
         BorderPane foreground = new BorderPane();
         foreground.getStyleClass().add(FOREGROUND_SELECTOR);
         addTitleContent(foreground);
-        addAuthor(foreground);
         addImageAndContent(foreground);
         addButtons(foreground);
         pane.getChildren().add(foreground);
-    }
-
-    private void addAuthor(BorderPane foreground) {
-
     }
 
     private void addButtons(BorderPane foreground) {
@@ -122,12 +121,30 @@ public class GameCard {
         imageDescription.getStyleClass().add(TEXT_SELECTOR + myIndex);
         imageDescription.setWrappingWidth(DISPLAY_WIDTH - WRAP_OFFSET);
         contentPane.setCenter(imageDescription);
+        try {
+            Text ratingText;
+            if(myManager.getAverageRating(myGame.getTitle()) == 0) {
+                ratingText = new Text (Utilities.getValue(myLanguageBundle, "ratingDefaultText"));
+            } else {
+                ratingText = new Text(Utilities.getValue(myLanguageBundle, "ratingStartText") + myManager.getAverageRating(myGame.getTitle()) + Utilities.getValue(myLanguageBundle, "ratingEndText"));
+            }
+            ratingText.getStyleClass().add(BODY_SELECTOR);
+            ratingText.getStyleClass().add(TEXT_SELECTOR + myIndex);
+            BorderPane.setAlignment(ratingText, Pos.CENTER);
+            contentPane.setBottom(ratingText);
+        } catch (SQLException e) {
+            //todo: do something
+        }
         contentPane.getStyleClass().add(CONTENT_SELECTOR);
         foreground.setCenter(contentPane);
     }
 
     private void addImage(BorderPane contentPane) {
-        contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE));
+        try {
+            contentPane.setTop(Utilities.getImagePane(myManager, myGame.getImageLocation(), GAME_IMAGE_SIZE, MAX_HEIGHT));
+        } catch (FileNotFoundException e) {
+            // do nothing, in this case there just won't be an image which is fine
+        }
     }
 
     private void addTitleContent(BorderPane foreground) {
@@ -137,11 +154,16 @@ public class GameCard {
         BorderPane titlePane = new BorderPane();
         titlePane.setCenter(title);
         Text author = new Text(myGame.getAuthorName());
+        author.setOnMouseClicked(e -> openUserPage(author.getText()));
         author.getStyleClass().add(BODY_SELECTOR);
         author.getStyleClass().add(TEXT_SELECTOR + myIndex);
         BorderPane.setAlignment(author, Pos.CENTER);
         titlePane.setBottom(author);
         foreground.setTop(titlePane);
+    }
+
+    private void openUserPage(String author) {
+        new UserProfileDisplay(myGame, myManager, myCurrentUser, author);
     }
 
 }

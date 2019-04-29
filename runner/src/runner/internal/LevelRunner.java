@@ -137,6 +137,7 @@ public class LevelRunner {
         myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
+            System.out.println(system);
         }
         if (canPause) updateButtonsAndHUD();
     }

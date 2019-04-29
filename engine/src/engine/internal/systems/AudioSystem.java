@@ -5,11 +5,13 @@ import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.component.AudioComponent;
 import engine.external.component.Component;
-import javafx.scene.image.Image;
 import javafx.scene.media.Media;
-import voogasalad.util.reflection.ReflectionException;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.File;
+
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -19,6 +21,8 @@ import java.util.HashMap;
  * and converts them into Media to be stored in AudioComponents
  */
 public class AudioSystem extends VoogaSystem {
+
+    private static final Integer REAE_BYTE_NUM = 1024;
 
     DataManager myDataManager;
     HashMap<Entity, String> myEntityPastSound;
@@ -39,7 +43,12 @@ public class AudioSystem extends VoogaSystem {
     }
 
 
-    protected void run() throws ReflectionException {
+    /**
+     * Loops through all Entities with a SoundComponent, retrieves the corresponding sound file from database and
+     * generates/updates the AudioComponent for this Entity to store the MediaPlayer for playing the sound
+     * All MediaPlayers are cached in the System to reduce database and I/O accesses
+     */
+    protected void run(){
         for (Entity entity : this.getEntities()) {
             generateAudio(entity);
         }
@@ -84,7 +93,7 @@ public class AudioSystem extends VoogaSystem {
             File audioFile = File.createTempFile("myAudio", ".mp3");
             FileOutputStream outputStream = new FileOutputStream(audioFile);
             int read;
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new byte[REAE_BYTE_NUM];
             while ((read = inputStream.read(bytes)) != -1) {
                 outputStream.write(bytes, 0, read);
             }

@@ -14,10 +14,11 @@ public class SceneManager {
     private SplashPage myInitialPage;
     private NewUserPage myNewUserPage;
 
+    private SwitchToUserOptions switchToInitialPage = this::goBackToInitialPage;
     private SwitchToUserPage switchToWelcomeUserPage = this::goToWelcomeUserPage;
     private SwitchToUserOptions switchToNewUserPage = this::goToNewUserPage;
 
-    private Stage myStage;
+
     /**
      * The SceneManager class distributes lambdas among the different scenes, depending upon which scene they need
      * to change to. As a result, different displays do not have to depend on one another and the stage can remain
@@ -27,7 +28,6 @@ public class SceneManager {
      */
     public void render(Stage myStage){
         makePages();
-        this.myStage = myStage;
         myScene = new Scene(myInitialPage,STAGE_WIDTH,STAGE_HEIGHT);
         myScene.getStylesheets().add(MY_STYLE);
         myStage.setScene(myScene);
@@ -36,13 +36,18 @@ public class SceneManager {
 
     private void makePages(){
         myInitialPage = new SplashPage(switchToNewUserPage,switchToWelcomeUserPage);
-        myNewUserPage = new NewUserPage(switchToWelcomeUserPage);
+        myNewUserPage = new NewUserPage(switchToInitialPage, switchToWelcomeUserPage);
+    }
+
+    private void goBackToInitialPage(){
+        myScene.setRoot(myInitialPage);
+        myInitialPage.refresh();
     }
 
     private void goToNewUserPage(){ myScene.setRoot(myNewUserPage);}
 
     private void goToWelcomeUserPage(String userName){
-        UserManager myLoggedInManager = new UserManager(userName);
+        UserManager myLoggedInManager = new UserManager(switchToInitialPage,userName);
         myLoggedInManager.render(myScene);
     }
 

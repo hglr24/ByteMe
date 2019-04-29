@@ -49,7 +49,6 @@ public class Engine {
         myEvents = level.getEvents();
         myLevelHeight = level.getHeight();
         myLevelWidth = level.getWidth();
-        System.out.println("engine: levelHeight = "+myLevelHeight+" levelWidth = "+myLevelWidth);
         initSystemMap();
     }
 
@@ -154,7 +153,7 @@ public class Engine {
             try {
                 componentList.add((Class) Class.forName(COMPONENTS_PACKAGE_PATH + component));
             }catch (ClassNotFoundException e){
-                throw new ReflectionException("Required Component "+COMPONENTS_PACKAGE_PATH+component+" nor found");
+                throw new ReflectionException(e,"Required Component "+COMPONENTS_PACKAGE_PATH+component+" nor found");
             }
         }
         return componentList;

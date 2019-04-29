@@ -4,9 +4,7 @@ import controls.EnterGameButton;
 import controls.HiddenField;
 import controls.InformativeField;
 import controls.PaneLabel;
-import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
-import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;
 
 import java.util.ResourceBundle;
@@ -26,23 +24,31 @@ public class UserLoginDisplay extends VBox {
 
     private static final String LOGIN_LABEL = "login_label";
 
-    private static final String STYLE = "default_launcher.css";
+    private static final String STYLE = "login-vbox";
     private static final String DELIMITER = ",";
 
+    private InformativeField myUserNameField;
+    private HiddenField myPasswordField;
+    private String[] loginTextFields;
+
     public UserLoginDisplay(SwitchToUserPage mySwitch){
-        String[] loginTextFields = myResources.getString(LOGIN_KEY).split(DELIMITER);
-        this.setSpacing(40);
-        InformativeField myUserNameField = new InformativeField(loginTextFields[0]);
-        HiddenField myPasswordField = new HiddenField(loginTextFields[1]);
+        loginTextFields = myResources.getString(LOGIN_KEY).split(DELIMITER);
+        this.getStyleClass().add(STYLE);
+        myUserNameField = new InformativeField(loginTextFields[0]);
+        myPasswordField = new HiddenField(loginTextFields[1]);
         setUpChildren(myUserNameField,myPasswordField, mySwitch);
 
     }
     private void setUpChildren(InformativeField userName, HiddenField passWord, SwitchToUserPage mySwitch){
-        this.setAlignment(Pos.CENTER);
         this.getChildren().add(new PaneLabel(LOGIN_LABEL));
         this.getChildren().add(userName);
         this.getChildren().add(passWord);
         this.getChildren().add(new EnterGameButton(LOGIN_BUTTON_TEXT, userName.accessValue(),
                 passWord.accessValue(), mySwitch));
+    }
+
+    public void refresh(){
+        myUserNameField.setText(loginTextFields[0]);
+        myPasswordField.setText(loginTextFields[1]);
     }
 }

@@ -1,5 +1,6 @@
 package ui.windows;
 
+import data.external.GameCenterData;
 import engine.external.Entity;
 import engine.external.component.NameComponent;
 import engine.external.component.SpriteComponent;
@@ -18,15 +19,19 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.AuthoringEntity;
 import ui.DefaultTypeXMLReaderFactory;
+import ui.EntityField;
 import ui.ErrorBox;
 import ui.Utility;
+import ui.manager.ObjectManager;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -40,6 +45,10 @@ public class CreateNewTypeWindow extends Stage {
     private static final ResourceBundle SYNTAX_RESOURCES = ResourceBundle.getBundle("property_syntax");
     private static final ResourceBundle WINDOW_RESOURCES = ResourceBundle.getBundle("new_object_window");
     private static final ResourceBundle GENERAL_RESOURCES = ResourceBundle.getBundle("authoring_general");
+    private static final String NO_ASSET_SELECTED = "NoAsset";
+    private static final String NO_NAME = "NoName";
+    private static final String BAD_SYNTAX = "BadSyntax";
+    private static final String NOT_UNIQUE = "NotUnique";
 
     private ComboBox myCategoryComboBox;
     private ComboBox myDefaultTypeNameComboBox;
@@ -56,14 +65,17 @@ public class CreateNewTypeWindow extends Stage {
     private static final int INPUT_WIDTH = 100;
     private static final int PICTURE_SIZE = 50;
     private static final String STYLE_SHEET = "default.css";
+    private ObjectManager myObjectManager;
+
 
     /**
      * Creates a window for the user to create a new type
      * @param defaultName Name of the defaultEntity the user is basing their
      *                    object off of
      */
-    public CreateNewTypeWindow(String defaultName){
+    public CreateNewTypeWindow(String defaultName, ObjectManager objectManager){
         mySelectedImageName = null;
+        myObjectManager = objectManager;
         initializeGridPane();
         initializeVariables();
         createContent(myDefaultTypesFactory.getCategory(defaultName), defaultName);
@@ -172,23 +184,58 @@ public class CreateNewTypeWindow extends Stage {
             myUserCreatedEntity = entity;
             this.close();
         }
-        else{
-            String[] errorInfo = WINDOW_RESOURCES.getString("InvalidInputs").split(",");
-            ErrorBox errorBox = new ErrorBox(errorInfo[0], errorInfo[1]);
-            errorBox.display();
-        }
     }
 
     private boolean checkValidInputs() {
-        Set<Boolean> checkerSet = new HashSet<>();
-        checkerSet.add((!mySelectedImageName.equals("")));
-        System.out.println("Image good: " + (mySelectedImageName != null));
-        checkerSet.add(!myTextField.getText().isEmpty());
-        System.out.println("TextField Not Empty: " + (!myTextField.getText().isEmpty()));
-        checkerSet.add(myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL")));
-        System.out.println("TextField good for label: " + (myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL"))));
-        return !checkerSet.contains(false);
+        if(!hasNameInput()) return false;
+        if(!hasNoSpecialCharacters()) return false;
+        if(!isUniqueTypeName()) return false;
+        if(!hasAssetSelected()) return false;
+        return true;
     }
+
+    private boolean hasAssetSelected() {
+        if (mySelectedImageName.equals("")) {
+            displayError(NO_ASSET_SELECTED);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasNameInput(){
+        if(myTextField.getText().isEmpty()){
+            displayError(NO_NAME);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean hasNoSpecialCharacters(){
+        if(!myTextField.getText().matches(SYNTAX_RESOURCES.getString("LABEL"))){
+            displayError(BAD_SYNTAX);
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isUniqueTypeName(){
+        Map<AuthoringEntity, String> typeMap = myObjectManager.getTypeMap();
+        for(AuthoringEntity entity : typeMap.keySet()){
+            if(entity.getPropertyMap().get(EntityField.LABEL).equals(myTextField.getText())){
+                displayError(NOT_UNIQUE);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void displayError(String resourceKey){
+        String[] info = WINDOW_RESOURCES.getString(resourceKey).split(",");
+        ErrorBox errorBox = new ErrorBox(info[0], info[1]);
+        errorBox.display();
+    }
+
+
 
 
     private void createAndAddBasedOnDropDown(String isBasedOn) {

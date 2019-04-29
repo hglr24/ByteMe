@@ -10,8 +10,11 @@ import pane.WelcomeDisplay;
 
 public class SplashPage extends VBox {
     private static final String MY_STYLE = "default_launcher.css";
+    private static final String HBOX_STYLE = "login-hbox";
+    private static final String VBOX_STYLE = "login-vbox";
     private static final String WELCOME_LABEL_KEY = "general_welcome";
     private static final String START_ACTION = "new_player";
+    private UserLoginDisplay myLogin;
 
     /**
      * This page will prompt the user to enter their credentials so they can login to their future account
@@ -20,20 +23,23 @@ public class SplashPage extends VBox {
      */
 
     public SplashPage(SwitchToUserOptions switchToNewUser, SwitchToUserPage switchToLoggedIn) {
-        this.getStyleClass().add(MY_STYLE);
+        this.getStylesheets().add(MY_STYLE);
         this.getChildren().add(new WelcomeDisplay(WELCOME_LABEL_KEY));
+        this.getStyleClass().add(VBOX_STYLE);
         makeLoginOptions(switchToNewUser, switchToLoggedIn);
-        //this.getChildren().add(new UserStartDisplay(switchToNewUser,switchToLoggedIn));
     }
 
     private void makeLoginOptions(SwitchToUserOptions switchToNewUser, SwitchToUserPage switchToLoggedIn) {
         HBox loginOptions = new HBox();
         LauncherSymbol mySymbol = new LauncherSymbol(START_ACTION, switchToNewUser);
         loginOptions.getChildren().add(mySymbol);
-        loginOptions.getChildren().add(new UserLoginDisplay(switchToLoggedIn));
-        loginOptions.setTranslateY(100);
-        loginOptions.setAlignment(Pos.CENTER);
-        loginOptions.setSpacing(100);
+        myLogin = new UserLoginDisplay(switchToLoggedIn);
+        loginOptions.getChildren().add(myLogin);
+        loginOptions.getStyleClass().add(HBOX_STYLE);
         this.getChildren().add(loginOptions);
+    }
+
+    public void refresh(){
+        myLogin.refresh();
     }
 }

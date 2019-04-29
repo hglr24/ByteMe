@@ -4,6 +4,7 @@ import data.external.DataManager;
 import data.external.DatabaseEngine;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 
 public class DatabaseLoader {
@@ -14,12 +15,61 @@ public class DatabaseLoader {
 //        createUser("Person2", "passwordTwo");
 //        validateUsers();
 //        System.out.println();
+//        createUsers();
+//        setProfPic("Megan", "Images/megan_prof_pic.png");
+        setBio("ICouldAlwaysEat", "You can just press control+alt+any random letter and IntelliJ will make something " +
+                "good happen to your code");
+        setBio("gamez_n_gainz", "Mind yo modules");
+        setBio("DimaFayyad", "Relatable content");
+        setBio("MeganPHibbones", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("fzero", "I'm just trying to be a Prime Citizen");
+        setBio("carrie", "Hey Megan *dramatic pause* want to play smash?");
+        setBio("harry", "If you need help with CSS, my office hours are 4-6...am");
+        setBio("hsing", "If you want to get an A take 270 but if you are actually trying to learn something take a different class");
+        setBio("louis", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("michaelzhang", "It's time");
+        setBio("ryryculhane", "Hey! My name is Megan, follow me on LinkedIn!");
+        setBio("Megan", "Hey! My name is Megan, follow me on LinkedIn!");
+
         DatabaseEngine.getInstance().close();
     }
 
     private static void createUser(String userName, String password){
         DataManager dm = new DataManager();
         System.out.println(dm.createUser(userName, password));
+    }
+
+    private static void setBio(String userName, String bio) {
+        DataManager dm = new DataManager();
+        try {
+            dm.setBio(userName, bio);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    private static void setProfPic(String userName, String path) {
+        DataManager dm = new DataManager();
+        try {
+            dm.setProfilePic(userName, new File(path));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void createUsers(){
+        createUser("ICouldAlwaysEat", "OrNotEat");
+        createUser("gamez_n_gainz", "bruh");
+        createUser("DimaFayyad", "cs725)@5wt3");
+        createUser("MeganPHibbones", "welcome2thaCenter");
+        createUser("fzero", "coachesdontplay");
+        createUser("carrie","morelikecarrietheteam");
+        createUser("harry", "morelikeharrytheteam");
+        createUser("hsing", "letmejustmakeapasswordsystem");
+        createUser("louis", "rowingandgrowing");
+        createUser("michaelzhang", "RIP");
+        createUser("ryryculhane", "noJDBCdriver");
+        createUser("Megan", "password");
     }
 
     private static void validateUsers(){

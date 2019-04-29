@@ -1,7 +1,6 @@
 package frontend.popups;
 
 import data.external.DataManager;
-import data.external.GameCenterData;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -23,22 +22,13 @@ public abstract class Popup {
 
     protected BorderPane myDisplay;
     protected DataManager myManager;
-    protected GameCenterData myData;
     protected ResourceBundle myLanguageBundle;
 
-
-    public Popup(GameCenterData data, DataManager manager) {
-        myData = data;
-    }
 
     public Popup(DataManager manager) {
         myManager = manager;
         myLanguageBundle = ResourceBundle.getBundle(DEFAULT_LANGUAGE);
-        initializeDisplay();
-        display();
     }
-
-
 
     protected void initializeDisplay() {
         myDisplay = new BorderPane();
@@ -59,15 +49,22 @@ public abstract class Popup {
         stage.showAndWait();
     }
 
-    protected void addTitleAndSubtitle(BorderPane pane, String title, String subtitle) {
+    protected void addTitleAndSubtitle(BorderPane pane, String title, String subtitle, double subtitleWrapSize) {
+        pane.setTop(getTitleAndSubtitle(title, subtitle, subtitleWrapSize));
+    }
+
+    protected Pane getTitleAndSubtitle(String title, String subtitle, double subtitleWrapSize) {
+        BorderPane pane = new BorderPane();
         Text titleText = new Text(title);
         titleText.getStyleClass().add(TITLE_SELECTOR);
         Text subtitleText = new Text(subtitle);
         subtitleText.getStyleClass().add(SUBTITLE_SELECTOR);
+        subtitleText.setWrappingWidth(subtitleWrapSize);
         VBox text = new VBox(titleText, subtitleText);
         text.setAlignment(Pos.CENTER);
         BorderPane.setAlignment(text, Pos.CENTER);
-        pane.setTop(text);
+        pane.setCenter(text);
+        return pane;
     }
 
     protected abstract void addHeader();

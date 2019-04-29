@@ -9,6 +9,7 @@
 
 package frontend.games;
 
+import center.external.CenterView;
 import data.external.DataManager;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
@@ -25,19 +26,31 @@ public class GameList {
     private static final int NUM_CARDS_DISPLAYED = 3;
     private static final String GAME_LIST_SELECTOR = "cardlist";
     private static final String SCROLLER_SELECTOR = "scroller";
+    private static final int SCROLL_OFFSET = 140;
     private List<GameCenterData> myGames;
     private DataManager myManager;
     private String myCurrentUser;
+    private double myHeight;
 
     /**
      * @purpose constructor, reads in the list of original GameData objects and saves it, then sets up the display of cards.
      */
-    public GameList(String user) {
+    public GameList(String user, double height) {
         myManager = new DataManager();
         myGames = myManager.loadAllGameInfoObjects();
         myCurrentUser = user;
+        myHeight = height;
         initializeDisplay();
     }
+
+    public GameList(String user, String desiredAuthor, double height) {
+        myManager = new DataManager();
+        myGames = myManager.loadAllGameInfoObjects(desiredAuthor);
+        myCurrentUser = user;
+        myHeight = height;
+        initializeDisplay();
+    }
+
 
     /**
      * @purpose give the display of the GameList to the GamePane
@@ -61,7 +74,7 @@ public class GameList {
         ScrollPane scroller = new ScrollPane();
         scroller.getStyleClass().add(SCROLLER_SELECTOR);
         scroller.setContent(gameList);
-        scroller.setMinHeight(GameCard.DISPLAY_HEIGHT * 2);
+        scroller.setMinHeight(myHeight - SCROLL_OFFSET);
         BorderPane content = new BorderPane(scroller);
         myDisplay = content;
     }

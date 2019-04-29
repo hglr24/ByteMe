@@ -23,209 +23,212 @@ import java.util.Random;
  * @author Louis Jensen, Feroze Mohideen
  */
 public class DummyGameObjectMaker {
-    private Game myGame;
-
-    /**
-     * Constructor that creates a dummy Game
-     */
-    public DummyGameObjectMaker(){
-        myGame = new Game();
-        initializeGame(myGame);
-    }
-
-    private void initializeGame(Game dummyGame) {
-        Level level1 = new Level();
-        level1.setHeight(myGame.getHeight());
-        level1.setWidth(myGame.getWidth());
-        addDummyEntities(level1, 1.0);
-        addDummyEvents(level1, 2.0);
-        dummyGame.addLevel(level1);
-
-        Level level2 = new Level();
-        level2.setHeight(myGame.getHeight());
-        level2.setWidth(myGame.getWidth());
-        addDummyEntities(level2, 2.0);
-        addDummyEvents(level2, 3.0);
-        dummyGame.addLevel(level2);
-
-        Level level3 = new Level();
-        level3.setHeight(myGame.getHeight());
-        level3.setWidth(myGame.getWidth());
-        addDummyEntities(level3, 3.0);
-        addDummyEvents(level3, 4.0);
-        dummyGame.addLevel(level3);
-
-        Level level4 = new Level();
-        level4.setHeight(myGame.getHeight());
-        level4.setWidth(myGame.getWidth());
-        addDummyEntities(level4, 4.0);
-        addDummyEvents(level4, 5.0);
-        dummyGame.addLevel(level4);
-
-    }
-
-    private void addDummyEvents(Level level1, Double next) {
+        private Game myGame;
 
         /**
-         * Event: Press L to decrement flappy's lives by 1
-         * Actions:
-         * 1. Decrement LivesComponent by 1
+         * Constructor that creates a dummy Game
          */
-        Event lifeKeyInputEvent = new Event();
-        lifeKeyInputEvent.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
-        lifeKeyInputEvent.addInputs(KeyCode.L);
-        lifeKeyInputEvent.addActions(new ChangeLivesAction(NumericAction.ModifyType.RELATIVE, -1.0));
+        public DummyGameObjectMaker(){
+                myGame = new Game();
+                initializeGame(myGame);
+        }
 
-        /**
-         * Event: Press Right Arrow Key to move flappy to the right
-         * Actions:
-         * 1. increase xPosition of flappy by 5
-         */
-        Event flappyMoveRightEvent = new Event();
-        flappyMoveRightEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        flappyMoveRightEvent.addInputs(KeyCode.RIGHT);
-        flappyMoveRightEvent.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
+        private void initializeGame(Game dummyGame) {
+                Level level1 = new Level();
+                level1.setHeight(myGame.getHeight());
+                level1.setWidth(myGame.getWidth());
+                addDummyEntities(level1, 1.0);
+                addDummyEvents(level1, 2.0);
+                dummyGame.addLevel(level1);
 
-        /**
-         * Event: Press S to give flappy x velocity
-         * Actions:
-         * 1. set xVelocity of flappy to 2
-         */
-        Event flappySpeedUpEvent = new Event();
-        flappySpeedUpEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        flappySpeedUpEvent.addInputs(KeyCode.S);
-        flappySpeedUpEvent.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
+                Level level2 = new Level();
+                level2.setHeight(myGame.getHeight());
+                level2.setWidth(myGame.getWidth());
+                addDummyEntities(level2, 2.0);
+                addDummyEvents(level2, 3.0);
+                dummyGame.addLevel(level2);
 
-        /**
-         * Event: Flappy collides with Ghost on the Right (Right side of flappy hits ghost):
-         * 1. set Ghost1 xVelocity to 0
-         */
-        RightCollisionEvent RightFlappyCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
-        RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+                Level level3 = new Level();
+                level3.setHeight(myGame.getHeight());
+                level3.setWidth(myGame.getWidth());
+                addDummyEntities(level3, 3.0);
+                addDummyEvents(level3, 4.0);
+                dummyGame.addLevel(level3);
+
+                Level level4 = new Level();
+                level4.setHeight(myGame.getHeight());
+                level4.setWidth(myGame.getWidth());
+                addDummyEntities(level4, 4.0);
+                addDummyEvents(level4, 5.0);
+                dummyGame.addLevel(level4);
+
+        }
+
+        private void addDummyEvents(Level level1, Double next) {
+
+                /**
+                 * Event: Press L to decrement flappy's lives by 1
+                 * Actions:
+                 * 1. Decrement LivesComponent by 1
+                 */
+                Event lifeKeyInputEvent = new Event();
+                lifeKeyInputEvent.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
+                lifeKeyInputEvent.addInputs(KeyCode.L);
+                lifeKeyInputEvent.addActions(new ChangeLivesAction(NumericAction.ModifyType.RELATIVE, -1.0));
+
+                /**
+                 * Event: Press Right Arrow Key to move flappy to the right
+                 * Actions:
+                 * 1. increase xPosition of flappy by 5
+                 */
+                Event flappyMoveRightEvent = new Event();
+                flappyMoveRightEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+                flappyMoveRightEvent.addInputs(KeyCode.RIGHT);
+                flappyMoveRightEvent.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
+
+                /**
+                 * Event: Press S to give flappy x velocity
+                 * Actions:
+                 * 1. set xVelocity of flappy to 2
+                 */
+                Event flappySpeedUpEvent = new Event();
+                flappySpeedUpEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+                flappySpeedUpEvent.addInputs(KeyCode.S);
+                flappySpeedUpEvent.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 2.0));
+
+                /**
+                 * Event: Flappy collides with Ghost on the Right (Right side of flappy hits ghost):
+                 * 1. set Ghost1 xVelocity to 0
+                 */
+                RightCollisionEvent RightFlappyCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
+                RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+                RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+
+                /**
+                 * Make bottom collision event between flappy and ghost1 and vice versa
+                 */
+                CollisionEvent BottomGhostCollisionWithFlappy = BottomCollisionEvent.makeBottomBounceEvent("flappy", "Ghost1", false);
+                CollisionEvent BottomFlappyCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "flappy", false);
 
 
-        /**
-         * Event: Ghost collides with another Ghost from the Right (Right side of ghost hits ghost): (Ghosts colliding with each other)
-         * 1. set Ghost1 xVelocity to -2
-         * 2. modify Ghost1 xPosition by -5
-         */
-        CollisionEvent RightGhostCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
-        RightGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        RightGhostCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
-        RightGhostCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                /**
+                 * Event: Ghost collides with another Ghost from the Right (Right side of ghost hits ghost): (Ghosts colliding with each other)
+                 * 1. set Ghost1 xVelocity to -2
+                 * 2. modify Ghost1 xPosition by -5
+                 */
+                //CollisionEvent RightGhostCollisionWithGhost = CollisionEvent.makeBounceEvent("Ghost1", "Ghost1", RightCollisionEvent.class, false);
+                CollisionEvent RightGhostCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
+                RightGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
+                RightGhostCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
+                RightGhostCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
 
-        /**
-         * Event: Ghost1 collides with another Ghost1 from the Bottom (Bottom side of ghost hits ghost): (Ghosts colliding with each other)
-         * 1. set Ghost1 yVelocity to -2
-         * 2. modify Ghost1 yPosition by -5
-         * 3. modify Ghost1 Xposition by 10
-         */
-        CollisionEvent BottomGhostCollisionWithGhost = new BottomCollisionEvent("Ghost1", false);
-        BottomGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        BottomGhostCollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
-        BottomGhostCollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomGhostCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                /**
+                 * Event: Ghost1 collides with another Ghost1 from the Bottom (Bottom side of ghost hits ghost): (Ghosts colliding with each other)
+                 * 1. set Ghost1 yVelocity to -2
+                 * 2. modify Ghost1 yPosition by -5
+                 * 3. modify Ghost1 Xposition by 10
+                 */
+                CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "Ghost1", false);
 
-        /**
-         * Event: Basketball bb collides with Basketball "bb" from the Right (Right side of bb hits bb): (Basketballs colliding with each other)
-         * 1. set bb xVelocity
-         * 3. modify bb Xposition
-         */
-        CollisionEvent broo = new RightCollisionEvent("bb", false);
-        broo.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        broo.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        broo.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                /**
+                 * Event: Basketball bb collides with Basketball "bb" from the Right (Right side of bb hits bb): (Basketballs colliding with each other)
+                 * 1. set bb xVelocity
+                 * 3. modify bb Xposition
+                 */
+                CollisionEvent broo = new RightCollisionEvent("bb", false);
+                broo.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
+                broo.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+                broo.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
 
-        /**
-         * Event: Basketball bb collides with Basketball "bb" from the Bottom (Bottom side of bb hits bb): (Basketballs colliding with each other)
-         * 1. set bb yVelocity
-         * 2. modify bb yPosition
-         * 3. modify bb Xposition
-         */
-        CollisionEvent BottomBBCollisionWithBB = new BottomCollisionEvent("bb", false);
-        BottomBBCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        BottomBBCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
-        BottomBBCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomBBCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                /**
+                 * Event: Basketball bb collides with Basketball "bb" from the Bottom (Bottom side of bb hits bb): (Basketballs colliding with each other)
+                 * 1. set bb yVelocity
+                 * 2. modify bb yPosition
+                 * 3. modify bb Xposition
+                 */
+                CollisionEvent BottomBBCollisionWithBB = new BottomCollisionEvent("bb", false);
+                BottomBBCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
+                BottomBBCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
+                BottomBBCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                BottomBBCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
-        /**
-         * Event: Ghost1 collides with Basketball "bb" from the Right (Right side of Ghost1 hits bb):
-         * 1. set ghost1 xVelocity to -8
-         * 3. modify ghost1 xPosition by -5
-         */
-        CollisionEvent RightGhostCollisionWithBB = new RightCollisionEvent("bb", false);
-        RightGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        RightGhostCollisionWithBB.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
-        RightGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                /**
+                 * Event: Ghost1 collides with Basketball "bb" from the Right (Right side of Ghost1 hits bb):
+                 * 1. set ghost1 xVelocity to -8
+                 * 3. modify ghost1 xPosition by -5
+                 */
+                CollisionEvent RightGhostCollisionWithBB = new RightCollisionEvent("bb", false);
+                RightGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
+                RightGhostCollisionWithBB.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
+                RightGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
 
-        /**
-         * Event: Ghost1 collides with Basketball "bb" from the bottom (bottom side of Ghost1 hits bb):
-         * 1. set ghost1 yVelocity to -5
-         * 2. modify ghost1 yPosition by -5
-         * 3. modify ghost1 Xposition by 10
-         */
-        CollisionEvent BottomGhostCollisionWithBB = new BottomCollisionEvent("bb", false);
-        BottomGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        BottomGhostCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        BottomGhostCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                /**
+                 * Event: Ghost1 collides with Basketball "bb" from the bottom (bottom side of Ghost1 hits bb):
+                 * 1. set ghost1 yVelocity to -5
+                 * 2. modify ghost1 yPosition by -5
+                 * 3. modify ghost1 Xposition by 10
+                 */
+                CollisionEvent BottomGhostCollisionWithBB = new BottomCollisionEvent("bb", false);
+                BottomGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
+                BottomGhostCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+                BottomGhostCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                BottomGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
-        /**
-         * Event: Basketball "bb" collides with Ghost1 from the Right (Right side of Basketball hits Ghost1):
-         * 1. set bb xVelocity to -5
-         * 2. move bb xPosition by -5
-         */
-        CollisionEvent RightBBCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
-        RightBBCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        RightBBCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        RightBBCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                /**
+                 * Event: Basketball "bb" collides with Ghost1 from the Right (Right side of Basketball hits Ghost1):
+                 * 1. set bb xVelocity to -5
+                 * 2. move bb xPosition by -5
+                 */
+                CollisionEvent RightBBCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
+                RightBBCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
+                RightBBCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+                RightBBCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
 
-        /**
-         * Event: Basketball "bb" collides with Ghost1 from the Bottom (bottom side of Basketball hits Ghost1):
-         * 1. set bb yVelocity
-         * 2. move bb yPosition by -5
-         * 3. modify bb xPosition
-         */
-        CollisionEvent BottomBBcollisionWithGhost = new BottomCollisionEvent("Ghost1", false);
-        BottomBBcollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        BottomBBcollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        BottomBBcollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomBBcollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                /**
+                 * Event: Basketball "bb" collides with Ghost1 from the Bottom (bottom side of Basketball hits Ghost1):
+                 * 1. set bb yVelocity
+                 * 2. move bb yPosition by -5
+                 * 3. modify bb xPosition
+                 */
+                CollisionEvent BottomBBcollisionWithGhost = new BottomCollisionEvent("Ghost1", false);
+                BottomBBcollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
+                BottomBBcollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
+                BottomBBcollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+                BottomBBcollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
-        /**
-         * Event: Ghost1 collides with flappy from the Left (Left side of Ghost1 hits flappy):
-         * 1. set Ghost1 xVelocity to 1
-         * 2. move Ghost1 xPosition by 80
-         */
-        LeftCollisionEvent LeftGhostCollisionWithFlappy = new LeftCollisionEvent("flappy", false);
-        LeftGhostCollisionWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        LeftGhostCollisionWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 1.0));
-        LeftGhostCollisionWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,80.0));
-        //LeftGhostCollisionWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
+                /**
+                 * Event: Ghost1 collides with flappy from the Left (Left side of Ghost1 hits flappy):
+                 * 1. set Ghost1 xVelocity to 1
+                 * 2. move Ghost1 xPosition by 80
+                 */
+                LeftCollisionEvent LeftGhostCollisionWithFlappy = new LeftCollisionEvent("flappy", false);
+                LeftGhostCollisionWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
+                LeftGhostCollisionWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 1.0));
+                LeftGhostCollisionWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,80.0));
+                //LeftGhostCollisionWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
 
-        /**
-         * Event: Ghost1 collides with flappy from the Right (Right side of Ghost1 hits flappy):
-         * 1. set Ghost1 xVelocity to -1
-         * 2. move Ghost1 xPosition by -80
-         */
-        CollisionEvent GhostCollidesWithFlappy = new RightCollisionEvent("flappy", false);
-        GhostCollidesWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-        GhostCollidesWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -1.0));
-        GhostCollidesWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-80.0));
-        //GhostCollidesWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
+                /**
+                 * Event: Ghost1 collides with flappy from the Right (Right side of Ghost1 hits flappy):
+                 * 1. set Ghost1 xVelocity to -1
+                 * 2. move Ghost1 xPosition by -80
+                 */
+                CollisionEvent GhostCollidesWithFlappy = new RightCollisionEvent("flappy", false);
+                GhostCollidesWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
+                GhostCollidesWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -1.0));
+                GhostCollidesWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-80.0));
+                //GhostCollidesWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
 
-        /**
-         * Event: Press Left Arrow Key to:
-         * 1.Move Flappy to the left
-         */
-        Event flappyMoveLeft = new Event();
-        flappyMoveLeft.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        flappyMoveLeft.addInputs(KeyCode.LEFT);
-        flappyMoveLeft.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
-        //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
+                /**
+                 * Event: Press Left Arrow Key to:
+                 * 1.Move Flappy to the left
+                 */
+                Event flappyMoveLeft = new Event();
+                flappyMoveLeft.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+                flappyMoveLeft.addInputs(KeyCode.LEFT);
+                flappyMoveLeft.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
+                //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
 
-        //add up down keycodes
+                //add up down keycodes
 //        Event flappyMoveUp = new Event("flappy");
 //        flappyMoveUp.addInputs(KeyCode.UP);
 //        flappyMoveUp.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE, -1.0));

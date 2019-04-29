@@ -1,29 +1,20 @@
 package data.external;
 
 public class GameCenterData {
-    private String myFolderName;
     private String myTitle;
     private String myImageLocation;
     private String myDescription;
     private String myAuthorName;
 
-    public GameCenterData(){
-
-    }
-    public GameCenterData(String folder, String title, String description, String imageLocation, String authorName){
-        myFolderName = folder;
+    public GameCenterData(String title, String description, String imageLocation, String authorName){
         myTitle = title;
         myDescription = description;
         myImageLocation = imageLocation;
         myAuthorName = authorName;
     }
 
-    public String getFolderName() {
-        return myFolderName;
-    }
+    public GameCenterData() {
 
-    public void setFolderName(String folderName) {
-        myFolderName = folderName;
     }
 
     public String getTitle() {
@@ -56,5 +47,19 @@ public class GameCenterData {
 
     public void setAuthorName(String authorName) {
         myAuthorName = authorName;
+    }
+
+    @Deprecated
+    public GameCenterData(String folder, String title, String description, String imageLocation, String authorName){
+
+    }
+
+    @Deprecated
+    public String getFolderName() {
+        return "";
+    }
+
+    @Deprecated
+    public void setFolderName(String folderName) {
     }
 }
