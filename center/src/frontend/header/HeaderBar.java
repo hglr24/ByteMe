@@ -9,8 +9,11 @@
 
 package frontend.header;
 
+import data.external.DataManager;
+import data.external.ImageChooser;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.PieChart;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +24,7 @@ import javafx.scene.text.Text;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class HeaderBar {
@@ -64,7 +68,14 @@ public class HeaderBar {
         BorderPane settingsPane = new BorderPane();
         settingsPane.setPadding(new Insets(20));
         try {
-            ImageView settings = new ImageView(new Image(new FileInputStream(SETTINGS_IMAGE_LOCATION)));
+            DataManager temporaryManager = new DataManager(); // todo: pass this in
+            ImageView settings;
+            try {
+                settings = new ImageView(new Image(temporaryManager.getProfilePic(myUsername)));
+            } catch(Exception e) {
+                settings = new ImageView(new Image(new FileInputStream("center/data/profile_information" +
+                        "/images/default.png")));
+            }
             settings.setOnMouseClicked(e -> openSettings());
             settings.setPreserveRatio(true);
             settings.setFitWidth(50);
@@ -77,7 +88,8 @@ public class HeaderBar {
     }
 
     private void openSettings() {
-
+        ImageChooser imageChooser = new ImageChooser(myUsername);
+        imageChooser.uploadImage();
     }
 
 }

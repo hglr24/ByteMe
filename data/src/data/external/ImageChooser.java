@@ -4,6 +4,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.List;
 
 public class ImageChooser {
@@ -14,12 +15,12 @@ public class ImageChooser {
     private static final List<String> IMAGE_EXTENSIONS = List.of(PNG, JPG, GIF);
     private static final String WILDCARD = "*.";
 
-    private String myPrefix;
+    private String myUserName;
     private DataManager myDataManager;
 
-    public ImageChooser(String prefix){
+    public ImageChooser(String userName){
         myDataManager = new DataManager();
-        myPrefix = prefix;
+        myUserName = userName;
     }
 
     public String uploadImage() {
@@ -28,8 +29,13 @@ public class ImageChooser {
         addExtensionsFilter(fileChooser);
         File selectedFile = fileChooser.showOpenDialog(stage);
         if(selectedFile != null){
-            String savedName = myPrefix + selectedFile.getName();
-            myDataManager.saveImage(myPrefix + selectedFile.getName(), selectedFile);
+            String savedName = myUserName + selectedFile.getName();
+            try {
+                System.out.println(selectedFile);
+                myDataManager.setProfilePic(myUserName, selectedFile);
+            } catch (SQLException e) {
+                e.printStackTrace(); // Just for testing
+            }
             return savedName;
         }
         return null;
