@@ -100,10 +100,18 @@ public class DummyGameObjectMaker {
                 RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
 
                 /**
+                 * Make bottom collision event between flappy and ghost1 and vice versa
+                 */
+                CollisionEvent BottomGhostCollisionWithFlappy = BottomCollisionEvent.makeBottomBounceEvent("flappy", "Ghost1", false);
+                CollisionEvent BottomFlappyCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "flappy", false);
+
+
+                /**
                  * Event: Ghost collides with another Ghost from the Right (Right side of ghost hits ghost): (Ghosts colliding with each other)
                  * 1. set Ghost1 xVelocity to -2
                  * 2. modify Ghost1 xPosition by -5
                  */
+                //CollisionEvent RightGhostCollisionWithGhost = CollisionEvent.makeBounceEvent("Ghost1", "Ghost1", RightCollisionEvent.class, false);
                 CollisionEvent RightGhostCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
                 RightGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
                 RightGhostCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
@@ -115,11 +123,7 @@ public class DummyGameObjectMaker {
                  * 2. modify Ghost1 yPosition by -5
                  * 3. modify Ghost1 Xposition by 10
                  */
-                CollisionEvent BottomGhostCollisionWithGhost = new BottomCollisionEvent("Ghost1", false);
-                BottomGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
-                BottomGhostCollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
-                BottomGhostCollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-                BottomGhostCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+                CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost1", "Ghost1", false);
 
                 /**
                  * Event: Basketball bb collides with Basketball "bb" from the Right (Right side of bb hits bb): (Basketballs colliding with each other)
@@ -432,6 +436,8 @@ public class DummyGameObjectMaker {
                 level1.addEvent(BottomBBcollisionWithGhost);
                 level1.addEvent(flappyFallsEvent);
                 level1.addEvent(lifeKeyInputEvent);
+                level1.addEvent(BottomGhostCollisionWithFlappy);
+                level1.addEvent(BottomFlappyCollisionWithGhost);
 
         }
 
