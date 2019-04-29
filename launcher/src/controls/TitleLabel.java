@@ -1,8 +1,6 @@
 package controls;
 
-import javafx.animation.FadeTransition;
 import javafx.scene.control.Label;
-import javafx.util.Duration;
 
 import java.util.ResourceBundle;
 
@@ -12,18 +10,13 @@ public class TitleLabel extends Label {
     private static final String STYLE = "welcome.css";
     private static final String SMALL_STYLE = "small-label";
 
-    private final String myWelcomeLabel;
-    private final FadeTransition myFadeAnimation;
     /**
      * This is the larger title display users see among the various pages of the launcher environment
      * @author Anna Darwish
      */
     public TitleLabel(String resourceKey){
         ResourceBundle myResources = ResourceBundle.getBundle(WELCOME_RESOURCE);
-        myWelcomeLabel = myResources.getString(resourceKey);
-
-        double fadeDuration = Double.parseDouble(myResources.getString(FADE_DURATION_KEY));
-        myFadeAnimation = new FadeTransition(Duration.millis(fadeDuration));
+        String myWelcomeLabel = myResources.getString(resourceKey);
         //setUpDisplay();
         this.setText(myWelcomeLabel);
         this.getStylesheets().add(STYLE);
@@ -38,15 +31,6 @@ public class TitleLabel extends Label {
      */
     private void addToLabel(String addition){
         this.setText(this.getText() + " " + addition);
-    }
-
-    private void setUpDisplay(){
-        this.setText(myWelcomeLabel);
-        myFadeAnimation.setNode(this);
-        myFadeAnimation.setFromValue(0.0);
-        myFadeAnimation.setToValue(1.0);
-        myFadeAnimation.setCycleCount(1);
-        myFadeAnimation.setAutoReverse(false);
     }
 
 
