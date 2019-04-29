@@ -1,0 +1,12 @@
+<DefaultEntity>
+    <Category>Miscellaneous</Category>
+    <Components>
+        <NameComponent>Falling Object</NameComponent>
+        <XVelocityComponent>0.0</XVelocityComponent>
+        <YVelocityComponent>-10.0</YVelocityComponent>
+        <OpacityComponent>1.0</OpacityComponent>
+        <WidthComponent>25.0</WidthComponent>
+        <HeightComponent>25.0</HeightComponent>
+        <YAccelerationComponent>-2.0</YAccelerationComponent>
+    </Components>
+</DefaultEntity>

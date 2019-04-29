@@ -3,10 +3,11 @@ package engine.external.actions;
 import engine.external.Entity;
 import engine.external.component.SpawnEntityComponent;
 
-public class AddEntityAction extends AddComponentAction {
-    public AddEntityAction(Entity entity){
+public class AddEntityInstantAction extends AddComponentAction {
+    public AddEntityInstantAction(Entity entity){
         SpawnEntityComponent entityComponent = new SpawnEntityComponent(entity);
-        setActionWithTimer(entityComponent);
+        setAbsoluteAction(entityComponent);
         myComponentClass = SpawnEntityComponent.class;
     }
+
 }

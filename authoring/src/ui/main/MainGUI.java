@@ -33,6 +33,7 @@ import ui.panes.UserCreatedTypesPane;
 import ui.panes.Viewer;
 import ui.windows.AudioManager;
 import ui.windows.ImageManager;
+import ui.windows.LoadGameSelector;
 import voogasalad.util.reflection.Reflection;
 
 import java.io.File;
@@ -42,6 +43,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -63,6 +65,7 @@ public class MainGUI {
     private ObjectProperty<Propertable> mySelectedEntity;
     private ObjectProperty<Propertable> myCurrentLevel;
     private Scene myScene;
+    private String myAuthorName = "harry";
 
     private static final double STAGE_MIN_HEIGHT = 600;
     private static final double PROP_PANE_HEIGHT = 210;
@@ -93,7 +96,6 @@ public class MainGUI {
         myCurrentStyle.addListener((change, oldVal, newVal) -> swapStylesheet(oldVal, newVal));
         myCurrentLevel.addListener((change, oldVal, newVal) -> swapViewer(oldVal, newVal));
         myObjectManager.setGameCenterData(myGameData);
-        createMainGUI(false);
     }
 
     public MainGUI(Game game, GameCenterData gameData) {
@@ -104,7 +106,8 @@ public class MainGUI {
         loadDatabaseGame();
     }
 
-    public void launch() {
+    public void launch(boolean load) {
+        createMainGUI(load);
         myStage.setTitle(STAGE_TITLE);
         myStage.setScene(myScene);
         myStage.setMinHeight(STAGE_MIN_HEIGHT);
@@ -199,7 +202,7 @@ public class MainGUI {
                 try {
                     this.getClass().getDeclaredMethod((String) bundle.getObject(option)).invoke(this);
                 } catch (Exception e) {
-                    // catch FIX
+                    e.printStackTrace();
                 }
             }));
         }
@@ -215,51 +218,41 @@ public class MainGUI {
     @SuppressWarnings("unused")
     private void newGame() {
         MainGUI newWorkspace = new MainGUI();
-        newWorkspace.launch();
+        newWorkspace.launch(false);
     }
 
     @SuppressWarnings("unused")
     private void openGame() {
-        String authorName = "";
         DataManager dataManager = new DataManager();
-        /*try {
-            List<String> gameNames = dataManager.loadUserGameNames(authorName); //TODO
-            myLoadedGame = (Game) dataManager.loadGameData(authorName, gameNames.get(0)); //TODO
-            //myGameData = null; //TODO
-        } catch (SQLException e) {
-            ErrorBox error = new ErrorBox("Load", "Error loading from database");
-        }*/
-
-        GameTranslator translator = new GameTranslator(myObjectManager);
         try {
-            Game exportableGame = translator.translate();
-            MainGUI newWorkspace = new MainGUI(exportableGame, myGameData);
-            newWorkspace.launch();
-        } catch (Exception e) {
-            //TODO
+            List<String> gameNames = dataManager.loadUserGameNames(myAuthorName);
+            LoadGameSelector selector = new LoadGameSelector(gameNames);
+            selector.showAndWait();
+
+            if(selector.getSelectedGame() != null) {
+                String selectedGameTitle = selector.getSelectedGame();
+                Game loadedGame = (Game) dataManager.loadGameData(selectedGameTitle, myAuthorName);
+                GameCenterData loadedGameData = dataManager.loadGameInfo(selectedGameTitle, myAuthorName);
+                MainGUI newWorkspace = new MainGUI(loadedGame, loadedGameData);
+                newWorkspace.launch(true);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            ErrorBox error = new ErrorBox("Load", "Error loading from database");
         }
     }
 
     private void loadDatabaseGame() {
-        // Populate ObjectManager (Translate Entities/Levels)
-        // Create labels for Entities, Groups, Levels in LabelManager
-        // Populate EventsMap
         GameTranslator translator = new GameTranslator(myObjectManager);
         myObjectManager.removeAllLevels();
-
         try {
             translator.populateObjectManager(myLoadedGame, myCurrentLevel);
         } catch (UIException e) {
             ErrorBox error = new ErrorBox("Load Error", e.getMessage());
             error.display();
         }
-
-        // Set selectedLevel to first level
         myCurrentLevel.setValue(myObjectManager.getLevels().get(0));
-        // Assign selectedEntity to something in the level, triggers Properties Panes
         mySelectedEntity.setValue(myObjectManager.getLevels().get(0).getEntities().get(0));
-        // Populate Levels Pane
-        // Create UI panes (Viewers, UserCreatedTypePane)
         createMainGUI(true);
     }
 
@@ -269,8 +262,8 @@ public class MainGUI {
         try {
             Game exportableGame = translator.translate();
             myDataManager = new DataManager();
-            myDataManager.saveGameData(myGameData.getFolderName(), myGameData.getAuthorName(), exportableGame);
-            myDataManager.saveGameInfo(myGameData.getFolderName(), myGameData.getAuthorName(), myGameData);
+            myDataManager.saveGameData(myGameData.getTitle(), myAuthorName, exportableGame);
+            myDataManager.saveGameInfo(myGameData.getTitle(), myAuthorName, myGameData);
 
             saveFolderToDataBase(GENERAL_RESOURCES.getString("images_filepath"));
             saveFolderToDataBase(GENERAL_RESOURCES.getString("audio_filepath"));
@@ -329,14 +322,11 @@ public class MainGUI {
     }
 
     private void defaultGameData() {
-        myGameData.setFolderName("NewGame");
         myGameData.setImageLocation("");
         myGameData.setTitle("New Game");
         myGameData.setDescription("A fun new game");
-        myGameData.setAuthorName("Carrie");
+        myGameData.setAuthorName(myAuthorName);
     }
-
-
 
     private void saveFolderToDataBase(String outerDirectoryPath){
         File outerDirectory = new File(outerDirectoryPath);
@@ -375,5 +365,15 @@ public class MainGUI {
             //TODO: handle error
             e.printStackTrace();
         }
+    }
+
+    public void clearFolder(String outerDirectoryPath){
+        DatabaseEngine.getInstance().close();
+        File outerDirectory = new File(outerDirectoryPath);
+        System.out.println("Directory: " + outerDirectory.getName());
+        for(File file : outerDirectory.listFiles()){
+            file.delete();
+        }
+        DatabaseEngine.getInstance().open();
     }
 }

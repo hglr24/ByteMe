@@ -2,9 +2,9 @@
     <Category>Characters</Category>
     <Components>
         <NameComponent>Hero</NameComponent>
-        <YAccelerationComponent>9.8</YAccelerationComponent>
+        <YAccelerationComponent>2.0</YAccelerationComponent>
         <OpacityComponent>1.0</OpacityComponent>
         <WidthComponent>25.0</WidthComponent>
-        <HeightComponent>75.0</HeightComponent>
+        <HeightComponent>100.0</HeightComponent>
     </Components>
 </DefaultEntity>

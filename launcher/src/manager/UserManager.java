@@ -47,7 +47,7 @@ import ui.main.MainGUI;
 
     private void goToAuthoring(GameCenterData myData){
         MainGUI myGUI = new MainGUI(new Game(), myData);
-        myGUI.launch();
+        myGUI.launch(false);
     }
 
     private void goToGameCenter(){

@@ -46,8 +46,8 @@ public class ValueFieldProperty extends TextField {
     public void addNumericRestriction(){
         resetValueField(NUMBER);
         myListener = (observableValue, s, newValue) -> {
-            if (!newValue.matches("\\d*")) {
-                setText(newValue.replaceAll("[^\\d]", ""));
+            if (!newValue.matches("^-?\\d+(?:\\.\\d+)?")) {
+                setText(newValue.replaceAll("^-?\\d+(?:\\.\\d+)?", ""));
             }
         };
         this.textProperty().addListener(myListener);

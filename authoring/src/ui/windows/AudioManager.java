@@ -54,21 +54,26 @@ public class AudioManager extends AssetManager {
         ListView listView = myMap.get(pane);
         Label text = new Label(extractDisplayName(file.getName()));
         VBox vBox = new VBox(text);
+        vBox.setFillWidth(true);
         vBox.setOnMouseClicked(mouseEvent -> {
             if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+                mySelectedAssetName = file.getName();
+                System.out.println("Single click registered");
                 if(mouseEvent.getClickCount() == 2){
+                    System.out.println("Double click registered");
                     Media sound = new Media(file.toURI().toString());
                     MediaPlayer mediaPlayer = new MediaPlayer(sound);
                     mediaPlayer.play();
                 }
             }
         });
-        vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                mySelectedAssetName = file.getName();
-            }
-        });
+//        vBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+//            @Override
+//            public void handle(MouseEvent mouseEvent) {
+//                mySelectedAssetName = file.getName();
+//                System.out.println("On selected");
+//            }
+//        });
         if(listView.getItems().contains(vBox)){
             listView.getItems().remove(vBox);
         }

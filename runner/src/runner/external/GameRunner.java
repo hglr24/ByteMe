@@ -1,7 +1,10 @@
 package runner.external;
 
 import data.external.DataManager;
+import engine.external.Entity;
 import engine.external.Level;
+import engine.external.component.LivesComponent;
+import engine.external.component.ScoreComponent;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import runner.internal.DummyGameObjectMaker;
@@ -25,6 +28,10 @@ public class GameRunner {
     private String myGameName;
     private String myAuthorName;
     private DataManager myDataManager;
+    private Level myCurrentLevel;
+    private Double myScore;
+    private String myUsername;
+    private Double myLives;
 
     /**
      * Constructor for GameRunner
@@ -33,10 +40,9 @@ public class GameRunner {
      * @throws FileNotFoundException if game is not found
      */
     public GameRunner(String gameName, String authorName, String username) throws FileNotFoundException {
-        //TODO Change defualt author to actual author
-        //String authorName = "DefaultAuthor";
         myGame = loadGameObject(gameName, authorName);
         myGameName = gameName;
+        myUsername = username;
         myAuthorName = authorName;
         myGameStage = new Stage();
         int firstLevel = 1;
@@ -44,10 +50,14 @@ public class GameRunner {
     }
 
     private Game loadGameObject(String gameName, String authorName){
+
+        /**
+         * MAKE SURE TO KEEP THESE COMMENTED SO YOU DON'T OVERWRITE YOUR GAME
+         */
 //        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
 //        Game gameMade = dm2.getGame(gameName);
         myDataManager = new DataManager();
-//        dm.saveGameData(gameName, authorName,gameMade);
+//        myDataManager.saveGameData(gameName, authorName,gameMade);
 //        System.out.println("Serialization complete");
 
         try {
@@ -67,7 +77,7 @@ public class GameRunner {
         } catch(SQLException e){
             gameToPlay = myGame;
         }
-        Level currentLevel = gameToPlay.getLevels().get(currentLevelNumber - 1);
+        myCurrentLevel = gameToPlay.getLevels().get(currentLevelNumber - 1);
         mySceneWidth = myGame.getWidth();
         mySceneHeight = myGame.getHeight();
         Consumer<Double> goToNext = (level) -> {
@@ -75,14 +85,15 @@ public class GameRunner {
         };
         Image background;
         try {
-           background = new Image(myDataManager.loadImage(currentLevel.getBackground()), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+           background = new Image(myDataManager.loadImage(myCurrentLevel.getBackground()), myCurrentLevel.getWidth(), myCurrentLevel.getHeight(), false, false);
         } catch (Exception e){
-            background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+            background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), myCurrentLevel.getWidth(), myCurrentLevel.getHeight(), false, false);
            // background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
         }
 
-        new LevelRunner(currentLevel, mySceneWidth, mySceneHeight, myGameStage,
-                goToNext, gameToPlay.getLevels().size(), background);
+        new LevelRunner(myCurrentLevel, mySceneWidth, mySceneHeight, myGameStage,
+                goToNext, gameToPlay.getLevels().size(), background, myScore, myLives,
+                myAuthorName, myGameName, myUsername, myGame);
     }
 
     private void nextLevel(Double level) {
@@ -93,6 +104,14 @@ public class GameRunner {
             levelToPlay = 10;
         }
         System.out.println("progressing to level " + levelToPlay);
+        for(Entity entity : myCurrentLevel.getEntities()){
+            if (entity.hasComponents(ScoreComponent.class)){
+                myScore = (Double) entity.getComponent(ScoreComponent.class).getValue();
+            }
+            if (entity.hasComponents(LivesComponent.class)){
+                myScore = (Double) entity.getComponent(LivesComponent.class).getValue();
+            }
+        }
         this.runLevel(levelToPlay);
     }
 
