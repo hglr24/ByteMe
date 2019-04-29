@@ -45,27 +45,8 @@ public class MovementSystem extends VoogaSystem {
      */
     protected void run() {
         for (Entity e: getEntities()) {
-            double x = calcPosition((Double) getComponentValue(X_POSITION_COMPONENT_CLASS,e),
-                    e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
-                            (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
-                    e.hasComponents(X_ACCELERATION_COMPONENT_CLASS)?
-                            (Double) getComponentValue(X_ACCELERATION_COMPONENT_CLASS,e):0.0);
-            double y = calcPosition((Double) getComponentValue(Y_POSITION_COMPONENT_CLASS,e),
-                    e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)?
-                            (Double) getComponentValue(Y_VELOCITY_COMPONENT_CLASS,e):0.0,
-                    e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
-                            (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
 
-            double vX = calcVelocity(e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
-                            (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
-                    e.hasComponents(X_ACCELERATION_COMPONENT_CLASS)?
-                            (Double) getComponentValue(X_ACCELERATION_COMPONENT_CLASS,e):0.0);
-            double vY = calcVelocity(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)?
-                            (Double) getComponentValue(Y_VELOCITY_COMPONENT_CLASS,e):0.0,
-                    e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
-                            (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
-
-            updateEntityParam(x,y,vX,vY,e);
+            updateEntityParam(calcXPosition(e),calcYPosition(e),calcXVelocity(e),calcYVelocity(e),e);
 
 //            if(e.getComponent(SpriteComponent.class).getValue().equals("flappy_bird.png")){
 //                System.out.println(e.getComponent(SpriteComponent.class).getValue()+" x pos = "+x+ " y pos = "+y);
@@ -75,8 +56,38 @@ public class MovementSystem extends VoogaSystem {
         }
     }
 
+    private double calcXPosition(Entity e){
+        return calcPosition((Double) getComponentValue(X_POSITION_COMPONENT_CLASS,e),
+                e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
+                        (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
+                e.hasComponents(X_ACCELERATION_COMPONENT_CLASS)?
+                        (Double) getComponentValue(X_ACCELERATION_COMPONENT_CLASS,e):0.0);
+    }
+
+    private double calcYPosition(Entity e){
+        return calcPosition((Double) getComponentValue(Y_POSITION_COMPONENT_CLASS,e),
+                e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)?
+                        (Double) getComponentValue(Y_VELOCITY_COMPONENT_CLASS,e):0.0,
+                e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
+                        (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
+    }
+
     private double calcPosition(double position, double velocity, double acceleration){
         return position+velocity+acceleration/2.0;
+    }
+
+    private double calcXVelocity(Entity e){
+        return calcVelocity(e.hasComponents(X_VELOCITY_COMPONENT_CLASS)?
+                        (Double) getComponentValue(X_VELOCITY_COMPONENT_CLASS,e):0.0,
+                e.hasComponents(X_ACCELERATION_COMPONENT_CLASS)?
+                        (Double) getComponentValue(X_ACCELERATION_COMPONENT_CLASS,e):0.0);
+    }
+
+    private double calcYVelocity(Entity e){
+        return calcVelocity(e.hasComponents(Y_VELOCITY_COMPONENT_CLASS)?
+                (Double) getComponentValue(Y_VELOCITY_COMPONENT_CLASS,e):0.0,
+                e.hasComponents(Y_ACCELERATION_COMPONENT_CLASS)?
+                (Double) getComponentValue(Y_ACCELERATION_COMPONENT_CLASS,e):0.0);
     }
 
     private double calcVelocity(double velocity, double acceleration){
