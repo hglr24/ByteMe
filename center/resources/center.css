@@ -135,3 +135,7 @@
     -fx-fill: white;
     -fx-font-size: 18;
 }
+
+.refreshspacing {
+    -fx-padding: 590 15 0 0;
+}
