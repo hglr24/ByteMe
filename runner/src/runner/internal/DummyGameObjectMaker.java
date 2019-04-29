@@ -318,7 +318,6 @@ public class DummyGameObjectMaker {
          */
         Event levelOver = new Event();
         levelOver.addInputs(KeyCode.SPACE);
-        levelOver.addActions(new ProgressionAction(true));
         //levelOver.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
         /**
@@ -327,7 +326,6 @@ public class DummyGameObjectMaker {
          */
         RightCollisionEvent rce = new RightCollisionEvent("Basketball", false);
         rce.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        rce.addActions(new ProgressionAction(true));
         //rce.addActions(new NextLevelAction(NumericAction.ModifyType.ABSOLUTE, next));
 
         /**
@@ -534,8 +532,6 @@ public class DummyGameObjectMaker {
         //Give flappy a ValueComponent that will limit the number of jumps he can perform. We will use this so that flappy can only double jump.
         Component flappyJumpCounter = new ValueComponent(0.0);
         Flappy.addComponent(flappyJumpCounter);
-        Flappy.addComponent(new NextLevelComponent(current));
-        Flappy.addComponent(new ProgressionComponent(false));
         Flappy.addComponent(new AssociatedEntityComponent(gameObject));
         Flappy.addComponent(new SoundComponent("mario_theme"));
 
