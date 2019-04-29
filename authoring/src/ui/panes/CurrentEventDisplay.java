@@ -2,6 +2,7 @@ package ui.panes;
 import engine.external.actions.Action;
 import engine.external.conditions.Condition;
 import engine.external.events.Event;
+import events.EventFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,11 +27,11 @@ import java.util.*;
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
     private ResourceBundle myErrorMessage = ResourceBundle.getBundle("error_messages");
     private ResourceBundle myKeyCodesDisplay = ResourceBundle.getBundle("concrete_keycode");
+    private ResourceBundle KEY_DISPLAY = ResourceBundle.getBundle("display_keycodes");
     private static final String EDIT = "Edit";
     private static final String REMOVE = "Remove";
     private static final String DELIMITER = ".";
     private static final String CSS = "current-events-display";
-
 
 
     CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier, AddKeyCode addKeyCode){
@@ -92,14 +93,10 @@ import java.util.*;
     }
 
     private void setUpKeyCodes(ChoiceBox<String> myKeyCodesListing){
-        Set<String> keyCodes = myKeyCodes.keySet();
-        List<String> keyCodesList = new ArrayList<>(keyCodes);
-        Collections.sort(keyCodesList);
-        List<String> removedIndex = new ArrayList<>();
-        for (String key: keyCodesList){
-            removedIndex.add(key.substring(key.indexOf(DELIMITER) + 1));
+        EventFactory.setUpKeyCode(myKeyCodes,myKeyCodesListing);
+        if (myEvent.getImmutableKeyCodes().size()!= 0){
+            myKeyCodesListing.setValue(KEY_DISPLAY.getString(myEvent.getImmutableKeyCodes().get(0).toString()));
         }
-        myKeyCodesListing.setItems(FXCollections.observableList(removedIndex));
         myKeyCodesListing.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newValue) -> {
             myKeyCodesListing.setAccessibleText(newValue);
             myKeyCodeAdder.refresh(myEvent,KeyCode.getKeyCode(myKeyCodesDisplay.getString(newValue)));

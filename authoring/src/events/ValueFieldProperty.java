@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.WindowEvent;
 import ui.windows.AudioManager;
 import ui.windows.ImageManager;
 import voogasalad.util.reflection.Reflection;
@@ -58,6 +59,12 @@ public class ValueFieldProperty extends TextField {
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
             AudioManager myManager = new AudioManager();
             myManager.show();
+            myManager.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                @Override
+                public void handle(WindowEvent windowEvent) {
+                    System.out.println(myManager.getAssetName());
+                }
+            });
         };
         this.setOnMouseClicked(showFileOptions);
     }

@@ -43,6 +43,7 @@ public class CreateGameDisplay extends AnchorPane {
     private static final String LARGER_STYLE = "bigger-title";
     private static final String IMAGE_PREFIX = "byteme_default_launcher_gameIcon_";
     private String myUserName;
+    private SwitchToAuthoring openNewGame;
     /**
      * This page will prompt the user to enter information about the new game they wish to create, such as its cover image,
      * title, and description. Then, it will create a new GameDisplay object to be passed to the authoring environment so they
@@ -52,6 +53,7 @@ public class CreateGameDisplay extends AnchorPane {
      */
     public CreateGameDisplay(SwitchToAuthoring goToAuthoring, String userName){
         this.getStyleClass().add(AUTHORING_STYLE);
+        openNewGame = goToAuthoring;
         myUserName = userName;
         setUpImages(goToAuthoring,userName);
 
@@ -108,6 +110,7 @@ public class CreateGameDisplay extends AnchorPane {
         String imageFileName = IMAGE_PREFIX + "_" + gameName.getTextEntered() + "_" + myUserName +"_"+ myFile.getName();
         dataManager.saveImage(imageFileName,myFile);
         GameCenterData myData = new GameCenterData(gameName.getTextEntered(),gameDescription.getTextEntered(),imageFileName,myUserName);
+        openNewGame.switchScene(myData);
 
     }
 
@@ -131,7 +134,7 @@ public class CreateGameDisplay extends AnchorPane {
         modifyGamePreferences.getStyleClass().add(INNER_BOX_STYLE);
     }
 
-    private void enterAuthoringToModifyOldGame(String gameName){
+    private void enterAuthoringToModifyOldGame(String userName){
 
     }
 

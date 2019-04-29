@@ -2,6 +2,8 @@ package events;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import java.util.*;
@@ -14,7 +16,7 @@ import java.util.*;
  */
 public class EventFactory {
     private static final String ASSOCIATED_OPTIONS_DELIMITER = "::";
-
+    private static final String KEYCODE_DELIMITER = ".";
     private static List<String> getIndependentOptionsListing(ResourceBundle associatedOptionsResource){
         List<String> independentOptions = new ArrayList<>(associatedOptionsResource.keySet());
         Collections.sort(independentOptions);
@@ -32,6 +34,18 @@ public class EventFactory {
         }
 
         return associatedOptions;
+    }
+
+    public static void setUpKeyCode(ResourceBundle myKeyCodes, ChoiceBox<String> myKeyCodesListing){
+        Set<String> keyCodes = myKeyCodes.keySet();
+        List<String> keyCodesList = new ArrayList<>(keyCodes);
+        Collections.sort(keyCodesList);
+        List<String> removedIndex = new ArrayList<>();
+        for (String key: keyCodesList){
+            removedIndex.add(key.substring(key.indexOf(KEYCODE_DELIMITER) + 1));
+        }
+        myKeyCodesListing.setItems(FXCollections.observableList(removedIndex));
+        myKeyCodesListing.setOnAction(actionEvent -> myKeyCodesListing.setAccessibleText(myKeyCodesListing.getValue()));
     }
 
     public static HBox createEventComponentOptions(String prompt, String resourceName, StringProperty componentName,

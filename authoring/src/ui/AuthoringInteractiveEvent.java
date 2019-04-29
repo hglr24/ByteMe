@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.manager.LabelManager;
+import ui.manager.RefreshEvents;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
 
@@ -38,7 +39,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     private static final String ERROR_PACKAGE_NAME = "error_messages";
     private static final ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_PACKAGE_NAME);
 
-    private Refresher myRefresher;
+    private RefreshEvents myRefresher;
     private ObservableList<Event> myEntityEvents;
 
     public AuthoringInteractiveEvent(LabelManager myLabelManager, String eventName, String entityName){
@@ -62,7 +63,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     }
 
     @Override
-    public void addSaveComponents(Refresher refresher, ObservableList<Event> entityEvents) {
+    public void addSaveComponents(RefreshEvents refresher, ObservableList<Event> entityEvents) {
         myRefresher = refresher;
         myEntityEvents = entityEvents;
     }
@@ -81,6 +82,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
         interactiveEvent.addConditions(new StringEqualToCondition(NameComponent.class,myEntityName));
         super.saveAction(interactiveEvent);
         super.saveEvent(interactiveEvent,myRefresher,myEntityEvents);
+        super.closeWindow();
     }
 
     private void saveInteractee(Event event){
