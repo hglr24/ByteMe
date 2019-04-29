@@ -99,7 +99,6 @@ public class DummyGameObjectMaker {
                 RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
                 RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
 
-
                 /**
                  * Event: Ghost collides with another Ghost from the Right (Right side of ghost hits ghost): (Ghosts colliding with each other)
                  * 1. set Ghost1 xVelocity to -2
@@ -233,8 +232,8 @@ public class DummyGameObjectMaker {
                 Ghost1Jump.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost1"));
                 Ghost1Jump.addInputs(KeyCode.J);
                 Ghost1Jump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-                Ghost1Jump.addActions(new SoundAction("coin"));
-                Ghost1Jump.addActions((new SpriteAction("mushroom.png")));
+                Ghost1Jump.addActions(new SoundAction("jump"));
+                Ghost1Jump.addActions((new SpriteAction("ghost.png")));
 
 
                 /**
@@ -254,7 +253,7 @@ public class DummyGameObjectMaker {
                 //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
                 flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
                 flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
-                flappyJump.addActions(new SoundAction("coin"));
+                flappyJump.addActions(new SoundAction("jump"));
 
                 /**
                  * Event: Press M to:
@@ -462,7 +461,8 @@ public class DummyGameObjectMaker {
                  */
                 //Give Flappy the needed components
                 Flappy.addComponent(new NameComponent("flappy"));
-                Flappy.addComponent(new SpriteComponent("#defaults#hero#dangling.gif"));
+                //Flappy.addComponent(new SpriteComponent("#defaults#hero#dangling.gif"));
+                Flappy.addComponent(new SpriteComponent("ryan.png"));
                 Flappy.addComponent(new XPositionComponent(200.0));
                 Flappy.addComponent(new YPositionComponent(50.0));
                 Flappy.addComponent(new ZPositionComponent(0.0));

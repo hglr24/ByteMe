@@ -1,9 +1,11 @@
 package engine.external.events;
 
-import engine.external.actions.Action;
+import engine.external.actions.*;
+import engine.external.component.NameComponent;
 import engine.external.conditions.CollisionCondition;
 import engine.external.component.BottomCollidedComponent;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 
 /**
  * @author Dima Fayyad
@@ -15,6 +17,14 @@ public class BottomCollisionEvent extends CollisionEvent {
         makeBottomCollisionCondition(grouped);
     }
 
+    public static CollisionEvent makeBottomBounceEvent(String entityName1, String entityName2, Boolean grouped){
+        CollisionEvent collisionEvent = new BottomCollisionEvent(entityName2, grouped);
+        collisionEvent.addConditions(new StringEqualToCondition(NameComponent.class, entityName1));
+        collisionEvent.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
+        collisionEvent.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
+        collisionEvent.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
+        return collisionEvent;
+    }
     /**
      * Adds a condition to the Event that verifies entity has a collidedComponent containing the correct entity collided with
      * Adds a condition to the Event that verifies the collision is below entity

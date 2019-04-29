@@ -49,6 +49,14 @@ public class Level implements Serializable {
     }
 
     /**
+     * Attaches a Collection of Event object to this Game Level
+     * @param events new Events to be added
+     */
+    public void addEvent(Collection<IEventEngine> events){
+        myEvents.addAll(events);
+    }
+
+    /**
      * Retrieves all Entities attached to a Game Level
      * @return HashSet of Entities stored for this Level
      */

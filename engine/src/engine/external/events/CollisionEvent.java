@@ -1,8 +1,10 @@
 package engine.external.events;
 
-import engine.external.actions.Action;
+import engine.external.actions.*;
+import engine.external.component.NameComponent;
 import engine.external.conditions.CollisionCondition;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 
 public abstract class CollisionEvent extends Event{
     private String myCollisionWithEntity;
