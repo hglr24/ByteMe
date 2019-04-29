@@ -42,10 +42,10 @@ public class GameRunner {
     }
 
     private Game loadGameObject(String gameName, String authorName){
-        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
-        Game gameMade = dm2.getGame(gameName);
+//        DummyGameObjectMaker dm2 = new DummyGameObjectMaker();
+//        Game gameMade = dm2.getGame(gameName);
         DataManager dm = new DataManager();
-        dm.saveGameData(gameName, authorName,gameMade);
+//        dm.saveGameData(gameName, authorName,gameMade);
         System.out.println("Serialization complete");
         try {
             return (Game) dm.loadGameData(gameName, authorName);

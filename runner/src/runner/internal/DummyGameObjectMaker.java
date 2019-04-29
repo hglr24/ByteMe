@@ -665,7 +665,9 @@ public class DummyGameObjectMaker {
 
     public void serializeObject(){
             DataManager dm = new DataManager();
-            dm.saveGameInfo("holdQlol", "fzero", new GameCenterData("holdQlol", "hold Q lol", "dima.png",
+            dm.saveGameInfo("holdQlol", "fzero", new GameCenterData("holdQlol", "i swear to god if this doesn't work",
+                    "dima" +
+                    ".png",
                     "fzero"));
             dm.saveGameData("holdQlol", "fzero", myGame);
     }
