@@ -41,4 +41,8 @@ public abstract class Condition {
     public String toString() {
         return this.getClass().getSimpleName();
     }
+
+    public Class<? extends Component> getMyComponentClass() {
+        return myComponentClass;
+    }
 }
