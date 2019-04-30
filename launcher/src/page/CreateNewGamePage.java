@@ -19,9 +19,9 @@ public class CreateNewGamePage extends BorderPane {
      * go there instead
      * @author Anna Darwish
      */
-    public CreateNewGamePage(SwitchToUserOptions backToPlayOrCreate,SwitchToAuthoring goToAuthoring, String userName, SwitchToUserOptions logout){
+    public CreateNewGamePage(SwitchToUserOptions backToPlayOrCreate,SwitchToAuthoring goToOldAuthoring,SwitchToUserOptions goToNewAuthoring, String userName, SwitchToUserOptions logout){
         this.setTop(new BackButton(backToPlayOrCreate));
-        this.setCenter(new CreateGameDisplay(goToAuthoring, userName));
+        this.setCenter(new CreateGameDisplay(goToOldAuthoring, goToNewAuthoring, userName));
         this.setBottom(new LogOutButton(logout));
     }
 }
