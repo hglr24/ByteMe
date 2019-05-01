@@ -29,6 +29,8 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
 
     private static final String INTERACTEE_PREFIX = "engine.external.events.";
     private static final String COMPONENT_KEY = "Component";
+    private static final String STYLE = "default.css";
+    private static final String STYLE_SIZING = "event-editor";
     private Map<String,ObservableList<String>> myInteractees = new HashMap<>();
 
     private StringProperty interactionType = new SimpleStringProperty(); //Whether this will be an interaction with a group or entity
@@ -54,6 +56,8 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     @Override
     public VBox generateEventOptions(){
         VBox eventOptions = new VBox();
+        eventOptions.getStylesheets().add(STYLE);
+        eventOptions.getStyleClass().add(STYLE_SIZING);
         HBox myInteractionOptions = new HBox();
         super.setUpPairedChoiceBoxes(myInteractees,interactionType,interacteeName,myInteractionOptions);
         eventOptions.getChildren().add(myInteractionOptions);

@@ -26,7 +26,7 @@ import ui.manager.RefreshEvents;
 import java.util.*;
 
 public abstract class AuthoringEvent extends Stage {
-    private static final String USER_ACTION_PROMPT = "Select Action...";
+    private static final String USER_ACTION_PROMPT = "Action:";
     private static final String ACTION_RESOURCE = "actions_display";
     private static final String CANCEL = "Cancel";
     private static final String CHECKPOINT = "Click to Insert CheckPoint";

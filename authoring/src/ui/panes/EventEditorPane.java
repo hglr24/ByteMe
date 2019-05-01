@@ -2,6 +2,7 @@ package ui.panes;
 
 import engine.external.actions.Action;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.Event;
 import events.EventBuilder;
 import events.EventFactory;
@@ -30,8 +31,8 @@ class EventEditorPane extends Stage {
     private static final String CONDITION = "Condition";
 
     private static final String STYLE = "default.css";
-    private static final String STYLE_CLASS = "event-editor";
-    private static final String VBOX_STYE = "event-component-vbox";
+    private static final String STYLE_CLASS = "event-component-vbox";
+    private static final String STYLE_VBOX = "editing-vbox";
     private Stage myPopUpStage = new Stage();
 
     private static final ResourceBundle eventComponentResource = ResourceBundle.getBundle("event_editor");
@@ -40,7 +41,6 @@ class EventEditorPane extends Stage {
     private static final String BUILD = "Build";
     private static final String PROMPT= "Prompt";
     private static final String RESOURCE = "Resource";
-
     private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
     private StringProperty conditionOperator = new SimpleStringProperty(); //type of condition, such as a LessThanCondition
     private StringProperty triggerValue = new SimpleStringProperty();  //value bound to trigger the actions associated with this event
@@ -97,7 +97,6 @@ class EventEditorPane extends Stage {
 
     private void addEventComponent(Object eventComponent, String eventComponentName, VBox myParent, Event event, int childIndex){
         VBox eventSubInformation = new VBox();
-        eventSubInformation.getStyleClass().add(VBOX_STYE);
         Button removeButton = new Button(REMOVE);
         eventSubInformation.getChildren().add(EventFactory.createLabel(eventComponent.toString()));
         eventSubInformation.getChildren().add(removeButton);
@@ -131,6 +130,7 @@ class EventEditorPane extends Stage {
 
     private VBox getEventControls(Event myEvent,VBox parent, String eventComponentName){
         VBox myDisplay = new VBox();
+        myDisplay.getStyleClass().add(STYLE_VBOX);
         String promptText = eventComponentResource.getString(eventComponentName + PROMPT);
         String resourceName = eventComponentResource.getString(eventComponentName + RESOURCE);
 

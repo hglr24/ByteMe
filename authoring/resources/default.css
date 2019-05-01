@@ -479,10 +479,27 @@
 }
 
 .event-editor {
-    -fx-min-height: 400;
-    -fx-min-width: 700;
-    -fx-max-height: 400;
-    -fx-max-width: 700;
+    -fx-min-height: 200;
+    -fx-min-width: 600;
+    -fx-max-height: 200;
+    -fx-max-width: 600;
+}
+
+.event-editor .choice-box{
+    -fx-min-height: 40;
+    -fx-min-width: 175;
+    -fx-max-height: 40;
+    -fx-max-width: 175;
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+.event-editor .text-field{
+    -fx-min-height: 40;
+    -fx-min-width: 175;
+    -fx-max-height: 40;
+    -fx-max-width: 175;
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
 }
 
 .event-editor .titled-pane {
@@ -528,11 +545,103 @@
 }
 
 .event-editor .button{
-    -fx-min-width: 350;
-    -fx-max-width: 350;
+    -fx-min-width: 300;
+    -fx-max-width: 300;
+}
+
+.event-editor .toggle-button {
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.event-editor .toggle-button:selected {
+    -fx-background-color: #303030;
+    -fx-text-fill: red;
 }
 
 .event-pop-up {
     -fx-min-height: 400;
     -fx-min-width: 500;
 }
+
+
+.event-pop-up {
+    -fx-min-height: 300;
+    -fx-min-width: 400;
+}
+
+.event-component-vbox {
+    -fx-min-height: 400;
+    -fx-min-width:  700;
+    -fx-max-height: 400;
+    -fx-max-width: 700;
+}
+
+.event-component-vbox .titled-pane {
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+    -fx-page-information-alignment: center;
+}
+
+.event-component-vbox .titled-pane > .title{
+    -fx-font-size: 18;
+    -fx-min-height: 400;
+    -fx-min-width: 250;
+    -fx-max-height: 400;
+    -fx-max-width: 250;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+
+}
+
+.event-component-vbox .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-pref-height: 380;
+    -fx-max-width: 350;
+    -fx-border-color: #202020;
+}
+
+.event-component-vbox .list-view {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+
+.event-component-vbox .list-cell{
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.event-component-vbox .list-cell:odd{
+    -fx-background-color: #303030;
+}
+
+.event-component-vbox .list-cell:selected {
+    -fx-background-color: #303030;
+}
+
+.event-component-vbox .button{
+    -fx-min-width: 300;
+}
+
+.event-component-vbox .choice-box{
+    -fx-min-height: 40;
+    -fx-min-width: 175;
+    -fx-max-height: 40;
+    -fx-max-width: 175;
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+.event-component-vbox .text-field{
+    -fx-min-height: 40;
+    -fx-min-width: 175;
+    -fx-max-height: 40;
+    -fx-max-width: 175;
+    -fx-text-fill: white;
+    -fx-background-color: #404040;
+}
+
+.event-component-vbox .editing-vbox {
+    -fx-pref-width: 600;
+    -fx-pref-height: 300;
+}
+

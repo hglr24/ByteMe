@@ -20,11 +20,13 @@ import ui.manager.RefreshEvents;
 import java.util.ResourceBundle;
 
 public class AuthoringKeyEvent extends AuthoringEvent {
-    private static final String USER_PROMPT = "Select Key...";
+    private static final String USER_PROMPT = "Key:";
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
     private ResourceBundle generateKeyCodes = ResourceBundle.getBundle("concrete_keycode");
 
     private static final String SAVE = "Save";
+    private static final String STYLE = "default.css";
+    private static final String STYLE_SIZING = "event-editor";
     private String myEntityName;
     private StringProperty keyName = new SimpleStringProperty(); //Name of the component for the conditional
     
@@ -37,6 +39,8 @@ public class AuthoringKeyEvent extends AuthoringEvent {
     @Override
     public VBox generateEventOptions(){
         VBox eventOptions = new VBox();
+        eventOptions.getStylesheets().add(STYLE);
+        eventOptions.getStyleClass().add(STYLE_SIZING);
         eventOptions.getChildren().add(generateKeyOptions());
         eventOptions.getChildren().add(super.createActionOptions());
         eventOptions.getChildren().add(createToolBar());

@@ -1,6 +1,8 @@
 package ui.panes;
 import engine.external.actions.Action;
+import engine.external.component.NameComponent;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.Event;
 import events.EventFactory;
 import javafx.beans.value.ChangeListener;
@@ -31,6 +33,7 @@ import java.util.*;
     private static final String EDIT = "Edit";
     private static final String REMOVE = "Remove";
     private static final String DELIMITER = ".";
+    private static final String IGNORE_NAME_CONDITION = "NameComponent";
     private static final String CSS = "current-events-display";
 
 
@@ -58,6 +61,10 @@ import java.util.*;
         StringBuilder text = new StringBuilder();
         try {
             for (Object eventComponent : myEventComponents) {
+                if (eventComponent instanceof StringEqualToCondition &&
+                        ((StringEqualToCondition) eventComponent).getComponentClass().getSimpleName().equals(IGNORE_NAME_CONDITION)){
+                    continue;
+                }
                 text.append(eventComponent.toString());
                 text.append("\n");
             }
