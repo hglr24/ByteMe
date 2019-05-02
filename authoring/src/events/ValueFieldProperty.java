@@ -47,7 +47,8 @@ public class ValueFieldProperty extends TextField {
         resetValueField(NUMBER);
         myListener = (observableValue, s, newValue) -> {
             if (!newValue.matches("^-?\\d+(?:\\.\\d+)?")) {
-                setText(newValue.replaceAll("^-?\\d+(?:\\.\\d+)?", ""));
+                if (newValue.matches("^-?\\d+(?:\\.)?"))
+                    setText(newValue + "0");
             }
         };
         this.textProperty().addListener(myListener);

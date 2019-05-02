@@ -47,10 +47,6 @@ public class AuthoringLevel implements Propertable {
         myEntities.add(newEntity);
     }
 
-    public void removeEntity(AuthoringEntity oldEntity) {
-        myEntities.remove(oldEntity);
-    }
-
     public List<AuthoringEntity> getEntities() {
         return myEntities;
     }

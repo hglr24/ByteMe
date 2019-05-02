@@ -1,4 +1,4 @@
-package ui.manager;
+package ui.windows;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -69,7 +69,7 @@ public class InfoEditor extends Stage {
 
     private void createImageView(GridPane contentBox) {
         try {
-            myImage = new ImageView(myData.getImageLocation());
+            myImage = new ImageView(new Image(Utility.makeImageAssetInputStream(myData.getImageLocation())));
         } catch (Exception e) {
             myImage = new ImageView(NO_IMAGE_ICON);
         }

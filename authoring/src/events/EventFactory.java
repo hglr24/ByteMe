@@ -47,6 +47,7 @@ public class EventFactory {
         triggerValue.bindBidirectional(myTriggerControl.textProperty());
         createDependencyForValueField(componentChoiceBox,myTriggerControl);
         eventComponentOptions.getChildren().add(myTriggerControl);
+        eventComponentOptions.getStyleClass().add("event-options");
         return eventComponentOptions;
 
     }

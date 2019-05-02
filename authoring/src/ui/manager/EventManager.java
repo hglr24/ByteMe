@@ -32,7 +32,7 @@ public class EventManager extends Stage {
     public EventManager(Propertable prop, ObjectManager manager) { // Loads common Events for object instance based on type label
 
         myEntity = (AuthoringEntity) prop; // EventManager is only ever used for an Entity, so cast can happen
-        myLabelManager = myEntity.getObjectManager().getLabelManager();
+        myLabelManager = manager.getLabelManager();
         Scene myDefaultScene = createPane();
         this.setScene(myDefaultScene);
         myEntityName = myEntity.getPropertyMap().get(EntityField.LABEL);
