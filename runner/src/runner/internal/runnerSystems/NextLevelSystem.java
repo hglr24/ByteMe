@@ -68,11 +68,12 @@ public class NextLevelSystem extends RunnerSystem {
     }
 
     private void changeLevel(Entity entity){
-        System.out.println(entity.getComponent(NextLevelComponent.class).getValue());
         Double nextLevel = (Double) entity.getComponent(NextLevelComponent.class).getValue();
         if(nextLevel.intValue() > myLevelCount){
-        myAnimation.stop();
-        myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX(), (Boolean) entity.getComponent(ProgressionComponent.class).getValue()).getNode());
+            myAnimation.stop();
+            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX(), (Boolean) entity.getComponent(ProgressionComponent.class).getValue()).getNode());
+        } else if (nextLevel.intValue() < 0) {
+            entity.addComponent(new ProgressionComponent(false));
         } else {
             endLevel(nextLevel);
         }

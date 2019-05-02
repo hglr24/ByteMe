@@ -51,12 +51,15 @@ public class LevelRunner {
     private int myLevelCount;
     private AudioManager myAudioManager;
     private Image myBackground;
-    private ImageView myImageViewBackgroud;
+    private ImageView myImageViewBackground;
     private Level myLevel;
     private String myUsername;
     private String myAuthorName;
     private String myGameName;
     private Game myGame;
+    private final String RUNNER_ID = "runnerStyle.css";
+    private final String GOOGLE_FONT_LINK = "https://fonts.googleapis.com/css?family=Gugi";
+    private final double HUD_HEIGHT = 40.0;
 
     /**
      * Constructor for level runner
@@ -112,9 +115,9 @@ public class LevelRunner {
     }
 
     private void addButtonsAndHUD() {
-        myHudBackground = new Rectangle(0,0,mySceneWidth, 40);
+        myHudBackground = new Rectangle(0,0, mySceneWidth, HUD_HEIGHT);
         myGroup.getChildren().add(myHudBackground);
-        myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager);
+        myPauseButton = new PauseButton(this, myAnimation, myGroup, myStage, myAudioManager, myHUD);
         myPause = myPauseButton.getPauseButton();
         myGroup.getChildren().add(myPause);
         canPause = true;
@@ -130,13 +133,12 @@ public class LevelRunner {
         myStage.setResizable(false);
         myGroup = new Group();
         myScene = new Scene(myGroup, mySceneWidth, mySceneHeight);
-        myImageViewBackgroud = new ImageView(myBackground);
-        myGroup.getChildren().addAll(myImageViewBackgroud);
-        //myScene.setFill(Color.BEIGE);
+        myImageViewBackground = new ImageView(myBackground);
+        myGroup.getChildren().addAll(myImageViewBackground);
         myScene.setOnKeyPressed(e -> handleKeyPress(e.getCode()));
         myScene.setOnKeyReleased(e -> handleKeyRelease(e.getCode()));
-        myScene.getStylesheets().add("runnerStyle.css");
-        myScene.getStylesheets().add("https://fonts.googleapis.com/css?family=Gugi");
+        myScene.getStylesheets().add(RUNNER_ID);
+        myScene.getStylesheets().add(GOOGLE_FONT_LINK);
         initializeSystems();
         updateGUI();
         myStage.setScene(myScene);
@@ -164,7 +166,7 @@ public class LevelRunner {
     }
 
     private void updateGUI(){
-        myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground, myImageViewBackgroud);
+        myGroup.getChildren().retainAll(myPause, myLabel, myHudBackground, myImageViewBackground);
         for(RunnerSystem system : mySystems){
             system.update(myEntities);
         }
