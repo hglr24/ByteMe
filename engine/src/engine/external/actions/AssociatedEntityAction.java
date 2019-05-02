@@ -16,8 +16,8 @@ public class AssociatedEntityAction extends NumericAction {
      */
     @SuppressWarnings("unchecked")
     @Override
-    protected void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
-        myComponentClass = componentClass;
+    public void setScaledAction(Number scaleFactor, Class<? extends Component<Double>> componentClass) {
+        //myComponentClass = componentClass;
 
         super.setAction((Consumer<Entity> & Serializable) entity -> {
             double oldValue =
@@ -38,8 +38,8 @@ public class AssociatedEntityAction extends NumericAction {
      * @param displacementFactor
      * @param componentClass
      */
-    protected void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
-        myComponentClass = componentClass;
+    public void setRelativeAction(Number displacementFactor, Class<? extends Component<Double>> componentClass) {
+        //myComponentClass = componentClass;
 
         setAction((Consumer<Entity> & Serializable) entity -> {
             Component component = ((Entity) entity.getComponent(AssociatedEntityComponent.class)
