@@ -17,7 +17,8 @@ import ui.main.MainGUI;
     private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomePage;
     private SwitchToUserOptions switchToCreatePage = this::goToCreatePage;
     private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
-    private SwitchToAuthoring switchToAuthoring = this::goToAuthoring;
+    private SwitchToNewGameAuthoring switchToNewGame = this::goToAuthoring;
+    private SwitchToAuthoring switchToOldGame = this::goToOldAuthoringGame;
 
     private String myUserName;
     private Scene myScene;
@@ -35,7 +36,7 @@ import ui.main.MainGUI;
 
     private void makePages(){
         myWelcomeUserPage = new WelcomeUserPage(switchToCreatePage,switchToGameCenter,myUserName,myLogOut);
-        myNewGamePage = new CreateNewGamePage(switchToWelcomeUserPage,switchToAuthoring,myUserName,myLogOut);
+        myNewGamePage = new CreateNewGamePage(switchToWelcomeUserPage,switchToOldGame,switchToNewGame,myUserName,myLogOut);
 
     }
 
@@ -45,9 +46,14 @@ import ui.main.MainGUI;
         myScene.setRoot(myNewGamePage);
     }
 
-    private void goToAuthoring(GameCenterData myData){
-        MainGUI myGUI = new MainGUI(new Game(), myData);
+    private void goToAuthoring(GameCenterData newGameData){
+        MainGUI myGUI = new MainGUI(newGameData);
         myGUI.launch(false);
+    }
+
+    private void goToOldAuthoringGame(Game oldGame, GameCenterData myData){
+        MainGUI myGUI = new MainGUI(oldGame, myData);
+        myGUI.launch(true);
     }
 
     private void goToGameCenter(){
@@ -57,12 +63,5 @@ import ui.main.MainGUI;
         gameCenterStage.show();
     }
  }
-
-
-//    private void goToAuthoring(GameCenterData myData){
-//        MainGUI myGUI = new MainGUI(new Game(), myData);
-//        myGUI.launch();
-//    }
-//
 
 

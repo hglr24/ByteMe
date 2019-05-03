@@ -10,13 +10,16 @@ import events.EventBuilder;
 import events.EventFactory;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ui.manager.RefreshEvents;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
 import java.util.List;
@@ -31,8 +34,8 @@ class EventEditorPane extends Stage {
 
     private static final String STYLE = "default.css";
     private static final String STYLE_CLASS = "event-editor";
-    private static final String VBOX_STYE = "event-component-vbox";
-    private Stage myPopUpStage;
+
+    private Stage myPopUpStage = new Stage();
 
     private static final ResourceBundle eventComponentResource = ResourceBundle.getBundle("event_editor");
     private static final String ADD = "Add";
@@ -40,14 +43,16 @@ class EventEditorPane extends Stage {
     private static final String BUILD = "Build";
     private static final String PROMPT= "Prompt";
     private static final String RESOURCE = "Resource";
-
     private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
     private StringProperty conditionOperator = new SimpleStringProperty(); //type of condition, such as a LessThanCondition
     private StringProperty triggerValue = new SimpleStringProperty();  //value bound to trigger the actions associated with this event
 
-    EventEditorPane(Event unfinishedEvent, Refresher eventDisplayRefresher){
-        HBox splitEditorPane = new HBox();
+    private RefreshEvents myEventRefresher;
+    EventEditorPane(Event unfinishedEvent, RefreshEvents eventDisplayRefresher){
+        VBox rootOfScene = new VBox();
 
+        HBox splitEditorPane = new HBox();
+        myEventRefresher = eventDisplayRefresher;
         List<?> myEventConditions = unfinishedEvent.getEventInformation().get(Condition.class);
         List<?> myEventActions = unfinishedEvent.getEventInformation().get(Action.class);
 
@@ -56,10 +61,17 @@ class EventEditorPane extends Stage {
         splitEditorPane.getChildren().add(myConditionScroll);
         splitEditorPane.getChildren().add(myActionScroll);
 
-        Scene myScene = new Scene(splitEditorPane);
+
+        VBox finished = new VBox();
+        finished.getChildren().add(doneButton());
+        rootOfScene.getChildren().add(splitEditorPane);
+        rootOfScene.getChildren().add(doneButton());
+
+        Scene myScene = new Scene(rootOfScene);
         myScene.getStylesheets().add(STYLE);
         splitEditorPane.getStyleClass().add(STYLE_CLASS);
-        this.setOnCloseRequest(windowEvent -> eventDisplayRefresher.refresh());
+
+        //this.setOnCloseRequest(windowEvent -> eventDisplayRefresher.refreshEventDisplay(unfinishedEvent));
         this.setScene(myScene);
     }
 
@@ -87,7 +99,6 @@ class EventEditorPane extends Stage {
 
     private void addEventComponent(Object eventComponent, String eventComponentName, VBox myParent, Event event, int childIndex){
         VBox eventSubInformation = new VBox();
-        eventSubInformation.getStyleClass().add(VBOX_STYE);
         Button removeButton = new Button(REMOVE);
         eventSubInformation.getChildren().add(EventFactory.createLabel(eventComponent.toString()));
         if (!eventComponent.getClass().equals(CollisionCondition.class) && !(eventComponent.getClass().equals(StringEqualToCondition.class) && ((StringEqualToCondition) eventComponent).getComponentClass().equals(NameComponent.class)))
@@ -103,6 +114,8 @@ class EventEditorPane extends Stage {
         myButton.setOnMouseClicked(mouseEvent -> {
             Reflection.callMethod(event,removeMethodName,eventElement);
             parent.getChildren().remove(child);
+            myEventRefresher.refreshEventDisplay(event);
+            myPopUpStage.close();
         });
     }
 
@@ -135,7 +148,7 @@ class EventEditorPane extends Stage {
         return myDisplay;
     }
 
-    private Button saveButton(Event myEvent, VBox myParent,String eventComponentName){
+    private Button saveButton(Event event, VBox myParent,String eventComponentName){
         Button mySaveButton = new Button(SAVE);
         EventBuilder myBuilder = new EventBuilder();
         String buildComponentMethodName = eventComponentResource.getString(eventComponentName + BUILD);
@@ -143,11 +156,22 @@ class EventEditorPane extends Stage {
         mySaveButton.setOnMouseClicked(mouseEvent -> {
             Object myEventComponent = Reflection.callMethod(myBuilder,buildComponentMethodName,componentName.getValue(),
                     conditionOperator.getValue(),triggerValue.getValue());
-            Reflection.callMethod(myEvent,addComponentMethodName,myEventComponent);
-            addEventComponent(myEventComponent,eventComponentName,myParent,myEvent,myParent.getChildren().size()-1);
+            Reflection.callMethod(event,addComponentMethodName,myEventComponent);
+            addEventComponent(myEventComponent,eventComponentName,myParent,event,myParent.getChildren().size()-1);
+            myEventRefresher.refreshEventDisplay(event);
             myPopUpStage.close();
         });
         return mySaveButton;
+    }
+
+    private Button doneButton(){
+        Button done = new Button("Finish Editing");
+        done.setOnMouseClicked(mouseEvent -> closeStage());
+        return done;
+    }
+
+    private void closeStage(){
+        this.close();
     }
 
 }

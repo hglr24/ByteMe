@@ -1,6 +1,7 @@
 package manager;
 
 import data.external.GameCenterData;
+import runner.external.Game;
 
 @FunctionalInterface
 
@@ -11,5 +12,5 @@ public interface SwitchToAuthoring {
      * environment by referring to a method in SceneManager
      * @author Anna Darwish
      */
-    void switchScene(GameCenterData myGameData);
+    void switchScene(Game oldGame, GameCenterData myGameData);
 }
