@@ -319,7 +319,7 @@ public class MainGUI {
         if (myGameData.getDescription() == null)
            myGameData.setDescription("A fun new game");
         if (myGameData.getAuthorName() == null)
-           myGameData.setAuthorName("default");
+           myGameData.setAuthorName("hsing");
     }
 
     private void saveFolderToDataBase(String outerDirectoryPath){
