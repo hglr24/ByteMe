@@ -86,10 +86,10 @@ public class GameRunner {
         };
         Image background;
         try {
-           background = new Image(myDataManager.loadImage(myCurrentLevel.getBackground()), myCurrentLevel.getWidth(), myCurrentLevel.getHeight(), false, false);
+            background = new Image(myDataManager.loadImage(myCurrentLevel.getBackground()), myCurrentLevel.getWidth(), myCurrentLevel.getHeight(), false, false);
         } catch (Exception e){
             background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), myCurrentLevel.getWidth(), myCurrentLevel.getHeight(), false, false);
-           // background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
+            // background = new Image(myDataManager.loadImage("byteme_default_runnerBackground"), currentLevel.getWidth(), currentLevel.getHeight(), false, false);
         }
 
         new LevelRunner(myCurrentLevel, mySceneWidth, mySceneHeight, myGameStage,

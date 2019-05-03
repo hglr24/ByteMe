@@ -31,8 +31,8 @@ public class  EventManagerTester extends Application {
         ObjectManager manager = new ObjectManager(new SimpleObjectProperty<>());
         addTestLabels(manager.getLabelManager());
         AuthoringEntity testEntity = populateTestObjects(manager);
-        testEntity.getInteractionListing().add("object2");
-        testEntity.getInteractionListing().add("object3");
+        //testEntity.getInteractionListing().add("object2");
+        //testEntity.getInteractionListing().add("object3");
         testEntity.getEvents().add(new Event());
         testEntity.getEvents().add(new Event());
         makeTestEvents(testEntity);

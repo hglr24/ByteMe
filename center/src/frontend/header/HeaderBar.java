@@ -58,7 +58,6 @@ public class HeaderBar {
     private void initializeLayouts() {
         Text title = new Text(Utilities.getValue(myLanguageBundle, "titleText"));
         title.getStyleClass().add(TITLE_SELECTOR);
-        StackPane headerLayout = new StackPane();
         BorderPane titleLayout = new BorderPane();
         titleLayout.setCenter(title);
         Text welcome = new Text(Utilities.getValue(myLanguageBundle, "welcomeSubtitle") + myUsername);
@@ -83,13 +82,14 @@ public class HeaderBar {
         } catch (FileNotFoundException e) {
             // do nothing
         }
-        headerLayout.getChildren().addAll(titleLayout, settingsPane);
-        myHeaderLayout = headerLayout;
+        myHeaderLayout.getChildren().clear();
+        myHeaderLayout.getChildren().addAll(titleLayout, settingsPane);
     }
 
     private void openSettings() {
         ImageChooser imageChooser = new ImageChooser(myUsername);
         imageChooser.uploadImage();
+        initializeLayouts();
     }
 
 }

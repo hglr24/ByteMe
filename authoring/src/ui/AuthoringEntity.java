@@ -9,9 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import ui.manager.ObjectManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Harry Ross
  */
@@ -19,7 +16,6 @@ public class AuthoringEntity implements Propertable {
 
     private ObservableMap<Enum, String> myPropertyMap;
     private ObjectManager myObjectManager;
-    private List<String> myInteractionListing = new ArrayList<>();
 
     private AuthoringEntity() { // Initialize default property map
         myPropertyMap = FXCollections.observableHashMap();
@@ -31,9 +27,8 @@ public class AuthoringEntity implements Propertable {
     public AuthoringEntity(String label, ObjectManager manager) { // Create new type of AuthoringEntity from scratch
         this();
         myObjectManager = manager;
-        myPropertyMap.put(EntityField.LABEL, label); //TODO see if this can be removed
+        myPropertyMap.put(EntityField.LABEL, label);
         addPropertyListeners();
-        myObjectManager.addEntityType(this, "");
     }
 
     public AuthoringEntity(Entity basis, ObjectManager manager) { // Create new AuthoringEntity type from Entity
@@ -91,11 +86,4 @@ public class AuthoringEntity implements Propertable {
     public ObservableList<Event> getEvents() {
         return myObjectManager.getEvents(this.myPropertyMap.get(EntityField.LABEL));
     }
-
-    public List<String> getInteractionListing(){ return myInteractionListing;} //TODO remove
-
-    public ObjectManager getObjectManager() { //TODO remove
-        return myObjectManager;
-    }
-
 }

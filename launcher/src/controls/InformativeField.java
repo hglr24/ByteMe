@@ -1,4 +1,6 @@
 package controls;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.control.TextField;
 
 public class InformativeField extends TextField {
@@ -10,6 +12,7 @@ public class InformativeField extends TextField {
         informationRequested = message;
         this.setText(informationRequested);
         this.setOnMouseClicked(mouseEvent -> handleDisplay());
+        this.textProperty().addListener((observableValue, s, t1) -> updateText(t1));
     }
     /**
      * Provides access to values of InformativeField, which displays information concerning what the user should input
@@ -23,6 +26,11 @@ public class InformativeField extends TextField {
         if (this.getText().equals(informationRequested)){
             this.setText(DEFAULT);
         }
+    }
+
+    private void updateText(String text){
+        this.setText(text);
+        this.setAccessibleText(text);
     }
     public String getTextEntered(){
         return this.getText();

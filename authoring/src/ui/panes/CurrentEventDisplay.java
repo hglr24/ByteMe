@@ -1,7 +1,12 @@
 package ui.panes;
 import engine.external.actions.Action;
+import engine.external.component.NameComponent;
 import engine.external.conditions.Condition;
+import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.Event;
+import events.EventFactory;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,6 +16,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import ui.UIException;
+import ui.manager.AddKeyCode;
 import ui.manager.LabelManager;
 
 import java.util.*;
@@ -19,17 +25,23 @@ import java.util.*;
     private Event myEvent;
     private Editor myEventRemover;
     private Editor myEventModifier;
+    private AddKeyCode myKeyCodeAdder;
     private ResourceBundle myKeyCodes = ResourceBundle.getBundle("keycode");
     private ResourceBundle myErrorMessage = ResourceBundle.getBundle("error_messages");
+    private ResourceBundle myKeyCodesDisplay = ResourceBundle.getBundle("concrete_keycode");
+    private ResourceBundle KEY_DISPLAY = ResourceBundle.getBundle("display_keycodes");
     private static final String EDIT = "Edit";
     private static final String REMOVE = "Remove";
     private static final String DELIMITER = ".";
+    private static final String IGNORE_NAME_CONDITION = "NameComponent";
     private static final String CSS = "current-events-display";
 
-    CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier){
+
+    CurrentEventDisplay(Map<Class<?>, List<?>> myMap, Event myEvent, Editor eventRemover, Editor eventModifier, AddKeyCode addKeyCode){
         this.myEvent = myEvent;
         this.myEventRemover = eventRemover;
         this.myEventModifier = eventModifier;
+        this.myKeyCodeAdder = addKeyCode;
         if (invalidEvent(myMap)){
             return;
         }
@@ -49,6 +61,10 @@ import java.util.*;
         StringBuilder text = new StringBuilder();
         try {
             for (Object eventComponent : myEventComponents) {
+                if (eventComponent instanceof StringEqualToCondition &&
+                        ((StringEqualToCondition) eventComponent).getComponentClass().getSimpleName().equals(IGNORE_NAME_CONDITION)){
+                    continue;
+                }
                 text.append(eventComponent.toString());
                 text.append("\n");
             }
@@ -84,19 +100,15 @@ import java.util.*;
     }
 
     private void setUpKeyCodes(ChoiceBox<String> myKeyCodesListing){
-        Set<String> keyCodes = myKeyCodes.keySet();
-        List<String> keyCodesList = new ArrayList<>(keyCodes);
-        Collections.sort(keyCodesList);
-        List<String> removedIndex = new ArrayList<>();
-        for (String key: keyCodesList){
-            removedIndex.add(key.substring(key.indexOf(DELIMITER) + 1));
+        EventFactory.setUpKeyCode(myKeyCodes,myKeyCodesListing);
+        if (myEvent.getImmutableKeyCodes().size()!= 0){
+            myKeyCodesListing.setValue(KEY_DISPLAY.getString(myEvent.getImmutableKeyCodes().get(0).toString()));
         }
-        myKeyCodesListing.setItems(FXCollections.observableList(removedIndex));
-        myKeyCodesListing.setOnAction(actionEvent -> {
-                myKeyCodesListing.setAccessibleText(myKeyCodesListing.getValue());
-                myEvent.clearInputs();
-                myEvent.addInputs(KeyCode.getKeyCode(myKeyCodesListing.getValue()));
+        myKeyCodesListing.getSelectionModel().selectedItemProperty().addListener((observableValue, s, newValue) -> {
+            myKeyCodesListing.setAccessibleText(newValue);
+            myKeyCodeAdder.refresh(myEvent,KeyCode.getKeyCode(myKeyCodesDisplay.getString(newValue)));
         });
+
 
     }
 }

@@ -136,7 +136,7 @@ public class DummyGameObjectMaker {
         RightFlappyCollisionWithM.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         AssociatedEntityAction aeam = new AssociatedEntityAction();
         aeam.setAction(NumericAction.ModifyType.RELATIVE,25.0,ScoreComponent.class);
-        RightFlappyCollisionWithM.addActions(aea);
+        RightFlappyCollisionWithM.addActions(aeam);
 
 
         /**
@@ -257,11 +257,11 @@ public class DummyGameObjectMaker {
         Event flappyJump = new Event();
         flappyJump.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         flappyJump.addInputs(KeyCode.UP);
-        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,10.0));
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,30.0));
         flappyJump.addConditions(new GreaterThanCondition(YAccelerationComponent.class,.1));
         flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
         flappyJump.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-.02));
-        flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
+        //flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
         //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
         //flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
         flappyJump.addActions(new SoundAction("jump"));
@@ -269,12 +269,13 @@ public class DummyGameObjectMaker {
         Event flappyJumpf = new Event();
         flappyJumpf.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         flappyJumpf.addInputs(KeyCode.DOWN);
-        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,10.0));
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,30.0));
         flappyJumpf.addConditions(new LessThanCondition(YAccelerationComponent.class,-.1));
         flappyJumpf.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, 5.0));
         flappyJumpf.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,.02));
-        flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
+        //flappyJumpf.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
         flappyJumpf.addActions(new SoundAction("jump"));
+        flappyJumpf.addActions(new ScoreAction(NumericAction.ModifyType.RELATIVE,10.0));
 
 
 
@@ -335,7 +336,7 @@ public class DummyGameObjectMaker {
         flappyFallsEvent.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE, 200.0));
         flappyFallsEvent.addActions(new XPositionAction(NumericAction.ModifyType.ABSOLUTE, 50.0));
         flappyFallsEvent.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
-        flappyFallsEvent.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, -10.0));
+        flappyFallsEvent.addActions(new ScoreAction(NumericAction.ModifyType.RELATIVE, -10.0));
         AssociatedEntityAction updateGameLivesAction = new AssociatedEntityAction();
         updateGameLivesAction.setAction(NumericAction.ModifyType.RELATIVE, -1.0, LivesComponent.class);
         flappyFallsEvent.addActions(updateGameLivesAction);
@@ -381,7 +382,7 @@ public class DummyGameObjectMaker {
         var r = new Random();
         for (int i =0;i<30;i++) {
             Entity Ghost1 = new Entity();
-            double xpos = (r.nextInt(80) + 1) * 100.0+2000.0;
+            double xpos = (r.nextInt(80) + 1) * 100.0+3000.0;
             boolean top = r.nextBoolean();
             double ypos = top ? 70.0 : 200.0;
             Ghost1.addComponent(new XPositionComponent(xpos));
@@ -408,7 +409,7 @@ public class DummyGameObjectMaker {
         var r = new Random();
         for (int i =0;i<30;i++) {
             Entity Ghost1 = new Entity();
-            double xpos = (r.nextInt(80) + 1) * 100.0+2000.0;
+            double xpos = (r.nextInt(80) + 1) * 100.0+3000.0;
             boolean top = r.nextBoolean();
             double ypos = top ? 70.0 : 200.0;
             Ghost1.addComponent(new XPositionComponent(xpos));

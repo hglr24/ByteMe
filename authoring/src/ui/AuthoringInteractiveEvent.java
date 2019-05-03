@@ -9,10 +9,13 @@ import events.EventType;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import ui.manager.LabelManager;
+import ui.manager.RefreshEvents;
 import ui.manager.Refresher;
 import voogasalad.util.reflection.Reflection;
 
@@ -28,6 +31,10 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
 
     private static final String INTERACTEE_PREFIX = "engine.external.events.";
     private static final String COMPONENT_KEY = "Component";
+
+    private static final String STYLE = "default.css";
+    private static final String STYLE_SIZING = "event-editor";
+    private static final String COLLISION_PROMPT = "Collision With...";
     private Map<String,ObservableList<String>> myInteractees = new HashMap<>();
 
     private StringProperty interactionType = new SimpleStringProperty(); //Whether this will be an interaction with a group or entity
@@ -38,7 +45,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     private static final String ERROR_PACKAGE_NAME = "error_messages";
     private static final ResourceBundle myErrors = ResourceBundle.getBundle(ERROR_PACKAGE_NAME);
 
-    private Refresher myRefresher;
+    private RefreshEvents myRefresher;
     private ObservableList<Event> myEntityEvents;
 
     public AuthoringInteractiveEvent(LabelManager myLabelManager, String eventName, String entityName){
@@ -53,16 +60,27 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
     @Override
     public VBox generateEventOptions(){
         VBox eventOptions = new VBox();
+        eventOptions.getStylesheets().add(STYLE);
+        eventOptions.getStyleClass().add(STYLE_SIZING);
         HBox myInteractionOptions = new HBox();
         super.setUpPairedChoiceBoxes(myInteractees,interactionType,interacteeName,myInteractionOptions);
-        eventOptions.getChildren().add(myInteractionOptions);
+        eventOptions.getChildren().add(createInteractionOptions(myInteractionOptions));
         eventOptions.getChildren().add(super.createActionOptions());
         eventOptions.getChildren().add(createToolBar());
+        myInteractionOptions.getStyleClass().add("event-options");
         return eventOptions;
     }
 
+    private HBox createInteractionOptions(HBox myInteractionOptions) {
+        HBox optionsWithLabel = new HBox();
+        optionsWithLabel.getStyleClass().add("event-options");
+        optionsWithLabel.getChildren().add(new Label(COLLISION_PROMPT));
+        optionsWithLabel.getChildren().add(myInteractionOptions);
+        return optionsWithLabel;
+    }
+
     @Override
-    public void addSaveComponents(Refresher refresher, ObservableList<Event> entityEvents) {
+    public void addSaveComponents(RefreshEvents refresher, ObservableList<Event> entityEvents) {
         myRefresher = refresher;
         myEntityEvents = entityEvents;
     }
@@ -81,6 +99,7 @@ public class AuthoringInteractiveEvent extends AuthoringEvent {
         interactiveEvent.addConditions(new StringEqualToCondition(NameComponent.class,myEntityName));
         super.saveAction(interactiveEvent);
         super.saveEvent(interactiveEvent,myRefresher,myEntityEvents);
+        super.closeWindow();
     }
 
     private void saveInteractee(Event event){

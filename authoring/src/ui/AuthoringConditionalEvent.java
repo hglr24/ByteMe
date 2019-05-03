@@ -10,20 +10,23 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import ui.manager.RefreshEvents;
 import ui.manager.Refresher;
 
 
 public class AuthoringConditionalEvent extends AuthoringEvent {
-    private static final String USER_PROMPT = "Select Condition...";
+    private static final String USER_PROMPT = "Condition:";
     private static final String CONDITION_RESOURCE = "conditions";
 
     private static final String SAVE = "Save";
+    private static final String STYLE = "default.css";
+    private static final String STYLE_SIZING = "event-editor";
     private String myEntityName;
     private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
     private StringProperty conditionOperator = new SimpleStringProperty(); //type of condition, such as a LessThanCondition
     private StringProperty triggerValue = new SimpleStringProperty();  //value bound to trigger the actions associated with this event
 
-    private Refresher myRefresher;
+    private RefreshEvents myRefresher;
     private ObservableList<Event> myEntityEvents;
     public AuthoringConditionalEvent(String entityName){
         myEntityName = entityName;
@@ -34,12 +37,14 @@ public class AuthoringConditionalEvent extends AuthoringEvent {
         eventOptions.getChildren().add(generateConditionOptions());
         eventOptions.getChildren().add(super.createActionOptions());
         eventOptions.getChildren().add(createToolBar());
+        eventOptions.getStylesheets().add(STYLE);
+        eventOptions.getStyleClass().add(STYLE_SIZING);
         return eventOptions;
     }
 
 
     @Override
-    public void addSaveComponents(Refresher refresher, ObservableList<Event> entityEvents) {
+    public void addSaveComponents(RefreshEvents refresher, ObservableList<Event> entityEvents) {
         myRefresher = refresher;
         myEntityEvents = entityEvents;
     }
@@ -67,5 +72,6 @@ public class AuthoringConditionalEvent extends AuthoringEvent {
         catch(UIException exception){
             exception.displayUIException();
         }
+        super.closeWindow();
     }
 }

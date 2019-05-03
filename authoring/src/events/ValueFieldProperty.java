@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.WindowEvent;
 import ui.windows.AudioManager;
 import ui.windows.ImageManager;
 import voogasalad.util.reflection.Reflection;
@@ -47,7 +48,8 @@ public class ValueFieldProperty extends TextField {
         resetValueField(NUMBER);
         myListener = (observableValue, s, newValue) -> {
             if (!newValue.matches("^-?\\d+(?:\\.\\d+)?")) {
-                setText(newValue.replaceAll("^-?\\d+(?:\\.\\d+)?", ""));
+                if (newValue.matches("^-?\\d+(?:\\.)?"))
+                    setText(newValue + "0");
             }
         };
         this.textProperty().addListener(myListener);
@@ -57,7 +59,9 @@ public class ValueFieldProperty extends TextField {
         resetValueField(SOUND);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
             AudioManager myManager = new AudioManager();
-            myManager.show();
+            myManager.showAndWait();
+            setText(myManager.getAssetName());
+            setAccessibleText(myManager.getAssetName());
         };
         this.setOnMouseClicked(showFileOptions);
     }
@@ -66,7 +70,8 @@ public class ValueFieldProperty extends TextField {
         resetValueField(IMAGE);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
             ImageManager myManager = new ImageManager();
-            myManager.show();
+            myManager.showAndWait();
+            setText(myManager.getAssetName());
         };
         this.setOnMouseClicked(showFileOptions);
     }
