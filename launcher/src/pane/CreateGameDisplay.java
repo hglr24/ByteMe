@@ -5,6 +5,8 @@ import controls.LauncherSymbol;
 import controls.TitleLabel;
 import data.external.DataManager;
 import data.external.GameCenterData;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.control.ChoiceBox;
@@ -15,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import manager.SwitchToAuthoring;
+import manager.SwitchToNewGameAuthoring;
 import manager.SwitchToUserOptions;
 import popup.ErrorPopUp;
 import runner.external.Game;
@@ -47,8 +50,9 @@ public class CreateGameDisplay extends AnchorPane {
     private static final String IMAGE_PREFIX = "byteme_default_launcher_gameIcon_";
     private static final String CORRUPT = "corrupt_game";
     private String myUserName;
-    private SwitchToUserOptions openNewGame;
+    private SwitchToNewGameAuthoring openNewGame;
     private SwitchToAuthoring openOldGame;
+    private ChoiceBox<String> gameNames = new ChoiceBox<>();
     /**
      * This page will prompt the user to enter information about the new game they wish to create, such as its cover image,
      * title, and description. Then, it will create a new GameDisplay object to be passed to the authoring environment so they
@@ -56,7 +60,7 @@ public class CreateGameDisplay extends AnchorPane {
      * of their game
      * @author Anna Darwish
      */
-    public CreateGameDisplay(SwitchToAuthoring goToOldAuthoring, SwitchToUserOptions goToNewGame, String userName){
+    public CreateGameDisplay(SwitchToAuthoring goToOldAuthoring, SwitchToNewGameAuthoring goToNewGame, String userName){
         this.getStyleClass().add(AUTHORING_STYLE);
         openOldGame = goToOldAuthoring;
         openNewGame = goToNewGame;
@@ -116,7 +120,7 @@ public class CreateGameDisplay extends AnchorPane {
         String imageFileName = IMAGE_PREFIX + "_" + gameName.getTextEntered() + "_" + myUserName +"_"+ myFile.getName();
         dataManager.saveImage(imageFileName,myFile);
         GameCenterData myData = new GameCenterData(gameName.getTextEntered(),gameDescription.getTextEntered(),imageFileName,myUserName);
-        openNewGame.switchPage();
+        openNewGame.switchScene(myData);
 
     }
 
@@ -130,8 +134,8 @@ public class CreateGameDisplay extends AnchorPane {
             ErrorPopUp dataBaseError = new ErrorPopUp(DATABASE_ERROR);
             dataBaseError.display();
         }
-        ChoiceBox<String> gameNames = new ChoiceBox<>();
         gameNames.setItems(FXCollections.observableList(gameNamesList));
+        gameNames.getSelectionModel().selectedItemProperty().addListener((observableValue, s, t1) -> gameNames.setAccessibleText(t1));
         LauncherSymbol mySymbol = new LauncherSymbol(CREATE_LAUNCHER);
         mySymbol.setOnMouseClicked(mouseEvent -> enterAuthoringToModifyOldGame());
         modifyGamePreferences.getChildren().add(gameNames);
@@ -143,8 +147,10 @@ public class CreateGameDisplay extends AnchorPane {
     private void enterAuthoringToModifyOldGame(){
         DataManager dataManager = new DataManager();
         try {
-            Game gameObject = (Game)dataManager.loadGameData(gameName.getTextEntered(), myUserName);
-            openOldGame.switchScene(gameObject, new GameCenterData());
+            String gameName = gameNames.getAccessibleText();
+            Game gameObject = (Game)dataManager.loadGameData(gameName, myUserName);
+            GameCenterData myData = dataManager.loadGameInfo(gameName,myUserName);
+            openOldGame.switchScene(gameObject, myData);
         }
         catch (Exception e){
             ErrorPopUp invalidGameSelection = new ErrorPopUp(CORRUPT);

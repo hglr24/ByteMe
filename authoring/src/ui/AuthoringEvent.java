@@ -30,6 +30,7 @@ public abstract class AuthoringEvent extends Stage {
     private static final String ACTION_RESOURCE = "actions_display";
     private static final String CANCEL = "Cancel";
     private static final String CHECKPOINT = "Click to Insert CheckPoint";
+    private static final String DEFAULT_STYLESHEET = "default.css";
 
     private StringProperty componentName = new SimpleStringProperty(); //Name of the component for the conditional
     private StringProperty modifierOperator = new SimpleStringProperty(); //type of modifier such as set or scale
@@ -43,11 +44,17 @@ public abstract class AuthoringEvent extends Stage {
     public void saveEvent(Event createdEvent, RefreshEvents myRefresher, ObservableList<Event> myEntityEvents){
         myEntityEvents.add(createdEvent);
         myRefresher.refreshEventDisplay(createdEvent);
+        myRefresher.refreshEventDisplay(createdEvent);
+        this.close();
     }
 
     public void render(){
-        Scene myScene = new Scene(generateEventOptions());
+        VBox eventOptions = generateEventOptions();
+        Scene myScene = new Scene(eventOptions);
+        myScene.getStylesheets().add(DEFAULT_STYLESHEET);
+        eventOptions.getStyleClass().add("event-builder");
         this.setScene(myScene);
+        this.sizeToScene();
         this.show();
     }
 
@@ -91,6 +98,7 @@ public abstract class AuthoringEvent extends Stage {
 
     HBox createToolBar(Button saveButton){
         HBox toolBar = new HBox();
+        toolBar.getStyleClass().add("buttons-bar");
         Button cancelButton = new Button(CANCEL);
         cancelButton.setOnMouseClicked(mouseEvent -> closeWindow());
         toolBar.getChildren().add(saveButton);

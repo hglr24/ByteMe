@@ -2,6 +2,8 @@ package engine.external.events;
 
 
 import engine.external.actions.Action;
+import engine.external.component.GroupComponent;
+import engine.external.component.NameComponent;
 import engine.external.conditions.Condition;
 import engine.external.Entity;
 import engine.external.IEventEngine;
@@ -52,6 +54,13 @@ public class Event implements IEventEngine, IEventAuthoring {
 
 
     private boolean conditionsMet(Entity entity, Collection<KeyCode> inputs) {
+        for(Condition c: conditions){
+            if(c.getMyComponentClass() == NameComponent.class || c.getMyComponentClass() == GroupComponent.class ){
+                if(!c.getPredicate().test(entity)){
+                    return false;
+                }
+            }
+        }
         for(Condition c: conditions){
             c.checkComponents(entity);
         }

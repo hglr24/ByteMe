@@ -5,6 +5,7 @@ import controls.LogOutButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import manager.SwitchToAuthoring;
+import manager.SwitchToNewGameAuthoring;
 import manager.SwitchToUserOptions;
 import manager.SwitchToUserPage;
 import pane.CreateGameDisplay;
@@ -19,7 +20,7 @@ public class CreateNewGamePage extends BorderPane {
      * go there instead
      * @author Anna Darwish
      */
-    public CreateNewGamePage(SwitchToUserOptions backToPlayOrCreate,SwitchToAuthoring goToOldAuthoring,SwitchToUserOptions goToNewAuthoring, String userName, SwitchToUserOptions logout){
+    public CreateNewGamePage(SwitchToUserOptions backToPlayOrCreate, SwitchToAuthoring goToOldAuthoring, SwitchToNewGameAuthoring goToNewAuthoring, String userName, SwitchToUserOptions logout){
         this.setTop(new BackButton(backToPlayOrCreate));
         this.setCenter(new CreateGameDisplay(goToOldAuthoring, goToNewAuthoring, userName));
         this.setBottom(new LogOutButton(logout));

@@ -1,6 +1,8 @@
 package ui.panes;
 
 import engine.external.actions.Action;
+import engine.external.component.NameComponent;
+import engine.external.conditions.CollisionCondition;
 import engine.external.conditions.Condition;
 import engine.external.conditions.StringEqualToCondition;
 import engine.external.events.Event;
@@ -99,9 +101,10 @@ class EventEditorPane extends Stage {
         VBox eventSubInformation = new VBox();
         Button removeButton = new Button(REMOVE);
         eventSubInformation.getChildren().add(EventFactory.createLabel(eventComponent.toString()));
-        eventSubInformation.getChildren().add(removeButton);
-        myParent.getChildren().add(childIndex,eventSubInformation);
-        setUpRemoveButton(removeButton,eventComponent,event,eventComponentName,myParent,eventSubInformation);
+        if (!eventComponent.getClass().equals(CollisionCondition.class) && !(eventComponent.getClass().equals(StringEqualToCondition.class) && ((StringEqualToCondition) eventComponent).getComponentClass().equals(NameComponent.class)))
+            eventSubInformation.getChildren().add(removeButton);
+        myParent.getChildren().add(childIndex, eventSubInformation);
+        setUpRemoveButton(removeButton, eventComponent, event, eventComponentName, myParent, eventSubInformation);
     }
 
 
@@ -123,6 +126,8 @@ class EventEditorPane extends Stage {
     private void displayEventComponentMaker(Event event,VBox parent, String eventComponentName){
         VBox myDisplay = getEventControls(event,parent,eventComponentName);
         myDisplay.getStylesheets().add(STYLE);
+        myPopUpStage = new Stage();
+        myPopUpStage.sizeToScene();
         myPopUpStage.setScene(new Scene(myDisplay));
         myPopUpStage.show();
 
@@ -130,13 +135,15 @@ class EventEditorPane extends Stage {
 
     private VBox getEventControls(Event myEvent,VBox parent, String eventComponentName){
         VBox myDisplay = new VBox();
-        myDisplay.getStyleClass().add(STYLE_VBOX);
+        myDisplay.getStyleClass().add("event-builder");
         String promptText = eventComponentResource.getString(eventComponentName + PROMPT);
         String resourceName = eventComponentResource.getString(eventComponentName + RESOURCE);
 
         HBox controls = EventFactory.createEventComponentOptions(promptText,resourceName,componentName,conditionOperator,triggerValue);
         myDisplay.getChildren().add(controls);
-        myDisplay.getChildren().add(saveButton(myEvent, parent, eventComponentName));
+        HBox buttonBar = new HBox(saveButton(myEvent, parent, eventComponentName));
+        buttonBar.getStyleClass().add("buttons-bar");
+        myDisplay.getChildren().add(buttonBar);
         return myDisplay;
     }
 

@@ -17,7 +17,7 @@ import ui.main.MainGUI;
     private SwitchToUserOptions switchToWelcomeUserPage = this::goToWelcomePage;
     private SwitchToUserOptions switchToCreatePage = this::goToCreatePage;
     private SwitchToUserOptions switchToGameCenter = this::goToGameCenter;
-    private SwitchToUserOptions switchToNewGame = this::goToAuthoring;
+    private SwitchToNewGameAuthoring switchToNewGame = this::goToAuthoring;
     private SwitchToAuthoring switchToOldGame = this::goToOldAuthoringGame;
 
     private String myUserName;
@@ -46,8 +46,8 @@ import ui.main.MainGUI;
         myScene.setRoot(myNewGamePage);
     }
 
-    private void goToAuthoring(){
-        MainGUI myGUI = new MainGUI();
+    private void goToAuthoring(GameCenterData newGameData){
+        MainGUI myGUI = new MainGUI(newGameData);
         myGUI.launch(false);
     }
 
