@@ -126,13 +126,13 @@ public class DummyGameObjectMaker {
          * Event: Flappy collides with Ghost on the Right (Right side of flappy hits ghost):
          * 1. set Ghost1 xVelocity to 0
          */
-        RightCollisionEvent RightFlappyCollisionWithGhost = new RightCollisionEvent("Ghost", false);
+        CollisionEvent RightFlappyCollisionWithGhost = new AnyCollisionEvent("Ghost", false);
         RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         AssociatedEntityAction aea = new AssociatedEntityAction();
         aea.setAction(NumericAction.ModifyType.RELATIVE,-25.0,ScoreComponent.class);
         RightFlappyCollisionWithGhost.addActions(aea);
 
-        RightCollisionEvent RightFlappyCollisionWithM = new RightCollisionEvent("mushroom", false);
+        CollisionEvent RightFlappyCollisionWithM = new AnyCollisionEvent("mushroom", false);
         RightFlappyCollisionWithM.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         AssociatedEntityAction aeam = new AssociatedEntityAction();
         aeam.setAction(NumericAction.ModifyType.RELATIVE,25.0,ScoreComponent.class);
@@ -165,68 +165,16 @@ public class DummyGameObjectMaker {
         //CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost", "Ghost", false);
 
 
-        /**
-         * Event: Basketball bb collides with Basketball "bb" from the Bottom (Bottom side of bb hits bb): (Basketballs colliding with each other)
-         * 1. set bb yVelocity
-         * 2. modify bb yPosition
-         * 3. modify bb Xposition
-         */
-        CollisionEvent BottomBBCollisionWithBB = new BottomCollisionEvent("bb", false);
-        BottomBBCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        BottomBBCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
-        BottomBBCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomBBCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
-        /**
-         * Event: Ghost1 collides with Basketball "bb" from the Right (Right side of Ghost1 hits bb):
-         * 1. set ghost1 xVelocity to -8
-         * 3. modify ghost1 xPosition by -5
-         */
-        CollisionEvent RightGhostCollisionWithBB = new RightCollisionEvent("bb", false);
-        RightGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
-        RightGhostCollisionWithBB.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -8.0));
-        RightGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
 
-        /**
-         * Event: Ghost1 collides with Basketball "bb" from the bottom (bottom side of Ghost1 hits bb):
-         * 1. set ghost1 yVelocity to -5
-         * 2. modify ghost1 yPosition by -5
-         * 3. modify ghost1 Xposition by 10
-         */
-        CollisionEvent BottomGhostCollisionWithBB = new BottomCollisionEvent("bb", false);
-        BottomGhostCollisionWithBB.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
-        BottomGhostCollisionWithBB.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        BottomGhostCollisionWithBB.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomGhostCollisionWithBB.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
-        /**
-         * Event: Basketball "bb" collides with Ghost1 from the Right (Right side of Basketball hits Ghost1):
-         * 1. set bb xVelocity to -5
-         * 2. move bb xPosition by -5
-         */
-        CollisionEvent RightBBCollisionWithGhost = new RightCollisionEvent("Ghost", false);
-        RightBBCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        RightBBCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        RightBBCollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-
-        /**
-         * Event: Basketball "bb" collides with Ghost1 from the Bottom (bottom side of Basketball hits Ghost1):
-         * 1. set bb yVelocity
-         * 2. move bb yPosition by -5
-         * 3. modify bb xPosition
-         */
-        CollisionEvent BottomBBcollisionWithGhost = new BottomCollisionEvent("Ghost", false);
-        BottomBBcollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "bb"));
-        BottomBBcollisionWithGhost.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
-        BottomBBcollisionWithGhost.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-5.0));
-        BottomBBcollisionWithGhost.addActions(new XPositionAction(NumericAction.ModifyType.RANDOM,10.0));
 
         /**
          * Event: Ghost1 collides with flappy from the Left (Left side of Ghost1 hits flappy):
          * 1. set Ghost1 xVelocity to 1
          * 2. move Ghost1 xPosition by 80
          */
-        LeftCollisionEvent LeftGhostCollisionWithFlappy = new LeftCollisionEvent("flappy", false);
+        CollisionEvent LeftGhostCollisionWithFlappy = new AnyCollisionEvent("flappy", false);
         LeftGhostCollisionWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
         LeftGhostCollisionWithFlappy.addActions(new DestroyAction(true));
 
@@ -236,8 +184,8 @@ public class DummyGameObjectMaker {
          * 1. set Ghost1 xVelocity to -1
          * 2. move Ghost1 xPosition by -80
          */
-        CollisionEvent GhostCollidesWithFlappy = new RightCollisionEvent("flappy", false);
-        GhostCollidesWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
+        CollisionEvent GhostCollidesWithFlappy = new AnyCollisionEvent("flappy", false);
+        GhostCollidesWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "mushroom"));
         GhostCollidesWithFlappy.addActions(new DestroyAction(true));
 
         //GhostCollidesWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
@@ -275,7 +223,7 @@ public class DummyGameObjectMaker {
         flappyJumpf.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,.02));
         //flappyJumpf.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
         flappyJumpf.addActions(new SoundAction("jump"));
-        flappyJumpf.addActions(new ScoreAction(NumericAction.ModifyType.RELATIVE,10.0));
+        //flappyJumpf.addActions(new ScoreAction(NumericAction.ModifyType.RELATIVE,10.0));
 
 
 
@@ -333,17 +281,24 @@ public class DummyGameObjectMaker {
         Event flappyFallsEvent = new Event();
         flappyFallsEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         flappyFallsEvent.addConditions(new GreaterThanCondition(YPositionComponent.class, 1000.0));
-        flappyFallsEvent.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE, 200.0));
-        flappyFallsEvent.addActions(new XPositionAction(NumericAction.ModifyType.ABSOLUTE, 50.0));
+        flappyFallsEvent.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE, 300.0));
+        flappyFallsEvent.addActions(new XPositionAction(NumericAction.ModifyType.ABSOLUTE, 10.0));
         flappyFallsEvent.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
         flappyFallsEvent.addActions(new ScoreAction(NumericAction.ModifyType.RELATIVE, -10.0));
         AssociatedEntityAction updateGameLivesAction = new AssociatedEntityAction();
-        updateGameLivesAction.setAction(NumericAction.ModifyType.RELATIVE, -1.0, LivesComponent.class);
+        //updateGameLivesAction.setAction(NumericAction.ModifyType.RELATIVE, -1.0, LivesComponent.class);
         flappyFallsEvent.addActions(updateGameLivesAction);
+
+
+        Event win = new Event();
+        win.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+        win.addConditions(new GreaterThanCondition(XPositionComponent.class,4000.0));
+        win.addActions(new ProgressionAction(true));
 
         /**
          * Add All Events to the Level
          */
+        level1.addEvent(win);
         level1.addEvent(gravity);
         level1.addEvent(gravityf);
         level1.addEvent(gravityG);
