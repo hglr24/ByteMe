@@ -84,16 +84,41 @@ public class DummyGameObjectMaker {
         Event flappyMoveRightEvent = new Event();
         flappyMoveRightEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         flappyMoveRightEvent.addInputs(KeyCode.RIGHT);
-        flappyMoveRightEvent.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 5.0));
+        flappyMoveRightEvent.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, 2.0));
 
+        /**
+         * Event: Press Left Arrow Key to:
+         * 1.Move Flappy to the left
+         */
+        Event flappyMoveLeft = new Event();
+        flappyMoveLeft.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+        flappyMoveLeft.addInputs(KeyCode.LEFT);
+        flappyMoveLeft.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -2.0));
 
         //flip gravity
         Event gravity = new Event();
         gravity.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        gravity.addConditions(new EqualToCondition(TimerComponent.class,0.0));
-        gravity.addInputs(KeyCode.SHIFT);
-        gravity.addActions(new YAccelerationAction(NumericAction.ModifyType.SCALE, -1.0));
-        gravity.addConditions(new LessThanCondition(TimerComponent.class,5.0));
+        gravity.addConditions(new LessThanCondition(TimerComponent.class,2.0));
+        gravity.addInputs(KeyCode.A);
+        gravity.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE, -.2));
+        gravity.addActions(new SpriteAction("ryan2.png"));
+
+
+        //flip gravity
+        Event gravityf = new Event();
+        gravityf.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+        gravityf.addConditions(new LessThanCondition(TimerComponent.class,2.0));
+        gravityf.addInputs(KeyCode.D);
+        gravityf.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE, .2));
+        gravityf.addActions(new SpriteAction("ryan.png"));
+        //use the value component, need duplicate events
+
+        Event gravityG = new Event();
+        gravityG.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
+        gravityG.addConditions(new LessThanCondition(TimerComponent.class,2.0));
+        gravityG.addInputs(KeyCode.A);
+        gravityG.addActions(new YAccelerationAction(NumericAction.ModifyType.SCALE, -1.0));
+        //gravity.addActions(new SpriteAction("ryan2.png"));
 
 
 
@@ -101,9 +126,18 @@ public class DummyGameObjectMaker {
          * Event: Flappy collides with Ghost on the Right (Right side of flappy hits ghost):
          * 1. set Ghost1 xVelocity to 0
          */
-        RightCollisionEvent RightFlappyCollisionWithGhost = new RightCollisionEvent("Ghost1", false);
+        RightCollisionEvent RightFlappyCollisionWithGhost = new RightCollisionEvent("Ghost", false);
         RightFlappyCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        RightFlappyCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+        AssociatedEntityAction aea = new AssociatedEntityAction();
+        aea.setAction(NumericAction.ModifyType.RELATIVE,-25.0,ScoreComponent.class);
+        RightFlappyCollisionWithGhost.addActions(aea);
+
+        RightCollisionEvent RightFlappyCollisionWithM = new RightCollisionEvent("mushroom", false);
+        RightFlappyCollisionWithM.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+        AssociatedEntityAction aeam = new AssociatedEntityAction();
+        aeam.setAction(NumericAction.ModifyType.RELATIVE,25.0,ScoreComponent.class);
+        RightFlappyCollisionWithM.addActions(aea);
+
 
         /**
          * Make bottom collision event between flappy and ghost1 and vice versa
@@ -117,7 +151,6 @@ public class DummyGameObjectMaker {
          * 1. set Ghost1 xVelocity to -2
          * 2. modify Ghost1 xPosition by -5
          */
-        //CollisionEvent RightGhostCollisionWithGhost = CollisionEvent.makeBounceEvent("Ghost1", "Ghost1", RightCollisionEvent.class, false);
         CollisionEvent RightGhostCollisionWithGhost = new RightCollisionEvent("Ghost", false);
         RightGhostCollisionWithGhost.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
         RightGhostCollisionWithGhost.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -2.0));
@@ -129,7 +162,7 @@ public class DummyGameObjectMaker {
          * 2. modify Ghost1 yPosition by -5
          * 3. modify Ghost1 Xposition by 10
          */
-        CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost", "Ghost", false);
+        //CollisionEvent BottomGhostCollisionWithGhost = BottomCollisionEvent.makeBottomBounceEvent("Ghost", "Ghost", false);
 
 
         /**
@@ -195,9 +228,8 @@ public class DummyGameObjectMaker {
          */
         LeftCollisionEvent LeftGhostCollisionWithFlappy = new LeftCollisionEvent("flappy", false);
         LeftGhostCollisionWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
-        LeftGhostCollisionWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, 1.0));
-        LeftGhostCollisionWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,80.0));
-        //LeftGhostCollisionWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
+        LeftGhostCollisionWithFlappy.addActions(new DestroyAction(true));
+
 
         /**
          * Event: Ghost1 collides with flappy from the Right (Right side of Ghost1 hits flappy):
@@ -206,30 +238,13 @@ public class DummyGameObjectMaker {
          */
         CollisionEvent GhostCollidesWithFlappy = new RightCollisionEvent("flappy", false);
         GhostCollidesWithFlappy.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
-        GhostCollidesWithFlappy.addActions(new XVelocityAction(NumericAction.ModifyType.ABSOLUTE, -1.0));
-        GhostCollidesWithFlappy.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE,-80.0));
+        GhostCollidesWithFlappy.addActions(new DestroyAction(true));
+
         //GhostCollidesWithFlappy.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-50.0));
 
-        /**
-         * Event: Press Left Arrow Key to:
-         * 1.Move Flappy to the left
-         */
-        Event flappyMoveLeft = new Event();
-        flappyMoveLeft.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        flappyMoveLeft.addInputs(KeyCode.LEFT);
-        flappyMoveLeft.addActions(new XPositionAction(NumericAction.ModifyType.RELATIVE, -5.0));
+
         //event.addConditions(new GreaterThanCondition(YPositionComponent.class, -50.0));
 
-
-
-        /**
-         * Event: Press J to make Ghost1 jump:
-         * 1. set y velocity so that ghost moves upwards (jumps)
-         */
-        Event Ghost1Jump = new Event();
-        Ghost1Jump.addConditions(new StringEqualToCondition(NameComponent.class, "Ghost"));
-        Ghost1Jump.addInputs(KeyCode.J);
-        Ghost1Jump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
 
         /**
          * Event: flappy jumps only if his jump counter is less than 10 (prevents him from performing infinite consecutive jumps before landing again:
@@ -243,20 +258,25 @@ public class DummyGameObjectMaker {
         flappyJump.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
         flappyJump.addInputs(KeyCode.UP);
         flappyJump.addConditions(new LessThanCondition(ValueComponent.class,10.0));
+        flappyJump.addConditions(new GreaterThanCondition(YAccelerationComponent.class,.1));
         flappyJump.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, -5.0));
         flappyJump.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-.02));
-        //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
         flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
-        flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
-        //flappyJump.addActions(new SoundAction("bach_chaconne"));
+        //flappyJump.addActions(new YAccelerationAction(NumericAction.ModifyType.ABSOLUTE,0.2));
+        //flappyJump.addActions(new ChangeScoreAction(NumericAction.ModifyType.RELATIVE, 100.0));
+        flappyJump.addActions(new SoundAction("jump"));
 
-        /**
-         * Event: Press M to:
-         * 1. Play the Mario Theme
-         */
-        Event music = new Event();
-        music.addInputs(KeyCode.M);
-        music.addActions(new SoundAction("mario_theme"));
+        Event flappyJumpf = new Event();
+        flappyJumpf.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
+        flappyJumpf.addInputs(KeyCode.DOWN);
+        flappyJump.addConditions(new LessThanCondition(ValueComponent.class,10.0));
+        flappyJumpf.addConditions(new LessThanCondition(YAccelerationComponent.class,-.1));
+        flappyJumpf.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE, 5.0));
+        flappyJumpf.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,.02));
+        flappyJump.addActions(new ValueAction(NumericAction.ModifyType.RELATIVE,1.0));
+        flappyJumpf.addActions(new SoundAction("jump"));
+
+
 
         /**
          * Event: flappy collides with Block from the Bottom (bottom of flappy hits block):
@@ -291,65 +311,16 @@ public class DummyGameObjectMaker {
         Ghost1OnPlatformTop.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,2.0));
 
 
+        BottomCollisionEvent MOnPlatform = new BottomCollisionEvent("Block", false);
+        MOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "mushroom"));
+        MOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+        MOnPlatform.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,-2.0));
 
+        TopCollisionEvent MOnPlatformTop = new TopCollisionEvent("Block", false);
+        MOnPlatformTop.addConditions(new StringEqualToCondition(NameComponent.class, "mushroom"));
+        MOnPlatformTop.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,0.0));
+        MOnPlatformTop.addActions(new YPositionAction(NumericAction.ModifyType.RELATIVE,2.0));
 
-        /**
-         * Event: Spawn a new Mushroom when you press I:
-         * 1. A Mushroom entity will spawn
-         * 2. The Mario theme will play :)
-         */
-        Event SpawnMushroomEvent = new Event();
-        SpawnMushroomEvent.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        SpawnMushroomEvent.addInputs(KeyCode.I);
-        Entity Mushroom = new Entity();
-        Mushroom.addComponent(new XPositionComponent(400.0));
-        Mushroom.addComponent(new YPositionComponent(50.0));
-        Mushroom.addComponent(new ZPositionComponent(0.0));
-        Mushroom.addComponent(new WidthComponent(40.0));
-        Mushroom.addComponent(new HeightComponent(40.0));
-        Mushroom.addComponent(new SpriteComponent("mushroom.png"));
-        Mushroom.addComponent(new NameComponent("Ghost1"));
-        Mushroom.addComponent(new XVelocityComponent(-2.0));
-        Mushroom.addComponent(new YVelocityComponent(0.0));
-        Mushroom.addComponent(new XAccelerationComponent(0.0));
-        Mushroom.addComponent(new YAccelerationComponent(0.2));
-        Mushroom.addComponent(new CollisionComponent(true));
-        Mushroom.addComponent(new TimerComponent(100.0));
-        SpawnMushroomEvent.addActions(new AddEntityInstantAction(Mushroom));
-        SpawnMushroomEvent.addActions(new SoundAction("mario_theme"));
-
-        /**
-         * Event: Spawn a new Basketball when you press o:
-         * 1. A SpawnBasketball entity will spawn
-         */
-        Event SpawnBasketball = new Event();
-        SpawnBasketball.addConditions(new StringEqualToCondition(NameComponent.class, "flappy"));
-        SpawnBasketball.addInputs(KeyCode.O);
-        Entity SpawnableBasketball = new Entity();
-        SpawnableBasketball.addComponent(new XPositionComponent(600.0));
-        SpawnableBasketball.addComponent(new YPositionComponent(50.0));
-        SpawnableBasketball.addComponent(new ZPositionComponent(0.0));
-        SpawnableBasketball.addComponent(new WidthComponent(40.0));
-        SpawnableBasketball.addComponent(new HeightComponent(40.0));
-        SpawnableBasketball.addComponent(new SpriteComponent("basketball"));
-        SpawnableBasketball.addComponent(new NameComponent("bb"));
-        SpawnableBasketball.addComponent(new XVelocityComponent(-2.0));
-        SpawnableBasketball.addComponent(new YVelocityComponent(0.0));
-        SpawnableBasketball.addComponent(new XAccelerationComponent(0.0));
-        SpawnableBasketball.addComponent(new YAccelerationComponent(0.2));
-        SpawnableBasketball.addComponent(new CollisionComponent(true));
-        SpawnBasketball.addActions(new AddEntityInstantAction(SpawnableBasketball));
-
-        /**
-         * Event: when the Basketball's timer reaches 0:
-         * 1. A Mushroom will spawn
-         * 2. The Basketball's timer will reset to 100
-         */
-        Event timeEvent = new Event();
-        timeEvent.addConditions(new StringEqualToCondition(NameComponent.class, "Basketball"));
-        timeEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
-        timeEvent.addActions(new AddEntityInstantAction(Mushroom));
-        timeEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
 
         /**
          * Event: When flappy falls off the screen he will:
@@ -373,15 +344,16 @@ public class DummyGameObjectMaker {
          * Add All Events to the Level
          */
         level1.addEvent(gravity);
+        level1.addEvent(gravityf);
+        level1.addEvent(gravityG);
         level1.addEvent(flappyMoveRightEvent);
-        level1.addEvent(timeEvent);
         level1.addEvent(flappyMoveLeft);
         level1.addEvent(flappyOnPlatformTop);
         level1.addEvent(flappyOnPlatform);
         level1.addEvent(flappyJump);
+        level1.addEvent(flappyJumpf);
 
 
-        level1.addEvent(Ghost1Jump);
         level1.addEvent(RightFlappyCollisionWithGhost);
         level1.addEvent(LeftGhostCollisionWithFlappy);
 
@@ -389,64 +361,74 @@ public class DummyGameObjectMaker {
 
         level1.addEvent(Ghost1OnPlatform);
         level1.addEvent(Ghost1OnPlatformTop);
-        level1.addEvent(SpawnMushroomEvent);
-        level1.addEvent(SpawnBasketball);
-        level1.addEvent(music);
         level1.addEvent(RightGhostCollisionWithGhost);
-        level1.addEvent(BottomGhostCollisionWithGhost);
+
+        level1.addEvent(MOnPlatform);
+        level1.addEvent(MOnPlatformTop);
+        level1.addEvent(RightFlappyCollisionWithM);
+
 
 
         level1.addEvent(flappyFallsEvent);
         level1.addEvent(lifeKeyInputEvent);
-
-        List<Event> spawnEvents = getSpawnEvents(new ArrayList<>(Arrays.asList(10.0, 20.0, 30.0, 40.0, 50.0, 60.0,
-                70.0, 80.0, 90.0)));
-        spawnEvents.forEach(e -> level1.addEvent(e));
+        addGhosts(level1);
+        addMushrooms(level1);
 
 
     }
 
-    private List<Event> getSpawnEvents(List<Double> times) {
+    private void addGhosts(Level level) {
         var r = new Random();
-        List<Event> eventlist = new ArrayList<>();
-        for (double time: times) {
-            Entity dummy = new Entity();
-            dummy.addComponent(new SpriteComponent("basketball"));
-            double xpos = (r.nextInt(5) + 1) * 100.0;
-            dummy.addComponent(new XPositionComponent(xpos));
-            dummy.addComponent(new YPositionComponent(0.0));
-            dummy.addComponent(new ZPositionComponent(1.0));
-            dummy.addComponent(new WidthComponent(100.0));
-            dummy.addComponent(new HeightComponent(100.0));
-            dummy.addComponent(new NameComponent("dummy"+time));
-            dummy.addComponent(new XVelocityComponent(0.0));
-            dummy.addComponent(new YVelocityComponent(0.0));
-            dummy.addComponent(new XAccelerationComponent(0.0));
-            dummy.addComponent(new YAccelerationComponent(0.2));
-            //dummy.addComponent(new CollisionComponent(false));
+        for (int i =0;i<30;i++) {
+            Entity Ghost1 = new Entity();
+            double xpos = (r.nextInt(80) + 1) * 100.0+2000.0;
+            boolean top = r.nextBoolean();
+            double ypos = top ? 70.0 : 200.0;
+            Ghost1.addComponent(new XPositionComponent(xpos));
+            Ghost1.addComponent(new YPositionComponent(ypos));
+            Ghost1.addComponent(new ZPositionComponent(0.0));
+            Ghost1.addComponent(new WidthComponent(40.0));
+            Ghost1.addComponent(new HeightComponent(40.0));
+            Ghost1.addComponent(new SpriteComponent("ghost.png"));
+            Ghost1.addComponent(new NameComponent("Ghost"));
+            Ghost1.addComponent(new XVelocityComponent(-2.0));
+            Ghost1.addComponent(new YVelocityComponent(0.0));
+            Ghost1.addComponent(new XAccelerationComponent(0.0));
+            Ghost1.addComponent(new YAccelerationComponent(0.1));
+            Ghost1.addComponent(new CollisionComponent(true));
+            Ghost1.addComponent(new TimerComponent(150.0));
 
-//            BottomCollisionEvent bbOnPlatform = new BottomCollisionEvent("Block", true);
-//            bbOnPlatform.addConditions(new StringEqualToCondition(NameComponent.class, "dummy"+time));
-//            bbOnPlatform.addActions(new YVelocityAction(NumericAction.ModifyType.ABSOLUTE,-10.0));
-//            bbOnPlatform.addActions(new YPositionAction(NumericAction.ModifyType.ABSOLUTE,-3.0));
+            level.addEntity(Ghost1);
 
-            Event spawn = new Event();
-            spawn.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
-            spawn.addConditions(new EqualToCondition(TimerComponent.class, time));
-            spawn.addInputConditions(new InputCondition(KeyCode.Q));
-            //spawn.addInputs(KeyCode.Q);
-            spawn.addActions(new AddEntityInstantAction(dummy));
-            //spawn.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
-
-            eventlist.add(spawn);
-            //eventlist.add(bbOnPlatform);
         }
-        Event lastEvent = new Event();
-        lastEvent.addConditions(new StringEqualToCondition(NameComponent.class, "game"));
-        lastEvent.addConditions(new EqualToCondition(TimerComponent.class, 0.0));
-        lastEvent.addActions(new TimerAction(NumericAction.ModifyType.ABSOLUTE, 100.0));
-        eventlist.add(lastEvent);
-        return eventlist;
+
+    }
+
+    private void addMushrooms(Level level) {
+        var r = new Random();
+        for (int i =0;i<30;i++) {
+            Entity Ghost1 = new Entity();
+            double xpos = (r.nextInt(80) + 1) * 100.0+2000.0;
+            boolean top = r.nextBoolean();
+            double ypos = top ? 70.0 : 200.0;
+            Ghost1.addComponent(new XPositionComponent(xpos));
+            Ghost1.addComponent(new YPositionComponent(ypos));
+            Ghost1.addComponent(new ZPositionComponent(0.0));
+            Ghost1.addComponent(new WidthComponent(40.0));
+            Ghost1.addComponent(new HeightComponent(40.0));
+            Ghost1.addComponent(new SpriteComponent("mushroom.png"));
+            Ghost1.addComponent(new NameComponent("mushroom"));
+            Ghost1.addComponent(new XVelocityComponent(-2.0));
+            Ghost1.addComponent(new YVelocityComponent(0.0));
+            Ghost1.addComponent(new XAccelerationComponent(0.0));
+            Ghost1.addComponent(new YAccelerationComponent(0.1));
+            Ghost1.addComponent(new CollisionComponent(true));
+            Ghost1.addComponent(new TimerComponent(100.0));
+
+            level.addEntity(Ghost1);
+
+        }
+
     }
 
     private void addDummyEntities(Level level, Double current) {
@@ -457,22 +439,16 @@ public class DummyGameObjectMaker {
         // Create the gameObject. This is the dummy object that authoring has to make for each game.
         Entity gameObject = new Entity();
         //Give the Game Object ScoreComponent and LivesComponent that will persist through the whole game (not just a level)
-        //gameObject.addComponent(new ScoreComponent(0.0));
+        gameObject.addComponent(new ScoreComponent(0.0));
         gameObject.addComponent(new LivesComponent(3.0));
         gameObject.addComponent(new NameComponent("game"));
         gameObject.addComponent(new TimerComponent(100.0));
 
         //Create the entities in the level
         Entity Flappy = new Entity();
-        Entity Ghost1 = new Entity();
-        Entity BasketBall = new Entity();
         Entity MarioBlock1 = new Entity();
         Entity MarioBlock2 = new Entity();
         Entity MarioBlock3 = new Entity();
-        Entity MarioBlock4 = new Entity();
-        Entity MarioBlock5 = new Entity();
-
-        Entity Ghost2 = new Entity();
 
         /**
          * Give the Entities their needed Components
@@ -497,56 +473,19 @@ public class DummyGameObjectMaker {
         Component flappyJumpCounter = new ValueComponent(0.0);
         Flappy.addComponent(flappyJumpCounter);
         Flappy.addComponent(new AssociatedEntityComponent(gameObject));
-        Flappy.addComponent(new SoundComponent("mario_theme"));
+        Flappy.addComponent(new SoundComponent("song2"));
         Flappy.addComponent(new TimerComponent(100.0));
-        Flappy.addComponent(new XVelocityComponent(2.0));
-        Flappy.addComponent(new ScoreComponent(0.0));
+        Flappy.addComponent(new XVelocityComponent(3.0));
+        Flappy.addComponent(new ScoreComponent(10.0));
+        Flappy.addComponent(new AssociatedEntityComponent(gameObject));
 
-        //Give Ghost1 the needed components
-        Ghost1.addComponent(new XPositionComponent(10.0));
-        Ghost1.addComponent(new YPositionComponent(200.0));
-        Ghost1.addComponent(new ZPositionComponent(0.0));
-        Ghost1.addComponent(new WidthComponent(40.0));
-        Ghost1.addComponent(new HeightComponent(40.0));
-        Ghost1.addComponent(new SpriteComponent("ghost.png"));
-        Ghost1.addComponent(new NameComponent("Ghost"));
-        Ghost1.addComponent(new XVelocityComponent(2.0));
-        Ghost1.addComponent(new YVelocityComponent(0.0));
-        Ghost1.addComponent(new XAccelerationComponent(0.0));
-        Ghost1.addComponent(new YAccelerationComponent(0.1));
-        Ghost1.addComponent(new CollisionComponent(true));
-
-        //Give basketball the needed components
-        BasketBall.addComponent(new XPositionComponent(90.0));
-        BasketBall.addComponent(new YPositionComponent(100.0));
-        BasketBall.addComponent(new ZPositionComponent(0.0));
-        BasketBall.addComponent(new WidthComponent(200.0));
-        BasketBall.addComponent(new HeightComponent(80.0));
-        BasketBall.addComponent(new SpriteComponent("basketball"));
-        BasketBall.addComponent(new NameComponent("Basketball"));
-        //BasketBall.addComponent(new TimerComponent(100.0));
-        //basketball has a timer component so that we can define an Event that will make mushrooms respawn everytime basketball's timer hits 0.
-
-        //Give Ghost2 the needed components
-        Ghost2.addComponent(new XPositionComponent(200.0));
-        Ghost2.addComponent(new YPositionComponent(200.0));
-        Ghost2.addComponent(new ZPositionComponent(0.0));
-        Ghost2.addComponent(new WidthComponent(40.0));
-        Ghost2.addComponent(new HeightComponent(40.0));
-        Ghost2.addComponent(new SpriteComponent("ghost.png"));
-        Ghost2.addComponent(new NameComponent("Ghost"));
-        Ghost2.addComponent(new XVelocityComponent(2.0));
-        Ghost2.addComponent(new YVelocityComponent(0.0));
-        Ghost2.addComponent(new XAccelerationComponent(0.0));
-        Ghost2.addComponent(new YAccelerationComponent(0.1));
-        Ghost2.addComponent(new CollisionComponent(true));
 
         //Give the blocks their needed components
         MarioBlock1.addComponent(new XPositionComponent(10.0));
         MarioBlock1.addComponent(new YPositionComponent(50.0));
         MarioBlock1.addComponent(new ZPositionComponent(0.0));
         MarioBlock1.addComponent(new WidthComponent(10000.0));
-        MarioBlock1.addComponent(new HeightComponent(100.0));
+        MarioBlock1.addComponent(new HeightComponent(25.0));
         MarioBlock1.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock1.addComponent(new CollisionComponent(false));
         MarioBlock1.addComponent(new HealthComponent(100.0));
@@ -556,16 +495,16 @@ public class DummyGameObjectMaker {
         MarioBlock2.addComponent(new YPositionComponent(400.0));
         MarioBlock2.addComponent(new ZPositionComponent(0.0));
         MarioBlock2.addComponent(new WidthComponent(10000.0));
-        MarioBlock2.addComponent(new HeightComponent(100.0));
+        MarioBlock2.addComponent(new HeightComponent(25.0));
         MarioBlock2.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock2.addComponent(new CollisionComponent(false));
         MarioBlock2.addComponent(new NameComponent("Block"));
 
-        MarioBlock3.addComponent(new XPositionComponent(320.0));
-        MarioBlock3.addComponent(new YPositionComponent(400.0));
+        MarioBlock3.addComponent(new XPositionComponent(10.0));
+        MarioBlock3.addComponent(new YPositionComponent(225.0));
         MarioBlock3.addComponent(new ZPositionComponent(0.0));
-        MarioBlock3.addComponent(new WidthComponent(100.0));
-        MarioBlock3.addComponent(new HeightComponent(100.0));
+        MarioBlock3.addComponent(new WidthComponent(10000.0));
+        MarioBlock3.addComponent(new HeightComponent(25.0));
         MarioBlock3.addComponent(new SpriteComponent("mario_block.png"));
         MarioBlock3.addComponent(new CollisionComponent(false));
         MarioBlock3.addComponent(new NameComponent("Block"));
@@ -576,8 +515,6 @@ public class DummyGameObjectMaker {
         //Add the entities to the level
         level.addEntity(gameObject);
         level.addEntity(Flappy);
-        level.addEntity(Ghost1);
-        level.addEntity(Ghost2);
 //        level.addEntity(BasketBall);
         level.addEntity(MarioBlock1);
         level.addEntity(MarioBlock2);
