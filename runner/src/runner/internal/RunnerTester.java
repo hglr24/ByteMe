@@ -25,7 +25,7 @@ public class RunnerTester extends Application {
      */
     @Override
     public void start (Stage primaryStage) throws Exception{
-        GameRunner runner = new GameRunner("YeetRevised3", "defaultAuthor", "defaultUserName");
+        GameRunner runner = new GameRunner("GravGod", "lucas", "lucas");
     }
 
     /**
