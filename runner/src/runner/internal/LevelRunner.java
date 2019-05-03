@@ -3,7 +3,15 @@ package runner.internal;
 import engine.external.Engine;
 import engine.external.Entity;
 import engine.external.Level;
+import engine.external.actions.NumericAction;
+import engine.external.actions.SoundAction;
+import engine.external.actions.ValueAction;
+import engine.external.component.ValueComponent;
+import engine.external.conditions.EqualToCondition;
+import engine.external.conditions.StringEqualToCondition;
+import engine.external.events.Event;
 import engine.external.component.LivesComponent;
+import engine.external.component.NameComponent;
 import engine.external.component.ScoreComponent;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -82,6 +90,7 @@ public class LevelRunner {
         mySceneWidth = width;
         mySceneHeight = height;
         myCurrentKeys = new HashSet<>();
+        addMusic(level);
         myEngine = new Engine(level);
         myHUD = new HeadsUpDisplay(width);
         myEntities = myEngine.updateState(myCurrentKeys);
@@ -94,6 +103,22 @@ public class LevelRunner {
         startAnimation();
         addButtonsAndHUD();
         myStage.show();
+    }
+
+    private void addMusic(Level level) {
+        Entity soundEntity = new Entity();
+        soundEntity.addComponent(new NameComponent("###sound"));
+        soundEntity.addComponent(new ValueComponent(1.0));
+
+        Event makeSound = new Event();
+        makeSound.addConditions(new StringEqualToCondition(NameComponent.class, "###sound"));
+        makeSound.addConditions(new EqualToCondition(ValueComponent.class, 1.0));
+
+        if (level.getMusic() != null) makeSound.addActions(new SoundAction(level.getMusic()));
+        makeSound.addActions(new ValueAction(NumericAction.ModifyType.ABSOLUTE, 0.0));
+
+        level.addEntity(soundEntity);
+        level.addEvent(makeSound);
     }
 
     private void keepScoreAndLives(Double score, Double lives) {

@@ -6,6 +6,7 @@ import engine.external.component.ProgressionComponent;
 import javafx.animation.Animation;
 import javafx.scene.Group;
 import javafx.stage.Stage;
+import runner.internal.AudioManager;
 import runner.internal.GameBeatenScreen;
 import runner.internal.LevelRunner;
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class GameOverSystem extends RunnerSystem {
     private int myHeight;
     private Consumer myLevelChanger;
     private int myLevelCount;
+    private AudioManager myAudioManager;
 
     /**
      * Constructor for the progression system
@@ -38,7 +40,7 @@ public class GameOverSystem extends RunnerSystem {
      */
     public GameOverSystem(Collection<Class<? extends Component>> requiredComponents, LevelRunner levelRunner,
                           Group group, Stage stage, Animation animation, int width, int height,
-                          Consumer consumer, int numLevels) {
+                          Consumer consumer, int numLevels, AudioManager audioManager) {
         super(requiredComponents, levelRunner);
         myGroup = group;
         myStage = stage;
@@ -47,6 +49,7 @@ public class GameOverSystem extends RunnerSystem {
         myHeight = height;
         myLevelChanger = consumer;
         myLevelCount = numLevels;
+        myAudioManager = audioManager;
     }
 
     /**
@@ -64,7 +67,7 @@ public class GameOverSystem extends RunnerSystem {
 
     private void progressIfNecessary(Entity entity){
             myAnimation.stop();
-            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX(), (Boolean) entity.getComponent(ProgressionComponent.class).getValue()).getNode());
+            myGroup.getChildren().add(new GameBeatenScreen(myStage, myGroup.getTranslateX(), (Boolean) entity.getComponent(ProgressionComponent.class).getValue(), myAudioManager).getNode());
     }
 
 }

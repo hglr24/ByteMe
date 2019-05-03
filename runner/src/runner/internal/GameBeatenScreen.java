@@ -29,7 +29,8 @@ public class GameBeatenScreen {
      * @param translatedX - Main group's translateX value to ensure screen is placed correctly
      * @param win - Boolean win or lose the game
      */
-    public GameBeatenScreen(Stage stage, Double translatedX, Boolean win) {
+    public GameBeatenScreen(Stage stage, Double translatedX, Boolean win, AudioManager audioManager) {
+        audioManager.shutdown();
         myStage = stage;
         Button exit = new Button(EXIT_GAME);
         exit.setOnMouseClicked(event ->{

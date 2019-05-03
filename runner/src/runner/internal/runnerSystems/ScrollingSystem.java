@@ -16,7 +16,7 @@ public class ScrollingSystem extends RunnerSystem {
     private Group myGroup;
     private Scene myScene;
     private final double LEFT_BUFFER_ZONE = 1.0 / 5.0;
-    private final double RIGHT_BUFFER_ZONE = 3.0 / 4.0;
+    private final double RIGHT_BUFFER_ZONE = 3.0 / 5.0;
 
     /**
      * Constructor for ScrollingSystem
