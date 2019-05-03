@@ -117,7 +117,10 @@ public class CreateGameDisplay extends AnchorPane {
     //game name, game description, image,
     private void enterAuthoringToMakeNewGame(){
         DataManager dataManager = new DataManager();
-        String imageFileName = IMAGE_PREFIX + "_" + gameName.getTextEntered() + "_" + myUserName +"_"+ myFile.getName();
+        String imageFileName = IMAGE_PREFIX + gameName.getTextEntered() + "_" + myUserName +"_"+ myFile.getName();
+        System.out.println(imageFileName);
+        System.out.println(myUserName);
+        System.out.println(myFile.getName());
         dataManager.saveImage(imageFileName,myFile);
         GameCenterData myData = new GameCenterData(gameName.getTextEntered(),gameDescription.getTextEntered(),imageFileName,myUserName);
         openNewGame.switchScene(myData);
@@ -141,6 +144,8 @@ public class CreateGameDisplay extends AnchorPane {
         modifyGamePreferences.getChildren().add(gameNames);
         modifyGamePreferences.getChildren().add(mySymbol);
         AnchorPane.setLeftAnchor(modifyGamePreferences,300.0 - modifyGamePreferences.getWidth()/2.0);
+        setTopAnchor(gameNames,20.0);
+        setLeftAnchor(gameNames,300.0-modifyGamePreferences.getWidth()/2.0);
         modifyGamePreferences.getStyleClass().add(INNER_BOX_STYLE);
     }
 

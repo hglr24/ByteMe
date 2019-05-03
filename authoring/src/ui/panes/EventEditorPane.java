@@ -33,8 +33,8 @@ class EventEditorPane extends Stage {
     private static final String CONDITION = "Condition";
 
     private static final String STYLE = "default.css";
-    private static final String STYLE_CLASS = "event-component-vbox";
-    private static final String STYLE_VBOX = "editing-vbox";
+    private static final String STYLE_CLASS = "event-editor";
+
     private Stage myPopUpStage = new Stage();
 
     private static final ResourceBundle eventComponentResource = ResourceBundle.getBundle("event_editor");
@@ -140,6 +140,7 @@ class EventEditorPane extends Stage {
         String resourceName = eventComponentResource.getString(eventComponentName + RESOURCE);
 
         HBox controls = EventFactory.createEventComponentOptions(promptText,resourceName,componentName,conditionOperator,triggerValue);
+        controls.getStyleClass().add("event-options");
         myDisplay.getChildren().add(controls);
         HBox buttonBar = new HBox(saveButton(myEvent, parent, eventComponentName));
         buttonBar.getStyleClass().add("buttons-bar");

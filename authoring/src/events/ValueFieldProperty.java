@@ -59,13 +59,9 @@ public class ValueFieldProperty extends TextField {
         resetValueField(SOUND);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
             AudioManager myManager = new AudioManager();
-            myManager.show();
-            myManager.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                @Override
-                public void handle(WindowEvent windowEvent) {
-                    System.out.println(myManager.getAssetName());
-                }
-            });
+            myManager.showAndWait();
+            setText(myManager.getAssetName());
+            setAccessibleText(myManager.getAssetName());
         };
         this.setOnMouseClicked(showFileOptions);
     }
@@ -74,7 +70,8 @@ public class ValueFieldProperty extends TextField {
         resetValueField(IMAGE);
         showFileOptions = (EventHandler<MouseEvent>) mouseEvent -> {
             ImageManager myManager = new ImageManager();
-            myManager.show();
+            myManager.showAndWait();
+            setText(myManager.getAssetName());
         };
         this.setOnMouseClicked(showFileOptions);
     }

@@ -77,7 +77,6 @@ public class AuthoringKeyEvent extends AuthoringEvent {
         conditionalEvent.addInputs(KeyCode.valueOf(generateKeyCodes.getString(keyName.getValue())));
         super.saveAction(conditionalEvent);
         super.saveEvent(conditionalEvent, myRefresher, myEntityEvents);
-
         super.closeWindow();
     }
 }

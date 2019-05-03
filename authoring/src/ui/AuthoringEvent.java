@@ -41,9 +41,8 @@ public abstract class AuthoringEvent extends Stage {
 
     public abstract void addSaveComponents(RefreshEvents myRefresher, ObservableList<Event> myEntityEvents);
 
-    public void saveEvent(Event createdEvent, RefreshEvents myRefresher, ObservableList<Event> myEntityEvents){
+    void saveEvent(Event createdEvent, RefreshEvents myRefresher, ObservableList<Event> myEntityEvents){
         myEntityEvents.add(createdEvent);
-        myRefresher.refreshEventDisplay(createdEvent);
         myRefresher.refreshEventDisplay(createdEvent);
         this.close();
     }

@@ -53,12 +53,19 @@ public class EventBuilder {
         }
         catch(Exception nonNumericAction){
             try {
-                Action createdAction = (Action)Reflection.createInstance(actionClassName,conditionValue) ;
+                Action createdAction = (Action) Reflection.createInstance(actionClassName,
+                        Double.parseDouble(conditionValue));
                 return createdAction;
-            }
-            catch(Exception e){
-                UIException myException = new UIException(myErrors.getString(ERROR_TWO_KEY));
-                myException.displayUIException();
+              }
+            catch(Exception nonComponentAction) {
+                try {
+                    Action createdAction = (Action) Reflection.createInstance(actionClassName, conditionValue);
+                    return createdAction;
+                }
+                catch (Exception e){
+                    UIException myException = new UIException(myErrors.getString(ERROR_TWO_KEY));
+                    myException.displayUIException();
+                }
             }
         }
         throw new UIException(myErrors.getString(ERROR_TWO_KEY));

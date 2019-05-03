@@ -59,15 +59,6 @@ public class CurrentEventsPane extends ScrollPane {
             myMap.put(addedEvent,currEventDisplay);
             myEventsListing.getChildren().add(currEventDisplay);
         }
-//        for (Event event: myCurrentEvents) {
-//            if (myMap.keySet().contains(event))
-//                continue;
-//            CurrentEventDisplay currEventDisplay = new CurrentEventDisplay(event.getEventInformation(),event,myRemover,
-//                    myEditor, myKeyCodeEditor);
-//            if (currEventDisplay.getChildren().size() != 0) {
-//                myEventsListing.getChildren().add(currEventDisplay);
-//            }
-//        }
     }
 
     private void editCurrentEvent(Event unfinishedEvent){
