@@ -3,6 +3,7 @@ package factory;
 import engine.external.Entity;
 import engine.external.IEventEngine;
 import engine.external.Level;
+import engine.external.component.AssociatedEntityComponent;
 import engine.external.component.CameraComponent;
 import engine.external.component.CollisionComponent;
 import engine.external.component.Component;
@@ -105,6 +106,7 @@ public class GameTranslator {
                 basisEntity.addComponent(new CameraComponent(true));
                 basisEntity.addComponent(new LivesComponent(3.0));
                 basisEntity.addComponent(new ScoreComponent(0.0));
+                basisEntity.addComponent(new AssociatedEntityComponent(basisEntity));
             }
             else if (field.equals(EntityField.VISIBLE)) {
                 if (Boolean.parseBoolean(authEntity.getPropertyMap().get(EntityField.VISIBLE)))

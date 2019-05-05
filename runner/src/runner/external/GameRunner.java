@@ -85,7 +85,6 @@ public class GameRunner {
         } catch (Exception e){
             levelToPlay = 10;
         }
-        System.out.println("progressing to level " + levelToPlay);
         for(Entity entity : myCurrentLevel.getEntities()){
             if (entity.hasComponents(ScoreComponent.class)){
                 myScore = (Double) entity.getComponent(ScoreComponent.class).getValue();
