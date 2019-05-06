@@ -11,11 +11,12 @@ import java.util.Map;
 
 /**
  * @author Lucas Liu
- *
+ * <p>
  * The Entity is the standard element of any game. An Entity can represent a player, an obstacle, an enemy, or any other game element, even
  * abstract elements such as a "camera" that follows the player. Entities are composed of Components. The entirety of an Entity's behavior and
- * State is encapsulated by its Components.
- *
+ * State is encapsulated by its Components. No subclasses of Entity allowed - flat structure.
+ * Create a variety of game elements through different component combinations.
+ * <p>
  * The Entity is a powerful abstraction that is simple to implement. Methods are simply basic getters and setters, but the contract is
  * constrained by the clever use of a map that takes Component class type as a key, and the actual instance of that component as the value. Each
  * Entity can only have one of each type of Component. This organization makes modifications of State easy (which happens quite frequently in a
@@ -29,28 +30,34 @@ public class Entity implements Serializable {
         myComponents = new HashMap<>();
     }
 
+    /**
+     * Deep copy method used for creating identical entities that are not tied to the same reference
+     *
+     * @return
+     */
     public Entity copyEntity() {
         Entity newEntity = new Entity();
-        for (Component c: this.myComponents.values()) {
+        for (Component c : this.myComponents.values()) {
             try {
-                if(!c.getClass().equals(WidthComponent.class)){
-                    Component newComponent = (Component) c.getClass().getConstructor(c.getValue().getClass()).newInstance(c.getValue());
-                    newEntity.myComponents.put((Class) c.getClass() ,newComponent);
-                }else{
-                    newEntity.myComponents.put(WidthComponent.class, new WidthComponent((Double)c.getValue()+1));
-                }
-            }
-            catch (Exception e) {
+
+                Component newComponent = c.getClass().getConstructor(c.getValue().getClass()).newInstance(c.getValue());
+                newEntity.myComponents.put(c.getClass(), newComponent);
+
+            } catch (Exception e) {
                 //Do nothing
-                System.out.println("Unable to copyEntity this entity");
+                System.out.println("Unable to deep copy this entity");
             }
         }
         return newEntity;
     }
 
-
+    /**
+     * Add component to entity
+     *
+     * @param components
+     */
     public void addComponent(Collection<Component<?>> components) {
-        for (Component<?> component: components) {
+        for (Component<?> component : components) {
             myComponents.put(component.getClass(), component);
         }
     }
@@ -59,8 +66,13 @@ public class Entity implements Serializable {
         addComponent(Arrays.asList(component));
     }
 
-    public void removeComponent(Collection<Class<? extends Component>> componentClazzes){
-        for (Class<? extends Component> clazz: componentClazzes) {
+    /**
+     * remove component from entity
+     *
+     * @param componentClazzes
+     */
+    public void removeComponent(Collection<Class<? extends Component>> componentClazzes) {
+        for (Class<? extends Component> clazz : componentClazzes) {
             myComponents.remove(clazz);
         }
     }
@@ -69,19 +81,10 @@ public class Entity implements Serializable {
         removeComponent(Arrays.asList(componentClazz));
     }
 
-    /**
-     * Added this in to test to see whether I was correctly reloading the components in of an entity - can certainly
-     * delete later on
-     * @author Anna
-     */
-    public void printMyComponents(){
-        for (Component<?> c: myComponents.values()) {
-            System.out.println(c.getValue());
-        }
-    }
 
     /**
      * Check if Entity has the specified requirements. Useful for filtering for only Entities that meet the necessary criteria
+     *
      * @param components
      * @return
      */
@@ -93,12 +96,14 @@ public class Entity implements Serializable {
         return hasComponents(Arrays.asList(component));
     }
 
+    /**
+     * get specific component based on its class
+     *
+     * @param clazz
+     * @return
+     */
     public Component<?> getComponent(Class<? extends Component> clazz) {
         return myComponents.get(clazz);
-    }
-
-    public Map<Class<? extends Component>, Component<?>> getComponentMap(){
-        return myComponents;
     }
 
 
