@@ -1,6 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-
 # JAR Files And Dependencies
 *.zip binary
 *.jar binary
@@ -8,7 +7,6 @@
 *.so binary
 *.jnilib binary
 *.dylib binary
-
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain
@@ -20,5 +18,5 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
-
 *.obj  diff=astextplain
+doc/games[[:space:]]demo.mp4 filter=lfs diff=lfs merge=lfs -text
